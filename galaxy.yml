@@ -1,0 +1,20 @@
+namespace: community
+name: windows
+version: 0.0.1-beta.1
+readme: README.md
+authors:
+- Jordan Borean @jborean93
+- Matt Davis @nitzmahone
+description: |
+  Ansible collection for community Windows pluigns.
+license_file: LICENSE
+tags:
+- windows
+dependencies:
+  ansible.windows: '*'
+repository: https://github.com/ansible-collections/community.windows
+documentation: https://github.com/ansible-collections/community.windows/tree/master/docs
+homepage: https://github.com/ansible-collections/community.windows
+issues: https://github.com/ansible-collections/community.windows/issues?q=is%3Aissue+is%3Aopen+sort%3Aupdated-desc
+build_ignore:
+- tests/integration/inventory*
