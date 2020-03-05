@@ -57,7 +57,7 @@ author:
 
 EXAMPLES = r'''
 - name: Get facts
-  setup:
+  ansible.windows.setup:
 
 - name: Add Pester module
   action:

@@ -138,15 +138,15 @@ EXAMPLES = """
 
 - name: Get the LAPS password using Kerberos auth, relies on kinit already being called
   set_fact:
-    ansible_password: "{{ lookup('laps_password', 'SERVER', domain='dc01.ansible.com') }}"
+    ansible_password: "{{ lookup('community.windows.laps_password', 'SERVER', domain='dc01.ansible.com') }}"
 
 - name: Specific the domain host using an explicit LDAP URI
   set_fact:
-    ansible_password: "{{ lookup('laps_password', 'SERVER', domain='ldap://ansible.com:389') }}"
+    ansible_password: "{{ lookup('community.windows.laps_password', 'SERVER', domain='ldap://ansible.com:389') }}"
 
 - name: Use Simple auth over LDAPS
   set_fact:
-    ansible_password: "{{ lookup('laps_password', 'server',
+    ansible_password: "{{ lookup('community.windows.laps_password', 'server',
                                  domain='dc01.ansible.com',
                                  auth='simple',
                                  scheme='ldaps',
@@ -155,7 +155,7 @@ EXAMPLES = """
 
 - name: Use Simple auth with LDAP and StartTLS
   set_fact:
-    ansible_password: "{{ lookup('laps_password', 'app01',
+    ansible_password: "{{ lookup('community.windows.laps_password', 'app01',
                                  domain='dc01.ansible.com',
                                  auth='simple',
                                  start_tls=True,
@@ -164,13 +164,13 @@ EXAMPLES = """
 
 - name: Narrow down the search base to a an OU
   set_fact:
-    ansible_password: "{{ lookup('laps_password', 'sql10',
+    ansible_password: "{{ lookup('community.windows.laps_password', 'sql10',
                                  domain='dc01.ansible.com',
                                  search_base='OU=Databases,DC=ansible,DC=com') }}"
 
 - name: Set certificate file to use when validating the TLS certificate
   set_fact:
-    ansible_password: "{{ lookup('laps_password', 'windows-pc',
+    ansible_password: "{{ lookup('community.windows.laps_password', 'windows-pc',
                                  domain='dc01.ansible.com',
                                  start_tls=True,
                                  ca_cert='/usr/local/share/certs/ad.pem') }}"

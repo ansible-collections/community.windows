@@ -1,6 +1,6 @@
 ---
 - name: check whether the host supports encryption
-  ansible.windows.ansible.windows.win_shell: |
+  ansible.windows.win_shell: |
     if ([System.Environment]::OSVersion.Version -lt [Version]"6.2") {
         "false"
     } else {

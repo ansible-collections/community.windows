@@ -11,7 +11,7 @@ license_file: LICENSE
 tags:
 - windows
 dependencies:
-  ansible.windows: '*'
+  ansible.windows: 0.0.1-beta.2
 repository: https://github.com/ansible-collections/community.windows
 documentation: https://github.com/ansible-collections/community.windows/tree/master/docs
 homepage: https://github.com/ansible-collections/community.windows

@@ -1,5 +1,5 @@
 # Setup action creates ansible_distribution_version variable
-- action: setup
+- ansible.windows.setup:
 
 - include_tasks: tasks/tests.yml
   # Works on windows >= Windows 7/Windows Server 2008 R2

@@ -38,15 +38,16 @@ sed -i 's/win_ping/ansible.windows.win_ping/g' "$ANSIBLE_TEST_PATH/_internal/man
 sed -i 's/hosts: windows/hosts: windows\n  collections: ["ansible.windows"]/g' "$ANSIBLE_TEST_PATH/_data/playbooks/windows_coverage_setup.yml"
 sed -i 's/hosts: windows/hosts: windows\n  collections: ["ansible.windows"]/g' "$ANSIBLE_TEST_PATH/_data/playbooks/windows_coverage_teardown.yml"
 
+export ANSIBLE_COLLECTIONS_PATHS="${HOME}/.ansible"
 SHIPPABLE_RESULT_DIR="$(pwd)/shippable"
-TEST_DIR="${HOME}/.ansible/ansible_collections/community/windows"
+TEST_DIR="${ANSIBLE_COLLECTIONS_PATHS}/ansible_collections/community/windows"
 mkdir -p "${TEST_DIR}"
 cp -aT "${SHIPPABLE_BUILD_DIR}" "${TEST_DIR}"
 cd "${TEST_DIR}"
 
 # TODO: put this in a requirements file
 # Install the depss of this collection
-ansible-galaxy collection install 'ansible.windows:0.0.1-beta.1'
+ansible-galaxy collection install 'ansible.windows:0.0.1-beta.2'
 
 # export PATH="${PWD}/bin:${PATH}"
 export PYTHONIOENCODING='utf-8'

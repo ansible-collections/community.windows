@@ -38,7 +38,7 @@
   register: unzip
 
 - name: get result of unarchive zip
-  slurp:
+  ansible.windows.slurp:
     path: '{{ win_unzip_dir }}\output\café.txt'
   register: unzip_actual
 
