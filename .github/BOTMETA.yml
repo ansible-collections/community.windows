@@ -1,0 +1,358 @@
+automerge: false
+files:
+  $modules/psexec.py: {}
+  $modules/win_audit_policy_system.ps1:
+    maintainers: $team_windows
+  $modules/win_audit_policy_system.py:
+    authors: nwsparks
+    maintainers: $team_windows
+  $modules/win_audit_rule.ps1:
+    maintainers: $team_windows
+  $modules/win_audit_rule.py:
+    authors: nwsparks
+    maintainers: $team_windows
+  $modules/win_auto_logon.ps1:
+    maintainers: $team_windows
+  $modules/win_auto_logon.py:
+    authors: prasoonkarunan
+    maintainers: $team_windows
+  $modules/win_certificate_info.ps1:
+    maintainers: $team_windows
+  $modules/win_certificate_info.py:
+    authors: mhunsber
+    maintainers: $team_windows
+  $modules/win_chocolatey.ps1:
+    maintainers: $team_windows
+  $modules/win_chocolatey.py:
+    authors: elventear jborean93 petemounce ptemplier smadam813 trondhindenes
+  $modules/win_chocolatey_config.ps1:
+    maintainers: $team_windows
+  $modules/win_chocolatey_config.py: {}
+  $modules/win_chocolatey_facts.ps1:
+    maintainers: $team_windows
+  $modules/win_chocolatey_facts.py:
+    authors: itigoag sbaerlocher
+    maintainers: $team_windows
+  $modules/win_chocolatey_feature.ps1:
+    maintainers: $team_windows
+  $modules/win_chocolatey_feature.py: {}
+  $modules/win_chocolatey_source.ps1:
+    maintainers: $team_windows
+  $modules/win_chocolatey_source.py: {}
+  $modules/win_computer_description.ps1:
+    maintainers: $team_windows
+  $modules/win_computer_description.py:
+    authors: RusoSova
+    maintainers: $team_windows
+  $modules/win_credential.ps1:
+    maintainers: $team_windows
+  $modules/win_credential.py: {}
+  $modules/win_data_deduplication.ps1:
+    maintainers: $team_windows
+  $modules/win_data_deduplication.py:
+    authors: rnsc
+    maintainers: $team_windows
+  $modules/win_defrag.ps1:
+    maintainers: $team_windows
+  $modules/win_defrag.py:
+    authors: dagwieers
+    maintainers: $team_windows
+  $modules/win_disk_facts.ps1:
+    maintainers: $team_windows
+  $modules/win_disk_facts.py:
+    authors: marqelme
+    maintainers: $team_windows
+  $modules/win_disk_image.ps1:
+    maintainers: $team_windows
+  $modules/win_disk_image.py:
+    authors: nitzmahone
+    maintainers: $team_windows
+  $modules/win_dns_record.ps1:
+    maintainers: $team_windows
+  $modules/win_dns_record.py:
+    authors: johnboy2
+    maintainers: $team_windows
+  $modules/win_domain_computer.ps1:
+    maintainers: $team_windows
+  $modules/win_domain_computer.py:
+    authors: Daniel-Sanchez-Fabregas
+    maintainers: $team_windows
+  $modules/win_domain_group.ps1:
+    maintainers: $team_windows
+  $modules/win_domain_group.py: {}
+  $modules/win_domain_group_membership.ps1:
+    maintainers: $team_windows
+  $modules/win_domain_group_membership.py:
+    authors: jiuka
+    maintainers: $team_windows
+  $modules/win_domain_object_info.ps1:
+    maintainers: $team_windows
+  $modules/win_domain_object_info.py: {}
+  $modules/win_domain_user.ps1:
+    maintainers: $team_windows
+  $modules/win_domain_user.py:
+    authors: nwchandler
+    maintainers: $team_windows
+  $modules/win_dotnet_ngen.ps1:
+    maintainers: $team_windows
+  $modules/win_dotnet_ngen.py:
+    authors: petemounce
+    maintainers: $team_windows
+  $modules/win_eventlog.ps1:
+    maintainers: $team_windows
+  $modules/win_eventlog.py:
+    authors: andrewsaraceni
+    maintainers: $team_windows
+  $modules/win_eventlog_entry.ps1:
+    maintainers: $team_windows
+  $modules/win_eventlog_entry.py:
+    authors: andrewsaraceni
+    maintainers: $team_windows
+  $modules/win_file_compression.ps1:
+    maintainers: $team_windows
+  $modules/win_file_compression.py:
+    authors: mhunsber
+    maintainers: $team_windows
+  $modules/win_file_version.ps1:
+    maintainers: $team_windows
+  $modules/win_file_version.py:
+    authors: SamLiu79
+    maintainers: $team_windows
+  $modules/win_firewall.ps1:
+    maintainers: $team_windows
+  $modules/win_firewall.py:
+    authors: michaeldeaton
+    maintainers: $team_windows
+  $modules/win_firewall_rule.ps1:
+    maintainers: $team_windows
+  $modules/win_firewall_rule.py:
+    authors: TimothyVandenbrande ar7z1
+    maintainers: $team_windows
+  $modules/win_format.ps1:
+    maintainers: $team_windows
+  $modules/win_format.py:
+    authors: chopraaa
+    maintainers: $team_windows
+  $modules/win_hosts.ps1:
+    maintainers: $team_windows
+  $modules/win_hosts.py:
+    authors: mhunsber
+    maintainers: $team_windows
+  $modules/win_hotfix.ps1:
+    maintainers: $team_windows
+  $modules/win_hotfix.py: {}
+  $modules/win_http_proxy.ps1:
+    maintainers: $team_windows
+  $modules/win_http_proxy.py: {}
+  $modules/win_iis_virtualdirectory.ps1:
+    maintainers: $team_windows
+  $modules/win_iis_virtualdirectory.py:
+    authors: henrikwallstrom
+    maintainers: $team_windows
+  $modules/win_iis_webapplication.ps1:
+    maintainers: $team_windows
+  $modules/win_iis_webapplication.py:
+    authors: henrikwallstrom
+    maintainers: $team_windows
+  $modules/win_iis_webapppool.ps1:
+    maintainers: $team_windows
+  $modules/win_iis_webapppool.py:
+    authors: henrikwallstrom jborean93
+  $modules/win_iis_webbinding.ps1:
+    maintainers: $team_windows
+  $modules/win_iis_webbinding.py:
+    authors: henrikwallstrom nwsparks
+    maintainers: $team_windows
+  $modules/win_iis_website.ps1:
+    maintainers: $team_windows
+  $modules/win_iis_website.py:
+    authors: henrikwallstrom
+    maintainers: $team_windows
+  $modules/win_inet_proxy.ps1:
+    maintainers: $team_windows
+  $modules/win_inet_proxy.py: {}
+  $modules/win_initialize_disk.ps1:
+    maintainers: $team_windows
+  $modules/win_initialize_disk.py:
+    authors: branic
+    maintainers: $team_windows
+  $modules/win_lineinfile.ps1:
+    maintainers: $team_windows
+  $modules/win_lineinfile.py:
+    authors: brianlloyd
+    maintainers: $team_windows
+  $modules/win_mapped_drive.ps1:
+    maintainers: $team_windows
+  $modules/win_mapped_drive.py: {}
+  $modules/win_msg.ps1:
+    maintainers: $team_windows
+  $modules/win_msg.py:
+    authors: jhawkesworth
+    maintainers: ShachafGoldstein jborean93
+  $modules/win_netbios.ps1:
+    maintainers: $team_windows
+  $modules/win_netbios.py:
+    authors: tmmruk
+    maintainers: $team_windows
+  $modules/win_nssm.ps1:
+    maintainers: $team_windows
+  $modules/win_nssm.py:
+    authors: Shachaf92 georgefrank h0nIg ksubileau smadam813 themiwi
+    maintainers: $team_windows
+    ignore: georgefrank h0nIg
+  $modules/win_pagefile.ps1:
+    maintainers: $team_windows
+  $modules/win_pagefile.py:
+    authors: LiranNis
+    maintainers: $team_windows
+  $modules/win_partition.ps1:
+    maintainers: $team_windows
+  $modules/win_partition.py:
+    authors: chopraaa
+    maintainers: $team_windows
+  $modules/win_pester.ps1:
+    maintainers: $team_windows
+  $modules/win_pester.py:
+    authors: equelin prasoonkarunan
+    maintainers: $team_windows
+  $modules/win_power_plan.ps1:
+    maintainers: $team_windows
+  $modules/win_power_plan.py:
+    authors: nwsparks
+    maintainers: $team_windows
+  $modules/win_product_facts.ps1:
+    maintainers: $team_windows
+  $modules/win_product_facts.py:
+    authors: dagwieers
+    maintainers: $team_windows
+  $modules/win_psexec.ps1:
+    maintainers: $team_windows
+  $modules/win_psexec.py:
+    authors: dagwieers
+    maintainers: $team_windows
+  $modules/win_psmodule.ps1:
+    maintainers: $team_windows
+  $modules/win_psmodule.py:
+    authors: dlazz it-praktyk
+    maintainers: $team_windows
+  $modules/win_psrepository.ps1:
+    maintainers: $team_windows
+  $modules/win_psrepository.py:
+    authors: it-praktyk
+    maintainers: $team_windows
+  $modules/win_psrepository_info.ps1:
+    maintainers: $team_windows
+  $modules/win_psrepository_info.py:
+    authors: briantist
+    maintainers: $team_windows
+  $modules/win_rabbitmq_plugin.ps1:
+    maintainers: $team_windows
+  $modules/win_rabbitmq_plugin.py:
+    authors: ar7z1
+    maintainers: $team_windows
+  $modules/win_rds_cap.ps1:
+    maintainers: $team_windows
+  $modules/win_rds_cap.py:
+    authors: ksubileau
+    maintainers: $team_windows
+  $modules/win_rds_rap.ps1:
+    maintainers: $team_windows
+  $modules/win_rds_rap.py:
+    authors: ksubileau
+    maintainers: $team_windows
+  $modules/win_rds_settings.ps1:
+    maintainers: $team_windows
+  $modules/win_rds_settings.py:
+    authors: ksubileau
+    maintainers: $team_windows
+  $modules/win_region.ps1:
+    maintainers: $team_windows
+  $modules/win_region.py: {}
+  $modules/win_regmerge.ps1:
+    maintainers: $team_windows
+  $modules/win_regmerge.py:
+    authors: jhawkesworth
+    maintainers: ShachafGoldstein jborean93
+  $modules/win_robocopy.ps1:
+    maintainers: $team_windows
+  $modules/win_robocopy.py:
+    authors: blakfeld
+    maintainers: $team_windows
+  $modules/win_route.ps1:
+    maintainers: $team_windows
+  $modules/win_route.py:
+    authors: dlazz
+    maintainers: $team_windows
+  $modules/win_say.ps1:
+    maintainers: $team_windows
+  $modules/win_say.py:
+    authors: jhawkesworth
+    maintainers: ShachafGoldstein jborean93
+  $modules/win_scheduled_task.ps1:
+    maintainers: $team_windows
+  $modules/win_scheduled_task.py:
+    authors: jborean93 petemounce
+  $modules/win_scheduled_task_stat.ps1:
+    maintainers: $team_windows
+  $modules/win_scheduled_task_stat.py: {}
+  $modules/:
+    notify: if-meaton
+    authors: jborean93
+    maintainers: ShachafGoldstein jhawkesworth
+    labels: win_security_policy
+    ignore: georgefrank ryansb
+    keywords: credssp hyperv powershell psrp winrm
+  $modules/win_shortcut.ps1:
+    maintainers: $team_windows
+  $modules/win_shortcut.py:
+    authors: dagwieers
+    maintainers: $team_windows
+  $modules/win_snmp.ps1:
+    maintainers: $team_windows
+  $modules/win_snmp.py:
+    authors: mcassaniti
+    maintainers: $team_windows
+  $modules/win_timezone.ps1:
+    maintainers: $team_windows
+  $modules/win_timezone.py:
+    authors: schwartzmx
+    maintainers: $team_windows
+  $modules/win_toast.ps1:
+    maintainers: $team_windows
+  $modules/win_toast.py:
+    authors: jhawkesworth
+    maintainers: ShachafGoldstein jborean93
+  $modules/win_unzip.ps1:
+    maintainers: $team_windows
+  $modules/win_unzip.py:
+    authors: schwartzmx
+    maintainers: $team_windows
+  $modules/win_user_profile.ps1:
+    maintainers: $team_windows
+  $modules/win_user_profile.py: {}
+  $modules/win_wait_for_process.ps1:
+    maintainers: $team_windows
+  $modules/win_wait_for_process.py:
+    authors: crossan007
+    maintainers: $team_windows
+  $modules/win_wakeonlan.ps1:
+    maintainers: $team_windows
+  $modules/win_wakeonlan.py:
+    authors: dagwieers
+    maintainers: $team_windows
+  $modules/win_webpicmd.ps1:
+    maintainers: $team_windows
+  $modules/win_webpicmd.py:
+    authors: petemounce
+    maintainers: $team_windows
+  $modules/win_xml.ps1:
+    maintainers: $team_windows
+  $modules/win_xml.py:
+    authors: jhawkesworth richardcs
+    maintainers: ShachafGoldstein jborean93
+  $plugins/laps_password.py:
+macros:
+  lookups: plugins/lookup
+  modules: plugins/modules
+  plugins: plugins/plugins
+  team_windows: ShachafGoldstein jborean93 jhawkesworth
