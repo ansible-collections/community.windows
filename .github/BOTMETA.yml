@@ -1,5 +1,6 @@
 automerge: false
 files:
+  $lookups/laps_password.py:
   $modules/psexec.py: {}
   $modules/win_audit_policy_system.ps1:
     maintainers: $team_windows
@@ -350,9 +351,7 @@ files:
   $modules/win_xml.py:
     authors: jhawkesworth richardcs
     maintainers: ShachafGoldstein jborean93
-  $plugins/laps_password.py:
 macros:
   lookups: plugins/lookup
   modules: plugins/modules
-  plugins: plugins/plugins
   team_windows: ShachafGoldstein jborean93 jhawkesworth
