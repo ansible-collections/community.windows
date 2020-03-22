@@ -8,13 +8,13 @@
 - name: check adding of repository defaults - check mode
   win_psrepository:
     name: "{{ repository_name }}"
-    source: "{{ repository_sourcelocation }}"
+    source: "{{ repository_source_location }}"
     state: present
   check_mode: True
   register: adding_repository_check
 
 - name: get result of adding repository defaults - check mode
-  ansible.windows.win_shell: (Get-PSRepository -Name {{ repository_name | quote }} -ErrorAction ignore | Measure-Object).Count
+  win_shell: (Get-PSRepository -Name {{ repository_name | quote }} -ErrorAction ignore | Measure-Object).Count
   changed_when: false
   register: result_adding_repository_check
 
@@ -27,12 +27,12 @@
 - name: check adding repository defaults
   win_psrepository:
     name: "{{ repository_name }}"
-    source: "{{ repository_sourcelocation }}"
+    source: "{{ repository_source_location }}"
     state: present
   register: adding_repository
 
 - name: get result of adding repository defaults
-  ansible.windows.win_shell: |
+  win_shell: |
     $repo = Get-PSRepository -Name {{ repository_name | quote }}
     ($repo | Measure-Object).Count
     $repo.SourceLocation
@@ -44,13 +44,13 @@
     that:
     - adding_repository is changed
     - result_adding_repository.stdout_lines[0] == '1'
-    - result_adding_repository.stdout_lines[1] == repository_sourcelocation
+    - result_adding_repository.stdout_lines[1] == repository_source_location
     - result_adding_repository.stdout_lines[2] == 'Trusted'
 
 - name: check adding repository defaults - idempotent
   win_psrepository:
     name: "{{ repository_name }}"
-    source: "{{ repository_sourcelocation }}"
+    source: "{{ repository_source_location }}"
     state: present
   register: adding_repository_again
 
@@ -62,13 +62,13 @@
 - name: change InstallationPolicy - check mode
   win_psrepository:
     name: "{{ repository_name }}"
-    source: "{{ repository_sourcelocation }}"
+    source: "{{ repository_source_location }}"
     installation_policy: untrusted
   check_mode: True
   register: change_installation_policy_check
 
 - name: get result of change InstallationPolicy - check mode
-  ansible.windows.win_shell: '(Get-PSRepository -Name {{ repository_name | quote }}).InstallationPolicy'
+  win_shell: '(Get-PSRepository -Name {{ repository_name | quote }}).InstallationPolicy'
   changed_when: false
   register: result_change_installation_policy_check
 
@@ -81,12 +81,12 @@
 - name: change InstallationPolicy
   win_psrepository:
     name: "{{ repository_name }}"
-    source: "{{ repository_sourcelocation }}"
+    source: "{{ repository_source_location }}"
     installation_policy: untrusted
   register: change_installation_policy
 
 - name: get result of change InstallationPolicy
-  ansible.windows.win_shell: '(Get-PSRepository -Name {{ repository_name | quote }}).InstallationPolicy'
+  win_shell: '(Get-PSRepository -Name {{ repository_name | quote }}).InstallationPolicy'
   changed_when: false
   register: result_change_installation_policy
 
@@ -99,7 +99,7 @@
 - name: change InstallationPolicy - idempotent
   win_psrepository:
     name: "{{ repository_name }}"
-    source: "{{ repository_sourcelocation }}"
+    source: "{{ repository_source_location }}"
     installation_policy: untrusted
   register: change_installation_policy_again
 
@@ -111,13 +111,13 @@
 - name: change source - check mode
   win_psrepository:
     name: "{{ repository_name }}"
-    source: "{{ repository_sourcelocation2 }}"
+    source: "{{ repository_source_location2 }}"
     state: present
   check_mode: True
   register: change_source_check
 
 - name: get result of change source - check mode
-  ansible.windows.win_shell: |
+  win_shell: |
       $repo = Get-PSRepository -Name {{ repository_name | quote }}
       $repo.SourceLocation
       $repo.InstallationPolicy
@@ -128,18 +128,18 @@
   assert:
     that:
     - change_source_check is changed
-    - result_change_source_check.stdout_lines[0] == repository_sourcelocation
+    - result_change_source_check.stdout_lines[0] == repository_source_location
     - result_change_source_check.stdout_lines[1] == 'Untrusted'
 
 - name: change source
   win_psrepository:
     name: "{{ repository_name }}"
-    source: "{{ repository_sourcelocation2 }}"
+    source: "{{ repository_source_location2 }}"
     state: present
   register: change_source
 
 - name: get result of change source
-  ansible.windows.win_shell: |
+  win_shell: |
       $repo = Get-PSRepository -Name {{ repository_name | quote }}
       $repo.SourceLocation
       $repo.InstallationPolicy
@@ -150,7 +150,7 @@
   assert:
     that:
     - change_source is changed
-    - result_change_source.stdout_lines[0] == repository_sourcelocation2
+    - result_change_source.stdout_lines[0] == repository_source_location2
     - result_change_source.stdout_lines[1] == 'Untrusted'
 
 - name: remove repository - check mode
@@ -161,7 +161,7 @@
   register: removing_repository_check
 
 - name: get result of remove repository - check mode
-  ansible.windows.win_shell: '(Get-PSRepository -Name {{ repository_name | quote }} -ErrorAction Ignore | Measure-Object).Count'
+  win_shell: '(Get-PSRepository -Name {{ repository_name | quote }} -ErrorAction Ignore | Measure-Object).Count'
   changed_when: false
   register: result_removing_repository_check
 
@@ -178,7 +178,7 @@
   register: removing_repository
 
 - name: get result of remove repository
-  ansible.windows.win_shell: '(Get-PSRepository -Name {{ repository_name | quote }} -ErrorAction Ignore | Measure-Object).Count'
+  win_shell: '(Get-PSRepository -Name {{ repository_name | quote }} -ErrorAction Ignore | Measure-Object).Count'
   changed_when: false
   register: result_removing_repository
 
