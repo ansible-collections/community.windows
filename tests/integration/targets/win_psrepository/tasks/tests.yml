@@ -14,7 +14,7 @@
   register: adding_repository_check
 
 - name: get result of adding repository defaults - check mode
-  win_shell: (Get-PSRepository -Name {{ repository_name | quote }} -ErrorAction ignore | Measure-Object).Count
+  ansible.windows.win_shell: (Get-PSRepository -Name {{ repository_name | quote }} -ErrorAction ignore | Measure-Object).Count
   changed_when: false
   register: result_adding_repository_check
 
@@ -32,7 +32,7 @@
   register: adding_repository
 
 - name: get result of adding repository defaults
-  win_shell: |
+  ansible.windows.win_shell: |
     $repo = Get-PSRepository -Name {{ repository_name | quote }}
     ($repo | Measure-Object).Count
     $repo.SourceLocation
@@ -68,7 +68,7 @@
   register: change_installation_policy_check
 
 - name: get result of change InstallationPolicy - check mode
-  win_shell: '(Get-PSRepository -Name {{ repository_name | quote }}).InstallationPolicy'
+  ansible.windows.win_shell: '(Get-PSRepository -Name {{ repository_name | quote }}).InstallationPolicy'
   changed_when: false
   register: result_change_installation_policy_check
 
@@ -86,7 +86,7 @@
   register: change_installation_policy
 
 - name: get result of change InstallationPolicy
-  win_shell: '(Get-PSRepository -Name {{ repository_name | quote }}).InstallationPolicy'
+  ansible.windows.win_shell: '(Get-PSRepository -Name {{ repository_name | quote }}).InstallationPolicy'
   changed_when: false
   register: result_change_installation_policy
 
@@ -117,7 +117,7 @@
   register: change_source_check
 
 - name: get result of change source - check mode
-  win_shell: |
+  ansible.windows.win_shell: |
       $repo = Get-PSRepository -Name {{ repository_name | quote }}
       $repo.SourceLocation
       $repo.InstallationPolicy
@@ -139,7 +139,7 @@
   register: change_source
 
 - name: get result of change source
-  win_shell: |
+  ansible.windows.win_shell: |
       $repo = Get-PSRepository -Name {{ repository_name | quote }}
       $repo.SourceLocation
       $repo.InstallationPolicy
@@ -161,7 +161,7 @@
   register: removing_repository_check
 
 - name: get result of remove repository - check mode
-  win_shell: '(Get-PSRepository -Name {{ repository_name | quote }} -ErrorAction Ignore | Measure-Object).Count'
+  ansible.windows.win_shell: '(Get-PSRepository -Name {{ repository_name | quote }} -ErrorAction Ignore | Measure-Object).Count'
   changed_when: false
   register: result_removing_repository_check
 
@@ -178,7 +178,7 @@
   register: removing_repository
 
 - name: get result of remove repository
-  win_shell: '(Get-PSRepository -Name {{ repository_name | quote }} -ErrorAction Ignore | Measure-Object).Count'
+  ansible.windows.win_shell: '(Get-PSRepository -Name {{ repository_name | quote }} -ErrorAction Ignore | Measure-Object).Count'
   changed_when: false
   register: result_removing_repository
 
