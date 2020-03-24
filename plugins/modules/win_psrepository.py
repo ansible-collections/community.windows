@@ -16,7 +16,6 @@ ANSIBLE_METADATA = {'metadata_version': '1.1',
 DOCUMENTATION = r'''
 ---
 module: win_psrepository
-version_added: "2.8"
 short_description: Adds, removes or updates a Windows PowerShell repository.
 description:
   - This module helps to add, remove and update Windows PowerShell repository on Windows-based systems.
@@ -39,17 +38,14 @@ options:
     description:
       - Specifies the URI for discovering and installing scripts from this repository.
     type: str
-    version_added: '2.10'
   publish_location:
     description:
       - Specifies the URI for publishing modules to this repository.
     type: str
-    version_added: '2.10'
   script_publish_location:
     description:
       - Specifies the URI for publishing scripts to this repository.
     type: str
-    version_added: '2.10'
   state:
     description:
       - If C(present) a new repository is added or updated.
@@ -69,7 +65,6 @@ options:
       - I(force) has no effect when I(state=absent). See notes for additional context.
     type: bool
     default: False
-    version_added: '2.10'
 requirements:
   - PowerShell Module L(PowerShellGet >= 1.6.0,https://www.powershellgallery.com/packages/PowerShellGet/)
   - PowerShell Module L(PackageManagement >= 1.1.7,https://www.powershellgallery.com/packages/PackageManagement/)
