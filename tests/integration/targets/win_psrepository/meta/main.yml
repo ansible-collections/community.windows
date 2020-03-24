@@ -1,4 +1,4 @@
 dependencies:
-- prepare_http_tests
+- setup_http_tests
 - setup_remote_tmp_dir
 - setup_win_psget
