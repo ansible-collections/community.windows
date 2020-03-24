@@ -10,14 +10,14 @@
     include_vars: httptester.yml
 
   - name: make sure the port forwarder is active
-    win_wait_for:
+    ansible.windows.win_wait_for:
       host: ansible.http.tests
       port: 80
       state: started
       timeout: 300
 
   - name: get client cert/key
-    win_get_url:
+    ansible.windows.win_get_url:
       url: http://ansible.http.tests/{{ item }}
       dest: '{{ remote_tmp_dir }}\{{ item }}'
     register: win_download
@@ -28,12 +28,12 @@
     - client.key
 
   - name: retrieve test cacert
-    win_get_url:
+    ansible.windows.win_get_url:
       url: http://ansible.http.tests/cacert.pem
       dest: '{{ remote_tmp_dir }}\cacert.pem'
 
   - name: update ca trust
-    win_certificate_store:
+    ansible.windows.win_certificate_store:
       path: '{{ remote_tmp_dir }}\cacert.pem'
       state: present
       store_location: LocalMachine
