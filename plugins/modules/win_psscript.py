@@ -11,7 +11,6 @@ ANSIBLE_METADATA = {'metadata_version': '1.1',
 DOCUMENTATION = r'''
 ---
 module: win_psscript
-version_added: '2.10'
 short_description: Install and manage PowerShell scripts from a PSRepository
 description:
   - Add or remove PowerShell scripts from registered PSRepositories.
