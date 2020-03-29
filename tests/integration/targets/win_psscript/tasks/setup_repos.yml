@@ -4,12 +4,12 @@
 # GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 ---
 - name: Unregister all repositories
-  win_shell: |
+  ansible.windows.win_shell: |
     Get-PSRepository | Unregister-PSRepository
   notify: Add PSGallery
 
 - name: Create repo folders
-  win_file:
+  ansible.windows.win_file:
     path: '{{ item.path }}'
     state: directory
   loop: "{{ repos }}"
@@ -24,7 +24,7 @@
   loop: "{{ repos }}"
 
 - name: Create and Publish Scripts
-  win_shell: |
+  ansible.windows.win_shell: |
     $tmp = '{{ remote_tmp_dir }}'
 
     # it looks like Tls12 is not added during the nuget bootstrapping process
