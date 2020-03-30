@@ -104,18 +104,18 @@ modules:
     path:
       description:
         - The path to the module.
-      type: path
+      type: str
       sample: 'C:\WINDOWS\system32\WindowsPowerShell\v1.0\Modules\PKI\PKI.psd1'
     module_base:
       description:
         - The path that contains the module's files.
-      type: path
+      type: str
       sample: 'C:\WINDOWS\system32\WindowsPowerShell\v1.0\Modules\PKI'
     installed_location:
       description:
         - The path where the module is installed.
         - This should have the same value as C(module_base) but only has a value when the module was installed via PowerShellGet.
-      type: path
+      type: str
       sample: 'C:\Program Files\WindowsPowerShell\Modules\posh-git\0.7.1'
     exported_aliases:
       description:
