@@ -91,7 +91,7 @@ function ConvertTo-SerializableModuleInfo {
         convert to snake_case.
 
         PrivateData can contain any data but a module manifest is a static file that can't contain references or
-        problematic types like [Type]. Unfortunately some module types like CIM and (presumably binary?) seem to be
+        problematic types like [Type]. Unfortunately some module types like CIM (and presumably binary?) seem to be
         able to populate that with whatever they want.
 
         As a precaution then, for module type that is not Script or Manifest, we limit PrivateData to a shallow depth.

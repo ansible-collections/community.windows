@@ -29,6 +29,7 @@ options:
       - Modules that were not installed from a repository will not be returned if this option is set.
       - Only modules installed from a registered repository will be returned.
       - If the repository was re-registered after module installation with a new C(SourceLocation), this will not match.
+    type: str
 requirements:
   - C(PowerShellGet) module
 seealso:
