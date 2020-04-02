@@ -1,0 +1,69 @@
+---
+run_check_mode: False
+suffix: "{{ '(check mode)' if run_check_mode else '' }}"
+default_repository_name: PSGallery
+
+modules_to_install:
+  - AnsibleVault
+  - PSCSharpInvoker
+  - Idempotion
+
+expected_fields:
+  - prefix
+  - private_data
+  - scripts
+  - author
+  - description
+  - exported_type_files
+  - exported_workflows
+  - nested_modules
+  - exported_dsc_resources
+  - updated_date
+  - root_module
+  - power_shell_host_name
+  - module_base
+  - path
+  - exported_format_files
+  - dependencies
+  - release_notes
+  - installed_date
+  - exported_variables
+  - published_date
+  - required_assemblies
+  - version
+  - icon_uri
+  - project_uri
+  - dot_net_framework_version
+  - prcoessor_architecture
+  - license_uri
+  - required_modules
+  - module_type
+  - compatible_ps_editions
+  - company_name
+  - copyright
+  - tags
+  - access_mode
+  - package_management_provider
+  - exported_aliases
+  - power_shell_host_version
+  - clr_version
+  - file_list
+  - help_info_uri
+  - module_list
+  - exported_functions
+  - power_shell_version
+  - guid
+  - repository_source_location
+  - exported_cmdlets
+  - exported_commands
+  - repository
+  - installed_location
+  - name
+  - log_pipeline_execution_details
+
+
+# second_repository_name: PowerShellGetDemo
+# second_repository_source_location: https://www.myget.org/F/powershellgetdemo/api/v2
+
+# third_repository_name: OtherRepo
+# third_repository_source_location: http://httpbin.org/get
