@@ -41,7 +41,7 @@ expected_fields:
   - icon_uri
   - project_uri
   - dot_net_framework_version
-  - prcoessor_architecture
+  - processor_architecture
   - license_uri
   - required_modules
   - module_type

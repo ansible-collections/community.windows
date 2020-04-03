@@ -197,7 +197,7 @@ modules:
         - The module's type. See U(https://docs.microsoft.com/en-us/dotnet/api/system.management.automation.moduletype)
       type: str
       sample: Script
-    prcoessor_architecture:
+    procoessor_architecture:
       description:
         - The module's processor architecture. See U(https://docs.microsoft.com/en-us/dotnet/api/system.reflection.processorarchitecture)
       type: str
