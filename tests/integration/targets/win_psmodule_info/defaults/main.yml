@@ -9,7 +9,7 @@ modules_to_install:
   - Idempotion
 
 builtin_modules:
-  - Microsoft.PowerShell.Core
+  - Microsoft.PowerShell.Utility
   - Microsoft.PowerShell.Host
   - Microsoft.PowerShell.Management
 
