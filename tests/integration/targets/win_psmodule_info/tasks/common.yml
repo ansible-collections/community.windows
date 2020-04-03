@@ -1,0 +1,23 @@
+# This file is part of Ansible
+
+# Copyright: (c) 2020, Brian Scholer <@briantist>
+# GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
+---
+- name: Assert that the correct structure is returned {{ suffix }}
+  assert:
+    that:
+      - module_info.modules is defined
+      - module_info.modules is sequence()
+      - module_info.modules | length >= expected_modules | length
+
+- name: Assert that all expected modules are present {{ suffix }}
+  assert:
+    that: item in (module_info.modules | map(attribute='name'))
+  loop: "{{ expected_modules }}"
+  loop_control:
+    label: "Asset '{{ item }}' in result."
+
+- include_tasks: contains_all_fields.yml
+  vars:
+    dict_to_check: "{{ item }}"
+  loop: "{{ module_info.modules }}"

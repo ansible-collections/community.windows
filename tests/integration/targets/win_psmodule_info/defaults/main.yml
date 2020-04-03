@@ -8,6 +8,13 @@ modules_to_install:
   - PSCSharpInvoker
   - Idempotion
 
+builtin_modules:
+  - Microsoft.PowerShell.Core
+  - Microsoft.PowerShell.Host
+  - Microsoft.PowerShell.Management
+
+sample_modules: "{{ builtin_modules + modules_to_install }}"
+
 expected_fields:
   - prefix
   - private_data
@@ -60,10 +67,3 @@ expected_fields:
   - installed_location
   - name
   - log_pipeline_execution_details
-
-
-# second_repository_name: PowerShellGetDemo
-# second_repository_source_location: https://www.myget.org/F/powershellgetdemo/api/v2
-
-# third_repository_name: OtherRepo
-# third_repository_source_location: http://httpbin.org/get
