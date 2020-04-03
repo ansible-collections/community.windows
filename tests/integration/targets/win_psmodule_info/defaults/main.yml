@@ -1,7 +1,8 @@
 ---
 run_check_mode: False
 suffix: "{{ '(check mode)' if run_check_mode else '' }}"
-default_repository_name: PSGallery
+repository_name: Repo
+repo_path: "{{ remote_tmp_dir }}\\repo\\"
 
 modules_to_install:
   - AnsibleVault

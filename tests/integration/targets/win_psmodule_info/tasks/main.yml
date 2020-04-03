@@ -8,6 +8,18 @@
     Get-PSRepository | Unregister-PSRepository
     Register-PSRepository -Default
 
+- name: Set up directory repository
+  win_copy:
+    src: "{{ role_path }}/files/"
+    dest: "{{ repo_path }}"
+    force: no
+
+- name: Register repository
+  community.windows.win_psrepository:
+    name: "{{ repository_name }}"
+    source_location: "{{ repo_path }}"
+    installation_policy: trusted
+
 - block:
     - name: Install Modules
       community.windows.win_psmodule:
@@ -29,3 +41,8 @@
         name: "{{ item }}"
         state: absent
       loop: "{{ modules_to_install }}"
+
+    - name: Reset repositories
+      ansible.windows.win_shell: |
+        Get-PSRepository | Unregister-PSRepository
+        Register-PSRepository -Default

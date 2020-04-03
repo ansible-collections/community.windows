@@ -48,7 +48,7 @@
 
 - name: Get info on modules by repository
   vars:
-    repository: "{{ default_repository_name }}"
+    repository: "{{ repository_name }}"
     expected_modules: "{{ modules_to_install }}"
   block:
     - name: Get multiple modules by repository {{ suffix }}
@@ -64,7 +64,7 @@
 - name: Get info on modules by repository and name pattern
   vars:
     wildcard: "*t"
-    repository: "{{ default_repository_name }}"
+    repository: "{{ repository_name }}"
     expected_modules:
       - "AnsibleVault"
   block:
