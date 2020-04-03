@@ -9,7 +9,7 @@
     Register-PSRepository -Default
 
 - name: Set up directory repository
-  win_copy:
+  ansible.windows.win_copy:
     src: "{{ role_path }}/files/"
     dest: "{{ repo_path }}"
     force: no
