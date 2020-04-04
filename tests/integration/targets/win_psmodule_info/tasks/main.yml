@@ -25,6 +25,7 @@
       community.windows.win_psmodule:
         name: "{{ item }}"
         state: latest
+        repository: "{{ repository_name }}"
       loop: "{{ modules_to_install }}"
 
     - name: Run Tests
