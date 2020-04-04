@@ -8,16 +8,29 @@
     that:
       - module_info.modules is defined
       - module_info.modules is sequence()
-      - module_info.modules | length >= expected_modules | length
+    quiet: yes
+
+- name: Assert that the correct number of modules are returned {{ suffix }}
+  assert:
+    that: module_info.modules | length >= expected_modules | length
+    fail_msg: "Expected {{ expected_modules | length }} modules, got {{ module_info.modules | join(',') }} ({{ module_info.modules | length}})"
+    quiet: yes
 
 - name: Assert that all expected modules are present {{ suffix }}
   assert:
     that: item in (module_info.modules | map(attribute='name'))
+    fail_msg: "Expected module '{{ item }}' not found in results."
+    quiet: yes
   loop: "{{ expected_modules }}"
   loop_control:
-    label: "Asset '{{ item }}' in result."
+    label: "Assert '{{ item }}' in result."
 
 - include_tasks: contains_all_fields.yml
   vars:
     dict_to_check: "{{ item }}"
-  loop: "{{ module_info.modules }}"
+  loop: "{{
+    only_check_first
+    | default(True)
+    | bool
+    | ternary(module_info.modules[0], module_info.modules)
+  }}"
