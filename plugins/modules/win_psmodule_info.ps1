@@ -239,7 +239,8 @@ function Add-ModuleRepositoryInfo {
             'ProjectUri',
             'IconUri',
             'ReleaseNotes',
-            'ExportedDscResources'
+            'ExportedDscResources', # ExportedDscResources is not returned here, this is a hack for Windows 2012/R2 to ensure the field is present
+            'Prefix'                # Prefix is not actually returned here, this is a hack for Windows 2012 just to ensure the field is present
         )
 
         # Get all the installed modules at once. This prevents us from having to make an expensive individual call for every
