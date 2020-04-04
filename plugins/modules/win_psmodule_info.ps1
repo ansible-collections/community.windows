@@ -231,7 +231,15 @@ function Add-ModuleRepositoryInfo {
             'Dependencies',
             'Repository',
             'PackageManagementProvider',
-            'InstalledLocation'
+            'InstalledLocation',
+            'RepositorySourceLocation',
+            'Tags',
+            'CompatiblePSEditions',
+            'LicenseUri',
+            'ProjectUri',
+            'IconUri',
+            'ReleaseNotes',
+            'ExportedDscResources'
         )
 
         # Get all the installed modules at once. This prevents us from having to make an expensive individual call for every
@@ -266,7 +274,9 @@ function Add-ModuleRepositoryInfo {
 
         $members = @{}
         $wantedProperties | ForEach-Object -Process {
-            $members[$_] = $installed.$_
+            if (-not $InputObject.$_) { # if the fields are present in both places, let's prefer what's sent in
+                $members[$_] = $installed.$_
+            }
         }
 
         $InputObject | Add-Member -NotePropertyMembers $members -Force -PassThru
