@@ -3,19 +3,6 @@
 # Copyright: (c) 2020, Brian Scholer <@briantist>
 # GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 ---
-- name: Get info on all modules
-  vars:
-    expected_modules: "{{ sample_modules }}"
-  block:
-    - name: Get all modules {{ suffix }}
-      community.windows.win_psmodule_info:
-      register: module_info
-
-    - include_tasks: common.yml
-
-  # block
-  check_mode: "{{ run_check_mode }}"
-
 - name: Get info on a named module
   vars:
     expected_modules:
@@ -24,6 +11,19 @@
     - name: Get single module {{ suffix }}
       community.windows.win_psmodule_info:
         name: "{{ expected_modules[0] }}"
+      register: module_info
+
+    - include_tasks: common.yml
+
+  # block
+  check_mode: "{{ run_check_mode }}"
+
+- name: Get info on all modules
+  vars:
+    expected_modules: "{{ sample_modules }}"
+  block:
+    - name: Get all modules {{ suffix }}
+      community.windows.win_psmodule_info:
       register: module_info
 
     - include_tasks: common.yml
