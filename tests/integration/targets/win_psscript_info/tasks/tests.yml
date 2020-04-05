@@ -21,7 +21,11 @@
 - name: Get info on scripts by wildcard match
   vars:
     wildcard: "Install-*"
-    expected_scripts: "{{ sample_scripts }}"
+    expected_scripts: "{{
+      sample_scripts
+      | select('match', '^Install-')
+      | list
+    }}"
   block:
     - name: Get multiple scripts by wildcard {{ suffix }}
       community.windows.win_psscript_info:
@@ -52,8 +56,11 @@
   vars:
     wildcard: "*RPC"
     repository: "{{ repository_name }}"
-    expected_scripts:
-      - "Test-RPC"
+    expected_scripts: "{{
+      sample_scripts
+      | select('match', 'RPC$')
+      | list
+    }}"
   block:
     - name: Get scripts by wildcard and repository {{ suffix }}
       community.windows.win_psscript_info:
