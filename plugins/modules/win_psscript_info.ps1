@@ -84,7 +84,12 @@ function ConvertTo-SerializableScriptInfo {
             <#
                 Includes is for modules, containing the stuff they export.
             #>
-            'Includes'
+            'Includes' ,
+
+            <#
+                This is always 'Script' for scripts.
+            #>
+            'Type'
         )
     )
 
@@ -115,7 +120,8 @@ function ConvertTo-SerializableScriptInfo {
 }
 
 $module.Result.scripts = @(
-    Get-InstalledScript -Name $module.Params.name |
+    Get-InstalledScript -Name $module.Params.name -ErrorAction SilentlyContinue |
+    Where-Object -FilterScript { -not $module.Params.repository -or $_.Repository -eq $module.Params.repository } |
     ConvertTo-SerializableScriptInfo |
     Convert-ObjectToSnakeCase -NoRecurse
 )
