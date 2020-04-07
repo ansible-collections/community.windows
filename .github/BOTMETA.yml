@@ -22,24 +22,6 @@ files:
   $modules/win_certificate_info.py:
     authors: mhunsber
     maintainers: $team_windows
-  $modules/win_chocolatey.ps1:
-    maintainers: $team_windows
-  $modules/win_chocolatey.py:
-    authors: elventear jborean93 petemounce ptemplier smadam813 trondhindenes
-  $modules/win_chocolatey_config.ps1:
-    maintainers: $team_windows
-  $modules/win_chocolatey_config.py: {}
-  $modules/win_chocolatey_facts.ps1:
-    maintainers: $team_windows
-  $modules/win_chocolatey_facts.py:
-    authors: itigoag sbaerlocher
-    maintainers: $team_windows
-  $modules/win_chocolatey_feature.ps1:
-    maintainers: $team_windows
-  $modules/win_chocolatey_feature.py: {}
-  $modules/win_chocolatey_source.ps1:
-    maintainers: $team_windows
-  $modules/win_chocolatey_source.py: {}
   $modules/win_computer_description.ps1:
     maintainers: $team_windows
   $modules/win_computer_description.py:

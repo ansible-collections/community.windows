@@ -61,7 +61,7 @@ EXAMPLES = r'''
 
 - name: Add Pester module
   action:
-    module_name: "{{ 'win_psmodule' if ansible_powershell_version >= 5 else 'win_chocolatey' }}"
+    module_name: "{{ 'win_psmodule' if ansible_powershell_version >= 5 else 'chocolatey.chocolatey.win_chocolatey' }}"
     name: Pester
     state: present
 

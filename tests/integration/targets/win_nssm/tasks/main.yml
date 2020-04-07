@@ -1,6 +1,6 @@
 ---
 - name: install NSSM
-  win_chocolatey:
+  chocolatey.chocolatey.win_chocolatey:
     name: NSSM
     state: present
 
@@ -33,7 +33,7 @@
         state: absent
 
     - name: uninstall NSSM
-      win_chocolatey:
+      chocolatey.chocolatey.win_chocolatey:
         name: NSSM
         state: absent
       failed_when: false

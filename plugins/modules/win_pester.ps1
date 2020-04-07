@@ -49,7 +49,7 @@ If (-not (Get-Module -Name $Pester -ErrorAction SilentlyContinue)) {
     If (Get-Module -Name $Pester -ListAvailable -ErrorAction SilentlyContinue) {
         Import-Module $Pester
     } else {
-        $module.FailJson("Cannot find module: $Pester. Check if pester is installed, and if it is not, install using win_psmodule or win_chocolatey.")
+        $module.FailJson("Cannot find module: $Pester. Check if pester is installed, and if it is not, install using win_psmodule or chocolatey.chocolatey.win_chocolatey.")
     }
 }
 

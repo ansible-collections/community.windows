@@ -1,5 +1,5 @@
 - name: Ensure RabbitMQ installed
-  win_chocolatey:
+  chocolatey.chocolatey.win_chocolatey:
     name: rabbitmq
     state: present
 
