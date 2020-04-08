@@ -40,7 +40,7 @@ cd "${TEST_DIR}"
 
 # TODO: put this in a requirements file
 # Install the depss of this collection
-ansible-galaxy collection install 'ansible.windows:0.0.1-beta.2'
+ansible-galaxy collection install 'ansible.windows:0.0.1-beta.2' 'chocolatey.chocolatey'
 
 # export PATH="${PWD}/bin:${PATH}"
 export PYTHONIOENCODING='utf-8'

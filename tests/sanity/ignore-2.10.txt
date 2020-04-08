@@ -1,8 +1,4 @@
 plugins/modules/win_audit_rule.ps1 pslint:PSCustomUseLiteralPath
-plugins/modules/win_chocolatey.ps1 validate-modules:doc-elements-mismatch
-plugins/modules/win_chocolatey_config.ps1 pslint:PSCustomUseLiteralPath
-plugins/modules/win_chocolatey_facts.ps1 pslint:PSCustomUseLiteralPath
-plugins/modules/win_chocolatey_source.ps1 pslint:PSCustomUseLiteralPath
 plugins/modules/win_credential.ps1 pslint:PSCustomUseLiteralPath
 plugins/modules/win_credential.ps1 validate-modules:doc-elements-mismatch
 plugins/modules/win_credential.ps1 validate-modules:parameter-type-not-in-doc
@@ -56,8 +52,6 @@ plugins/modules/win_wait_for_process.ps1 validate-modules:parameter-list-no-elem
 plugins/modules/win_webpicmd.ps1 pslint:PSAvoidUsingInvokeExpression
 plugins/modules/win_xml.ps1 pslint:PSCustomUseLiteralPath
 tests/integration/targets/win_audit_rule/library/test_get_audit_rule.ps1 pslint:PSCustomUseLiteralPath
-tests/integration/targets/win_chocolatey/files/tools/chocolateyUninstall.ps1 pslint:PSCustomUseLiteralPath
-tests/integration/targets/win_chocolatey_source/library/choco_source.ps1 pslint:PSCustomUseLiteralPath
 tests/integration/targets/win_iis_webbinding/library/test_get_webbindings.ps1 pslint:PSUseApprovedVerbs
 tests/integration/targets/win_psmodule/files/module/template.psd1 pslint!skip
 tests/integration/targets/win_psmodule/files/module/template.psm1 pslint!skip

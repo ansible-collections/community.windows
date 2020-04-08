@@ -1,3 +1,4 @@
 integration_tests_dependencies:
 - ansible.windows
+- chocolatey.chocolatey
 unit_tests_dependencies: []
