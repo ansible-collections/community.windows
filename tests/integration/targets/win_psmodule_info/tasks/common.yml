@@ -1,0 +1,37 @@
+# This file is part of Ansible
+
+# Copyright: (c) 2020, Brian Scholer <@briantist>
+# GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
+---
+- name: Assert that the correct structure is returned {{ suffix }}
+  assert:
+    that:
+      - module_info.modules is defined
+      - module_info.modules is sequence()
+    quiet: yes
+
+- name: Assert that the correct number of modules are returned {{ suffix }}
+  assert:
+    that: module_info.modules | length >= expected_modules | length
+    fail_msg: >-
+      Expected {{ expected_modules | length }} modules, got {{ module_info.modules | map(attribute='name') | join(',') }} ({{ module_info.modules | length}})
+    quiet: yes
+
+- name: Assert that all expected modules are present {{ suffix }}
+  assert:
+    that: item in (module_info.modules | map(attribute='name'))
+    fail_msg: "Expected module '{{ item }}' not found in results."
+    quiet: yes
+  loop: "{{ expected_modules }}"
+  loop_control:
+    label: "Assert '{{ item }}' in result."
+
+- include_tasks: contains_all_fields.yml
+  vars:
+    dict_to_check: "{{ item }}"
+  loop: "{{
+    only_check_first
+    | default(True)
+    | bool
+    | ternary([ module_info.modules[0] ], module_info.modules)
+  }}"

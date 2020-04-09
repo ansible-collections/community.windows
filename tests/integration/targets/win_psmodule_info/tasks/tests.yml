@@ -1,0 +1,85 @@
+# This file is part of Ansible
+
+# Copyright: (c) 2020, Brian Scholer <@briantist>
+# GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
+---
+- name: Get info on a named module
+  vars:
+    expected_modules:
+      - "{{ builtin_modules[0] }}"
+  block:
+    - name: Get single module {{ suffix }}
+      community.windows.win_psmodule_info:
+        name: "{{ expected_modules[0] }}"
+      register: module_info
+
+    - include_tasks: common.yml
+
+  # block
+  check_mode: "{{ run_check_mode }}"
+
+- name: Get info on modules by wildcard match
+  vars:
+    wildcard: "Microsoft.PowerShell.*"
+    expected_modules: "{{ builtin_modules }}"
+  block:
+    - name: Get multiple modules by wildcard {{ suffix }}
+      community.windows.win_psmodule_info:
+        name: "{{ wildcard }}"
+      register: module_info
+
+    - include_tasks: common.yml
+
+  # block
+  check_mode: "{{ run_check_mode }}"
+
+- name: Get info on modules by repository
+  vars:
+    repository: "{{ repository_name }}"
+    expected_modules: "{{ modules_to_install }}"
+  block:
+    - name: Get multiple modules by repository {{ suffix }}
+      community.windows.win_psmodule_info:
+        repository: "{{ repository }}"
+      register: module_info
+
+    - include_tasks: common.yml
+
+  # block
+  check_mode: "{{ run_check_mode }}"
+
+- name: Get info on modules by repository and name pattern
+  vars:
+    wildcard: "*t"
+    repository: "{{ repository_name }}"
+    expected_modules:
+      - "AnsibleVault"
+  block:
+    - name: Get multiple modules by wildcard and repository {{ suffix }}
+      community.windows.win_psmodule_info:
+        name: "{{ wildcard }}"
+        repository: "{{ repository }}"
+      register: module_info
+
+    - include_tasks: common.yml
+
+  # block
+  check_mode: "{{ run_check_mode }}"
+
+- name: Get info on all modules
+  vars:
+    expected_modules: "{{ sample_modules }}"
+  block:
+    - name: Get all modules {{ suffix }}
+      community.windows.win_psmodule_info:
+      register: module_info
+
+    - include_tasks: common.yml
+
+    # one last time checking all the fields
+    - include_tasks: common.yml
+      vars:
+        only_check_first: False
+
+  # block
+  check_mode: "{{ run_check_mode }}"

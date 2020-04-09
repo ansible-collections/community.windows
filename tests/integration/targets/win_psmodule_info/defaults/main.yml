@@ -1,0 +1,70 @@
+---
+run_check_mode: False
+suffix: "{{ '(check mode)' if run_check_mode else '' }}"
+repository_name: Repo
+repo_path: "{{ remote_tmp_dir }}\\repo\\"
+
+modules_to_install:
+  - AnsibleVault
+  - PSCSharpInvoker
+  - PInvokeHelper
+
+builtin_modules:
+  - Microsoft.PowerShell.Utility
+  - Microsoft.PowerShell.Host
+  - Microsoft.PowerShell.Management
+
+sample_modules: "{{ builtin_modules + modules_to_install }}"
+
+expected_fields:
+  - prefix
+  - private_data
+  - scripts
+  - author
+  - description
+  - exported_type_files
+  - exported_workflows
+  - nested_modules
+  - exported_dsc_resources
+  - updated_date
+  - root_module
+  - power_shell_host_name
+  - module_base
+  - path
+  - exported_format_files
+  - dependencies
+  - release_notes
+  - installed_date
+  - exported_variables
+  - published_date
+  - required_assemblies
+  - version
+  - icon_uri
+  - project_uri
+  - dot_net_framework_version
+  - processor_architecture
+  - license_uri
+  - required_modules
+  - module_type
+  - compatible_ps_editions
+  - company_name
+  - copyright
+  - tags
+  - access_mode
+  - package_management_provider
+  - exported_aliases
+  - power_shell_host_version
+  - clr_version
+  - file_list
+  - help_info_uri
+  - module_list
+  - exported_functions
+  - power_shell_version
+  - guid
+  - repository_source_location
+  - exported_cmdlets
+  - exported_commands
+  - repository
+  - installed_location
+  - name
+  - log_pipeline_execution_details

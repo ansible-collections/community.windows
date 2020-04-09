@@ -1,0 +1,49 @@
+# This file is part of Ansible
+
+# Copyright: (c) 2020, Brian Scholer <@briantist>
+# GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
+---
+- name: Reset repositories
+  ansible.windows.win_shell: |
+    Get-PSRepository | Unregister-PSRepository
+    Register-PSRepository -Default
+
+- name: Set up directory repository
+  ansible.windows.win_copy:
+    src: "{{ role_path }}/files/"
+    dest: "{{ repo_path }}"
+    force: no
+
+- name: Register repository
+  community.windows.win_psrepository:
+    name: "{{ repository_name }}"
+    source_location: "{{ repo_path }}"
+    installation_policy: trusted
+
+- block:
+    - name: Install Modules
+      community.windows.win_psmodule:
+        name: "{{ item }}"
+        state: latest
+        repository: "{{ repository_name }}"
+      loop: "{{ modules_to_install }}"
+
+    - name: Run Tests
+      import_tasks: tests.yml
+
+    - name: Run Tests (check mode)
+      import_tasks: tests.yml
+      vars:
+        run_check_mode: True
+
+  always:
+    - name: Remove Modules
+      community.windows.win_psmodule:
+        name: "{{ item }}"
+        state: absent
+      loop: "{{ modules_to_install }}"
+
+    - name: Reset repositories
+      ansible.windows.win_shell: |
+        Get-PSRepository | Unregister-PSRepository
+        Register-PSRepository -Default
