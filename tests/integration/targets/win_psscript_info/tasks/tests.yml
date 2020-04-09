@@ -1,0 +1,92 @@
+# This file is part of Ansible
+
+# Copyright: (c) 2020, Brian Scholer <@briantist>
+# GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
+---
+- name: Get info on a named script
+  vars:
+    expected_scripts:
+      - "{{ sample_scripts[0] }}"
+  block:
+    - name: Get single script {{ suffix }}
+      community.windows.win_psscript_info:
+        name: "{{ expected_scripts[0] }}"
+      register: script_info
+
+    - include_tasks: common.yml
+
+  # block
+  check_mode: "{{ run_check_mode }}"
+
+- name: Get info on scripts by wildcard match
+  vars:
+    wildcard: "Install-*"
+    expected_scripts: "{{
+      sample_scripts
+      | select('match', '^Install-')
+      | list
+    }}"
+  block:
+    - name: Get multiple scripts by wildcard {{ suffix }}
+      community.windows.win_psscript_info:
+        name: "{{ wildcard }}"
+      register: script_info
+
+    - include_tasks: common.yml
+
+  # block
+  check_mode: "{{ run_check_mode }}"
+
+- name: Get info on scripts by repository
+  vars:
+    repository: "{{ repository_name }}"
+    expected_scripts: "{{ sample_scripts }}"
+  block:
+    - name: Get multiple scripts by repository {{ suffix }}
+      community.windows.win_psscript_info:
+        repository: "{{ repository }}"
+      register: script_info
+
+    - include_tasks: common.yml
+
+  # block
+  check_mode: "{{ run_check_mode }}"
+
+- name: Get info on scripts by repository and name pattern
+  vars:
+    wildcard: "*RPC"
+    repository: "{{ repository_name }}"
+    expected_scripts: "{{
+      sample_scripts
+      | select('match', 'RPC$')
+      | list
+    }}"
+  block:
+    - name: Get scripts by wildcard and repository {{ suffix }}
+      community.windows.win_psscript_info:
+        name: "{{ wildcard }}"
+        repository: "{{ repository }}"
+      register: script_info
+
+    - include_tasks: common.yml
+
+  # block
+  check_mode: "{{ run_check_mode }}"
+
+- name: Get info on all scripts
+  vars:
+    expected_scripts: "{{ sample_scripts }}"
+  block:
+    - name: Get all scripts {{ suffix }}
+      community.windows.win_psscript_info:
+      register: script_info
+
+    - include_tasks: common.yml
+
+    # one last time checking all the fields
+    - include_tasks: common.yml
+      vars:
+        only_check_first: False
+
+  # block
+  check_mode: "{{ run_check_mode }}"

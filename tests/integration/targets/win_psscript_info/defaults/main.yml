@@ -1,0 +1,34 @@
+---
+run_check_mode: False
+suffix: "{{ '(check mode)' if run_check_mode else '' }}"
+repository_name: Repo
+repo_path: "{{ remote_tmp_dir }}\\repo\\"
+
+sample_scripts:
+  - Test-RPC
+  - Upgrade-PowerShell
+  - Install-WMF3Hotfix
+  - Install-Git
+
+expected_fields:
+  - name
+  - version
+  - installed_location
+  - author
+  - copyright
+  - company_name
+  - description
+  - dependencies
+  - icon_uri
+  - license_uri
+  - project_uri
+  - repository_source_location
+  - repository
+  - release_notes
+  - installed_date
+  - published_date
+  - updated_date
+  - package_management_provider
+  - tags
+  - power_shell_get_format_version
+  - additional_metadata
