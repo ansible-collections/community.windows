@@ -1,3 +1,6 @@
+#!powershell
+# GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
+
 <#
 Function to enable 32 bit .net version for iis web Apps
 #>
