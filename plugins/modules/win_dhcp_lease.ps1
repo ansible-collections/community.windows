@@ -1,12 +1,10 @@
 #!powershell
 
-# Copyright: (c) 2019 VMware, Inc. All Rights Reserved.
+# Copyright: (c) 2020 VMware, Inc. All Rights Reserved.
 # SPDX-License-Identifier: GPL-3.0-only
 # GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 
 #AnsibleRequires -CSharpUtil Ansible.Basic
-
-$ErrorActionPreference = 'Stop'
 
 $spec = @{
     options = @{
@@ -21,11 +19,15 @@ $spec = @{
         description = @{ type = "str"; }
         state = @{ type = "str"; choices = "absent", "present"; default = "present" }
     }
+    required_if = @(
+        @("state", "present", @("mac", "ip"), $true),
+        @("state", "present", @("scope_id")),
+        @("state", "absent", @("mac", "ip"), $true)
+    )
     supports_check_mode = $true
 }
 
 $module = [Ansible.Basic.AnsibleModule]::Create($args, $spec)
-$module.Result.changed = $false
 $check_mode = $module.CheckMode
 
 $type = $module.Params.type
@@ -110,7 +112,7 @@ Try {
 }
 Catch {
     # Couldn't load the DhcpServer Module
-    $module.FailJson("The DhcpServer module failed to load properly")
+    $module.FailJson("The DhcpServer module failed to load properly",$_)
 }
 
 # Determine if there is an existing lease
@@ -154,13 +156,6 @@ else {
 # State: Absent
 # Ensure the DHCP Lease/Reservation is not present
 if ($state -eq "absent") {
-
-    # Required: MAC or IP address
-    if ((-not $mac) -and (-not $ip)) {
-        $module.Result.changed = $false
-        $module.FailJson("The ip or mac parameter is required for state=absent")
-    }
-
     # If the lease exists, we need to destroy it
     if ($current_lease_reservation -eq $true) {
 
@@ -171,6 +166,7 @@ if ($state -eq "absent") {
         }
         Catch {
             $state_absent_removed = $false
+            $remove_err = $_
         }
     }
     else {
@@ -182,31 +178,28 @@ if ($state -eq "absent") {
         }
         Catch {
             $state_absent_removed = $false
+            $remove_err = $_
         }
     }
 
     # If the lease doesn't exist, our work here is done
     if ($current_lease_exists -eq $false) {
-        $module.Result.changed = $false
-        $module.Result.msg = "The lease or reservation doesn't exist."
-        $module.ExitJson()
+        $module.Result.msg = "The lease doesn't exist."
     }
 
     # See if we removed the lease/reservation
     if ($state_absent_removed) {
         $module.Result.changed = $true
-        $module.ExitJson()
     }
     else {
         $module.Result.lease = Convert-ReturnValue -Object $current_lease
-        $module.FailJson("Unable to remove lease/reservation")
+        $module.FailJson("Unable to remove lease/reservation: $($remove_err.Exception.Message)", $remove_err)
     }
 }
 
 # State: Present
 # Ensure the DHCP Lease/Reservation is present, and consistent
 if ($state -eq "present") {
-
     # Current lease exists, and is not a reservation
     if (($current_lease_reservation -eq $false) -and ($current_lease_exists -eq $true)) {
         if ($type -eq "reservation") {
@@ -257,15 +250,8 @@ if ($state -eq "present") {
                 $module.ExitJson()
             }
             Catch {
-                $module.Result.changed = $false
-                $module.FailJson("Could not convert lease to a reservation")
+                $module.FailJson("Could not convert lease to a reservation",$_)
             }
-        }
-
-        # Nothing needs to be done, already in the desired state
-        if ($type -eq "lease") {
-            $module.Result.changed = $false
-            $module.ExitJson()
         }
     }
 
@@ -290,8 +276,7 @@ if ($state -eq "present") {
                     Add-DhcpServerv4Lease @lease_params -WhatIf:$check_mode
                 }
                 Catch {
-                    $module.Result.changed = $false
-                    $module.FailJson("Unable to convert the reservation to a lease")
+                    $module.FailJson("Unable to convert the reservation to a lease",$_)
                 }
 
                 # Get the lease we just created
@@ -300,8 +285,7 @@ if ($state -eq "present") {
                         $new_lease = Get-DhcpServerv4Lease -ClientId $lease_params.ClientId -ScopeId $lease_params.ScopeId
                     }
                     Catch {
-                        $module.Result.changed = $false
-                        $module.FailJson("Unable to retreive the newly created lease")
+                        $module.FailJson("Unable to retreive the newly created lease",$_)
                     }
                 }
 
@@ -313,8 +297,7 @@ if ($state -eq "present") {
                 $module.ExitJson()
             }
             Catch {
-                $module.Result.changed = $false
-                $module.FailJson("Could not convert reservation to lease")
+                $module.FailJson("Could not convert reservation to lease",$_)
             }
         }
 
@@ -365,19 +348,6 @@ if ($state -eq "present") {
 
     # Lease Doesn't Exist - Create
     if ($current_lease_exists -eq $false) {
-
-        # Required: MAC and IP address
-        if ((-not $mac) -or (-not $ip)) {
-            $module.Result.changed = $false
-            $module.FailJson("The ip and mac parameters are required for state=present")
-        }
-
-        # Required: Scope ID
-        if (-not $scope_id) {
-            $module.Result.changed = $false
-            $module.FailJson("The scope_id parameter is required for state=present")
-        }
-
         # Required Parameters
         $lease_params = @{
             ClientId = $mac
@@ -422,8 +392,7 @@ if ($state -eq "present") {
         }
         Catch {
             # Failed to create lease
-            $module.Result.changed = $false
-            $module.FailJson("Could not create DHCP lease")
+            $module.FailJson("Could not create DHCP lease",$_)
         }
 
         # Create Reservation
@@ -448,8 +417,7 @@ if ($state -eq "present") {
                 }
                 Catch {
                     # Failed to create reservation
-                    $module.Result.changed = $false
-                    $module.FailJson("Could not create DHCP reservation")
+                    $module.FailJson("Could not create DHCP reservation",$_)
                 }
 
                 if(-not $check_mode) {
@@ -459,13 +427,11 @@ if ($state -eq "present") {
                 }
 
                 $module.Result.changed = $true
-                $module.ExitJson()
             }
         }
         Catch {
             # Failed to create reservation
-            $module.Result.changed = $false
-            $module.FailJson("Could not create DHCP reservation")
+            $module.FailJson("Could not create DHCP reservation",$_)
         }
     }
 }
