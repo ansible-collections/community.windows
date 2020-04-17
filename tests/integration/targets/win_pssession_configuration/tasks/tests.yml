@@ -1,0 +1,158 @@
+# This file is part of Ansible
+
+# Copyright: (c) 2020, Brian Scholer <@briantist>
+# GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
+---
+- name: Create a simple configuration (check)
+  win_pssession_configuration:
+    name: "{{ config_name }}"
+    description: "{{ config_description }}"
+    mount_user_drive: True
+  register: status
+  check_mode: yes
+
+- name: Check for changed status
+  assert:
+    that: status is changed
+    quiet: yes
+
+- name: Create a simple configuration
+  win_pssession_configuration:
+    name: "{{ config_name }}"
+    description: "{{ config_description }}"
+    mount_user_drive: True
+  register: status
+
+- name: Check for changed status
+  assert:
+    that: status is changed
+    quiet: yes
+
+- name: Create a simple configuration again (check)
+  win_pssession_configuration:
+    name: "{{ config_name }}"
+    description: "{{ config_description }}"
+    mount_user_drive: True
+  register: status
+  check_mode: yes
+
+- name: Check for unchanged status
+  assert:
+    that: status is not changed
+    quiet: yes
+
+- name: Create a simple configuration again
+  win_pssession_configuration:
+    name: "{{ config_name }}"
+    description: "{{ config_description }}"
+    mount_user_drive: True
+  register: status
+
+- name: Check for unchanged status
+  assert:
+    that: status is not changed
+    quiet: yes
+
+#######
+
+- name: Omit a field that doesn't matter (check)
+  win_pssession_configuration:
+    name: "{{ config_name }}"
+    # description: "{{ config_description }}" # intentionally omitted
+    mount_user_drive: True
+  register: status
+  check_mode: yes
+
+- name: Check for unchanged status
+  assert:
+    that: status is not changed
+    quiet: yes
+
+- name: Omit a field that doesn't matter
+  win_pssession_configuration:
+    name: "{{ config_name }}"
+    # description: "{{ config_description }}" # intentionally omitted
+    mount_user_drive: True
+  register: status
+
+- name: Check for unchanged status
+  assert:
+    that: status is not changed
+    quiet: yes
+
+#######
+
+- name: Omit a field that doesn't matter by default but does explicitly (check)
+  win_pssession_configuration:
+    name: "{{ config_name }}"
+    # description: "{{ config_description }}" # intentionally omitted
+    mount_user_drive: True
+    lenient_config_fields:
+      - guid
+      - author
+  register: status
+  check_mode: yes
+
+- name: Check for changed status
+  assert:
+    that: status is changed
+    quiet: yes
+
+- name: Omit a field that doesn't matter by default but does explicitly
+  win_pssession_configuration:
+    name: "{{ config_name }}"
+    # description: "{{ config_description }}" # intentionally omitted
+    mount_user_drive: True
+    lenient_config_fields:
+      - guid
+      - author
+  register: status
+
+- name: Check for changed status
+  assert:
+    that: status is changed
+    quiet: yes
+
+########
+
+- name: Change something not in the config file (check)
+  win_pssession_configuration:
+    name: "{{ config_name }}"
+    thread_options: reuse_thread
+    use_shared_process: True
+  register: status
+  check_mode: yes
+
+- name: Check for changed status
+  assert:
+    that: status is changed
+    quiet: yes
+
+- name: Change something not in the config file
+  win_pssession_configuration:
+    name: "{{ config_name }}"
+    thread_options: reuse_thread
+    use_shared_process: True
+  register: status
+
+- name: Check for changed status
+  assert:
+    that: status is changed
+    quiet: yes
+
+- name: Change something not in the config file (again)
+  win_pssession_configuration:
+    name: "{{ config_name }}"
+    thread_options: reuse_thread
+    use_shared_process: True
+  register: status
+
+- name: Check for unchanged status
+  assert:
+    that: status is not changed
+    quiet: yes
+
+
+# - win_pssession_configuration:
+#     name: test
+#     state: absent
