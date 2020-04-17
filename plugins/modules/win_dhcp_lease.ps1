@@ -161,7 +161,6 @@ if ($state -eq "absent") {
     } else {
         # If the lease exists, we need to destroy it
         if ($current_lease_reservation -eq $true) {
-    
             # Try to remove reservation
             Try {
                 $current_lease | Remove-DhcpServerv4Reservation -WhatIf:$check_mode
@@ -173,7 +172,6 @@ if ($state -eq "absent") {
             }
         }
         else {
-    
             # Try to remove lease
             Try {
                 $current_lease | Remove-DhcpServerv4Lease -WhatIf:$check_mode
@@ -184,7 +182,7 @@ if ($state -eq "absent") {
                 $remove_err = $_
             }
         }
-    
+
         # See if we removed the lease/reservation
         if ($state_absent_removed) {
             $module.Result.changed = $true
