@@ -70,6 +70,8 @@ class ActionModule(ActionBase):
             '_async_dir': ntpath.dirname(status['results_file'])
         }
 
+        max_retries = 3
+        retries = 0
         while not check_mode:
             try:
                 # check up on the async job
@@ -91,6 +93,11 @@ class ActionModule(ActionBase):
                 time.sleep(self._task.poll)
 
             except BaseException as e:
+                retries += 1
+                if retries >= max_retries:
+                    display.vvvv("Max retries reached.")
+                    raise e
+                display.vvvv("Retrying (%s of %s)" % (retries, max_retries))
                 display.vvvv("Falling back to wait_for_connection: %r" % e)
                 wait_connection_action.run(task_vars=task_vars)
 

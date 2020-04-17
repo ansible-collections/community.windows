@@ -56,11 +56,11 @@ $pssc_options = @{
 
 $session_configuration_options = @{
     name                                      = @{ type = 'str' ; required = $true }
-    processor_architecure                     = @{ type = 'str'  ; choices = @('amd64', 'x86') }
+    processor_architecure                     = @{ type = 'str' ; choices = @('amd64', 'x86') }
     access_mode                               = @{ type = 'str' ; choices = @('disabled', 'local', 'remote') }
     use_shared_process                        = @{ type = 'bool' }
     thread_apartment_state                    = @{ type = 'str' ; choices = @('mta', 'sta') }
-    thread_options                            = @{ type = 'str' ; choices = @('default', 'resue_thread', 'use_current_thread', 'use_new_thread') }
+    thread_options                            = @{ type = 'str' ; choices = @('default', 'reuse_thread', 'use_current_thread', 'use_new_thread') }
     startup_script                            = @{ type = 'path' }
     maximum_received_data_size_per_command_mb = @{ type = $type.double }
     maximum_received_object_size_mb           = @{ type = $type.double }
@@ -74,18 +74,18 @@ $behavior_options = @{
     existing_connection_timeout_seconds       = @{ type = 'int' ; default = 0 }
     existing_connection_timeout_action        = @{ type = 'str' ; choices = @('terminate', 'fail') ; default = 'terminate' }
     existing_connection_wait_states           = @{ type = 'list' ; elements = 'str' ; default = @('connected') }
+    lenient_config_fields                     = @{ type = 'list' ; elements = 'str' ; default = @('guid', 'author', 'company', 'copyright', 'description') }
 }
 
 $spec = @{
     options = $pssc_options + $session_configuration_options + $behavior_options
     required_together = @(
-        @('run_as_credential_username', 'run_as_credential_password')
+        ,@('run_as_credential_username', 'run_as_credential_password')
     )
     supports_check_mode = $true
 }
 
 $module = [Ansible.Basic.AnsibleModule]::Create($args, $spec)
-
 
 # TODO: check for existing connections with timeout
 # Get-WSManInstance -ComputerName localhost -ResourceURI shell -Enumerate
@@ -116,6 +116,7 @@ function Import-LegacyPowerShellDataFile {
         $ht.SafeGetValue()
     }
 }
+
 function ConvertFrom-SnakeCase {
     [CmdletBinding()]
     [OutputType([String])]
@@ -145,24 +146,27 @@ function ConvertFrom-AnsibleOptions {
     End {
         $ret = @{}
         foreach ($option in $OptionSet.GetEnumerator()) {
-            if ($Params.Contains($option.Name)) {
-                $raw_name = $option.Name
-                switch -Wildcard ($raw_name) {
-                    'run_as_credential_*' {
-                        $raw_name = $raw_name -replace '_[^_]+$'
-                        $name = ConvertFrom-SnakeCase -SnakedString $raw_name
-                        if (-not $ret.Contains($name)) {
-                            $un = $OptionSet["${raw_name}_username"]
-                            $secpw = ConvertTo-SecureString -String $OptionSet["${raw_name}_password"] -AsPlainText -Force
+            $raw_name = $option.Name
+            switch -Wildcard ($raw_name) {
+                'run_as_credential_*' {
+                    $raw_name = $raw_name -replace '_[^_]+$'
+                    $name = ConvertFrom-SnakeCase -SnakedString $raw_name
+                    if (-not $ret.Contains($name)) {
+                        $un = $Params["${raw_name}_username"]
+                        if ($un) {
+                            $secpw = ConvertTo-SecureString -String $Params["${raw_name}_password"] -AsPlainText -Force
                             $value = New-Object -TypeName PSCredential -ArgumentList $un, $secpw
                             $ret[$name] = $value
                         }
-                        break
                     }
+                    break
+                }
 
-                    default {
-                        $value = $Params[$raw_name]
-                        if ($option.Contains('choices')) {
+                default {
+                    $value = $Params[$raw_name]
+                    if ($null -ne $value) {
+                        if ($option.Value.choices) {
+                            # the options that have choices have them listed in snake_case versions of their real values
                             $value = ConvertFrom-SnakeCase -SnakedString $value
                         }
                         $name = ConvertFrom-SnakeCase -SnakedString $raw_name
@@ -197,29 +201,38 @@ function Write-GeneratedSessionConfiguration {
             [System.IO.Path]::GetTempFileName()
         }
 
-        $file = $file -replace '\.pssc$', '.pssc'
+        $file = $file -replace '(?<!\.pssc)$', '.pssc'
         New-PSSessionConfigurationFile -Path $file @ParameterSet
         [System.IO.FileInfo]$file
     }
 }
-function ConvertTo-WhitespaceNormalized {
-    [CmdletBinding()]
-    param(
-        [Parameter(
-            Mandatory = $true,
-            ValueFromPipeline = $true
-        )]
-        [String]
-        $Value
-    )
-
-    Process {
-        return $Value
-        $Value -replace '\s*?(?:\r?\n)+', "`n"
-    }
-}
 
 function Compare-ConfigFile {
+    <#
+        .SYNOPSIS
+        This function compares the existing config file to the desired
+
+        .DESCRIPTION
+        We'll load the contents of both the desired and existing config, remove fields that shouldn't be
+        compared, then generate a new config based on the existing and compare those files.
+
+        This could be done as a direct file compare, without loading the contents as objects.
+        The primary reasons to do it this slightly more complicated way are:
+
+        - To ignore GUID as a value that matters: if you don't supply it a new one is generated for you,
+          but PSSessionConfigurations don't use this for anything; it's just metadata. If you supply one,
+          we want to compare it. If you don't, we shouldn't count the "mismatch" against you though.
+
+        - To normalize the existing file based on the following stuff so we avoid unnecessary changes:
+
+        - A file compare either has to be case insensitive (won't catch changes in values) or case sensitive
+          (will may force changes on differences that don't matter, like case differences in key values)
+
+        - A file compare will see changes on whitespace and line ending differences; although those could be
+          accounted for in other ways, this method handles them.
+
+        - A file compare will see changes on other non-impacting syntax style differences like indentation.
+    #>
     [CmdletBinding()]
     [OutputType([bool])]
     param(
@@ -233,14 +246,48 @@ function Compare-ConfigFile {
 
         [Parameter(Mandatory=$true)]
         [System.Collections.IDictionary]
-        $Params
+        $Params ,
+
+        [Parameter()]
+        [String[]]
+        $UseExistingIfMissing
     )
 
     Process {
+        $desired_config = $NewConfigFile.FullName
+
         $existing_content   = Import-PowerShellDataFile -LiteralPath $ConfigFilePath.FullName
-        $desired_content    = Import-PowerShellDataFile -LiteralPath $NewConfigFile.FullName
+        $desired_content    = Import-PowerShellDataFile -LiteralPath $desired_config
 
+        $regen = $false
+        foreach ($ignorable_param in $UseExistingIfMissing) {
+            # here we're checking for the parameters that shouldn't be compared if they are in the existing
+            # config, but missing in the desired config. To account for this, we copy the value from the
+            # existing into the desired so that when we regenerate it, it'll match the existing if there
+            # aren't other changes.
+            if (-not $Params.Contains($ignorable_param) -and $existing_content.Contains($ignorable_param)) {
+                $desired_content[$ignorable_param] = $existing_content[$ignorable_param]
+                $regen = $true
+            }
+        }
 
+        # re-write and read the desired config file
+        if ($regen) {
+            $NewConfigFile.Delete()
+            $desired_config = Write-GeneratedSessionConfiguration -ParameterSet $desired_content -OutFile $desired_config
+        }
+
+        $desired_content = Get-Content -Raw -LiteralPath $desired_config
+
+        # re-write/import the existing one too to get a pristine version
+        # this will account for unimporant case differences, comments, whitespace, etc.
+        $pristine_config    = Write-GeneratedSessionConfiguration -ParameterSet $existing_content
+        $existing_content   = Get-Content -Raw -LiteralPath $pristine_config
+
+        # with all this de/serializing out of the way we can just do a simple case-sensitive string compare
+        $desired_content -ceq $existing_content
+
+        Remove-Item -LiteralPath $pristine_config -Force -ErrorAction SilentlyContinue
     }
 }
 
@@ -248,29 +295,23 @@ if (-not (Get-Command -Name 'Microsoft.PowerShell.Utility\Import-PowerShellDataF
     New-Alias -Name 'Import-PowerShellDataFile' -Value 'Import-LegacyPowerShellDataFile'
 }
 
-$result = @{ }
-
-$existing = Get-PSSessionConfiguration -Name $name -ErrorAction SilentlyContinue
-
 $opt_pssc    = ConvertFrom-AnsibleOptions -Params $module.Params -OptionSet $pssc_options
 $opt_session = ConvertFrom-AnsibleOptions -Params $module.Params -OptionSet $session_configuration_options
+
+$existing = Get-PSSessionConfiguration -Name $opt_session.Name -ErrorAction SilentlyContinue
 
 try {
     if ($opt_pssc.Count) {
         # config file options were passed to the module, so generate a config file from those
-        $desired_config = Write-GeneratedSessionConfiguration -ParameterSet $options.pssc -OutFile $module.Params.session_configuration_save_path
+        $desired_config = Write-GeneratedSessionConfiguration -ParameterSet $opt_pssc
     }
     if ($existing) {
         # the endpoint is registered
-        if ((Test-Path -LiteralPath $existing.ConfigFilePath)) {
+        if ($existing.ConfigFilePath -and (Test-Path -LiteralPath $existing.ConfigFilePath)) {
             # the registered endpoint uses a config file
             if ($desired_config) {
-                # a desired config file exists, so read the content for comparison
-                $desired_content = Get-Content -LiteralPath $desired_config.FullName -Raw | ConvertTo-WhitespaceNormalized
-
-                # then load the config file from the existing, and compare them
-                $existing_content = Get-Content -LiteralPath $existing.ConfigFilePath -Raw | ConvertTo-WhitespaceNormalized
-                $content_match = $existing_content -ceq $desired_content
+                # a desired config file exists, so compare it to the existing one
+                $content_match = $existing | Compare-ConfigFile -NewConfigFile $desired_config -Params $opt_pssc -UseExistingIfMissing $module.Params.lenient_config_fields
             }
             else {
                 # existing endpoint has a config file but no config file options were passed, so there is no match
@@ -279,10 +320,10 @@ try {
         }
         else {
             # existing endpoint doesn't use a config file, so it's a match if there are also no config options passed
-            $content_match = -not $opt_pssc.Count
+            $content_match = $opt_pssc.Count -eq 0
         }
 
-        ## compare the options that don't get set in the config file (unless credential is supplied, which is always a change)
+        # compare the options that don't get set in the config file (unless credential is supplied, which is always a change)
         $session_match = -not $opt_session.Contains('RunAsCredential')
         foreach ($opt in $opt_session.GetEnumerator()) {
             if (-not $session_match) {
@@ -294,13 +335,25 @@ try {
         }
     }
 
+    $state = $module.Params.state
+
     $create = $state -eq 'present' -and (-not $existing -or -not $content_match)
     $remove = $existing -and ($state -eq 'absent' -or -not $content_match)
     $session_change = -not $session_match -and $state -ne 'absent'
 
+    # $module.Warn('$existing: {0}' -f ($existing | ConvertTo-Json -Depth 2 -Compress))
+    # $module.Warn('$opt_session: {0}' -f ($opt_session | ConvertTo-Json -Depth 2 -Compress))
+    # $module.Warn('$opt_pssc: {0}' -f ($opt_pssc | ConvertTo-Json -Depth 2 -Compress))
+    # $module.Warn('$state: {0}' -f $state)
+    # $module.Warn('$content_match: {0}' -f $content_match)
+    # $module.Warn('$session_match: {0}' -f $session_match)
+    # $module.Warn('$session_change: {0}' -f $session_change)
+    # $module.Warn('$create: {0}' -f $create)
+    # $module.Warn('$remove: {0}' -f $remove)
+
     $module.Result.changed = $create -or $remove -or $session_change
 
-    if (-not $check_mode) {
+    if (-not $module.CheckMode) {
         if ($remove) {
             Unregister-PSSessionConfiguration -Name $opt_session.Name -Force
         }
@@ -312,15 +365,15 @@ try {
             $null = Register-PSSessionConfiguration @opt_session -Force
         }
         elseif ($session_change) {
-            $psso = $options.session
+            $psso = $opt_session
             Set-PSSessionConfiguration @psso -Force
         }
     }
 }
 finally {
     if ($desired_config) {
-        Remove-Item -LiteralPath $desired_config -Force
+        Remove-Item -LiteralPath $desired_config -Force -ErrorAction SilentlyContinue
     }
 }
 
-Exit-Json -obj $result
+$module.ExitJson()
