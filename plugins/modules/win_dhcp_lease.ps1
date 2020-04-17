@@ -156,44 +156,44 @@ else {
 # State: Absent
 # Ensure the DHCP Lease/Reservation is not present
 if ($state -eq "absent") {
-    # If the lease exists, we need to destroy it
-    if ($current_lease_reservation -eq $true) {
-
-        # Try to remove reservation
-        Try {
-            $current_lease | Remove-DhcpServerv4Reservation -WhatIf:$check_mode
-            $state_absent_removed = $true
-        }
-        Catch {
-            $state_absent_removed = $false
-            $remove_err = $_
-        }
-    }
-    else {
-
-        # Try to remove lease
-        Try {
-            $current_lease | Remove-DhcpServerv4Lease -WhatIf:$check_mode
-            $state_absent_removed = $true
-        }
-        Catch {
-            $state_absent_removed = $false
-            $remove_err = $_
-        }
-    }
-
     # If the lease doesn't exist, our work here is done
     if ($current_lease_exists -eq $false) {
         $module.Result.msg = "The lease doesn't exist."
-    }
-
-    # See if we removed the lease/reservation
-    if ($state_absent_removed) {
-        $module.Result.changed = $true
-    }
-    else {
-        $module.Result.lease = Convert-ReturnValue -Object $current_lease
-        $module.FailJson("Unable to remove lease/reservation: $($remove_err.Exception.Message)", $remove_err)
+    } else {
+        # If the lease exists, we need to destroy it
+        if ($current_lease_reservation -eq $true) {
+    
+            # Try to remove reservation
+            Try {
+                $current_lease | Remove-DhcpServerv4Reservation -WhatIf:$check_mode
+                $state_absent_removed = $true
+            }
+            Catch {
+                $state_absent_removed = $false
+                $remove_err = $_
+            }
+        }
+        else {
+    
+            # Try to remove lease
+            Try {
+                $current_lease | Remove-DhcpServerv4Lease -WhatIf:$check_mode
+                $state_absent_removed = $true
+            }
+            Catch {
+                $state_absent_removed = $false
+                $remove_err = $_
+            }
+        }
+    
+        # See if we removed the lease/reservation
+        if ($state_absent_removed) {
+            $module.Result.changed = $true
+        }
+        else {
+            $module.Result.lease = Convert-ReturnValue -Object $current_lease
+            $module.FailJson("Unable to remove lease/reservation: $($remove_err.Exception.Message)", $remove_err)
+        }
     }
 }
 
