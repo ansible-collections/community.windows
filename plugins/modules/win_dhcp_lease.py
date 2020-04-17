@@ -46,7 +46,7 @@ options:
   scope_id:
     description:
       - Specifies the scope identifier as defined by the DHCP server.
-      - This is a required parameter, if l(state=present) and the reservation or lease 
+      - This is a required parameter, if l(state=present) and the reservation or lease
         doesn't already exist. Not required if updating an existing lease or reservation.
     type: str
   mac:
