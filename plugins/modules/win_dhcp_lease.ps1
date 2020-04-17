@@ -21,7 +21,6 @@ $spec = @{
     }
     required_if = @(
         @("state", "present", @("mac", "ip"), $true),
-        @("state", "present", @("scope_id")),
         @("state", "absent", @("mac", "ip"), $true)
     )
     supports_check_mode = $true
@@ -348,6 +347,12 @@ if ($state -eq "present") {
 
     # Lease Doesn't Exist - Create
     if ($current_lease_exists -eq $false) {
+        # Required: Scope ID
+        if (-not $scope_id) {
+            $module.Result.changed = $false
+            $module.FailJson("The scope_id parameter is required for state=present when a lease or reservation doesn't already exist")
+        }
+
         # Required Parameters
         $lease_params = @{
             ClientId = $mac
