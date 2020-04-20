@@ -4,6 +4,7 @@
 # GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 
 #AnsibleRequires -CSharpUtil Ansible.Basic
+#AnsibleRequires -CSharpUtil Ansible.Become
 
 $type = @{
     guid    = [Func[[Object], [System.Guid]]] {
@@ -90,7 +91,7 @@ $module = [Ansible.Basic.AnsibleModule]::Create($args, $spec)
 # TODO: check for existing connections with timeout
 # Get-WSManInstance -ComputerName localhost -ResourceURI shell -Enumerate
 
-function Import-LegacyPowerShellDataFile {
+function Import-PowerShellDataFileLegacy {
     <#
         .SYNOPSIS
         A pre-PowerShell 5.0 version of Import-PowerShellDataFile
@@ -115,6 +116,10 @@ function Import-LegacyPowerShellDataFile {
         }, $false)
         $ht.SafeGetValue()
     }
+}
+
+if (-not (Get-Command -Name 'Microsoft.PowerShell.Utility\Import-PowerShellDataFile' -ErrorAction SilentlyContinue)) {
+    New-Alias -Name 'Import-PowerShellDataFile' -Value 'Import-PowerShellDataFileLegacy'
 }
 
 function ConvertFrom-SnakeCase {
@@ -291,8 +296,62 @@ function Compare-ConfigFile {
     }
 }
 
-if (-not (Get-Command -Name 'Microsoft.PowerShell.Utility\Import-PowerShellDataFile' -ErrorAction SilentlyContinue)) {
-    New-Alias -Name 'Import-PowerShellDataFile' -Value 'Import-LegacyPowerShellDataFile'
+function Compare-SessionOption {
+    <#
+        .DESCRIPTION
+        This function is used for comparing the session options that don't get set in the config file.
+        This _should_ have been straightforward for anything other than RunAsCredential, except that for
+        some godforesaken reason a smattering of settings have names that differ from their parameter name.
+
+        This list is defined internally in PowerShell here:
+        https://git.io/JfUk7
+
+    #>
+    [CmdletBinding()]
+    [OutputType([bool])]
+    param(
+        [Parameter(Mandatory=$true)]
+        [System.Collections.IDictionary]
+        $DesiredOptions ,
+
+        [Parameter(Mandatory=$true)]
+        [Object]
+        $ExistingOptions
+    )
+
+    End {
+        $optnamer = @{
+            ThreadApartmentState                    = 'pssessionthreadapartmentstate'
+            ThreadOptions                           = 'pssessionthreadoptions'
+            MaximumReceivedDataSizePerCommandMb     = 'PSMaximumReceivedDataSizePerCommandMB'
+            MaximumReceivedObjectSizeMb             = 'PSMaximumReceivedObjectSizeMB'
+        } | Add-Member -MemberType ScriptMethod -Name GetValueOrKey -Value {
+            param($key)
+
+            $val = $this[$key]
+            if ($null -eq $val) {
+                return $key
+            }
+            else {
+                return $val
+            }
+        } -Force -PassThru
+
+        if ($DesiredOptions.Contains('RunAsCredential')) {
+            # since we can't retrieve/compare password, a change must always be made if a cred is specified
+            return $false
+        }
+        $smatch = $true
+        foreach ($opt in $DesiredOptions.GetEnumerator()) {
+            $smatch = $smatch -and (
+                $existing.($optnamer.GetValueOrKey($opt.Name)) -ceq $opt.Value
+            )
+            if (-not $smatch) {
+                break
+            }
+        }
+        return $smatch
+    }
 }
 
 $opt_pssc    = ConvertFrom-AnsibleOptions -Params $module.Params -OptionSet $pssc_options
@@ -323,16 +382,7 @@ try {
             $content_match = $opt_pssc.Count -eq 0
         }
 
-        # compare the options that don't get set in the config file (unless credential is supplied, which is always a change)
-        $session_match = -not $opt_session.Contains('RunAsCredential')
-        foreach ($opt in $opt_session.GetEnumerator()) {
-            if (-not $session_match) {
-                break
-            }
-            $session_match = $session_match -and (
-                $existing.($opt.Name) -ceq $opt.Value
-            )
-        }
+        $session_match = Compare-SessionOption -DesiredOptions $opt_session -ExistingOptions $existing
     }
 
     $state = $module.Params.state
@@ -341,17 +391,40 @@ try {
     $remove = $existing -and ($state -eq 'absent' -or -not $content_match)
     $session_change = -not $session_match -and $state -ne 'absent'
 
-    # $module.Warn('$existing: {0}' -f ($existing | ConvertTo-Json -Depth 2 -Compress))
-    # $module.Warn('$opt_session: {0}' -f ($opt_session | ConvertTo-Json -Depth 2 -Compress))
-    # $module.Warn('$opt_pssc: {0}' -f ($opt_pssc | ConvertTo-Json -Depth 2 -Compress))
-    # $module.Warn('$state: {0}' -f $state)
-    # $module.Warn('$content_match: {0}' -f $content_match)
-    # $module.Warn('$session_match: {0}' -f $session_match)
-    # $module.Warn('$session_change: {0}' -f $session_change)
-    # $module.Warn('$create: {0}' -f $create)
-    # $module.Warn('$remove: {0}' -f $remove)
+    $rnd = Set-PSBreakpoint -Variable rnd -Action { $Global:rnd = [guid]::NewGuid().ToString().TrimStart('{').Substring(0,4) } -Mode Read
+
+    # $module.Warn('$existing: {0} [{1}]' -f ($existing | ConvertTo-Json -Depth 2 -Compress))
+    $module.Warn('$opt_session: {0} [{1}]' -f (($opt_session | ConvertTo-Json -Depth 2 -Compress),$rnd))
+    $module.Warn('$opt_pssc: {0} [{1}]' -f (($opt_pssc | ConvertTo-Json -Depth 2 -Compress),$rnd))
+    $module.Warn('$state: {0} [{1}]' -f ($state,$rnd))
+    $module.Warn('$content_match: {0} [{1}]' -f ($content_match,$rnd))
+    $module.Warn('$session_match: {0} [{1}]' -f ($session_match,$rnd))
+    $module.Warn('$session_change: {0} [{1}]' -f ($session_change,$rnd))
+    $module.Warn('$create: {0} [{1}]' -f ($create,$rnd))
+    $module.Warn('$remove: {0} [{1}]' -f ($remove,$rnd))
 
     $module.Result.changed = $create -or $remove -or $session_change
+
+    # In this module, we pre-emptively remove the session configuratin if there's any change
+    # in the config file options, and then re-register later if needed.
+    # But if the RunAs credential is wrong, the register will fail, and since we already removed
+    # the existing one, it will be gone.
+    #
+    # So let's ensure we can actually use the credential by running something (whoami.exe) with the become
+    # module util, that way we can fail before touching the existing config.
+    if ($opt_session.Contains('RunAsCredential')) {
+        $cred = $opt_session.RunAsCredential
+        try {
+            $result = [Ansible.Become.BecomeUtil]::CreateProcessAsUser($cred.Username, $cred.GetNetworkCredential().Password, 'whoami.exe')
+            $module.Debug("RunAsCredential check whoami.exe output: $($result.StandardOut)")
+            if ($result.ExitCode -ne 0) {
+                throw
+            }
+        }
+        catch {
+            $module.FailJson('Could not validate RunAs Credential.')
+        }
+    }
 
     if (-not $module.CheckMode) {
         if ($remove) {

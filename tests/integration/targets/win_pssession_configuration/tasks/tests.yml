@@ -140,6 +140,19 @@
     that: status is changed
     quiet: yes
 
+- name: Change something not in the config file (again) (check)
+  win_pssession_configuration:
+    name: "{{ config_name }}"
+    thread_options: reuse_thread
+    use_shared_process: True
+  register: status
+  check_mode: yes
+
+- name: Check for unchanged status
+  assert:
+    that: status is not changed
+    quiet: yes
+
 - name: Change something not in the config file (again)
   win_pssession_configuration:
     name: "{{ config_name }}"
@@ -151,6 +164,97 @@
   assert:
     that: status is not changed
     quiet: yes
+
+######
+
+- name: Check custom type parameters (check)
+  win_pssession_configuration:
+    name: "{{ config_name }}"
+    guid: "{{ 'test' | to_uuid }}"
+    powershell_version: '3.0'
+    user_drive_maximum_size: 5000000000
+    maximum_received_data_size_per_command_mb: 5.0E+11
+    maximum_received_object_size_mb: 6.6666666666666666666666666
+  register: status
+
+######
+
+- name: Reset back to a steady state
+  win_pssession_configuration:
+    name: "{{ config_name }}"
+  register: status
+
+- name: Check for changed status
+  assert:
+    that: status is changed
+    quiet: yes
+  ignore_errors: yes
+
+- name: Reset back to a steady state (again)
+  win_pssession_configuration:
+    name: "{{ config_name }}"
+  register: status
+
+- name: Check for unchanged status
+  assert:
+    that: status is not changed
+    quiet: yes
+  ignore_errors: yes
+
+#######
+
+- name: "RunAs Tests"
+  vars:
+    runas_user: "{{ ansible_user }}"
+    runas_pass: "{{ ansible_password }}"
+  block:
+    - name: Change runas credential (check)
+      win_pssession_configuration:
+        name: "{{ config_name }}"
+        run_as_credential_username: "{{ runas_user }}"
+        run_as_credential_password: "{{ runas_pass }}"
+      register: status
+      check_mode: yes
+
+    - name: Check for changed status
+      assert:
+        that: status is changed
+        quiet: yes
+
+    - name: Change runas credential
+      win_pssession_configuration:
+        name: "{{ config_name }}"
+        run_as_credential_username: "{{ runas_user }}"
+        run_as_credential_password: "{{ runas_pass }}"
+      register: status
+
+    - name: Check for changed status
+      assert:
+        that: status is changed
+        quiet: yes
+
+    - name: Try an invalid runas credential (failure expected)
+      win_pssession_configuration:
+        name: "{{ config_name }}"
+        run_as_credential_username: Fake
+        run_as_credential_password: Fake
+      register: status
+      ignore_errors: yes
+
+    - name: Check for failed status
+      assert:
+        that: status is failed
+        quiet: yes
+
+    - name: Ensure the sessions configuration still exists with the working user
+      ansible.windows.win_shell: |
+        $sc = Get-PSSessionConfiguration -Name '{{ config_name }}'
+        if ($sc.RunAsUser -ne '{{ runas_user }}') {
+            throw
+        }
+      register: status
+
+#######
 
 
 # - win_pssession_configuration:
