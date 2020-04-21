@@ -32,10 +32,6 @@ class ActionModule(ActionBase):
         if check_mode:
             self._task.async_val = None
 
-        # if I don't do this it seems to fail in module_manifest.py, line 301, in _create_powershell_wrapper
-        if self._task.async_val is None:
-            self._task.async_val = 0
-
         result = super(ActionModule, self).run(tmp, task_vars)
 
         # build the wait_for_connection object for later use
@@ -57,6 +53,11 @@ class ActionModule(ActionBase):
         # if it's not in check mode, call the module async so the WinRM restart doesn't kill ansible
         if not check_mode:
             self._task.async_val = async_timeout or self._default_async_timeout
+
+        # if I don't do this it seems to fail in module_manifest.py, line 301, in _create_powershell_wrapper
+        #  but only in shippable 🤔
+        if self._task.async_val is None:
+            self._task.async_val = 0
 
         result = status = self._execute_module(
             task_vars=task_vars,
