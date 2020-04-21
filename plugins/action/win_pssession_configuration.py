@@ -30,6 +30,10 @@ class ActionModule(ActionBase):
 
         # fake out the super so it doesn't stop us from using check mode with async
         if check_mode:
+            self._task.async_val = None
+
+        # if I don't do this it seems to fail in module_manifest.py, line 301, in _create_powershell_wrapper
+        if self._task.async_val is None:
             self._task.async_val = 0
 
         result = super(ActionModule, self).run(tmp, task_vars)
