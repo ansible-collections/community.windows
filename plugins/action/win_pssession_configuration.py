@@ -55,7 +55,7 @@ class ActionModule(ActionBase):
             self._task.async_val = async_timeout or self._default_async_timeout
 
         # if I don't do this it seems to fail in module_manifest.py, line 301, in _create_powershell_wrapper
-        #  but only in shippable 🤔
+        # but only in shippable
         if self._task.async_val is None:
             self._task.async_val = 0
 
@@ -70,7 +70,7 @@ class ActionModule(ActionBase):
             return result
 
         # remove the async flag so that our calls to async_status and wait_for_connection don't try to run async
-        self._task.async_val = None
+        self._task.async_val = 0
 
         async_status_args = {
             'jid': status['ansible_job_id'],
