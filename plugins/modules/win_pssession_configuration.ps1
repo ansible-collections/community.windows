@@ -435,8 +435,8 @@ $PSDefaultParameterValues = @{
     'Wait-WinRMConnection:Module'           = $module
 }
 
-$opt_pssc       = ConvertFrom-AnsibleOptions -OptionSet $pssc_options                   #-Params $module.Params
-$opt_session    = ConvertFrom-AnsibleOptions -OptionSet $session_configuration_options  #-Params $module.Params
+$opt_pssc       = ConvertFrom-AnsibleOptions -OptionSet $pssc_options
+$opt_session    = ConvertFrom-AnsibleOptions -OptionSet $session_configuration_options
 
 $existing = Get-PSSessionConfiguration -Name $opt_session.Name -ErrorAction SilentlyContinue
 
@@ -475,18 +475,6 @@ try {
     $remove = $existing -and ($state -eq 'absent' -or -not $content_match)
     $session_change = -not $session_match -and $state -ne 'absent'
 
-    # $rnd = Set-PSBreakpoint -Variable rnd -Action { $Global:rnd = [guid]::NewGuid().ToString().TrimStart('{').Substring(0,4) } -Mode Read
-
-    # $module.Warn('$existing: {0} [{1}]' -f ($existing | ConvertTo-Json -Depth 2 -Compress))
-    # $module.Warn('$opt_session: {0} [{1}]' -f (($opt_session | ConvertTo-Json -Depth 2 -Compress),$rnd))
-    # $module.Warn('$opt_pssc: {0} [{1}]' -f (($opt_pssc | ConvertTo-Json -Depth 2 -Compress),$rnd))
-    # $module.Warn('$state: {0} [{1}]' -f ($state,$rnd))
-    # $module.Warn('$content_match: {0} [{1}]' -f ($content_match,$rnd))
-    # $module.Warn('$session_match: {0} [{1}]' -f ($session_match,$rnd))
-    # $module.Warn('$session_change: {0} [{1}]' -f ($session_change,$rnd))
-    # $module.Warn('$create: {0} [{1}]' -f ($create,$rnd))
-    # $module.Warn('$remove: {0} [{1}]' -f ($remove,$rnd))
-
     $module.Result.changed = $create -or $remove -or $session_change
 
     # In this module, we pre-emptively remove the session configuratin if there's any change
@@ -513,7 +501,7 @@ try {
     if (-not $module.CheckMode) {
         if ($remove) {
             # Wait-WinRMConnection
-            Unregister-PSSessionConfiguration -Name $opt_session.Name #-Force
+            Unregister-PSSessionConfiguration -Name $opt_session.Name
         }
 
         if ($create) {
@@ -521,12 +509,12 @@ try {
                 $opt_session.Path = $desired_config
             }
             # Wait-WinRMConnection
-            $null = Register-PSSessionConfiguration @opt_session #-Force
+            $null = Register-PSSessionConfiguration @opt_session
         }
         elseif ($session_change) {
             $psso = $opt_session
             # Wait-WinRMConnection
-            Set-PSSessionConfiguration @psso #-Force
+            Set-PSSessionConfiguration @psso
         }
     }
 }
