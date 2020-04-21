@@ -30,7 +30,7 @@ class ActionModule(ActionBase):
 
         # fake out the super so it doesn't stop us from using check mode with async
         if check_mode:
-            self._task.async_val = None
+            self._task.async_val = 0
 
         result = super(ActionModule, self).run(tmp, task_vars)
 
@@ -54,11 +54,6 @@ class ActionModule(ActionBase):
         if not check_mode:
             self._task.async_val = async_timeout or self._default_async_timeout
 
-        # if I don't do this it seems to fail in module_manifest.py, line 301, in _create_powershell_wrapper
-        # but only in shippable
-        if self._task.async_val is None:
-            self._task.async_val = 0
-
         result = status = self._execute_module(
             task_vars=task_vars,
             module_args=self._task.args
@@ -78,7 +73,7 @@ class ActionModule(ActionBase):
         }
 
         # Retries here is a fallback in case the module fails in an unexpected way
-        # which can sometimes not properly set the finished field in the return.
+        # which can sometimes not properly set the failed field in the return.
         # It is not related to async retries.
         # Without this, that situation would cause an infinite loop.
         max_retries = 3
