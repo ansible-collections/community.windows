@@ -518,6 +518,20 @@ try {
         }
     }
 }
+catch [System.Management.Automation.ParameterBindingException] {
+    $e = $_
+    if ($e.Exception.ErrorId -eq 'NamedParameterNotFound') {
+        $psv = $PSVersionTable.PSVersion.ToString(2)
+        $param = $e.Exception.ParameterName
+        $cmd = $e.InvocationInfo.MyCommand.Name
+        $message = "Parameter '$param' is not available for '$cmd' in PowerShell $psv."
+    }
+    else {
+        $message = "Unknown parameter binding error."
+    }
+
+    $module.FailJson($message, $e)
+}
 finally {
     if ($desired_config) {
         Remove-Item -LiteralPath $desired_config -Force -ErrorAction SilentlyContinue
