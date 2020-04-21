@@ -30,7 +30,7 @@ class ActionModule(ActionBase):
 
         # fake out the super so it doesn't stop us from using check mode with async
         if check_mode:
-            self._task.async_val = None
+            self._task.async_val = 0
 
         result = super(ActionModule, self).run(tmp, task_vars)
 
