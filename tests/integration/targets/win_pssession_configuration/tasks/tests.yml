@@ -54,7 +54,46 @@
     quiet: yes
 
 #######
+# Incomplete tests for future enhancement of waiting for connections before making changes
 
+# - name: Start a 45 second WinRM connection
+#   ansible.windows.win_shell: |
+#     Invoke-Command -ComputerName . -ScriptBlock { Start-Sleep -Seconds 45 } -AsJob
+
+# - name: Make a change with a 10 second fail on timeout (failure expected)
+#   win_pssession_configuration:
+#     name: "{{ config_name }}"
+#     description: "{{ config_description }}"
+#     mount_user_drive: False
+#     existing_connection_timeout_seconds: 10
+#     existing_connection_timeout_action: fail
+#   register: status
+#   ignore_errors: yes
+
+# - name: Check for failed status
+#   assert:
+#     that: status is failed
+#     quiet: yes
+
+# - name: Start a 25 second WinRM connection
+#   ansible.windows.win_shell: |
+#     Invoke-Command -ComputerName . -ScriptBlock { Start-Sleep -Seconds 25 } -AsJob
+
+# - name: Make a change with a 45 second fail on timeout (success expected)
+#   win_pssession_configuration:
+#     name: "{{ config_name }}"
+#     description: "{{ config_description }}"
+#     mount_user_drive: False
+#     existing_connection_timeout_seconds: 10
+#     existing_connection_timeout_action: fail
+#   register: status
+
+# - name: Check for changed status
+#   assert:
+#     that: status is changed
+#     quiet: yes
+
+#######
 - name: Omit a field that doesn't matter (check)
   win_pssession_configuration:
     name: "{{ config_name }}"
@@ -256,7 +295,36 @@
 
 #######
 
+- name: Test session configuration removal (check)
+  win_pssession_configuration:
+    name: "{{ config_name }}"
+    state: absent
+  register: status
+  check_mode: yes
 
-# - win_pssession_configuration:
-#     name: test
-#     state: absent
+- name: Check for changed status
+  assert:
+    that: status is changed
+    quiet: yes
+
+- name: Test session configuration removal
+  win_pssession_configuration:
+    name: "{{ config_name }}"
+    state: absent
+  register: status
+
+- name: Check for changed status
+  assert:
+    that: status is changed
+    quiet: yes
+
+- name: Test session configuration removal (again)
+  win_pssession_configuration:
+    name: "{{ config_name }}"
+    state: absent
+  register: status
+
+- name: Check for unchanged status
+  assert:
+    that: status is not changed
+    quiet: yes

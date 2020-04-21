@@ -13,8 +13,10 @@ from ansible.utils.vars import merge_hash
 from ansible.utils.display import Display
 display = Display()
 
+
 class ActionModule(ActionBase):
     _default_async_timeout = 300
+    _default_async_poll = 1
 
     def __init__(self, *args, **kwargs):
         super(ActionModule, self).__init__(*args, **kwargs)
@@ -36,7 +38,7 @@ class ActionModule(ActionBase):
         wait_for_connection_task = self._task.copy()
         wait_for_connection_task.args = {
             'timeout': async_timeout or self._default_async_timeout,
-            'sleep': async_poll or 1
+            'sleep': async_poll or self._default_async_poll
         }
         wait_connection_action = self._shared_loader_obj.action_loader.get(
             'wait_for_connection',
@@ -70,6 +72,10 @@ class ActionModule(ActionBase):
             '_async_dir': ntpath.dirname(status['results_file'])
         }
 
+        # Retries here is a fallback in case the module fails in an unexpected way
+        # which can sometimes not properly set the finished field in the return.
+        # It is not related to async retries.
+        # Without this, that situation would cause an infinite loop.
         max_retries = 3
         retries = 0
         while not check_mode:
@@ -100,11 +106,5 @@ class ActionModule(ActionBase):
                 display.vvvv("Retrying (%s of %s)" % (retries, max_retries))
                 display.vvvv("Falling back to wait_for_connection: %r" % e)
                 wait_connection_action.run(task_vars=task_vars)
-
-        # simulate non-async return by removing async fields (when caller didn't ask for async)
-        if not async_timeout:
-            for prop in status.keys():
-                if prop not in ['changed']:  # this list needs to be updated if the module params change
-                    result.pop(prop)
 
         return result

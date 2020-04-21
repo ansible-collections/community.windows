@@ -41,14 +41,14 @@ $pssc_options = @{
     language_mode                             = @{ type = 'str' ; choices = @('no_language', 'restricted_language', 'constrained_language', 'full_language') }
     execution_policy                          = @{ type = 'str' ; choices = @('default', 'remote_signed', 'restricted', 'undefined', 'unrestricted') }
     powershell_version                        = @{ type = $type.version }
-    modules_to_import                         = @{ type = 'list' }
+    modules_to_import                         = @{ type = 'list' ; elements = 'raw' }
     visible_aliases                           = @{ type = 'list' ; elements = 'str' }
-    visible_cmdlets                           = @{ type = 'list' }
-    visible_functions                         = @{ type = 'list' }
+    visible_cmdlets                           = @{ type = 'list' ; elements = 'raw' }
+    visible_functions                         = @{ type = 'list' ; elements = 'raw' }
     visible_external_commands                 = @{ type = 'list' ; elements = 'str' }
     alias_definitions                         = @{ type = 'dict' }
     function_definitions                      = @{ type = 'dict' }
-    variable_definitions                      = @{ type = 'list' }
+    variable_definitions                      = @{ type = 'list' ; elements = 'dict' }
     environment_variables                     = @{ type = 'dict' }
     types_to_process                          = @{ type = 'list' ; elements = 'path' }
     formats_to_process                        = @{ type = 'list' ; elements = 'path' }
@@ -72,10 +72,17 @@ $session_configuration_options = @{
 
 $behavior_options = @{
     state                                     = @{ type = 'str' ; choices = @('present', 'absent') ; default = 'present' }
+    lenient_config_fields                     = @{ type = 'list' ; elements = 'str' ; default = @('guid', 'author', 'company', 'copyright', 'description') }
+<#
+    # TODO: possible future enhancement to wait for existing connections to finish
+    # Existing connections can be found with:
+    # Get-WSManInstance -ComputerName localhost -ResourceURI shell -Enumerate
+
     existing_connection_timeout_seconds       = @{ type = 'int' ; default = 0 }
+    existing_connection_timeout_interval_ms   = @{ type = 'int' ; default = 500 }
     existing_connection_timeout_action        = @{ type = 'str' ; choices = @('terminate', 'fail') ; default = 'terminate' }
     existing_connection_wait_states           = @{ type = 'list' ; elements = 'str' ; default = @('connected') }
-    lenient_config_fields                     = @{ type = 'list' ; elements = 'str' ; default = @('guid', 'author', 'company', 'copyright', 'description') }
+#>
 }
 
 $spec = @{
@@ -88,8 +95,6 @@ $spec = @{
 
 $module = [Ansible.Basic.AnsibleModule]::Create($args, $spec)
 
-# TODO: check for existing connections with timeout
-# Get-WSManInstance -ComputerName localhost -ResourceURI shell -Enumerate
 
 function Import-PowerShellDataFileLegacy {
     <#
@@ -135,6 +140,7 @@ function ConvertFrom-SnakeCase {
         [regex]::Replace($SnakedString, '^_?.|_.', { param($m) $m.Value.TrimStart('_').ToUpperInvariant() })
     }
 }
+
 function ConvertFrom-AnsibleOptions {
     [CmdletBinding()]
     [OutputType([System.Collections.IDictionary])]
@@ -354,8 +360,83 @@ function Compare-SessionOption {
     }
 }
 
-$opt_pssc    = ConvertFrom-AnsibleOptions -Params $module.Params -OptionSet $pssc_options
-$opt_session = ConvertFrom-AnsibleOptions -Params $module.Params -OptionSet $session_configuration_options
+<#
+    For use with possible future enhancement.
+    Right now the biggest challenges to this are:
+        - Ansible's connection itself: the number doesn't go to 0 while we're here running
+          and waiting for it. I thought being async it would disappear but either that's not
+          the case or it's taking too long to do so.
+
+        - I have not found a reliable way to determine which WinRM connection is the one used for
+          the Ansible connection. Over psrp we can use Get-PSSession -ComputerName but that won't
+          work for the winrm connection plugin.
+
+        - Connections seem to take time to disappear. In tests when trying to start time-limited
+          sessions, like:
+          icm -computername . -scriptblock { Start-Sleep -Seconds 30 } -AsJob
+          After the time elapses the connection lingers for a little while after. Should be ok but
+          does add some challenges to writing tests.
+
+        - Checking for instances of the shell resource looks reliable, but I'm not yet certain
+          if it captures all WinRM connections, like CIM connections. Still would be better than
+          nothing.
+#>
+# function Wait-WinRMConnection {
+#     <#
+#         .SYNOPSIS
+#         Waits for existing WinRM connections to finish
+
+#         .DESCRIPTION
+#         Finds existing WinRM connections that are in a set of states (configurable), and waits for them
+#         to disappear, or times out.
+#     #>
+#     [CmdletBinding()]
+#     param(
+#         [Parameter(Mandatory=$true)]
+#         [Ansible.Basic.AnsibleModule]
+#         $Module
+#     )
+
+#     End {
+#         $action     = $Module.Params.existing_connection_timeout_action
+#         $states     = $Module.Params.existing_connection_wait_states
+#         $timeout_ms = [System.Math]::Min(0, $Module.Params.existing_connection_timeout_seconds) * 1000
+#         $interval   = [System.Math]::Max([System.Math]::Min(100, $Module.Params.existing_connection_timeout_interval_ms), $timeout_ms)
+
+#         # Would only with psrp
+#         $thiscon = Get-PSSession -ComputerName . | Select-Object -ExpandProperty InstanceId
+
+#         $sw = New-Object -TypeName System.Diagnostics.Stopwatch
+
+#         do {
+#             $connections = Get-WSManInstance -ComputerName localhost -ResourceURI shell -Enumerate |
+#                 Where-Object -FilterScript {
+#                     $states -contains $_.State -and (
+#                         -not $thiscon -or
+#                         $thiscon -ne $_.ShellId
+#                     )
+#                 }
+
+#             $sw.Start()
+#             Start-Sleep -Milliseconds $interval
+#         } while ($connections -and $sw.ElapsedMilliseconds -lt $timeout_ms)
+#         $sw.Stop()
+
+#         if ($connections -and $action -eq 'fail') {
+#             # somehow $connections.Count sometimes is blank (not 0) but I can't figure out how that's possible
+#             $Module.FailJson("$($connections.Count) remained after timeout.")
+#         }
+#     }
+# }
+
+$PSDefaultParameterValues = @{
+    '*-PSSessionConfiguration:Force'        = $true
+    'ConvertFrom-AnsibleOptions:Params'     = $module.Params
+    'Wait-WinRMConnection:Module'           = $module
+}
+
+$opt_pssc       = ConvertFrom-AnsibleOptions -OptionSet $pssc_options                   #-Params $module.Params
+$opt_session    = ConvertFrom-AnsibleOptions -OptionSet $session_configuration_options  #-Params $module.Params
 
 $existing = Get-PSSessionConfiguration -Name $opt_session.Name -ErrorAction SilentlyContinue
 
@@ -370,7 +451,10 @@ try {
             # the registered endpoint uses a config file
             if ($desired_config) {
                 # a desired config file exists, so compare it to the existing one
-                $content_match = $existing | Compare-ConfigFile -NewConfigFile $desired_config -Params $opt_pssc -UseExistingIfMissing $module.Params.lenient_config_fields
+                $content_match = $existing |
+                    Compare-ConfigFile -NewConfigFile $desired_config -Params $opt_pssc -UseExistingIfMissing (
+                        $module.Params.lenient_config_fields | ConvertFrom-SnakeCase
+                    )
             }
             else {
                 # existing endpoint has a config file but no config file options were passed, so there is no match
@@ -391,17 +475,17 @@ try {
     $remove = $existing -and ($state -eq 'absent' -or -not $content_match)
     $session_change = -not $session_match -and $state -ne 'absent'
 
-    $rnd = Set-PSBreakpoint -Variable rnd -Action { $Global:rnd = [guid]::NewGuid().ToString().TrimStart('{').Substring(0,4) } -Mode Read
+    # $rnd = Set-PSBreakpoint -Variable rnd -Action { $Global:rnd = [guid]::NewGuid().ToString().TrimStart('{').Substring(0,4) } -Mode Read
 
     # $module.Warn('$existing: {0} [{1}]' -f ($existing | ConvertTo-Json -Depth 2 -Compress))
-    $module.Warn('$opt_session: {0} [{1}]' -f (($opt_session | ConvertTo-Json -Depth 2 -Compress),$rnd))
-    $module.Warn('$opt_pssc: {0} [{1}]' -f (($opt_pssc | ConvertTo-Json -Depth 2 -Compress),$rnd))
-    $module.Warn('$state: {0} [{1}]' -f ($state,$rnd))
-    $module.Warn('$content_match: {0} [{1}]' -f ($content_match,$rnd))
-    $module.Warn('$session_match: {0} [{1}]' -f ($session_match,$rnd))
-    $module.Warn('$session_change: {0} [{1}]' -f ($session_change,$rnd))
-    $module.Warn('$create: {0} [{1}]' -f ($create,$rnd))
-    $module.Warn('$remove: {0} [{1}]' -f ($remove,$rnd))
+    # $module.Warn('$opt_session: {0} [{1}]' -f (($opt_session | ConvertTo-Json -Depth 2 -Compress),$rnd))
+    # $module.Warn('$opt_pssc: {0} [{1}]' -f (($opt_pssc | ConvertTo-Json -Depth 2 -Compress),$rnd))
+    # $module.Warn('$state: {0} [{1}]' -f ($state,$rnd))
+    # $module.Warn('$content_match: {0} [{1}]' -f ($content_match,$rnd))
+    # $module.Warn('$session_match: {0} [{1}]' -f ($session_match,$rnd))
+    # $module.Warn('$session_change: {0} [{1}]' -f ($session_change,$rnd))
+    # $module.Warn('$create: {0} [{1}]' -f ($create,$rnd))
+    # $module.Warn('$remove: {0} [{1}]' -f ($remove,$rnd))
 
     $module.Result.changed = $create -or $remove -or $session_change
 
@@ -428,18 +512,21 @@ try {
 
     if (-not $module.CheckMode) {
         if ($remove) {
-            Unregister-PSSessionConfiguration -Name $opt_session.Name -Force
+            # Wait-WinRMConnection
+            Unregister-PSSessionConfiguration -Name $opt_session.Name #-Force
         }
 
         if ($create) {
             if ($desired_config) {
                 $opt_session.Path = $desired_config
             }
-            $null = Register-PSSessionConfiguration @opt_session -Force
+            # Wait-WinRMConnection
+            $null = Register-PSSessionConfiguration @opt_session #-Force
         }
         elseif ($session_change) {
             $psso = $opt_session
-            Set-PSSessionConfiguration @psso -Force
+            # Wait-WinRMConnection
+            Set-PSSessionConfiguration @psso #-Force
         }
     }
 }
