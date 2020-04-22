@@ -119,7 +119,16 @@ function Import-PowerShellDataFileLegacy {
         $ht = $astloader.Find({ param($ast)
              $ast -is [System.Management.Automation.Language.HashtableAst]
         }, $false)
-        $ht.SafeGetValue()
+
+        if (-not $ht) {
+            throw "Invalid PowerShell Data File."
+        }
+
+        # SafeGetValue() is not available before PowerShell 5 anyway, so we'll do the unsafe load and just execute it.
+        # The only files we're loading are ones we generated from options, or ones that were already attached to existing
+        # session configurations.
+        # $ht.SafeGetValue()
+        Invoke-Expression -Command $ht.Extent.Text
     }
 }
 
