@@ -107,6 +107,7 @@ function Import-PowerShellDataFileLegacy {
     #>
     [CmdletBinding()]
     [OutputType([hashtable])]
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidUsingInvokeExpression','', Justification='Required to process PS data file')]
     param(
         [Parameter(Mandatory=$true)]
         [Alias('Path')]
