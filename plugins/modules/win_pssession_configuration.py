@@ -267,8 +267,9 @@ options:
   run_as_credential_username:
     description:
       - Used to set a RunAs account for the session. All commands executed in the session will be run as this user.
-      - To use a gMSA, see I(group_managed_service_account)/
+      - To use a gMSA, see I(group_managed_service_account).
       - To use a virtual account, see I(run_as_virtual_account) and I(run_as_virtual_account_groups).
+      - Status will always be C(changed) when a RunAs credential is set because the password cannot be retrieved for comparison.
     type: str
   run_as_credential_password:
     description:
@@ -283,7 +284,7 @@ options:
     default:
       - guid
       - author
-      - company
+      - company_name
       - copyright
       - description
 notes:
@@ -314,7 +315,58 @@ author:
 '''
 
 EXAMPLES = r'''
-# TBD
+- name: Register a session configuration that loads modules automatically
+  community.windows.win_pssession_configuration:
+    name: WebAdmin
+    modules_to_import:
+      - WebAdministration
+      - IISAdministration
+    description: This endpoint has IIS modules pre-loaded
+
+- name: Set up an admin endpoint with a restricted execution policy
+  community.windows.win_pssession_configuration:
+    name: GloboCorp.Admin
+    company_name: Globo Corp
+    description: Admin Endpoint
+    execution_policy: restricted
+
+- name: Create a complex JEA endpoint
+  community.windows.win_pssession_configuration:
+    name: RBAC.Endpoint
+    session_type: restricted_remote_server
+    run_as_virtual_account: True
+    transcript_directory: '\\server\share\Transcripts'
+    language_mode: no_language
+    execution_policy: restricted
+    role_definitions:
+      'CORP\IT Support':
+        RoleCapabilities:
+          - PasswordResetter
+          - EmployeeOffboarder
+      'CORP\Webmasters':
+        RoleCapabilities: IISAdmin
+    visible_functions:
+      - tabexpansion2
+      - help
+    visible_cmdlets:
+      - Get-Help
+      - Name: Get-Service
+        Parameters:
+          - Name: DependentServices
+          - Name: RequiredServices
+          - Name: Name
+            ValidateSet:
+              - WinRM
+              - W3SVC
+              - WAS
+    visible_aliases:
+      - gsv
+    state: present
+
+- name: Remove a session configuration
+  community.windows.win_pssession_configuration:
+    name: UnusedEndpoint
+    state: absent
 '''
 
 RETURN = r'''

@@ -72,7 +72,7 @@ $session_configuration_options = @{
 
 $behavior_options = @{
     state                                     = @{ type = 'str' ; choices = @('present', 'absent') ; default = 'present' }
-    lenient_config_fields                     = @{ type = 'list' ; elements = 'str' ; default = @('guid', 'author', 'company', 'copyright', 'description') }
+    lenient_config_fields                     = @{ type = 'list' ; elements = 'str' ; default = @('guid', 'author', 'company_name', 'copyright', 'description') }
 <#
     # TODO: possible future enhancement to wait for existing connections to finish
     # Existing connections can be found with:
