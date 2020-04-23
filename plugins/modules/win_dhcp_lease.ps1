@@ -52,9 +52,14 @@ Function Convert-MacAddress {
         return $mac
     }
     elseif ($mac.Length -eq 17) {
+        # Remove Colons
+        if($mac -like "*:*:*:*:*:*") {
+            return ($mac -replace ':')
+        }
         # Remove Dashes
-        $mac = $mac -replace '-'
-        return $mac
+        if ($mac -like "*-*-*-*-*-*") {
+            return ($mac -replace '-')
+        }
     }
     else {
         return $false
@@ -68,14 +73,13 @@ Function Compare-DhcpLease {
     )
 
     # Compare values that we care about
-    if (($Original.AddressState -eq $Updated.AddressState) -and ($Original.IPAddress -eq $Updated.IPAddress) -and ($Original.ScopeId -eq $Updated.ScopeId) -and ($Original.Name -eq $Updated.Name) -and ($Original.Description -eq $Updated.Description)) {
-        # changed = false
-        return $false
-    }
-    else {
-        # changed = true
-        return $true
-    }
+    -not (
+        ($Original.AddressState -eq $Updated.AddressState) -and
+        ($Original.IPAddress -eq $Updated.IPAddress) -and
+        ($Original.ScopeId -eq $Updated.ScopeId) -and
+        ($Original.Name -eq $Updated.Name) -and
+        ($Original.Description -eq $Updated.Description)
+    )
 }
 
 Function Convert-ReturnValue {
@@ -83,7 +87,7 @@ Function Convert-ReturnValue {
         $Object
     )
 
-    $data = @{
+    return @{
         address_state = $Object.AddressState
         client_id     = $Object.ClientId
         ip_address    = $Object.IPAddress.IPAddressToString
@@ -91,8 +95,6 @@ Function Convert-ReturnValue {
         name          = $Object.Name
         description   = $Object.Description
     }
-
-    return $data
 }
 
 # Parse Regtype
@@ -111,7 +113,7 @@ Try {
 }
 Catch {
     # Couldn't load the DhcpServer Module
-    $module.FailJson("The DhcpServer module failed to load properly",$_)
+    $module.FailJson("The DhcpServer module failed to load properly: $($_.Exception.Message)", $_)
 }
 
 # Determine if there is an existing lease
@@ -395,7 +397,7 @@ if ($state -eq "present") {
         }
         Catch {
             # Failed to create lease
-            $module.FailJson("Could not create DHCP lease",$_)
+            $module.FailJson("Could not create DHCP lease: $($_.Exception.Message)",$_)
         }
 
         # Create Reservation
@@ -420,7 +422,7 @@ if ($state -eq "present") {
                 }
                 Catch {
                     # Failed to create reservation
-                    $module.FailJson("Could not create DHCP reservation",$_)
+                    $module.FailJson("Could not create DHCP reservation: $($_.Exception.Message)", $_)
                 }
 
                 if(-not $check_mode) {
@@ -434,7 +436,7 @@ if ($state -eq "present") {
         }
         Catch {
             # Failed to create reservation
-            $module.FailJson("Could not create DHCP reservation",$_)
+            $module.FailJson("Could not create DHCP reservation: $($_.Exception.Message)", $_)
         }
     }
 }

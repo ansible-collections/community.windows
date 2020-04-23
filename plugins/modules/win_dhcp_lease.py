@@ -98,35 +98,30 @@ EXAMPLES = r'''
     type: reservation
     ip: 192.168.100.205
     scope_id: 192.168.100.0
-    mac: 00b18ad15a1f
+    mac: 00:B1:8A:D1:5A:1F
     dns_hostname: "{{ ansible_inventory }}"
     description: Testing Server
-  delegate_to: dhcp-raju-euc.vmware.com
 
 - name: Ensure DHCP lease or reservation does not exist
   win_dhcp_lease:
-    mac: 00b18ad15a1f
+    mac: 00:B1:8A:D1:5A:1F
     state: absent
-  delegate_to: dhcp-marshallb-euc.vmware.com
 
 - name: Ensure DHCP lease or reservation does not exist
   win_dhcp_lease:
     ip: 192.168.100.205
     state: absent
-  delegate_to: dhcp-wpinner-euc.vmware.com
 
 - name: Convert DHCP lease to reservation & update description
   win_dhcp_lease:
     type: reservation
     ip: 192.168.100.205
     description: Testing Server
-  delegate_to: dhcp-dgemzer-euc.vmware.com
 
 - name: Convert DHCP reservation to lease
   win_dhcp_lease:
     type: lease
     ip: 192.168.100.205
-  delegate_to: dhcp-jamals-euc.vmware.com
 '''
 
 RETURN = r'''
