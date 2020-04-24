@@ -539,7 +539,7 @@ catch [System.Management.Automation.ParameterBindingException] {
         $message = "Parameter '$param' is not available for '$cmd' in PowerShell $psv."
     }
     else {
-        $message = "Unknown parameter binding error."
+        $message = "Unknown parameter binding error: $($e.Exception.Message)"
     }
 
     $module.FailJson($message, $e)
