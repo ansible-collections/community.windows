@@ -4,7 +4,7 @@
 # GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 
 #AnsibleRequires -CSharpUtil Ansible.Basic
-#AnsibleRequires -CSharpUtil Ansible.Become
+#AnsibleRequires -CSharpUtil Ansible.AccessToken
 
 $type = @{
     guid    = [Func[[Object], [System.Guid]]] {
@@ -492,19 +492,21 @@ try {
     # But if the RunAs credential is wrong, the register will fail, and since we already removed
     # the existing one, it will be gone.
     #
-    # So let's ensure we can actually use the credential by running something (whoami.exe) with the become
-    # module util, that way we can fail before touching the existing config.
+    # So let's ensure we can actually use the credential by logging on with TokenUtil,
+    # that way we can fail before touching the existing config.
     if ($opt_session.Contains('RunAsCredential')) {
         $cred = $opt_session.RunAsCredential
+        $username = $cred.Username
+        $domain = $null
+        if ($username.Contains('\')) {
+            $domain,$username = $username.Split('\')
+        }
         try {
-            $result = [Ansible.Become.BecomeUtil]::CreateProcessAsUser($cred.Username, $cred.GetNetworkCredential().Password, 'whoami.exe')
-            $module.Debug("RunAsCredential check whoami.exe output: $($result.StandardOut)")
-            if ($result.ExitCode -ne 0) {
-                throw
-            }
+            $handle = [Ansible.AccessToken.TokenUtil]::LogonUser($username, $domain, $cred.GetNetworkCredential().Password, 'Network', 'Default')
+            $handle.Dispose()
         }
         catch {
-            $module.FailJson('Could not validate RunAs Credential.')
+            $module.FailJson("Could not validate RunAs Credential: $($_.Exception.Message)", $_)
         }
     }
 
