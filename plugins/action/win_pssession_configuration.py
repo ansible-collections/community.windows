@@ -1,4 +1,4 @@
-# Copyright: (c) 2018, Ansible Project
+# Copyright: (c) 2020, Brian Scholer <@briantist>
 # GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 
 from __future__ import (absolute_import, division, print_function)
@@ -10,6 +10,7 @@ import time
 from ansible.errors import AnsibleError
 from ansible.plugins.action import ActionBase
 from ansible.utils.vars import merge_hash
+from ansible.playbook.task import Task
 from ansible.utils.display import Display
 display = Display()
 
@@ -64,13 +65,17 @@ class ActionModule(ActionBase):
         if check_mode or async_poll == 0:
             return result
 
-        # remove the async flag so that our calls to async_status and wait_for_connection don't try to run async
-        self._task.async_val = 0
-
-        async_status_args = {
-            'jid': status['ansible_job_id'],
-            '_async_dir': ntpath.dirname(status['results_file'])
-        }
+        # build the async_status object
+        async_status_task = Task().load(dict(action='async_status jid=%s' % status['ansible_job_id'], environment=self._task.environment))
+        async_status_action = self._shared_loader_obj.action_loader.get(
+            'async_status',
+            task=async_status_task,
+            connection=self._connection,
+            play_context=self._play_context,
+            loader=self._loader,
+            templar=self._templar,
+            shared_loader_obj=self._shared_loader_obj
+        )
 
         # Retries here is a fallback in case the module fails in an unexpected way
         # which can sometimes not properly set the failed field in the return.
@@ -81,12 +86,7 @@ class ActionModule(ActionBase):
         while not check_mode:
             try:
                 # check up on the async job
-                job_status = self._execute_module(
-                    module_name='async_status',
-                    module_args=async_status_args,
-                    task_vars=task_vars,
-                    wrap_async=False
-                )
+                job_status = async_status_action.run(task_vars=task_vars)
                 display.vvvv("Async Job Status: %r" % job_status)
 
                 if job_status.get('failed', False):
