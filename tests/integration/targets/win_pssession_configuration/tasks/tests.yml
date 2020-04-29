@@ -55,6 +55,59 @@
 
 #######
 
+- name: Change something async fire-and-forget
+  win_pssession_configuration:
+    name: "{{ config_name }}"
+    description: "{{ config_description }}~~~~"
+    modules_to_import: Microsoft.PowerShell.Utility
+    async_timeout: 500
+    async_poll: 0
+  register: status
+
+- name: Wait for it to complete
+  async_status:
+    jid: "{{ status.ansible_job_id }}"
+  until: status.finished
+  retries: 10
+  delay: 1
+  register: status
+
+- name: Check for changed status
+  assert:
+    that: status is changed
+    quiet: yes
+
+- name: Change it back with custom async values
+  win_pssession_configuration:
+    name: "{{ config_name }}"
+    description: "{{ config_description }}"
+    modules_to_import: Microsoft.PowerShell.Utility
+    async_timeout: 500
+    async_poll: 2
+  register: status
+
+- name: Check for changed status
+  assert:
+    that: status is changed
+    quiet: yes
+
+- name: Try it with the keywords (failure expected)
+  win_pssession_configuration:
+    name: "{{ config_name }}"
+    description: "{{ config_description }}"
+    modules_to_import: Microsoft.PowerShell.Utility
+  async: 500
+  poll: 2
+  register: status
+  ignore_errors: yes
+
+- name: Check for expected failire
+  assert:
+    that: status is failed
+    quiet: yes
+
+#######
+
 - name: Try to set a parameter that's only available in PowerShell 5+ (check)
   win_pssession_configuration:
     name: "{{ config_name }}"

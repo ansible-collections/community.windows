@@ -287,12 +287,26 @@ options:
       - company_name
       - copyright
       - description
+  async_timeout:
+    description:
+      - Sets a timeout for how long in seconds to wait for asynchronous module execution and waiting for the connection to recover.
+      - Replicates the functionality of the C(async) keyword.
+      - Has no effect in check mode.
+    type: int
+    default: 300
+  async_poll:
+    description:
+      - Sets a delay in seconds between each check of the asynchronous execution status.
+      - Replicates the functionality of the C(poll) keyword.
+      - Has no effect in check mode.
+    type: int
+    default: 1
 notes:
   - This module will restart the WinRM service on any change. This will terminate all WinRM connections including those by other Ansible runs.
   - Internally this module uses C(async) when not in check mode to ensure things goes smoothly when restarting the WinRM service.
-  - Internal defaults are C(async=300) and C(poll=1).
-  - The standard C(async) and C(poll) keywords can be used to control the internal async timeout and poll values.
-  - Values that don't list a default here will use the defaults of C(New-PSSessionConfigurationFile) and C(Register-PSSessionConfiguration).
+  - The standard C(async) and C(poll) keywords cannot be used; instead use the I(async_timeout) and I(async_poll) options to controll asynchronous execution.
+  - Setting I(poll=0) will return a result that can be used with C(async_status).
+  - Options that don't list a default value here will use the defaults of C(New-PSSessionConfigurationFile) and C(Register-PSSessionConfiguration).
   - If a value can be specified in both a session config file and directly in the session options, this module will prefer the setting be in the config file.
 seealso:
   - name: C(New-PSSessionConfigurationFile) Reference
@@ -367,6 +381,13 @@ EXAMPLES = r'''
   community.windows.win_pssession_configuration:
     name: UnusedEndpoint
     state: absent
+
+- name: Set a sessions configuration with tweaked async values
+  community.windows.win_pssession_configuration:
+    name: MySession
+    description: A sample session
+    async_timeout: 500
+    poll: 5
 '''
 
 RETURN = r'''

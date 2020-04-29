@@ -24,22 +24,18 @@ class ActionModule(ActionBase):
 
     def run(self, tmp=None, task_vars=None):
         self._supports_check_mode = True
-        self._supports_async = True
-        check_mode = self._play_context.check_mode
-        async_timeout = self._task.async_val
-        async_poll = self._task.poll
-
-        # fake out the super so it doesn't stop us from using check mode with async
-        if check_mode:
-            self._task.async_val = 0
+        self._supports_async = False
+        check_mode      = self._play_context.check_mode
+        async_timeout   = self._task.args.get('async_timeout', self._default_async_timeout)
+        async_poll      = self._task.args.get('async_poll', self._default_async_poll)
 
         result = super(ActionModule, self).run(tmp, task_vars)
 
         # build the wait_for_connection object for later use
         wait_for_connection_task = self._task.copy()
         wait_for_connection_task.args = {
-            'timeout': async_timeout or self._default_async_timeout,
-            'sleep': async_poll or self._default_async_poll
+            'timeout': async_timeout,
+            'sleep': async_poll,
         }
         wait_connection_action = self._shared_loader_obj.action_loader.get(
             'wait_for_connection',
@@ -53,7 +49,7 @@ class ActionModule(ActionBase):
 
         # if it's not in check mode, call the module async so the WinRM restart doesn't kill ansible
         if not check_mode:
-            self._task.async_val = async_timeout or self._default_async_timeout
+            self._task.async_val = async_timeout
 
         result = status = self._execute_module(
             task_vars=task_vars,
