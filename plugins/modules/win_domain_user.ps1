@@ -16,11 +16,9 @@ Function Test-Credential {
         $Domain = $null # force $Domain to be null, to prevent undefined behaviour, as a domain name is already included in the username
     } elseif (($Username.ToCharArray()) -contains [char]'\') {
         # Pre Win2k Account Name
-        $Username = ($Username -split '\')[0]
-        $Domain = ($Username -split '\')[1]
-    } else {
-        # No domain provided, so maybe local user, or domain specified separately.
-    }
+        $Domain = ($Username -split '\\')[0]
+        $Username = ($Username -split '\\', 2)[-1]
+    } # If no domain provided, so maybe local user, or domain specified separately.
 
     try {
         $handle = [Ansible.AccessToken.TokenUtil]::LogonUser($Username, $Domain, $Password, "Network", "Default")
