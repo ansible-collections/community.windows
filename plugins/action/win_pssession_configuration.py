@@ -25,9 +25,9 @@ class ActionModule(ActionBase):
     def run(self, tmp=None, task_vars=None):
         self._supports_check_mode = True
         self._supports_async = False
-        check_mode      = self._play_context.check_mode
-        async_timeout   = self._task.args.get('async_timeout', self._default_async_timeout)
-        async_poll      = self._task.args.get('async_poll', self._default_async_poll)
+        check_mode = self._play_context.check_mode
+        async_timeout = self._task.args.get('async_timeout', self._default_async_timeout)
+        async_poll = self._task.args.get('async_poll', self._default_async_poll)
 
         result = super(ActionModule, self).run(tmp, task_vars)
 
