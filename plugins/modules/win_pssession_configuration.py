@@ -387,7 +387,7 @@ EXAMPLES = r'''
     name: MySession
     description: A sample session
     async_timeout: 500
-    poll: 5
+    async_poll: 5
 '''
 
 RETURN = r'''
