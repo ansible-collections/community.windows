@@ -34,7 +34,7 @@ $repository_params = @{
     Name = $name
 }
 
-$Repo = Get-PSRepository @repository_params -ErrorAction Ignore
+$Repo = Get-PSRepository @repository_params -ErrorAction SilentlyContinue
 
 if ($installation_policy) {
     $repository_params.InstallationPolicy = $installation_policy

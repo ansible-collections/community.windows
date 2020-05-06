@@ -162,7 +162,7 @@ Function Add-DefinedParameter {
     )
 
     ForEach ($ParameterName in $ParametersNames) {
-        $ParameterVariable = Get-Variable -Name $ParameterName -ErrorAction Ignore
+        $ParameterVariable = Get-Variable -Name $ParameterName -ErrorAction SilentlyContinue
         if ( $ParameterVariable.Value -and $Hashtable.Keys -notcontains $ParameterName ){
                 $Hashtable.Add($ParameterName,$ParameterVariable.Value)
         }
@@ -381,7 +381,7 @@ if ( ($state -eq "latest") -and
 }
 
 if ( $repo -and (-not $url) ) {
-    $RepositoryExists = Get-PSRepository -Name $repo -ErrorAction Ignore
+    $RepositoryExists = Get-PSRepository -Name $repo -ErrorAction SilentlyContinue
     if ( $null -eq $RepositoryExists) {
         $ErrorMessage = "The repository $repo doesn't exist."
         Fail-Json $result $ErrorMessage

@@ -5,7 +5,7 @@
 ---
 - name: Retrieve Repository Manually
   ansible.windows.win_shell: |
-    $repo = Get-PSRepository -Name {{ repository_name | quote }} -ErrorAction Ignore
+    $repo = Get-PSRepository -Name {{ repository_name | quote }} -ErrorAction SilentlyContinue
     @{
         repo = $repo
         exists = $repo -as [bool]
