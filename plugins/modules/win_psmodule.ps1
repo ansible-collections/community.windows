@@ -27,6 +27,18 @@ $result = @{changed = $false
             nuget_changed = $false
             repository_changed = $false}
 
+
+# Enable TLS1.1/TLS1.2 if they're available but disabled (eg. .NET 4.5)
+$security_protocols = [System.Net.ServicePointManager]::SecurityProtocol -bor [System.Net.SecurityProtocolType]::SystemDefault
+if ([System.Net.SecurityProtocolType].GetMember("Tls11").Count -gt 0) {
+    $security_protocols = $security_protocols -bor [System.Net.SecurityProtocolType]::Tls11
+}
+if ([System.Net.SecurityProtocolType].GetMember("Tls12").Count -gt 0) {
+    $security_protocols = $security_protocols -bor [System.Net.SecurityProtocolType]::Tls12
+}
+[System.Net.ServicePointManager]::SecurityProtocol = $security_protocols
+
+
 Function Install-NugetProvider {
     Param(
         [Bool]$CheckMode

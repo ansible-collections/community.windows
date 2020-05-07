@@ -26,6 +26,16 @@ $force = Get-AnsibleParam -obj $params -name "force" -type "bool" -default $fals
 
 $result = @{"changed" = $false}
 
+# Enable TLS1.1/TLS1.2 if they're available but disabled (eg. .NET 4.5)
+$security_protocols = [System.Net.ServicePointManager]::SecurityProtocol -bor [System.Net.SecurityProtocolType]::SystemDefault
+if ([System.Net.SecurityProtocolType].GetMember("Tls11").Count -gt 0) {
+    $security_protocols = $security_protocols -bor [System.Net.SecurityProtocolType]::Tls11
+}
+if ([System.Net.SecurityProtocolType].GetMember("Tls12").Count -gt 0) {
+    $security_protocols = $security_protocols -bor [System.Net.SecurityProtocolType]::Tls12
+}
+[System.Net.ServicePointManager]::SecurityProtocol = $security_protocols
+
 if (-not (Import-Module -Name PowerShellGet -MinimumVersion 1.6.0 -PassThru -ErrorAction SilentlyContinue)) {
     Fail-Json -obj $result -Message "PowerShellGet version 1.6.0+ is required."
 }
