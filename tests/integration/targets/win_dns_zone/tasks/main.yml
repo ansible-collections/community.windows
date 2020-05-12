@@ -8,14 +8,17 @@
     include_sub_features: true
     state: present
 
-- name: Ensure domain controller is promoted
-  ansible.windows.win_domain_controller:
+- name: Ensure domain is present
+  ansible.windows.win_domain:
+    create_dns_delegation: no
+    database_path: C:\Windows\NTDS
     dns_domain_name: vmware.lan
-    domain_admin_user: "{{ ansible_user }}@vmware.lan"
-    domain_admin_password: "{{ ansible_password }}"
-    safe_mode_password: "{{ ansible_password }}"
-    state: domain_controller
-  register: result
+    domain_mode: Win2012
+    domain_netbios_name: VMW
+    forest_mode: Win2012
+    safe_mode_password: password123!
+    sysvol_path: C:\Windows\SYSVOL
+  register: domain_install
 
 - block:
   - name: Ensure loopback address is set to DNS
@@ -32,5 +35,3 @@
 
   - name: Run tests - check mode
     include_tasks: tests_checkmode.yml
-  vars:
-    ansible_user: "{{ ansible_user }}@vmware.lan"
