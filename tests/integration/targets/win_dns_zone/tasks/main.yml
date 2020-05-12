@@ -1,0 +1,33 @@
+---
+- name: Ensure AD/DNS roles are installed
+  ansible.windows.win_feature:
+    name:
+      - AD-Domain-Services
+      - DNS
+    include_management_tools: true
+    include_sub_features: true
+    state: present
+
+- name: Ensure domain controller is promoted
+  win_domain_controller:
+    dns_domain_name: vmware.lan
+    domain_admin_user: "{{ ansible_user }}"
+    domain_admin_password: "{{ ansible_password }}"
+    safe_mode_password: "{{ ansible_password }}"
+    state: domain_controller
+  register: result
+
+- name: Reboot if needed
+  ansible.windows.win_reboot:
+  when: result.reboot_required
+
+- name: Ensure loopback address is set to DNS
+  win_dns_client:
+    adapter_names: '*'
+    ipv4_addresses: 127.0.0.1
+
+- name: Run tests
+  include_tasks: tests.yml
+
+- name: Run tests - check mode
+  include_tasks: tests_checkmode.yml

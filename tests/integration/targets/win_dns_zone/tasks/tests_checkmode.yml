@@ -1,0 +1,78 @@
+---
+- name: Check DHCP Service/Role Install State
+  ansible.windows.win_feature:
+    name: DHCP
+    state: present
+    include_management_tools: yes
+  register: dhcp_role
+  check_mode: true
+
+- name: Reboot if Necessary
+  ansible.windows.win_reboot:
+  when: dhcp_role.reboot_required
+  check_mode: true
+
+- name: Remove DHCP Address by IP
+  win_dhcp_lease:
+    state: absent
+    ip: "{{ dhcp_lease_ip }}"
+  check_mode: true
+
+- name: Ensure primary DNS zones are present (check mode)
+  win_dns_zone:
+    name: mehmoodkhap.euc.vmware.com
+    replication: domain
+    type: primary
+  check_mode: true
+  register: test1
+  failed_when: test1 is changed
+
+- name: Ensure primary DNS zones replicate to forest (check mode)
+  win_dns_zone:
+    name: chall.euc.vmware.com
+    replication: forest
+    type: primary
+  check_mode: true
+  register: test2
+  failed_when: test2 is changed
+
+- name: Ensure forwarder is present (check mode)
+  win_dns_zone:
+    name: nkini.euc.vmware.com
+    type: forwarder
+    dns_servers:
+      - 10.245.51.100
+      - 10.245.51.101
+      - 10.245.51.102
+  check_mode: true
+  register: test3
+  failed_when: test3 is changed
+
+- name: Ensure forwarder zone has specific DNS servers (check mode)
+  win_dns_zone:
+    name: ssanthanagopalan.euc.vmware.com
+    type: forwarder
+    dns_servers:
+      - 10.205.1.219
+      - 10.205.1.220
+  check_mode: true
+  register: test4
+  failed_when: test4 is changed
+
+- name: Ensure Active Directory integrated secondary zone is present (check mode)
+  win_dns_zone:
+    name: rrounsaville.euc.vmware.com
+    type: secondary
+    replication: forest
+    dynamic_update: none
+  register: test5
+  failed_when: test5.changed == false
+
+- name: Ensure file backed stub zone is present (check mode)
+  win_dns_zone:
+    name: anup.euc.vmware.com
+    type: stub
+    replication: none
+    dynamic_update: none
+  register: test5
+  failed_when: test5.changed == false
