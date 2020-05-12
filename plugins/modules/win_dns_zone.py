@@ -18,8 +18,7 @@ requirements:
   - This module requires Windows Server 2012 or Newer
 description:
   - Manage Windows Server DNS Zones
-  - Adds, Removes and Modifies DNS Zones: Primary, Forward, 
-    Stub & Reverse
+  - Adds, Removes and Modifies DNS Zones: Primary, Forward, Stub & Reverse
   - Task should be delegated to a Windows DNS Server
 options:
   name:
@@ -57,7 +56,7 @@ options:
     choices: [ present, absent ]
   forwarder_timeout:
     description:
-      - Specifies a length of time, in seconds, that a DNS server 
+      - Specifies a length of time, in seconds, that a DNS server
         waits for a master server to resolve a query.
       - Accepts values between 0 and 15.
     type: int
@@ -70,7 +69,7 @@ options:
         to all domain controllers in the Active Directory domain.
       - l(replication=none) disables Active Directory integration and
         creates a local file with the name of the zone.
-      - This is the equivalent of selecting l(store the zone in Active 
+      - This is the equivalent of selecting l(store the zone in Active
         Directory) in the GUI.
     type: str
     choices: [ forest, domain, legacy, none ]
@@ -83,8 +82,6 @@ options:
       - At least one server is required.
     type: list
     alias: master_servers
-author:
-- Joseph Zollo (@joezollo)
 '''
 
 EXAMPLES = r'''
@@ -174,14 +171,14 @@ zone:
   returned: When l(state=present)
   type: dict
   sample:
-    name: 
-    type: 
-    dynamic_update: 
-    reverse_lookup: 
-    forwarder_timeout: 
-    paused: 
-    shutdown: 
-    zone_file: 
-    replication: 
-    dns_servers: 
+    name:
+    type:
+    dynamic_update:
+    reverse_lookup:
+    forwarder_timeout:
+    paused:
+    shutdown:
+    zone_file:
+    replication:
+    dns_servers:
 '''

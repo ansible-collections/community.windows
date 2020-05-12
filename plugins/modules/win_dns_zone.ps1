@@ -70,9 +70,10 @@ Try { Import-Module DnsServer }
 Catch { $module.FailJson("The DnsServer module failed to load properly: $($_.Exception.Message)", $_) }
 
 Try {
-    # determine current zone state, check for fast fails
+    # determine current zone state
     $current_zone = Get-DnsServerZone -name $name
     if (-not $type) { $type = $current_zone.ZoneType.toLower() }
+    # check for fast fails
     if ($current_zone.ZoneType -like $type) { $current_zone_type_match = $true }
     if ($current_zone.ReplicationScope -like 'none' -and $replication -in @('legacy','forest','domain')) { $module.FailJson("Converting file backed DNS zone to Active Directory integrated zone is unsupported") }
     if ($current_zone.ReplicationScope -in @('legacy','forest','domain') -and $replication -like 'none') { $module.FailJson("Converting Active Directory integrated zone to file backed DNS zone is unsupported") }
@@ -92,6 +93,7 @@ if ($state -eq "present") {
 
     switch ($type) {
         "primary" {
+            # remove irrelevant params
             $parms.Remove('MasterServers')
             if (-not $current_zone) {
                 # create zone
@@ -116,6 +118,7 @@ if ($state -eq "present") {
             }
         }
         "secondary" {
+            # remove irrelevant params
             $parms.Remove('ReplicationScope')
             $parms.Remove('DynamicUpdate')
             if (-not $current_zone) {
