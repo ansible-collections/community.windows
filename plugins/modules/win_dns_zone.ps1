@@ -14,7 +14,7 @@ $spec = @{
         dynamic_update = @{ type = "str"; choices = "secure", "none", "nonsecureandsecure" }
         state = @{ type = "str"; choices = "absent", "present"; default = "present" }
         forwarder_timeout = @{ type = "int" }
-        dns_servers = @{ type = "list" }
+        dns_servers = @{ type = "list"; elements = "str"; aliases = "master_zone" }
     }
     supports_check_mode = $true
 }

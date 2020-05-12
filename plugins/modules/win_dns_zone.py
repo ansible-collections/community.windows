@@ -81,7 +81,7 @@ options:
         otherwise ignored.
       - At least one server is required.
     type: list
-    alias: master_servers
+    aliases: [ master_zone ]
 '''
 
 EXAMPLES = r'''
