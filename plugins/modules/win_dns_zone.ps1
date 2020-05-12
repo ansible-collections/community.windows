@@ -131,7 +131,7 @@ if ($state -eq "present") {
                     $parms.MasterServers = $current_zone.MasterServers
                     $parms.ZoneFile = $current_zone.ZoneFile
                     if ($current_zone.IsShutdown) { $module.FailJson("Failed to convert DNS zone $($name): this zone is shutdown and cannot be modified") }
-                    Try { ConvertTo-DnsServerSecondaryZone @parms -Force -WhatIf:$check_mode } 
+                    Try { ConvertTo-DnsServerSecondaryZone @parms -Force -WhatIf:$check_mode }
                     Catch { $module.FailJson("Failed to convert DNS zone $($name): $($_.Exception.Message)", $_) }
                 }
                 Try { if ($dns_servers) { Set-DnsServerSecondaryZone -Name $name -MasterServers $dns_servers -WhatIf:$check_mode } }

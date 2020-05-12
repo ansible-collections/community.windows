@@ -9,7 +9,7 @@
     state: present
 
 - name: Ensure domain controller is promoted
-  win_domain_controller:
+  ansible.windows.win_domain_controller:
     dns_domain_name: vmware.lan
     domain_admin_user: "{{ ansible_user }}"
     domain_admin_password: "{{ ansible_password }}"
@@ -22,7 +22,7 @@
   when: result.reboot_required
 
 - name: Ensure loopback address is set to DNS
-  win_dns_client:
+  ansible.windows.win_dns_client:
     adapter_names: '*'
     ipv4_addresses: 127.0.0.1
 
