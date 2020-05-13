@@ -83,14 +83,14 @@ Try {
 if ($state -eq "present") {
     # parse replication/zonefile
     if (-not $replication -and $current_zone) { $parms.ReplicationScope = $current_zone.ReplicationScope }
-    elseif ($replication -eq 'none' -or -not $replication) { $parms.ZoneFile = "$name.dns" }
+    elseif (($replication -eq 'none' -or -not $replication) -and -not $current_zone) { $parms.ZoneFile = "$name.dns" }
     else  { $parms.ReplicationScope = $replication }
     # parse params
     if ($dynamic_update) { $parms.DynamicUpdate = $dynamic_update }
     if ($dns_servers) { $parms.MasterServers = $dns_servers }
     if ($forwarder_timeout -and ($forwarder_timeout -in 0..15)) { $parms.ForwarderTimeout = $forwarder_timeout }
     if ($type -ne 'forwarder') { $parms.Remove('ForwarderTimeout') }
-
+    if ($type -in @('stub','forwader','secondary') -and -not $current_zone -and -not $dns_servers) { $module.FailJson("The dns_servers param is required for creating new stub, forwarder or secondary zones") }
     switch ($type) {
         "primary" {
             # remove irrelevant params
