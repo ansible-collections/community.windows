@@ -72,12 +72,19 @@ Catch { $module.FailJson("The DnsServer module failed to load properly: $($_.Exc
 Try {
     # determine current zone state
     $current_zone = Get-DnsServerZone -name $name
+    if($check_mode) { $module.Diff.before = Get-DnsZoneObject -Object $current_zone }
     if (-not $type) { $type = $current_zone.ZoneType.toLower() }
-    # check for fast fails
     if ($current_zone.ZoneType -like $type) { $current_zone_type_match = $true }
-    if ($current_zone.ReplicationScope -like 'none' -and $replication -in @('legacy','forest','domain')) { $module.FailJson("Converting file backed DNS zone to Active Directory integrated zone is unsupported") }
-    if ($current_zone.ReplicationScope -in @('legacy','forest','domain') -and $replication -like 'none') { $module.FailJson("Converting Active Directory integrated zone to file backed DNS zone is unsupported") }
-    if ($current_zone.IsDsIntegrated -eq $false -and $parms.DynamicUpdate -eq 'secure') { $module.FailJson("The secure dynamic update option is only available for Active Directory integrated zones") }
+    # check for fast fails
+    if ($current_zone.ReplicationScope -like 'none' -and $replication -in @('legacy','forest','domain')) { 
+        $module.FailJson("Converting a file backed DNS zone to Active Directory integrated zone is unsupported") 
+    }
+    if ($current_zone.ReplicationScope -in @('legacy','forest','domain') -and $replication -like 'none') { 
+        $module.FailJson("Converting Active Directory integrated zone to a file backed DNS zone is unsupported") 
+    }
+    if ($current_zone.IsDsIntegrated -eq $false -and $parms.DynamicUpdate -eq 'secure') { 
+        $module.FailJson("The secure dynamic update option is only available for Active Directory integrated zones") 
+    }
 } Catch { $current_zone = $false }
 
 if ($state -eq "present") {
@@ -88,9 +95,9 @@ if ($state -eq "present") {
     # parse params
     if ($dynamic_update) { $parms.DynamicUpdate = $dynamic_update }
     if ($dns_servers) { $parms.MasterServers = $dns_servers }
-    if ($forwarder_timeout -and ($forwarder_timeout -in 0..15)) { $parms.ForwarderTimeout = $forwarder_timeout }
-    if ($type -ne 'forwarder') { $parms.Remove('ForwarderTimeout') }
-    if ($type -in @('stub','forwader','secondary') -and -not $current_zone -and -not $dns_servers) { $module.FailJson("The dns_servers param is required for creating new stub, forwarder or secondary zones") }
+    if ($type -in @('stub','forwarder','secondary') -and -not $current_zone -and -not $dns_servers) { 
+        $module.FailJson("The dns_servers param is required when creating new stub, forwarder or secondary zones") 
+    }
     switch ($type) {
         "primary" {
             # remove irrelevant params
@@ -155,6 +162,13 @@ if ($state -eq "present") {
             }
         }
         "forwarder" {
+            $parms.Remove('ZoneFile')
+            if ($forwarder_timeout -and ($forwarder_timeout -in 0..15)) { 
+                $parms.ForwarderTimeout = $forwarder_timeout 
+            }
+            if ($forwarder_timeout -and -not ($forwarder_timeout -in 0..15)) {
+                $module.Warn("The forwarder_timeout param must be an integer value between 0 and 15")
+            }
             if (-not $current_zone) {
                 # create zone
                 Try { Add-DnsServerConditionalForwarderZone @parms -WhatIf:$check_mode }
@@ -185,12 +199,13 @@ if ($state -eq "absent") {
 
 # determine if a change was made
 Try {
-    $new_zone = Get-DnsServerZone -Name $name
-    if(-not (Compare-DnsZone -Original $current_zone -Updated $new_zone)) {
-        $module.Result.changed = $true
-        $module.Result.zone = Get-DnsZoneObject -Object $new_zone
-        $module.Diff.after = Get-DnsZoneObject -Object $new_zone
-        if($current_zone) { $module.Diff.before = Get-DnsZoneObject -Object $current_zone }
+    if (-not $check_mode) {
+        $new_zone = Get-DnsServerZone -Name $name
+        if(-not (Compare-DnsZone -Original $current_zone -Updated $new_zone)) {
+            $module.Result.changed = $true
+            $module.Result.zone = Get-DnsZoneObject -Object $new_zone
+            $module.Diff.after = Get-DnsZoneObject -Object $new_zone
+        }
     }
 } Catch { $module.FailJson("Failed to lookup new zone $($name): $($_.Exception.Message)", $_) }
 
