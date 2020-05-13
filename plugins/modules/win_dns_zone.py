@@ -80,6 +80,7 @@ options:
       - Required if l(type=secondary), l(type=forwarder) or l(type=stub),
         otherwise ignored.
       - At least one server is required.
+    elements: str
     type: list
 '''
 

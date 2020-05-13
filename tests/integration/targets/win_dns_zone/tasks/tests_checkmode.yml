@@ -12,12 +12,6 @@
   when: dhcp_role.reboot_required
   check_mode: true
 
-- name: Remove DHCP Address by IP
-  win_dhcp_lease:
-    state: absent
-    ip: "{{ dhcp_lease_ip }}"
-  check_mode: true
-
 - name: Ensure primary DNS zones are present (check mode)
   win_dns_zone:
     name: mehmoodkhap.euc.vmware.com

@@ -28,7 +28,7 @@
 
   - name: Reboot if needed
     ansible.windows.win_reboot:
-    when: result.reboot_required
+    when: domain_install.reboot_required
 
   - name: Run tests
     include_tasks: tests.yml
