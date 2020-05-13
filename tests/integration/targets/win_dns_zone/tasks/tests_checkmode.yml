@@ -49,6 +49,7 @@
       - 10.205.1.220
     replication: forest
     dynamic_update: none
+  check_mode: true
   register: test5
   failed_when: test5 is changed
 
@@ -61,5 +62,6 @@
       - 10.205.1.220
     replication: none
     dynamic_update: none
+  check_mode: true
   register: test6
   failed_when: test6 is changed
