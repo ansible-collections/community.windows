@@ -76,7 +76,7 @@ Try {
     if ($current_zone.ZoneType -like $type) { $current_zone_type_match = $true }
     # check for fast fails
     if ($current_zone.ReplicationScope -like 'none' -and $replication -in @('legacy','forest','domain')) {
-        $module.FailJson("Converting a file backed DNS zone to Active Directory integrated zone is unsupported") 
+        $module.FailJson("Converting a file backed DNS zone to Active Directory integrated zone is unsupported")
     }
     if ($current_zone.ReplicationScope -in @('legacy','forest','domain') -and $replication -like 'none') {
         $module.FailJson("Converting Active Directory integrated zone to a file backed DNS zone is unsupported")
@@ -88,9 +88,14 @@ Try {
 
 if ($state -eq "present") {
     # parse replication/zonefile
-    if (-not $replication -and $current_zone) { $parms.ReplicationScope = $current_zone.ReplicationScope }
-    elseif (($replication -eq 'none' -or -not $replication) -and -not $current_zone) { $parms.ZoneFile = "$name.dns" }
-    else  { $parms.ReplicationScope = $replication }
+    if (-not $replication -and $current_zone) {
+        $parms.ReplicationScope = $current_zone.ReplicationScope
+    } elseif (($replication -eq 'none' -or -not $replication) -and -not $current_zone) {
+        $parms.ZoneFile = "$name.dns"
+    }
+    else {
+        $parms.ReplicationScope = $replication 
+    }
     # parse params
     if ($dynamic_update) { $parms.DynamicUpdate = $dynamic_update }
     if ($dns_servers) { $parms.MasterServers = $dns_servers }
@@ -193,7 +198,9 @@ if ($state -eq "absent") {
         Try {
             Remove-DnsServerZone -Name $name -Force -WhatIf:$check_mode
             $module.Result.changed = $true
-        } Catch { $module.FailJson("Failed to remove DNS zone: $($_.Exception.Message)", $_) }
+        } Catch {
+            $module.FailJson("Failed to remove DNS zone: $($_.Exception.Message)", $_)
+        }
     }
     $module.ExitJson()
 }
@@ -208,6 +215,8 @@ Try {
             $module.Diff.after = Get-DnsZoneObject -Object $new_zone
         }
     }
-} Catch { $module.FailJson("Failed to lookup new zone $($name): $($_.Exception.Message)", $_) }
+} Catch {
+    $module.FailJson("Failed to lookup new zone $($name): $($_.Exception.Message)", $_)
+}
 
 $module.ExitJson()

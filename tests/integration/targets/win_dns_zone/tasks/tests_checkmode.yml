@@ -63,7 +63,7 @@
     replication: forest
     dynamic_update: none
   register: test5
-  failed_when: test5.changed == false
+  failed_when: test5 is changed
 
 - name: Ensure file backed stub zone is present (check mode)
   win_dns_zone:
@@ -74,5 +74,5 @@
       - 10.205.1.220
     replication: none
     dynamic_update: none
-  register: test5
-  failed_when: test5.changed == false
+  register: test6
+  failed_when: test6 is changed
