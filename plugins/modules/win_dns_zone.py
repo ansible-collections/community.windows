@@ -31,14 +31,14 @@ options:
       - Specifies the type of DNS zone.
       - When l(type=secondary), the DNS server will immediately attempt to
         perform a zone transfer from the servers in this list. If this initial
-        transfer fails, then the zone will be left in an unworkable state. 
+        transfer fails, then the zone will be left in an unworkable state.
         This module does not verify the initial transfer.
     type: str
     choices: [ primary, secondary, stub, forwarder ]
   dynamic_update:
     description:
       - Specifies how a zone handles dynamic updates.
-      - Secure DNS updates are available only for Active Directory-integrated 
+      - Secure DNS updates are available only for Active Directory-integrated
         zones.
       - When not specified during new zone creation, Windows will default this
         to l(none).

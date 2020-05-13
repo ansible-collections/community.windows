@@ -61,8 +61,7 @@ Function Compare-DnsZone {
     if($Original -eq $false) { return $false }
     $props = @('ZoneType','DynamicUpdate','IsDsIntegrated','MasterServers','ForwarderTimeout','ReplicationScope')
     $x = Compare-Object $Original $Updated -Property $props
-    if($x.Count -eq 0) { return $true }
-    return $false
+    if($x.Count -eq 0) { return $true } else { return $false }
 }
 
 # attempt import of module
@@ -76,14 +75,14 @@ Try {
     if (-not $type) { $type = $current_zone.ZoneType.toLower() }
     if ($current_zone.ZoneType -like $type) { $current_zone_type_match = $true }
     # check for fast fails
-    if ($current_zone.ReplicationScope -like 'none' -and $replication -in @('legacy','forest','domain')) { 
+    if ($current_zone.ReplicationScope -like 'none' -and $replication -in @('legacy','forest','domain')) {
         $module.FailJson("Converting a file backed DNS zone to Active Directory integrated zone is unsupported") 
     }
-    if ($current_zone.ReplicationScope -in @('legacy','forest','domain') -and $replication -like 'none') { 
-        $module.FailJson("Converting Active Directory integrated zone to a file backed DNS zone is unsupported") 
+    if ($current_zone.ReplicationScope -in @('legacy','forest','domain') -and $replication -like 'none') {
+        $module.FailJson("Converting Active Directory integrated zone to a file backed DNS zone is unsupported")
     }
-    if ($current_zone.IsDsIntegrated -eq $false -and $parms.DynamicUpdate -eq 'secure') { 
-        $module.FailJson("The secure dynamic update option is only available for Active Directory integrated zones") 
+    if ($current_zone.IsDsIntegrated -eq $false -and $parms.DynamicUpdate -eq 'secure') {
+        $module.FailJson("The secure dynamic update option is only available for Active Directory integrated zones")
     }
 } Catch { $current_zone = $false }
 
@@ -95,8 +94,8 @@ if ($state -eq "present") {
     # parse params
     if ($dynamic_update) { $parms.DynamicUpdate = $dynamic_update }
     if ($dns_servers) { $parms.MasterServers = $dns_servers }
-    if ($type -in @('stub','forwarder','secondary') -and -not $current_zone -and -not $dns_servers) { 
-        $module.FailJson("The dns_servers param is required when creating new stub, forwarder or secondary zones") 
+    if ($type -in @('stub','forwarder','secondary') -and -not $current_zone -and -not $dns_servers) {
+        $module.FailJson("The dns_servers param is required when creating new stub, forwarder or secondary zones")
     }
     switch ($type) {
         "primary" {
@@ -129,6 +128,8 @@ if ($state -eq "present") {
             $parms.Remove('ReplicationScope')
             $parms.Remove('DynamicUpdate')
             if (-not $current_zone) {
+                # enforce param
+                $parms.ZoneFile = "$name.dns"
                 # create zone
                 Try { Add-DnsServerSecondaryZone @parms -WhatIf:$check_mode }
                 Catch { $module.FailJson("Failed to add $type zone $($name): $($_.Exception.Message)", $_) }
@@ -163,8 +164,8 @@ if ($state -eq "present") {
         }
         "forwarder" {
             $parms.Remove('ZoneFile')
-            if ($forwarder_timeout -and ($forwarder_timeout -in 0..15)) { 
-                $parms.ForwarderTimeout = $forwarder_timeout 
+            if ($forwarder_timeout -and ($forwarder_timeout -in 0..15)) {
+                $parms.ForwarderTimeout = $forwarder_timeout
             }
             if ($forwarder_timeout -and -not ($forwarder_timeout -in 0..15)) {
                 $module.Warn("The forwarder_timeout param must be an integer value between 0 and 15")
@@ -188,7 +189,7 @@ if ($state -eq "present") {
 }
 
 if ($state -eq "absent") {
-    if ($current_zone) {
+    if ($current_zone -and -not $check_mode) {
         Try {
             Remove-DnsServerZone -Name $name -Force -WhatIf:$check_mode
             $module.Result.changed = $true
