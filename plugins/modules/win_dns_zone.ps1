@@ -71,7 +71,9 @@ Catch { $module.FailJson("The DnsServer module failed to load properly: $($_.Exc
 Try {
     # determine current zone state
     $current_zone = Get-DnsServerZone -name $name
-    if($check_mode) { $module.Diff.before = Get-DnsZoneObject -Object $current_zone }
+    if ($check_mode) {
+        $module.Diff.before = Get-DnsZoneObject -Object $current_zone
+    }
     if (-not $type) { $type = $current_zone.ZoneType.toLower() }
     if ($current_zone.ZoneType -like $type) { $current_zone_type_match = $true }
     # check for fast fails
@@ -152,6 +154,7 @@ if ($state -eq "present") {
             }
         }
         "stub" {
+            $parms.Remove('DynamicUpdate')
             if (-not $current_zone) {
                 # create zone
                 Try { Add-DnsServerStubZone @parms -WhatIf:$check_mode }
@@ -168,6 +171,8 @@ if ($state -eq "present") {
             }
         }
         "forwarder" {
+            # remove irrelevant params
+            $parms.Remove('DynamicUpdate')
             $parms.Remove('ZoneFile')
             if ($forwarder_timeout -and ($forwarder_timeout -in 0..15)) {
                 $parms.ForwarderTimeout = $forwarder_timeout

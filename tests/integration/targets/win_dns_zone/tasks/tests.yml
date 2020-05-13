@@ -169,27 +169,19 @@
   register: test7
   failed_when: test7 is changed
 
-- name: Ensure file backed forwarder zone is present
+- name: Ensure file backed primary zone is present
   win_dns_zone:
     name: marshallb.euc.vmware.com
     type: primary
     replication: none
-    dns_servers:
-      - 10.78.20.125
-      - 10.78.20.126
-    forwarder_timeout: 9
   register: test8a
   failed_when: test8a.changed == false
 
-- name: Ensure file backed forwarder zone is present (idempotence check)
+- name: Ensure file backed primary zone is present (idempotence check)
   win_dns_zone:
     name: marshallb.euc.vmware.com
     type: primary
     replication: none
-    dns_servers:
-      - 10.78.20.125
-      - 10.78.20.126
-    forwarder_timeout: 9
   register: test8
   failed_when: test8 is changed
 

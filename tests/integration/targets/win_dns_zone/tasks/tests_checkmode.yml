@@ -1,17 +1,4 @@
 ---
-- name: Check DHCP Service/Role Install State
-  ansible.windows.win_feature:
-    name: DHCP
-    state: present
-    include_management_tools: yes
-  register: dhcp_role
-  check_mode: true
-
-- name: Reboot if Necessary
-  ansible.windows.win_reboot:
-  when: dhcp_role.reboot_required
-  check_mode: true
-
 - name: Ensure primary DNS zones are present (check mode)
   win_dns_zone:
     name: mehmoodkhap.euc.vmware.com
