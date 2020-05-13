@@ -94,7 +94,7 @@ if ($state -eq "present") {
         $parms.ZoneFile = "$name.dns"
     }
     else {
-        $parms.ReplicationScope = $replication 
+        $parms.ReplicationScope = $replication
     }
     # parse params
     if ($dynamic_update) { $parms.DynamicUpdate = $dynamic_update }
