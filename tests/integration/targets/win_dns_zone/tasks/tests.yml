@@ -35,6 +35,24 @@
   register: test1
   failed_when: test1 is changed
 
+- name: Ensure Active Directory integrated primary zone is present with secure updates
+  win_dns_zone:
+    name: basavaraju.euc.vmware.com
+    type: primary
+    replication: forest
+    dynamic_update: secure
+  register: test9a
+  failed_when: test9a.changed == false
+
+- name: Ensure Active Directory integrated primary zone is present with secure updates (idempotence check)
+  win_dns_zone:
+    name: basavaraju.euc.vmware.com
+    type: primary
+    replication: forest
+    dynamic_update: secure
+  register: test9
+  failed_when: test9 is changed
+
 - name: Ensure primary DNS zone is present, change replication
   win_dns_zone:
     name: wpinner.euc.vmware.com
@@ -174,24 +192,6 @@
     forwarder_timeout: 9
   register: test8
   failed_when: test8 is changed
-
-- name: Ensure Active Directory integrated primary zone is present with secure updates
-  win_dns_zone:
-    name: basavaraju.euc.vmware.com
-    type: primary
-    replication: forest
-    dynamic_update: secure
-  register: test9a
-  failed_when: test9a.changed == false
-
-- name: Ensure Active Directory integrated primary zone is present with secure updates (idempotence check)
-  win_dns_zone:
-    name: basavaraju.euc.vmware.com
-    type: primary
-    replication: forest
-    dynamic_update: secure
-  register: test9
-  failed_when: test9 is changed
 
 - name: Ensure Active Directory integrated dynamic updates set to nonsecureandsecure
   win_dns_zone:

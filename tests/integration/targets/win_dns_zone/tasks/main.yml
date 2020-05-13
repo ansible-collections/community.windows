@@ -10,15 +10,11 @@
 
 - name: Ensure domain is present
   ansible.windows.win_domain:
-    create_dns_delegation: no
-    database_path: C:\Windows\NTDS
-    dns_domain_name: vmware.lan
-    domain_mode: Win2012
-    domain_netbios_name: VMW
-    forest_mode: Win2012
+    dns_domain_name: ansible.test
     safe_mode_password: password123!
-    sysvol_path: C:\Windows\SYSVOL
-  register: domain_install
+
+- name: Reboot
+  ansible.windows.win_reboot:
 
 - block:
   - name: Ensure loopback address is set to DNS
@@ -26,9 +22,8 @@
       adapter_names: '*'
       ipv4_addresses: 127.0.0.1
 
-  - name: Reboot if needed
+  - name: Reboot Again
     ansible.windows.win_reboot:
-    when: domain_install.reboot_required
 
   - name: Run tests
     include_tasks: tests.yml
