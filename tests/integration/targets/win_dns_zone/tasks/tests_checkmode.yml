@@ -57,6 +57,9 @@
   win_dns_zone:
     name: rrounsaville.euc.vmware.com
     type: secondary
+    dns_servers:
+      - 10.205.1.219
+      - 10.205.1.220
     replication: forest
     dynamic_update: none
   register: test5
@@ -66,6 +69,9 @@
   win_dns_zone:
     name: anup.euc.vmware.com
     type: stub
+    dns_servers:
+      - 10.205.1.219
+      - 10.205.1.220
     replication: none
     dynamic_update: none
   register: test5
