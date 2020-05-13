@@ -15,7 +15,7 @@ module: win_dns_zone
 short_description: Manage Windows Server DNS Zones
 author: Joe Zollo (@joezollo)
 requirements:
-  - This module requires Windows Server 2012 or Newer
+  - This module requires Windows Server 2012R2 or Newer
 description:
   - Manage Windows Server DNS Zones
   - Adds, Removes and Modifies DNS Zones - Primary, Forward, Stub & Reverse
@@ -81,7 +81,6 @@ options:
         otherwise ignored.
       - At least one server is required.
     type: list
-    aliases: [ master_zone ]
 '''
 
 EXAMPLES = r'''
