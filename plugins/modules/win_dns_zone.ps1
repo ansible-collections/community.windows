@@ -56,12 +56,14 @@ Function Get-DnsZoneObject {
 }
 
 Function Compare-DnsZone {
-    Param([PSObject]$Original,[PSObject]$Updated)
+    Param(
+        [PSObject]$Original,
+        [PSObject]$Updated)
 
-    if($Original -eq $false) { return $false }
-    $props = @('ZoneType','DynamicUpdate','IsDsIntegrated','MasterServers','ForwarderTimeout','ReplicationScope')
+    if ($Original -eq $false) { return $false }
+    $props = @('ZoneType', 'DynamicUpdate', 'IsDsIntegrated', 'MasterServers', 'ForwarderTimeout', 'ReplicationScope')
     $x = Compare-Object $Original $Updated -Property $props
-    if($x.Count -eq 0) { return $true } else { return $false }
+    if ($x.Count -eq 0) { return $true } else { return $false }
 }
 
 # attempt import of module
@@ -90,15 +92,17 @@ Try {
 
 if ($state -eq "present") {
     # parse replication/zonefile
+    # if (($replication -eq 'none') -and ($current_zone)) {  }
     if (-not $replication -and $current_zone) {
         $parms.ReplicationScope = $current_zone.ReplicationScope
-    } elseif (($replication -eq 'none' -or -not $replication) -and -not $current_zone) {
+    } elseif ((($replication -eq 'none') -or (-not $replication)) -and (-not $current_zone)) {
         $parms.ZoneFile = "$name.dns"
-    }
-    else {
+    } elseif (($replication -eq 'none') -and ($current_zone)) {
+        $parms.ZoneFile = "$name.dns"
+    } else {
         $parms.ReplicationScope = $replication
     }
-    # parse params
+    # parse param
     if ($dynamic_update) { $parms.DynamicUpdate = $dynamic_update }
     if ($dns_servers) { $parms.MasterServers = $dns_servers }
     if ($type -in @('stub','forwarder','secondary') -and -not $current_zone -and -not $dns_servers) {
