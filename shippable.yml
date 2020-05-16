@@ -18,31 +18,6 @@ matrix:
     - env: T=units/3.8/1
     - env: T=units/3.9/1
 
-    - env: T=windows/2012/1
-    - env: T=windows/2012-R2/1
-    - env: T=windows/2016/1
-    - env: T=windows/2019/1
-
-    - env: T=windows/2012/2
-    - env: T=windows/2012-R2/2
-    - env: T=windows/2016/2
-    - env: T=windows/2019/2
-
-    - env: T=windows/2012/3
-    - env: T=windows/2012-R2/3
-    - env: T=windows/2016/3
-    - env: T=windows/2019/3
-
-    - env: T=windows/2012/4
-    - env: T=windows/2012-R2/4
-    - env: T=windows/2016/4
-    - env: T=windows/2019/4
-
-    - env: T=windows/2012/5
-    - env: T=windows/2012-R2/5
-    - env: T=windows/2016/5
-    - env: T=windows/2019/5
-
 branches:
   except:
     - "*-patch-*"
