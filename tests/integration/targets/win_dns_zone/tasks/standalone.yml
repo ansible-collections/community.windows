@@ -80,7 +80,7 @@
 - name: Ensure file-backed forwarder has specific DNS servers
   win_dns_zone:
     name: jamals.euc.vmware.com
-    type: none
+    type: forwarder
     replication: none
     forwarder_timeout: 2
     dns_servers:
@@ -93,7 +93,7 @@
 - name: Ensure file-backed forwarder has specific DNS servers (idempotence check)
   win_dns_zone:
     name: jamals.euc.vmware.com
-    type: none
+    type: forwarder
     replication: none
     dns_servers:
       - 10.245.51.100

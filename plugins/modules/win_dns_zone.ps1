@@ -87,7 +87,7 @@ Try {
     if ($current_zone.IsDsIntegrated -eq $false -and $parms.DynamicUpdate -eq 'secure') {
         $module.FailJson("The secure dynamic update option is only available for Active Directory integrated zones")
     }
-} Catch { 
+} Catch {
     $module.Diff.before = ""
     $current_zone = $false
 }
