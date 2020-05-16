@@ -162,41 +162,23 @@
   register: test7
   failed_when: test7 is changed
 
-- name: Ensure file backed integrated dynamic updates set to nonsecureandsecure
+- name: Ensure file backed integrated dynamic updates set to none
   win_dns_zone:
     name: basavaraju.euc.vmware.com
     type: primary
     replication: none
-    dynamic_update: nonsecureandsecure
+    dynamic_update: none
   register: test8a
   failed_when: test8a.changed == false
 
-- name: Ensure file backed primary zone has dynamic updates set to nonsecureandsecure (idempotence check)
+- name: Ensure file backed primary zone has dynamic updates set to none (idempotence check)
   win_dns_zone:
     name: basavaraju.euc.vmware.com
     type: primary
     replication: none
-    dynamic_update: nonsecureandsecure
+    dynamic_update: none
   register: test8
   failed_when: test8 is changed
-
-- name: Ensure zone has dynamic update set to secure and replication set to domain
-  win_dns_zone:
-    name: basavaraju.euc.vmware.com
-    type: primary
-    dynamic_update: secure
-    replication: none
-  register: test9a
-  failed_when: test9a.changed == false
-
-- name: Ensure zone has dynamic update set to secure and replication set to domain (idempotence check)
-  win_dns_zone:
-    name: basavaraju.euc.vmware.com
-    type: primary
-    dynamic_update: secure
-    replication: none
-  register: test9
-  failed_when: test9 is changed
 
 - name: Ensure primary DNS zones are present (check mode)
   win_dns_zone:
