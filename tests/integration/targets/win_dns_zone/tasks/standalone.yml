@@ -162,7 +162,7 @@
   register: test7
   failed_when: test7 is changed
 
-- name: Ensure Active Directory integrated dynamic updates set to nonsecureandsecure
+- name: Ensure file backed integrated dynamic updates set to nonsecureandsecure
   win_dns_zone:
     name: basavaraju.euc.vmware.com
     type: primary

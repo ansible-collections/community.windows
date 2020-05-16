@@ -113,6 +113,10 @@ if ($state -eq "present") {
         "primary" {
             # remove irrelevant params
             $parms.Remove('MasterServers')
+            if ($parms.ZoneFile -and ($dynamic_update -in @('secure','nonsecureandsecure'))) {
+                $parms.Remove('DynamicUpdate')
+                $module.Warn("Secure DNS updates are available only for Active Directory-integrated zones")
+            }
             if (-not $current_zone) {
                 # create zone
                 Try { Add-DnsServerPrimaryZone @parms -WhatIf:$check_mode }
