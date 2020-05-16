@@ -61,11 +61,34 @@ class ActionModule(ActionBase):
         if check_mode or async_poll == 0:
             return result
 
+        # turn off async so we don't run the following actions as async
+        self._task.async_val = 0
+
         # build the async_status object
-        async_status_task = Task().load(dict(action='async_status jid=%s' % status['ansible_job_id'], environment=self._task.environment))
+        async_status_load_params = dict(
+            action='async_status jid=%s' % status['ansible_job_id'],
+            environment=self._task.environment
+        )
+        async_status_task = Task().load(async_status_load_params)
         async_status_action = self._shared_loader_obj.action_loader.get(
             'async_status',
             task=async_status_task,
+            connection=self._connection,
+            play_context=self._play_context,
+            loader=self._loader,
+            templar=self._templar,
+            shared_loader_obj=self._shared_loader_obj
+        )
+
+        # build an async_status mode=cleanup object
+        async_cleanup_load_params = dict(
+            action='async_status mode=cleanup jid=%s' % status['ansible_job_id'],
+            environment=self._task.environment
+        )
+        async_cleanup_task = Task().load(async_cleanup_load_params)
+        async_cleanup_action = self._shared_loader_obj.action_loader.get(
+            'async_status',
+            task=async_cleanup_task,
             connection=self._connection,
             play_context=self._play_context,
             loader=self._loader,
@@ -102,5 +125,14 @@ class ActionModule(ActionBase):
                 display.vvvv("Retrying (%s of %s)" % (retries, max_retries))
                 display.vvvv("Falling back to wait_for_connection: %r" % e)
                 wait_connection_action.run(task_vars=task_vars)
+
+        try:
+            # let's try to clean up after our implicit async
+            job_status = async_cleanup_action.run(task_vars=task_vars)
+            if job_status.get('failed', False):
+                display.vvvv("Clean up of async status failed on the remote host: %r" % job_status.get('msg', job_status))
+        except BaseException as e:
+            # let's swallow errors during implicit cleanup to aovid interrupting what was otherwise a successful run
+            display.vvvv("Clean up of async status failed on the remote host: %r" % e)
 
         return result
