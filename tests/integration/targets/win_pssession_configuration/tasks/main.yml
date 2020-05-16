@@ -15,7 +15,7 @@
   always:
     - name: Remove
       ansible.windows.win_shell: |
-        Unregister-PSSessionConfiguration -Name '{{ config_name }}' -Force
+        Unregister-PSSessionConfiguration -Name '{{ config_name }}' -Force -ErrorAction SilentlyContinue
       ignore_errors: yes
       # sometimes this fails because the connection was interrupted
       # it doesn't matter because it's still successful
