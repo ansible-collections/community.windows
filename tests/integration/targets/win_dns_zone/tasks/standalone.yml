@@ -164,7 +164,7 @@
 
 - name: Ensure file backed integrated dynamic updates set to none
   win_dns_zone:
-    name: basavaraju.euc.vmware.com
+    name: virajp.euc.vmware.com
     type: primary
     replication: none
     dynamic_update: none
@@ -173,7 +173,7 @@
 
 - name: Ensure file backed primary zone has dynamic updates set to none (idempotence check)
   win_dns_zone:
-    name: basavaraju.euc.vmware.com
+    name: virajp.euc.vmware.com
     type: primary
     replication: none
     dynamic_update: none
