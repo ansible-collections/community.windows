@@ -304,8 +304,8 @@ options:
 notes:
   - This module will restart the WinRM service on any change. This will terminate all WinRM connections including those by other Ansible runs.
   - Internally this module uses C(async) when not in check mode to ensure things goes smoothly when restarting the WinRM service.
-  - The standard C(async) and C(poll) keywords cannot be used; instead use the I(async_timeout) and I(async_poll) options to controll asynchronous execution.
-  - Setting I(poll=0) will return a result that can be used with C(async_status).
+  - The standard C(async) and C(poll) keywords cannot be used; instead use the I(async_timeout) and I(async_poll) options to control asynchronous execution.
+  - Setting I(async_poll=0) will return a result that can be used with C(async_status).
   - Options that don't list a default value here will use the defaults of C(New-PSSessionConfigurationFile) and C(Register-PSSessionConfiguration).
   - If a value can be specified in both a session config file and directly in the session options, this module will prefer the setting be in the config file.
 seealso:
