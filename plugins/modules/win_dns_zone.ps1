@@ -63,7 +63,7 @@ Function Compare-DnsZone {
     if ($Original -eq $false) { return $false }
     $props = @('ZoneType', 'DynamicUpdate', 'IsDsIntegrated', 'MasterServers', 'ForwarderTimeout', 'ReplicationScope')
     $x = Compare-Object $Original $Updated -Property $props
-    if ($x.Count -eq 0) { return $true } else { return $false }
+    $x.Count -eq 0
 }
 
 # attempt import of module
@@ -73,9 +73,8 @@ Catch { $module.FailJson("The DnsServer module failed to load properly: $($_.Exc
 Try {
     # determine current zone state
     $current_zone = Get-DnsServerZone -name $name
-    if ($check_mode) {
-        $module.Diff.before = Get-DnsZoneObject -Object $current_zone
-    }
+    $module.Diff.before = Get-DnsZoneObject -Object $current_zone
+
     if (-not $type) { $type = $current_zone.ZoneType.toLower() }
     if ($current_zone.ZoneType -like $type) { $current_zone_type_match = $true }
     # check for fast fails
@@ -88,11 +87,13 @@ Try {
     if ($current_zone.IsDsIntegrated -eq $false -and $parms.DynamicUpdate -eq 'secure') {
         $module.FailJson("The secure dynamic update option is only available for Active Directory integrated zones")
     }
-} Catch { $current_zone = $false }
+} Catch { 
+    $module.Diff.before = ""
+    $current_zone = $false
+}
 
 if ($state -eq "present") {
     # parse replication/zonefile
-    # if (($replication -eq 'none') -and ($current_zone)) {  }
     if (-not $replication -and $current_zone) {
         $parms.ReplicationScope = $current_zone.ReplicationScope
     } elseif ((($replication -eq 'none') -or (-not $replication)) -and (-not $current_zone)) {
@@ -207,6 +208,7 @@ if ($state -eq "absent") {
         Try {
             Remove-DnsServerZone -Name $name -Force -WhatIf:$check_mode
             $module.Result.changed = $true
+            $module.Diff.after = ""
         } Catch {
             $module.FailJson("Failed to remove DNS zone: $($_.Exception.Message)", $_)
         }
@@ -216,13 +218,24 @@ if ($state -eq "absent") {
 
 # determine if a change was made
 Try {
-    if (-not $check_mode) {
-        $new_zone = Get-DnsServerZone -Name $name
-        if(-not (Compare-DnsZone -Original $current_zone -Updated $new_zone)) {
-            $module.Result.changed = $true
-            $module.Result.zone = Get-DnsZoneObject -Object $new_zone
-            $module.Diff.after = Get-DnsZoneObject -Object $new_zone
+    $new_zone = Get-DnsServerZone -Name $name
+    if (-not (Compare-DnsZone -Original $current_zone -Updated $new_zone)) {
+        $module.Result.changed = $true
+        $module.Result.zone = Get-DnsZoneObject -Object $new_zone
+        $module.Diff.after = Get-DnsZoneObject -Object $new_zone
+    }
+
+    # simulate changes if check mode
+    if ($check_mode) {
+        $new_zone = @{}
+        $current_zone.PSObject.Properties | ForEach-Object {
+            if($parms[$_.Name]) {
+                $new_zone[$_.Name] = $parms[$_.Name]
+            } else {
+                $new_zone[$_.Name] = $_.Value
+            }
         }
+        $module.Diff.after = Get-DnsZoneObject -Object $new_zone
     }
 } Catch {
     $module.FailJson("Failed to lookup new zone $($name): $($_.Exception.Message)", $_)

@@ -18,7 +18,7 @@ requirements:
   - This module requires Windows Server 2012R2 or Newer
 description:
   - Manage Windows Server DNS Zones
-  - Adds, Removes and Modifies DNS Zones - Primary, Forward, Stub & Reverse
+  - Adds, Removes and Modifies DNS Zones - Primary, Secondary, Forwarder & Stub
   - Task should be delegated to a Windows DNS Server
 options:
   name:
