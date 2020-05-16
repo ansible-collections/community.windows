@@ -14,6 +14,10 @@ from ansible.playbook.task import Task
 from ansible.utils.display import Display
 display = Display()
 
+def clean_async_result(reference_keys, obj):
+    for key in reference_keys:
+        obj.pop(key)
+    return obj
 
 class ActionModule(ActionBase):
     _default_async_timeout = 300
@@ -135,4 +139,4 @@ class ActionModule(ActionBase):
             # let's swallow errors during implicit cleanup to aovid interrupting what was otherwise a successful run
             display.vvvv("Clean up of async status failed on the remote host: %r" % e)
 
-        return result
+        return clean_async_result(status.keys(), result)
