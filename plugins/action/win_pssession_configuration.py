@@ -14,6 +14,7 @@ from ansible.playbook.task import Task
 from ansible.utils.display import Display
 display = Display()
 
+
 def clean_async_result(reference_keys, obj):
     for key in reference_keys:
         obj.pop(key)
