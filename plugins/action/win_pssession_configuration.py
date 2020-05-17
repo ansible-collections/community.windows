@@ -19,6 +19,7 @@ def clean_async_result(reference_keys, obj):
         obj.pop(key)
     return obj
 
+
 class ActionModule(ActionBase):
     _default_async_timeout = 300
     _default_async_poll = 1
