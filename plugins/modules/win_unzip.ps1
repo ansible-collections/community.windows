@@ -145,7 +145,7 @@ If ($ext -eq ".zip" -And $recurse -eq $false) {
         Fail-Json $result "Error importing module PSCX"
     }
 
-    If ($password -ne $null){
+    If ($null -ne $password){
 		Try{
                         $password= ConvertTo-SecureString $password -AsPlainText -Force
         		Expand-Archive -Path $src -OutputPath $dest -Password $password -WhatIf:$check_mode
