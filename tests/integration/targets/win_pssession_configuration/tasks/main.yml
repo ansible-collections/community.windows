@@ -1,0 +1,21 @@
+# This file is part of Ansible
+
+# Copyright: (c) 2020, Brian Scholer <@briantist>
+# GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
+---
+- block:
+    - ansible.windows.setup:
+        gather_subset:
+          - '!all'
+          - '!min'
+          - powershell_version
+
+    - import_tasks: tests.yml
+
+  always:
+    - name: Remove
+      ansible.windows.win_shell: |
+        Unregister-PSSessionConfiguration -Name '{{ config_name }}' -Force -ErrorAction SilentlyContinue
+      ignore_errors: yes
+      # sometimes this fails because the connection was interrupted
+      # it doesn't matter because it's still successful

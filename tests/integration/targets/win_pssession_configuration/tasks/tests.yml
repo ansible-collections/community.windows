@@ -1,0 +1,410 @@
+# This file is part of Ansible
+
+# Copyright: (c) 2020, Brian Scholer <@briantist>
+# GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
+---
+- name: Create a simple configuration (check)
+  win_pssession_configuration:
+    name: "{{ config_name }}"
+    description: "{{ config_description }}"
+    modules_to_import: Microsoft.PowerShell.Utility
+  register: status
+  check_mode: yes
+
+- name: Check for changed status
+  assert:
+    that: status is changed
+    quiet: yes
+
+- name: Create a simple configuration
+  win_pssession_configuration:
+    name: "{{ config_name }}"
+    description: "{{ config_description }}"
+    modules_to_import: Microsoft.PowerShell.Utility
+  register: status
+
+- name: Check for changed status
+  assert:
+    that: status is changed
+    quiet: yes
+
+- name: Create a simple configuration again (check)
+  win_pssession_configuration:
+    name: "{{ config_name }}"
+    description: "{{ config_description }}"
+    modules_to_import: Microsoft.PowerShell.Utility
+  register: status
+  check_mode: yes
+
+- name: Check for unchanged status
+  assert:
+    that: status is not changed
+    quiet: yes
+
+- name: Create a simple configuration again
+  win_pssession_configuration:
+    name: "{{ config_name }}"
+    description: "{{ config_description }}"
+    modules_to_import: Microsoft.PowerShell.Utility
+  register: status
+
+- name: Check for unchanged status
+  assert:
+    that: status is not changed
+    quiet: yes
+
+#######
+
+- name: Change something async fire-and-forget
+  win_pssession_configuration:
+    name: "{{ config_name }}"
+    description: "{{ config_description }}~~~~"
+    modules_to_import: Microsoft.PowerShell.Utility
+    async_timeout: 500
+    async_poll: 0
+  register: status
+
+- name: Wait for it to complete
+  async_status:
+    jid: "{{ status.ansible_job_id }}"
+  until: status.finished
+  retries: 10
+  delay: 1
+  register: status
+
+- name: Check for changed status
+  assert:
+    that: status is changed
+    quiet: yes
+
+- name: Change it back with custom async values
+  win_pssession_configuration:
+    name: "{{ config_name }}"
+    description: "{{ config_description }}"
+    modules_to_import: Microsoft.PowerShell.Utility
+    async_timeout: 500
+    async_poll: 2
+  register: status
+
+- name: Check for changed status
+  assert:
+    that: status is changed
+    quiet: yes
+
+- name: Try it with the keywords (failure expected)
+  win_pssession_configuration:
+    name: "{{ config_name }}"
+    description: "{{ config_description }}"
+    modules_to_import: Microsoft.PowerShell.Utility
+  async: 500
+  poll: 2
+  register: status
+  ignore_errors: yes
+
+- name: Check for expected failire
+  assert:
+    that: status is failed
+    quiet: yes
+
+#######
+
+- name: Try to set a parameter that's only available in PowerShell 5+ (check)
+  win_pssession_configuration:
+    name: "{{ config_name }}"
+    description: "{{ config_description }}"
+    mount_user_drive: True
+  register: status
+  check_mode: yes
+  ignore_errors: yes
+
+- name: Check for version-based status
+  assert:
+    that: (status is failed) == (ansible_powershell_version < 5)
+    quiet: yes
+
+#######
+# Incomplete tests for future enhancement of waiting for connections before making changes
+
+# - name: Start a 45 second WinRM connection
+#   ansible.windows.win_shell: |
+#     Invoke-Command -ComputerName . -ScriptBlock { Start-Sleep -Seconds 45 } -AsJob
+
+# - name: Make a change with a 10 second fail on timeout (failure expected)
+#   win_pssession_configuration:
+#     name: "{{ config_name }}"
+#     description: "{{ config_description }}"
+#     mount_user_drive: False
+#     existing_connection_timeout_seconds: 10
+#     existing_connection_timeout_action: fail
+#   register: status
+#   ignore_errors: yes
+
+# - name: Check for failed status
+#   assert:
+#     that: status is failed
+#     quiet: yes
+
+# - name: Start a 25 second WinRM connection
+#   ansible.windows.win_shell: |
+#     Invoke-Command -ComputerName . -ScriptBlock { Start-Sleep -Seconds 25 } -AsJob
+
+# - name: Make a change with a 45 second fail on timeout (success expected)
+#   win_pssession_configuration:
+#     name: "{{ config_name }}"
+#     description: "{{ config_description }}"
+#     mount_user_drive: False
+#     existing_connection_timeout_seconds: 10
+#     existing_connection_timeout_action: fail
+#   register: status
+
+# - name: Check for changed status
+#   assert:
+#     that: status is changed
+#     quiet: yes
+
+#######
+- name: Omit a field that doesn't matter (check)
+  win_pssession_configuration:
+    name: "{{ config_name }}"
+    # description: "{{ config_description }}" # intentionally omitted
+    modules_to_import: Microsoft.PowerShell.Utility
+  register: status
+  check_mode: yes
+
+- name: Check for unchanged status
+  assert:
+    that: status is not changed
+    quiet: yes
+
+- name: Omit a field that doesn't matter
+  win_pssession_configuration:
+    name: "{{ config_name }}"
+    # description: "{{ config_description }}" # intentionally omitted
+    modules_to_import: Microsoft.PowerShell.Utility
+  register: status
+
+- name: Check for unchanged status
+  assert:
+    that: status is not changed
+    quiet: yes
+
+#######
+
+- name: Omit a field that doesn't matter by default but does explicitly (check)
+  win_pssession_configuration:
+    name: "{{ config_name }}"
+    # description: "{{ config_description }}" # intentionally omitted
+    modules_to_import: Microsoft.PowerShell.Utility
+    lenient_config_fields:
+      - guid
+      - author
+  register: status
+  check_mode: yes
+
+- name: Check for changed status
+  assert:
+    that: status is changed
+    quiet: yes
+
+- name: Omit a field that doesn't matter by default but does explicitly
+  win_pssession_configuration:
+    name: "{{ config_name }}"
+    # description: "{{ config_description }}" # intentionally omitted
+    modules_to_import: Microsoft.PowerShell.Utility
+    lenient_config_fields:
+      - guid
+      - author
+  register: status
+
+- name: Check for changed status
+  assert:
+    that: status is changed
+    quiet: yes
+
+########
+
+- name: Change something not in the config file (check)
+  win_pssession_configuration:
+    name: "{{ config_name }}"
+    thread_options: reuse_thread
+    use_shared_process: True
+  register: status
+  check_mode: yes
+
+- name: Check for changed status
+  assert:
+    that: status is changed
+    quiet: yes
+
+- name: Change something not in the config file
+  win_pssession_configuration:
+    name: "{{ config_name }}"
+    thread_options: reuse_thread
+    use_shared_process: True
+  register: status
+
+- name: Check for changed status
+  assert:
+    that: status is changed
+    quiet: yes
+
+- name: Change something not in the config file (again) (check)
+  win_pssession_configuration:
+    name: "{{ config_name }}"
+    thread_options: reuse_thread
+    use_shared_process: True
+  register: status
+  check_mode: yes
+
+- name: Check for unchanged status
+  assert:
+    that: status is not changed
+    quiet: yes
+
+- name: Change something not in the config file (again)
+  win_pssession_configuration:
+    name: "{{ config_name }}"
+    thread_options: reuse_thread
+    use_shared_process: True
+  register: status
+
+- name: Check for unchanged status
+  assert:
+    that: status is not changed
+    quiet: yes
+
+######
+
+- name: Check custom type parameters for PowerShell <= 4 (check)
+  win_pssession_configuration:
+    name: "{{ config_name }}"
+    guid: "{{ 'test' | to_uuid }}"
+    powershell_version: '3.0'
+    maximum_received_data_size_per_command_mb: 5.0E+11
+    maximum_received_object_size_mb: 6.6666666666666666666666666
+  register: status
+  when: ansible_powershell_version <= 4
+
+- name: Check custom type parameters for PowerShell >= 5 (check)
+  win_pssession_configuration:
+    name: "{{ config_name }}"
+    guid: "{{ 'test' | to_uuid }}"
+    powershell_version: '3.0'
+    user_drive_maximum_size: 5000000000
+    maximum_received_data_size_per_command_mb: 5.0E+11
+    maximum_received_object_size_mb: 6.6666666666666666666666666
+  register: status
+  when: ansible_powershell_version >= 5
+
+######
+
+- name: Reset back to a steady state
+  win_pssession_configuration:
+    name: "{{ config_name }}"
+  register: status
+
+- name: Check for changed status
+  assert:
+    that: status is changed
+    quiet: yes
+  ignore_errors: yes
+
+- name: Reset back to a steady state (again)
+  win_pssession_configuration:
+    name: "{{ config_name }}"
+  register: status
+
+- name: Check for unchanged status
+  assert:
+    that: status is not changed
+    quiet: yes
+  ignore_errors: yes
+
+#######
+
+- name: "RunAs Tests"
+  vars:
+    runas_user: "{{ ansible_user }}"
+    runas_pass: "{{ ansible_password }}"
+  block:
+    - name: Change runas credential (check)
+      win_pssession_configuration:
+        name: "{{ config_name }}"
+        run_as_credential_username: "{{ runas_user }}"
+        run_as_credential_password: "{{ runas_pass }}"
+      register: status
+      check_mode: yes
+
+    - name: Check for changed status
+      assert:
+        that: status is changed
+        quiet: yes
+
+    - name: Change runas credential
+      win_pssession_configuration:
+        name: "{{ config_name }}"
+        run_as_credential_username: "{{ runas_user }}"
+        run_as_credential_password: "{{ runas_pass }}"
+      register: status
+
+    - name: Check for changed status
+      assert:
+        that: status is changed
+        quiet: yes
+
+    - name: Try an invalid runas credential (failure expected)
+      win_pssession_configuration:
+        name: "{{ config_name }}"
+        run_as_credential_username: Fake
+        run_as_credential_password: Fake
+      register: status
+      ignore_errors: yes
+
+    - name: Check for failed status
+      assert:
+        that: status is failed
+        quiet: yes
+
+    - name: Ensure the sessions configuration still exists with the working user
+      ansible.windows.win_shell: |
+        $sc = Get-PSSessionConfiguration -Name '{{ config_name }}'
+        if ($sc.RunAsUser -ne '{{ runas_user }}') {
+            throw
+        }
+      register: status
+
+#######
+
+- name: Test session configuration removal (check)
+  win_pssession_configuration:
+    name: "{{ config_name }}"
+    state: absent
+  register: status
+  check_mode: yes
+
+- name: Check for changed status
+  assert:
+    that: status is changed
+    quiet: yes
+
+- name: Test session configuration removal
+  win_pssession_configuration:
+    name: "{{ config_name }}"
+    state: absent
+  register: status
+
+- name: Check for changed status
+  assert:
+    that: status is changed
+    quiet: yes
+
+- name: Test session configuration removal (again)
+  win_pssession_configuration:
+    name: "{{ config_name }}"
+    state: absent
+  register: status
+
+- name: Check for unchanged status
+  assert:
+    that: status is not changed
+    quiet: yes
