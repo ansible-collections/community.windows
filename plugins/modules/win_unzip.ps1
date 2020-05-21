@@ -145,22 +145,18 @@ If ($ext -eq ".zip" -And $recurse -eq $false) {
         Fail-Json $result "Error importing module PSCX"
     }
 
-    If ($null -ne $password){
-		Try{
+	Try{
+		If ($null -ne $password){
                         $password= ConvertTo-SecureString $password -AsPlainText -Force
-        		Expand-Archive -Path $src -OutputPath $dest -Password $password -WhatIf:$check_mode
-		   }
-		Catch{
-			Fail-Json -obj $result -message "Error expanding '$src' to 'dest'! Msg: $($_.Exception.Message)"
-		   }
-		}
-    Else{
-    		Try {
-       		 	Expand-Archive -Path $src -OutputPath $dest -Force -WhatIf:$check_mode
-    		} Catch {
-        		Fail-Json -obj $result -message "Error expanding '$src' to '$dest'! Msg: $($_.Exception.Message)"
-    		}
-   	}
+                        Expand-Archive -Path $src -OutputPath $dest -Password $password -WhatIf:$check_mode
+                   }
+                Else{
+                        Expand-Archive -Path $src -OutputPath $dest -Force -WhatIf:$check_mode
+              }
+	}
+	Catch{
+ 		Fail-Json -obj $result -message "Error expanding '$src' to '$dest'! Msg: $($_.Exception.Message)"
+	     }
 
     If ($recurse) {
         Get-ChildItem -LiteralPath $dest -recurse | Where-Object {$pcx_extensions -contains $_.extension} | ForEach-Object {
