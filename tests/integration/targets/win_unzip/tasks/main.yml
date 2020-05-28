@@ -12,19 +12,15 @@
     src: '{{ output_dir }}/win_unzip.zip'
     dest: '{{ win_unzip_dir }}\win_unzip.zip'
 ###--->
-- name: create pass test directory
-  ansible.windows.win_file:
-    path: '{{ win_unzip_pass_dir }}\output'
-    state: directory
 
 - name: create local zip file with password protection
-  script: create_pass_zip.py {{ output_pass_dir + '/win_unzip_pass.zip' | quote }}
+  script: create_pass_zip.py {{ output_dir + '/win_unzip_pass.zip' | quote }}
   delegate_to: localhost
 
 - name: copy across pass_zip to Windows host 
   ansible.windows.win_copy:
-    src: '{{ output_pass_dir }}/win_unzip_pass.zip'
-    dest: '{{ win_unzip_pass_dir }}\win_unzip_pass.zip'
+    src: '{{ output_dir }}/win_unzip_pass.zip'
+    dest: '{{ win_unzip_dir }}\win_unzip_pass.zip'
 ###   <---
 - name: unarchive zip (check)
   win_unzip:
@@ -65,15 +61,15 @@
 ###->
 - name: unarchive password protected zip (check)
   win_unzip:
-    src: '{{ win_unzip_pass_dir }}\win_unzip_pass.zip'
-    dest: '{{ win_unzip_pass_dir }}\output'
+    src: '{{ win_unzip_dir }}\win_unzip_pass.zip'
+    dest: '{{ win_unzip_dir }}\output'
     password: "abcd"
   register: unzip_check
   check_mode: yes
 
 - name: get result of unarchive pass zip (check)
   ansible.windows.win_stat:
-    path: '{{ win_unzip_pass_dir }}\output\café_pass.txt'
+    path: '{{ win_unzip_dir }}\output\café_pass.txt'
   register: unzip_actual_check
 
 - name: assert result of unarchive pass zip (check)
@@ -85,14 +81,14 @@
 
 - name: unarchive pass zip
   win_unzip:
-    src: '{{ win_unzip_pass_dir }}\win_unzip_pass.zip'
-    dest: '{{ win_unzip_pass_dir }}\output'
+    src: '{{ win_unzip_dir }}\win_unzip_pass.zip'
+    dest: '{{ win_unzip_dir }}\output'
     password: "abcd"
   register: unzip_pass
 
 - name: get result of unarchive pass zip
   ansible.windows.slurp:
-    path: '{{ win_unzip_pass_dir }}\output\café_pass.txt'
+    path: '{{ win_unzip_dir }}\output\café_pass.txt'
   register: unzip_actual_pass
 
 - name: assert result of unarchive pass zip
