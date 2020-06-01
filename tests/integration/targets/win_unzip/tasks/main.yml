@@ -11,17 +11,7 @@
   ansible.windows.win_copy:
     src: '{{ output_dir }}/win_unzip.zip'
     dest: '{{ win_unzip_dir }}\win_unzip.zip'
-###--->
 
-- name: create local zip file with password protection
-  script: create_pass_zip.py {{ output_dir + '/win_unzip_pass.zip' | quote }}
-  delegate_to: localhost
-
-- name: copy across pass_zip to Windows host 
-  ansible.windows.win_copy:
-    src: '{{ output_dir }}/win_unzip_pass.zip'
-    dest: '{{ win_unzip_dir }}\win_unzip_pass.zip'
-###   <---
 - name: unarchive zip (check)
   win_unzip:
     src: '{{ win_unzip_dir }}\win_unzip.zip'
@@ -58,46 +48,6 @@
     - unzip is changed
     - not unzip.removed
     - unzip_actual.content | b64decode == 'café.txt'
-###->
-- name: unarchive password protected zip (check)
-  win_unzip:
-    src: '{{ win_unzip_dir }}\win_unzip_pass.zip'
-    dest: '{{ win_unzip_dir }}\output'
-    password: "abcd"
-  register: unzip_check
-  check_mode: yes
-
-- name: get result of unarchive pass zip (check)
-  ansible.windows.win_stat:
-    path: '{{ win_unzip_dir }}\output\café_pass.txt'
-  register: unzip_actual_check
-
-- name: assert result of unarchive pass zip (check)
-  assert:
-    that:
-    - unzip_check is changed
-    - not unzip_check.removed
-    - not unzip_actual_check.stat.exists
-
-- name: unarchive pass zip
-  win_unzip:
-    src: '{{ win_unzip_dir }}\win_unzip_pass.zip'
-    dest: '{{ win_unzip_dir }}\output'
-    password: "abcd"
-  register: unzip_pass
-
-- name: get result of unarchive pass zip
-  ansible.windows.slurp:
-    path: '{{ win_unzip_dir }}\output\café_pass.txt'
-  register: unzip_actual_pass
-
-- name: assert result of unarchive pass zip
-  assert:
-    that:
-    - unzip is changed
-    - not unzip.removed
-    - unzip_actual.content | b64decode == 'café_pass.txt'
-###<--
 
 # Module is not idempotent, will always change without creates
 - name: unarchive zip again without creates
