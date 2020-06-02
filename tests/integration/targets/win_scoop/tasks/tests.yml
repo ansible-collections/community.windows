@@ -43,7 +43,7 @@
 
 - name: install multiple packages locally
   win_scoop:
-    name: '{{ test_scoop_package1 }}'
+    name: '{{ test_scoop_packages }}'
   register: install_multiple
 
 - name: assert install multiple packages locally
