@@ -1,0 +1,3 @@
+---
+- name: run install tests
+  include_tasks: install.yml
