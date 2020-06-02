@@ -1,0 +1,84 @@
+---
+- name: install package locally
+  win_scoop:
+    name: '{{ test_scoop_package1 }}'
+  register: install_locally
+
+- name: assert install package locally
+  assert:
+    that:
+      - install_locally is changed
+
+- name: install package locally (idempotent)
+  win_scoop:
+    name: '{{ test_scoop_package1 }}'
+  register: install_idempotent
+
+- name: assert install package locally (itempotent)
+  assert:
+    that:
+      - not install_idempotent is changed
+
+- name: remove package
+  win_scoop:
+    name: '{{ test_scoop_package1 }}'
+    state: absent
+  register: remove
+
+- name: assert remove package
+  assert:
+    that:
+      - remove is changed
+
+- name: remove package (idempotent)
+  win_scoop:
+    name: '{{ test_scoop_package1 }}'
+    state: absent
+  register: remove_idempotent
+
+- name: assert remove package
+  assert:
+    that:
+      - not remove_idempotent is changed
+
+- name: install multiple packages locally
+  win_scoop:
+    name: '{{ test_scoop_package1 }}'
+  register: install_multiple
+
+- name: assert install multiple packages locally
+  assert:
+    that:
+      - install_multiple is changed
+
+- name: install multiple packages locally (idempotent)
+  win_scoop:
+    name: '{{ test_scoop_packages }}'
+  register: install_multiple_idempotent
+
+- name: assert install multiple packages locally (itempotent)
+  assert:
+    that:
+      - not install_multiple_idempotent is changed
+
+- name: remove multiple packages locally
+  win_scoop:
+    name: '{{ test_scoop_packages }}'
+    state: absent
+  register: remove_multiple
+
+- name: assert remove multiple packages
+  assert:
+    that:
+      - remove_multiple is changed
+
+- name: remove multiple packages locally (idempotent)
+  win_scoop:
+    name: '{{ test_scoop_packages }}'
+    state: absent
+  register: remove_multiple_idempotent
+
+- name: remove multiple packages locally (idempotent)
+  assert:
+    that:
+      - not remove_multiple_idempotent is changed

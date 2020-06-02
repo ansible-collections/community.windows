@@ -1,4 +1,0 @@
----
-- name: install jq
-  win_scoop:
-    name: jq
