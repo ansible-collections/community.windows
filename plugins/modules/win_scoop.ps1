@@ -207,19 +207,27 @@ $scoop_path = Install-Scoop
 $installed_packages = Get-ScoopPackages -scoop_path $scoop_path
 
 if ($state -in @("absent")) {
-  Uninstall-ScoopPackage -scoop_path $scoop_path -packages $name
+  $missing_uninstall_packages = [System.Collections.ArrayList]@()
+  foreach ($package in $name) {
+    if ($installed_packages.Package -contains $package) {
+      $missing_uninstall_packages.Add($package)
+    }
+  }
+  if ($missing_uninstall_packages) {
+    Uninstall-ScoopPackage -scoop_path $scoop_path -packages $missing_uninstall_packages
+  }
 }
 
 if ($state -in @("present")) {
-  $missing_packages = [System.Collections.ArrayList]@()
+  $missing_install_packages = [System.Collections.ArrayList]@()
   foreach ($package in $name) {
     if ($installed_packages.Package -notcontains $package) {
-      $missing_packages.Add($package)
+      $missing_install_packages.Add($package)
     }
   }
 
-  if ($missing_packages) {
-    Install-ScoopPackage -scoop_path $scoop_path -packages $missing_packages
+  if ($missing_install_packages) {
+    Install-ScoopPackage -scoop_path $scoop_path -packages $missing_install_packages
   }
 }
 
