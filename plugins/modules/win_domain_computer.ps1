@@ -20,9 +20,9 @@ $check_mode = Get-AnsibleParam -obj $params -name "_ansible_check_mode" -type "b
 $diff_support = Get-AnsibleParam -obj $params -name "_ansible_diff" -type "bool" -default $false
 
 $name = Get-AnsibleParam -obj $params -name "name" -failifempty $true -resultobj $result
-$sam_account_name = Get-AnsibleParam -obj $params -name "sam_account_name" -default "$name$"
+$sam_account_name = Get-AnsibleParam -obj $params -name "sam_account_name" -default "${name}$"
 If (-not $sam_account_name.EndsWith("$")) {
-  Fail-Json -obj $result -message "sam_account_name must end in $"
+  $sam_account_name = "${sam_account_name}$"
 }
 $enabled = Get-AnsibleParam -obj $params -name "enabled" -type "bool" -default $true
 $description = Get-AnsibleParam -obj $params -name "description" -default $null
@@ -74,12 +74,14 @@ Function Get-InitialState($desired_state) {
       @extra_args
   } Catch { $null }
   If ($computer) {
+      $null,$current_ou = $computer.DistinguishedName -split '(?<=[^\\](?:\\\\)*),'
+      $current_ou = $current_ou -join ','
+
       $initial_state = [ordered]@{
         name = $computer.Name
         sam_account_name = $computer.SamAccountName
         dns_hostname = $computer.DNSHostName
-        # Get OU from regexp that removes all characters to the first ","
-        ou = $computer.DistinguishedName -creplace "^[^,]*,",""
+        ou = $current_ou
         distinguished_name = $computer.DistinguishedName
         description = $computer.Description
         enabled = $computer.Enabled
@@ -163,7 +165,7 @@ Function Remove-ConstructedState($initial_state) {
 }
 
 # ------------------------------------------------------------------------------
-Function are_hashtables_equal($x, $y) {
+Function Test-HashtableEquality($x, $y) {
   # Compare not nested HashTables
   Foreach ($key in $x.Keys) {
       If (($y.Keys -notcontains $key) -or ($x[$key] -cne $y[$key])) {
@@ -183,17 +185,17 @@ $initial_state = Get-InitialState($desired_state)
 
 If ($desired_state.state -eq "present") {
     If ($initial_state.state -eq "present") {
-      $in_desired_state = are_hashtables_equal $initial_state $desired_state
+      $in_desired_state = Test-HashtableEquality -X $initial_state -Y $desired_state
 
       If (-not $in_desired_state) {
-        Set-ConstructedState $initial_state $desired_state
+        Set-ConstructedState -initial_state $initial_state -desired_state $desired_state
       }
     } Else { # $desired_state.state = "Present" & $initial_state.state = "Absent"
-      Add-ConstructedState($desired_state)
+      Add-ConstructedState -desired_state $desired_state
     }
   } Else { # $desired_state.state = "Absent"
     If ($initial_state.state -eq "present") {
-      Remove-ConstructedState($initial_state)
+      Remove-ConstructedState -initial_state $initial_state
     }
   }
 

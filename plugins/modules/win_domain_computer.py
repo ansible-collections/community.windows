@@ -32,7 +32,8 @@ options:
         operating systems compatibility.
       - The LDAP display name (ldapDisplayName) for this property is sAMAccountName.
       - If ommitted the value is the same as C(name).
-      - Note that all computer SAMAccountNames need to end with a $.
+      - Note that all computer SAMAccountNames need to end with a C($).
+      - If C($) is omitted, it will be added to the end.
     type: str
   enabled:
     description:
@@ -47,6 +48,7 @@ options:
     description:
       - Specifies the X.500 path of the Organizational Unit (OU) or container
         where the new object is created. Required when I(state=present).
+      - Special characters must be escaped, see U(https://docs.microsoft.com/en-us/previous-versions/windows/desktop/ldap/distinguished-names)
     type: str
   description:
     description:
@@ -99,7 +101,7 @@ author:
 EXAMPLES = r'''
   - name: Add linux computer to Active Directory OU using a windows machine
     win_domain_computer:
-      name: one_linux_server.my_org.local
+      name: one_linux_server
       sam_account_name: linux_server$
       dns_hostname: one_linux_server.my_org.local
       ou: "OU=servers,DC=my_org,DC=local"
@@ -110,7 +112,7 @@ EXAMPLES = r'''
 
   - name: Remove linux computer from Active Directory using a windows machine
     win_domain_computer:
-      name: one_linux_server.my_org.local
+      name: one_linux_server
       state: absent
     delegate_to: my_windows_bridge.my_org.local
 '''

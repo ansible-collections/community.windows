@@ -2,15 +2,29 @@
 # these are here if someone wants to run the module tests locally on their own
 # domain.
 # Requirements:
-#   LDAP Base path set in defaults/main.yml like DC=ansible,DC=local
-#   Custom OU path set in defaults/main.yml like OU=ou1,DC=ansible,DC=local
+#   Set the names in vars: on the command line, or set the following:
+#   test_domain_name:       The DNS name of the domain like ansible.local
+#   test_ad_domain_dn:      The DN of the domain like DC=ansible,DC=local
+#   test_ad_computer_ou:    The DN of the OU where computers will be created like OU=ou1,DC=ansible,DC=local
+#
+# This is not a traditional role, and can't be used with ansible-test. This is a playbook. To run ensure:
+#   - your collections are set up and Ansible knows where to find them ($ANSIBLE_COLLECTIONS_PATHS for example)
+#   - your inventory contains a host where this can run, like a domain controller
+#   - connection keywords/options/vars are set properly to connect to the host
+#   - the variable win_domain_computer_testing_host contains the name of the host or the group that contains it
+#
+# then call this file with ansible-playbook and any extra vars or other params you need
 ---
 - name: run win_domain_users test
-  hosts: win_domain_computer_testing_host
+  hosts: "{{ win_domain_computer_testing_host }}"
+  gather_facts: no
+  collections:
+    - community.windows
   vars:
-    test_win_domain_computer_ldap_base: "{{ test_ad_ou }}"
-    test_win_domain_computer_ou_path: "{{ test_ad_group_ou }}"
-    test_win_domain_computer_name: "test_computer.{{ test_domain_name }}"
+    test_win_domain_computer_ldap_base: "{{ test_ad_domain_dn }}"
+    test_win_domain_computer_ou_path: "{{ test_ad_computer_ou }}"
+    test_win_domain_computer_name: "test_computer"
+    test_win_domain_domain_name: "{{ test_domain_name }}"
   tasks:
 
     - name: ensure the computer is deleted before the test
@@ -24,33 +38,51 @@
       vars:
         test_win_domain_computer_long_name: '{{ test_win_domain_computer_name }}_with_long_name'
         test_win_domain_computer_sam_account_name: '{{ test_win_domain_computer_name }}$'
+        test_win_domain_computer_dns_hostname: "{{ test_win_domain_computer_long_name }}.{{ test_domain_name }}"
       block:
 
         # ----------------------------------------------------------------------
-        - name: create computer with long name and distinct sam_account_name
+        - name: create computer with long name and distinct sam_account_name (check mode)
           win_domain_computer:
             name: '{{ test_win_domain_computer_long_name }}'
+            dns_hostname: '{{ test_win_domain_computer_dns_hostname }}'
             sam_account_name: '{{ test_win_domain_computer_sam_account_name }}'
+            ou: "{{ test_win_domain_computer_ou_path }}"
             enabled: yes
             state: present
           register: create_distinct_sam_account_name
           check_mode: yes
 
-        - name: get actual computer with long name and distinct sam_account_name
-          ansible.windows.win_command: powershell.exe "Import-Module ActiveDirectory; Get-ADComputer -Identity '{{ test_win_domain_computer_sam_account_name }}'"
-          register: create_distinct_sam_account_name_check
-          ignore_errors: True
-
-        - name: assert create computer with long name and distinct sam_account_name
+        - name: assert create computer with long name and distinct sam_account_name (check mode)
           assert:
             that:
-            - create_distinct_sam_account_name is changed
-            - create_distinct_sam_account_name_check.rc == 1
+              - create_distinct_sam_account_name is changed
+
+        - name: create computer with long name and distinct sam_account_name
+          win_domain_computer:
+            name: '{{ test_win_domain_computer_long_name }}'
+            dns_hostname: '{{ test_win_domain_computer_dns_hostname }}'
+            sam_account_name: '{{ test_win_domain_computer_sam_account_name }}'
+            ou: "{{ test_win_domain_computer_ou_path }}"
+            enabled: yes
+            state: present
+          register: create_distinct_sam_account_name
+
+        - name: get actual computer with long name and distinct sam_account_name
+          ansible.windows.win_shell: |
+            Import-Module ActiveDirectory
+            $c = Get-ADComputer -Identity '{{ test_win_domain_computer_sam_account_name }}' -ErrorAction Stop
+            if ($c.Name -ne '{{ test_win_domain_computer_long_name }}') {
+              throw 'Wrong computer name in relation to sAMAccountName'
+            }
+          register: create_distinct_sam_account_name_check
 
         - name: (Idempotence) create computer with long name and distinct sam_account_name
           win_domain_computer:
             name: '{{ test_win_domain_computer_long_name }}'
+            dns_hostname: '{{ test_win_domain_computer_dns_hostname }}'
             sam_account_name: '{{ test_win_domain_computer_sam_account_name }}'
+            ou: "{{ test_win_domain_computer_ou_path }}"
             enabled: yes
             state: present
           register: create_distinct_sam_account_name_idempotence
@@ -61,7 +93,7 @@
             that:
             - create_distinct_sam_account_name_idempotence is not changed
 
-        - name: ensure the test group is deleted after the test
+        - name: ensure the test computer is deleted after the test
           win_domain_computer:
             name: '{{ test_win_domain_computer_long_name }}'
             sam_account_name: '{{ test_win_domain_computer_sam_account_name }}'
