@@ -16,40 +16,40 @@ description:
 - Manage packages using Scoop.
 - If Scoop is missing from the system, the module will install it.
 options:
-  architecture:
+  arch:
     description:
-    - Force Scoop to install the package of a specific process
-      architecture.
+    - Force Scoop to install the package of a specific process architecture.
     type: str
     choices: [ 32bit, 64bit ]
   global:
     description:
-      - Install the app globally
+    - Install the app globally
     type: bool
     default: no
   independent:
     description:
-      - Don't install dependencies automatically
+    - Don't install dependencies automatically
     type: bool
     default: no
   name:
     description:
-      - Name of the package(s) to be installed.
+    - Name of the package(s) to be installed.
     type: list
+    elements: str
     required: yes
   no_cache:
     description:
-      - Don't use the download cache
+    - Don't use the download cache
     type: bool
     default: no
   purge:
     description:
-      - Remove all persistent data
+    - Remove all persistent data
     type: bool
     default: no
   skip:
     description:
-      - Skip hash validation
+    - Skip hash validation
     type: bool
     default: no
   state:
@@ -58,8 +58,8 @@ options:
     - When C(absent), will ensure the package is not installed.
     - When C(present), will ensure the package is installed.
     type: str
-      choices: [ absent, present ]
-      default: present
+    choices: [ absent, present ]
+    default: present
 seealso:
 - module: win_chocolatey
 - name: Scoop website
