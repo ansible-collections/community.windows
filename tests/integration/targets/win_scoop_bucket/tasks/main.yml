@@ -1,6 +1,6 @@
 ---
 - name: ensure test buckets are removed
-  win_scoop:
+  win_scoop_bucket:
     name: '{{ item.name }}'
     state: absent
   with_items: '{{ test_scoop_buckets }}'
