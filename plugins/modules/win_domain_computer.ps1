@@ -1,9 +1,12 @@
 #!powershell
 
+# Copyright: (c) 2020, Brian Scholer (@briantist)
 # Copyright: (c) 2017, AMTEGA - Xunta de Galicia
 # GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 
 #Requires -Module Ansible.ModuleUtils.Legacy
+#Requires -Module Ansible.ModuleUtils.ArgvParser
+#Requires -Module Ansible.ModuleUtils.CommandUtil
 
 
 # ------------------------------------------------------------------------------
@@ -30,6 +33,12 @@ $domain_username = Get-AnsibleParam -obj $params -name "domain_username" -type "
 $domain_password = Get-AnsibleParam -obj $params -name "domain_password" -type "str" -failifempty ($null -ne $domain_username)
 $domain_server = Get-AnsibleParam -obj $params -name "domain_server" -type "str"
 $state = Get-AnsibleParam -obj $params -name "state" -ValidateSet "present","absent" -default "present"
+
+$do_odj = Get-AnsibleParam -obj $params -name "offline_domain_join" -type "bool" -default $false
+if ($do_odj) {
+  $odj_return_blob = Get-AnsibleParam -obj $params -name "odj_return_blob" -type "bool" -default $false
+  $odj_blob_path = Get-AnsibleParam -obj $params -name "odj_blob_path" -type "str" -failifempty (-not $odj_return_blob) -default $null
+}
 
 $extra_args = @{}
 if ($null -ne $domain_username) {
@@ -148,6 +157,73 @@ Function Add-ConstructedState($desired_state) {
   $result.changed = $true
 }
 
+Function Invoke-OfflineDomainJoin {
+  [CmdletBinding(SupportsShouldProcess=$true)]
+  param(
+    [Parameter(Mandatory=$true)]
+    [System.Collections.IDictionary]
+    $desired_state ,
+
+    [Parameter()]
+    [bool]
+    $ReturnBlob = $false ,
+
+    [Parameter()]
+    [System.IO.FileInfo]
+    $BlobPath
+  )
+
+  End {
+    $dns_domain = $desired_state.dns_hostname -replace '^[^.]+\.'
+
+    $delete = -not $BlobPath
+    if ($delete) {
+      $BlobPath = [System.IO.Path]::GetTempFileName()
+    }
+
+    $arguments = @(
+      '/PROVISION'
+      '/REUSE'  # we're pre-creating the machine normally to set other fields, then overwriting it with this
+      '/DOMAIN'
+      $dns_domain
+      '/MACHINE'
+      $desired_state.sam_account_name.TrimEnd('$')  # this machine name is the short name
+      '/MACHINEOU'
+      $desired_state.ou
+      '/SAVEFILE'
+      $BlobPath.FullName
+    )
+
+    $argstring = Argv-ToString -arguments $arguments
+    $exe = 'djoin.exe'
+    $invocation = "$exe $argstring"
+    $result.djoin = @{
+      invocation = $invocation
+    }
+    $result.odj_blob = [String]::Empty
+
+    if ($PSCmdlet.ShouldProcess($exe, $argstring)) {
+      $djoin_result = Run-Command -command $invocation
+      $result.djoin.rc = $djoin_result.rc
+      $result.djoin.stdout = $djoin_result.stdout
+      $result.djoin.stderr = $djoin_result.stderr
+
+      if ($djoin_result.rc) {
+        Fail-Json -obj $result -message "Problem running djoin.exe. See returned values."
+      }
+
+      if ($ReturnBlob) {
+        $data = Get-Content -LiteralPath $BlobPath.FullName -Encoding Unicode -Raw
+        $result.odj_blob = $data.TrimEnd("`0")
+      }
+
+      if ($delete) {
+        $BlobPath.Delete()
+      }
+    }
+  }
+}
+
 # ------------------------------------------------------------------------------
 Function Remove-ConstructedState($initial_state) {
   Try {
@@ -192,6 +268,9 @@ If ($desired_state.state -eq "present") {
       }
     } Else { # $desired_state.state = "Present" & $initial_state.state = "Absent"
       Add-ConstructedState -desired_state $desired_state
+      if ($do_odj) {
+        Invoke-OfflineDomainJoin -desired_state $desired_state -ReturnBlob $odj_return_blob -BlobPath $odj_blob_path -WhatIf:$check_mode
+      }
     }
   } Else { # $desired_state.state = "Absent"
     If ($initial_state.state -eq "present") {
