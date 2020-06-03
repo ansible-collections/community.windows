@@ -41,7 +41,6 @@
     that:
       - not remove_known_idempotent is changed
 
----
 - name: add custom bucket
   win_scoop:
     name: '{{ test_scoop_bucket2.name }}'
