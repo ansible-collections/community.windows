@@ -75,7 +75,7 @@ function Install-Scoop {
     $module.ExitJson()
   }
 
-  if ($null -eq $scoop_app -or -not (Test-Path -Path $scoop_app.Path)) {
+  if ($null -eq $scoop_app -or -not (Test-Path -LiteralPath $scoop_app.Path)) {
     $module.FailJson("Failed to find scoop.ps1, make sure it is added to the PATH")
   }
 
