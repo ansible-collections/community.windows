@@ -199,10 +199,7 @@ function Uninstall-ScoopPackage {
   if ($module.Verbosity -gt 1) {
     $module.Result.stdout = $res.stdout
   }
-  if ($null -ne $res.stderr) {
-    $module.Result.changed = $false
-  }
-  else {
+  if (-not $res.stdout -match "ERROR '(.*?)' isn't installed.") {
     $module.Result.changed = $true
   }
 }
@@ -212,6 +209,8 @@ $scoop_path = Install-Scoop
 $installed_packages = Get-ScoopPackages -scoop_path $scoop_path
 
 if ($state -in @("absent")) {
+  # Always attempt uninstall
+  # Packages can be in a broken state where they don't appear scoop export
   Uninstall-ScoopPackage -scoop_path $scoop_path -packages $name
 }
 
