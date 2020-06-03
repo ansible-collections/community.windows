@@ -1,6 +1,6 @@
 ---
 - name: add known bucket
-  win_scoop:
+  win_scoop_bucket:
     name: '{{ test_scoop_bucket1.name }}'
   register: add_known
 
@@ -10,7 +10,7 @@
       - add_known is changed
 
 - name: add known bucket (idempotent)
-  win_scoop:
+  win_scoop_bucket:
     name: '{{ test_scoop_bucket1.name }}'
   register: add_known_idempotent
 
@@ -20,7 +20,7 @@
       - not add_known_idempotent is changed
 
 - name: remove known bucket
-  win_scoop:
+  win_scoop_bucket:
     name: '{{ test_scoop_bucket1.name }}'
     state: absent
   register: remove_known
@@ -31,7 +31,7 @@
       - remove_known is changed
 
 - name: remove known bucket (idempotent)
-  win_scoop:
+  win_scoop_bucket:
     name: '{{ test_scoop_bucket1.name }}'
     state: absent
   register: remove_known_idempotent
@@ -42,7 +42,7 @@
       - not remove_known_idempotent is changed
 
 - name: add custom bucket
-  win_scoop:
+  win_scoop_bucket:
     name: '{{ test_scoop_bucket2.name }}'
     repo: '{{ test_scoop_bucket2.repo }}'
   register: add_custom
@@ -53,7 +53,7 @@
       - add_custom is changed
 
 - name: add custom bucket (idempotent)
-  win_scoop:
+  win_scoop_bucket:
     name: '{{ test_scoop_bucket2.name }}'
     repo: '{{ test_scoop_bucket2.repo }}'
   register: add_custom_idempotent
@@ -64,7 +64,7 @@
       - not add_custom_idempotent is changed
 
 - name: remove custom bucket
-  win_scoop:
+  win_scoop_bucket:
     name: '{{ test_scoop_bucket2.name }}'
     state: absent
   register: remove_custom
@@ -75,7 +75,7 @@
       - remove_custom is changed
 
 - name: remove custom bucket (idempotent)
-  win_scoop:
+  win_scoop_bucket:
     name: '{{ test_scoop_bucket2.name }}'
     state: absent
   register: remove_custom_idempotent
