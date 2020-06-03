@@ -199,7 +199,7 @@ function Uninstall-ScoopPackage {
   if ($module.Verbosity -gt 1) {
     $module.Result.stdout = $res.stdout
   }
-  if (-not $res.stdout -match "ERROR '(.*?)' isn't installed.") {
+  if (-not ($res.stdout -match "ERROR '(.*?)' isn't installed.")) {
     $module.Result.changed = $true
   }
 }
