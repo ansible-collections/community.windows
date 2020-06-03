@@ -1,0 +1,9 @@
+---
+- name: ensure test buckets are removed
+  win_scoop:
+    name: '{{ item.name }}'
+    state: absent
+  with_items: '{{ test_scoop_buckets }}'
+
+- name: run tests
+  include_tasks: tests.yml
