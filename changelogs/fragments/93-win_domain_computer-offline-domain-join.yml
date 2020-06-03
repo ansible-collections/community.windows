@@ -1,4 +1,4 @@
 ---
 minor_changes:
   - win_domain_computer - add support for offline domain join
-  - win_domain_computer - sam account name with missing ``$``` will have it added automatically
+  - win_domain_computer - ``sam_account_name`` with missing ``$`` will have it added automatically
