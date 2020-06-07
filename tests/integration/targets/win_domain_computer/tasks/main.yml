@@ -124,8 +124,7 @@
                 description: "{{ test_computer_description }}"
                 enabled: yes
                 state: present
-                offline_domain_join: yes
-                odj_return_blob: yes
+                offline_domain_join: output
               register: odj_result
               check_mode: yes
 
@@ -135,6 +134,7 @@
                   - odj_result is changed
                   - odj_result.odj_blob is defined
                   - odj_result.odj_blob == ''
+                  - odj_result.odj_blob_path is not defined
                   - odj_result.djoin is defined
                   - odj_result.djoin.invocation is defined
 
@@ -147,8 +147,7 @@
                 description: "{{ test_computer_description }}"
                 enabled: yes
                 state: present
-                offline_domain_join: yes
-                odj_return_blob: yes
+                offline_domain_join: output
               register: odj_result
 
             - name: assert odj
@@ -157,6 +156,7 @@
                   - odj_result is changed
                   - odj_result.odj_blob is defined
                   - odj_result.odj_blob != ''
+                  - odj_result.odj_blob_path is not defined
                   - odj_result.djoin is defined
                   - odj_result.djoin.invocation is defined
                   - odj_result.djoin.rc is defined
@@ -173,8 +173,7 @@
                 description: "{{ test_computer_description }}"
                 enabled: yes
                 state: present
-                offline_domain_join: yes
-                odj_return_blob: yes
+                offline_domain_join: output
               register: odj_result
 
             - name: assert odj
@@ -182,6 +181,7 @@
                 that:
                   - odj_result is not changed
                   - odj_result.odj_blob is not defined
+                  - odj_result.odj_blob_path is not defined
                   - odj_result.djoin is not defined
 
           always:
@@ -205,8 +205,7 @@
                 description: "{{ test_computer_description }}"
                 enabled: yes
                 state: present
-                offline_domain_join: yes
-                odj_return_blob: yes
+                offline_domain_join: output
                 odj_blob_path: "{{ blob_path }}"
               register: odj_result
               check_mode: yes
@@ -217,6 +216,7 @@
                   - odj_result is changed
                   - odj_result.odj_blob is defined
                   - odj_result.odj_blob == ''
+                  - odj_result.odj_blob_path is not defined
                   - odj_result.djoin is defined
                   - odj_result.djoin.invocation is defined
 
@@ -229,8 +229,7 @@
                 description: "{{ test_computer_description }}"
                 enabled: yes
                 state: present
-                offline_domain_join: yes
-                odj_return_blob: yes
+                offline_domain_join: output
                 odj_blob_path: "{{ blob_path }}"
               register: odj_result
 
@@ -240,22 +239,13 @@
                   - odj_result is changed
                   - odj_result.odj_blob is defined
                   - odj_result.odj_blob != ''
+                  - odj_result.odj_blob_path is not defined
                   - odj_result.djoin is defined
                   - odj_result.djoin.invocation is defined
                   - odj_result.djoin.rc is defined
                   - odj_result.djoin.rc == 0
                   - odj_result.djoin.stdout is defined
                   - odj_result.djoin.stderr is defined
-
-            - name: Test ODJ file
-              ansible.windows.win_shell: |
-                $file = '{{ blob_path }}'
-                $expected_content = '{{ odj_result.odj_blob }}'
-                $content = (Get-Content -LiteralPath $file -Raw -Encoding Unicode -ErrorAction Stop).TrimEnd("`0")
-
-                if ($expected_content.Length -ne $content.Length -or $expected_content -cne $content) {
-                  throw "BLOB file and returned contents don't match"
-                }
 
             - name: Create computer with offline domain join and blob file with return (idempotence)
               win_domain_computer:
@@ -266,8 +256,7 @@
                 description: "{{ test_computer_description }}"
                 enabled: yes
                 state: present
-                offline_domain_join: yes
-                odj_return_blob: yes
+                offline_domain_join: output
                 odj_blob_path: "{{ blob_path }}"
               register: odj_result
 
@@ -276,6 +265,7 @@
                 that:
                   - odj_result is not changed
                   - odj_result.odj_blob is not defined
+                  - odj_result.odj_blob_path is not defined
                   - odj_result.djoin is not defined
 
           always:
@@ -288,3 +278,201 @@
             - name: ensure the blob file is deleted
               win_shell: |
                 Remove-Item -LiteralPath '{{ blob_path }}' -Force -ErrorAction SilentlyContinue
+                exit 0
+
+        - name: Specified file return
+          vars:
+            blob_path: 'C:\Windows\Temp\blob.txt'
+          block:
+            - name: Create computer with offline domain join and blob file return with specified path (check mode)
+              win_domain_computer:
+                name: '{{ test_win_domain_computer_name }}'
+                dns_hostname: '{{ test_win_domain_computer_dns_hostname }}'
+                sam_account_name: '{{ test_win_domain_computer_sam_account_name }}'
+                ou: "{{ test_win_domain_computer_ou_path }}"
+                description: "{{ test_computer_description }}"
+                enabled: yes
+                state: present
+                offline_domain_join: path
+                odj_blob_path: "{{ blob_path }}"
+              register: odj_result
+              check_mode: yes
+
+            - name: assert odj (check mode)
+              assert:
+                that:
+                  - odj_result is changed
+                  - odj_result.odj_blob is defined
+                  - odj_result.odj_blob == ''
+                  - odj_result.odj_blob_path is defined
+                  - odj_result.odj_blob_path == blob_path
+                  - odj_result.djoin is defined
+                  - odj_result.djoin.invocation is defined
+
+            - name: Create computer with offline domain join and blob file return with specified path
+              win_domain_computer:
+                name: '{{ test_win_domain_computer_name }}'
+                dns_hostname: '{{ test_win_domain_computer_dns_hostname }}'
+                sam_account_name: '{{ test_win_domain_computer_sam_account_name }}'
+                ou: "{{ test_win_domain_computer_ou_path }}"
+                description: "{{ test_computer_description }}"
+                enabled: yes
+                state: present
+                offline_domain_join: path
+                odj_blob_path: "{{ blob_path }}"
+              register: odj_result
+
+            - name: assert odj
+              assert:
+                that:
+                  - odj_result is changed
+                  - odj_result.odj_blob is defined
+                  - odj_result.odj_blob == ''
+                  - odj_result.odj_blob_path is defined
+                  - odj_result.odj_blob_path == blob_path
+                  - odj_result.djoin is defined
+                  - odj_result.djoin.invocation is defined
+                  - odj_result.djoin.rc is defined
+                  - odj_result.djoin.rc == 0
+                  - odj_result.djoin.stdout is defined
+                  - odj_result.djoin.stderr is defined
+
+            - name: Test ODJ File
+              ansible.windows.win_shell: |
+                $ErrorActionPreference = 'Stop'
+                $file = '{{ odj_result.odj_blob_path }}'
+                $content = Get-Content -LiteralPath $file -Raw -Encoding Unicode
+                $trimmed = $content.TrimEnd("`0")
+                if ($content.Length -eq $trimmed.Length) { throw 'No terminating null found' }
+                # try a base64 decode to validate it is the kind of data we expect
+                $bytes = [Convert]::FromBase64String($trimmed)
+
+            - name: Create computer with offline domain join and blob file return with specified path (idempotence)
+              win_domain_computer:
+                name: '{{ test_win_domain_computer_name }}'
+                dns_hostname: '{{ test_win_domain_computer_dns_hostname }}'
+                sam_account_name: '{{ test_win_domain_computer_sam_account_name }}'
+                ou: "{{ test_win_domain_computer_ou_path }}"
+                description: "{{ test_computer_description }}"
+                enabled: yes
+                state: present
+                offline_domain_join: path
+                odj_blob_path: "{{ blob_path }}"
+              register: odj_result
+
+            - name: assert odj
+              assert:
+                that:
+                  - odj_result is not changed
+                  - odj_result.odj_blob is not defined
+                  - odj_result.odj_blob_path is not defined
+                  - odj_result.djoin is not defined
+
+          always:
+            - name: ensure the test computer is deleted after the test
+              win_domain_computer:
+                name: '{{ test_win_domain_computer_name }}'
+                sam_account_name: '{{ test_win_domain_computer_sam_account_name }}'
+                state: absent
+
+            - name: ensure the blob file is deleted
+              win_shell: |
+                Remove-Item -LiteralPath '{{ blob_path }}' -Force -ErrorAction SilentlyContinue
+                exit 0
+
+        - name: Random file return
+          block:
+            - name: Create computer with offline domain join and random blob file return (check mode)
+              win_domain_computer:
+                name: '{{ test_win_domain_computer_name }}'
+                dns_hostname: '{{ test_win_domain_computer_dns_hostname }}'
+                sam_account_name: '{{ test_win_domain_computer_sam_account_name }}'
+                ou: "{{ test_win_domain_computer_ou_path }}"
+                description: "{{ test_computer_description }}"
+                enabled: yes
+                state: present
+                offline_domain_join: path
+              register: odj_result
+              check_mode: yes
+
+            - name: assert odj (check mode)
+              assert:
+                that:
+                  - odj_result is changed
+                  - odj_result.odj_blob is defined
+                  - odj_result.odj_blob == ''
+                  - odj_result.odj_blob_path is defined
+                  - odj_result.djoin is defined
+                  - odj_result.djoin.invocation is defined
+
+            - name: Create computer with offline domain join and random blob file return
+              win_domain_computer:
+                name: '{{ test_win_domain_computer_name }}'
+                dns_hostname: '{{ test_win_domain_computer_dns_hostname }}'
+                sam_account_name: '{{ test_win_domain_computer_sam_account_name }}'
+                ou: "{{ test_win_domain_computer_ou_path }}"
+                description: "{{ test_computer_description }}"
+                enabled: yes
+                state: present
+                offline_domain_join: path
+              register: odj_result
+
+            - name: assert odj
+              assert:
+                that:
+                  - odj_result is changed
+                  - odj_result.odj_blob is defined
+                  - odj_result.odj_blob == ''
+                  - odj_result.odj_blob_path is defined
+                  - odj_result.djoin is defined
+                  - odj_result.djoin.invocation is defined
+                  - odj_result.djoin.rc is defined
+                  - odj_result.djoin.rc == 0
+                  - odj_result.djoin.stdout is defined
+                  - odj_result.djoin.stderr is defined
+
+            - name: This file needs to be deleted later
+              set_fact:
+                returned_file: "{{ odj_result.odj_blob_path }}"
+
+            - name: Test ODJ File
+              ansible.windows.win_shell: |
+                $ErrorActionPreference = 'Stop'
+                $file = '{{ odj_result.odj_blob_path }}'
+                $content = Get-Content -LiteralPath $file -Raw -Encoding Unicode
+                $trimmed = $content.TrimEnd("`0")
+                if ($content.Length -eq $trimmed.Length) { throw 'No terminating null found' }
+                # try a base64 decode to validate it is the kind of data we expect
+                $bytes = [Convert]::FromBase64String($trimmed)
+
+            - name: Create computer with offline domain join and random blob file return (idempotence)
+              win_domain_computer:
+                name: '{{ test_win_domain_computer_name }}'
+                dns_hostname: '{{ test_win_domain_computer_dns_hostname }}'
+                sam_account_name: '{{ test_win_domain_computer_sam_account_name }}'
+                ou: "{{ test_win_domain_computer_ou_path }}"
+                description: "{{ test_computer_description }}"
+                enabled: yes
+                state: present
+                offline_domain_join: path
+              register: odj_result
+
+            - name: assert odj
+              assert:
+                that:
+                  - odj_result is not changed
+                  - odj_result.odj_blob is not defined
+                  - odj_result.odj_blob_path is not defined
+                  - odj_result.djoin is not defined
+
+          always:
+            - name: ensure the test computer is deleted after the test
+              win_domain_computer:
+                name: '{{ test_win_domain_computer_name }}'
+                sam_account_name: '{{ test_win_domain_computer_sam_account_name }}'
+                state: absent
+
+            - name: ensure the blob file is deleted
+              win_shell: |
+                Remove-Item -LiteralPath '{{ returned_file }}' -Force -ErrorAction SilentlyContinue
+                exit 0

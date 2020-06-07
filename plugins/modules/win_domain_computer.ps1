@@ -21,6 +21,7 @@ $params = Parse-Args $args -supports_check_mode $true
 
 $check_mode = Get-AnsibleParam -obj $params -name "_ansible_check_mode" -type "bool"  -default $false
 $diff_support = Get-AnsibleParam -obj $params -name "_ansible_diff" -type "bool" -default $false
+$temp = Get-AnsibleParam -obj $params -name '_ansible_remote_tmp' -type 'path' -default $env:TEMP
 
 $name = Get-AnsibleParam -obj $params -name "name" -failifempty $true -resultobj $result
 $sam_account_name = Get-AnsibleParam -obj $params -name "sam_account_name" -default "${name}$"
@@ -34,11 +35,9 @@ $domain_password = Get-AnsibleParam -obj $params -name "domain_password" -type "
 $domain_server = Get-AnsibleParam -obj $params -name "domain_server" -type "str"
 $state = Get-AnsibleParam -obj $params -name "state" -ValidateSet "present","absent" -default "present"
 
-$do_odj = Get-AnsibleParam -obj $params -name "offline_domain_join" -type "bool" -default $false
-if ($do_odj) {
-  $odj_return_blob = Get-AnsibleParam -obj $params -name "odj_return_blob" -type "bool" -default $false
-  $odj_blob_path = Get-AnsibleParam -obj $params -name "odj_blob_path" -type "str" -failifempty (-not $odj_return_blob) -default $null
-}
+$odj_action = Get-AnsibleParam -obj $params -name "offline_domain_join" -type "str" -ValidateSet "none","output","path" -default "none"
+$_default_blob_path = Join-Path -Path $temp -ChildPath ([System.IO.Path]::GetRandomFileName())
+$odj_blob_path = Get-AnsibleParam -obj $params -name "odj_blob_path" -type "str" -default $_default_blob_path
 
 $extra_args = @{}
 if ($null -ne $domain_username) {
@@ -164,9 +163,10 @@ Function Invoke-OfflineDomainJoin {
     [System.Collections.IDictionary]
     $desired_state ,
 
-    [Parameter()]
-    [bool]
-    $ReturnBlob = $false ,
+    [Parameter(Mandatory=$true)]
+    [ValidateSet('none','output','path')]
+    [String]
+    $Action ,
 
     [Parameter()]
     [System.IO.FileInfo]
@@ -174,14 +174,16 @@ Function Invoke-OfflineDomainJoin {
   )
 
   End {
-    $dns_domain = $desired_state.dns_hostname -replace '^[^.]+\.'
-
-    $delete = -not $BlobPath
-    if ($delete) {
-      $BlobPath = [System.IO.Path]::GetTempFileName()
+    if ($Action -eq 'none') {
+      return
     }
 
+    $dns_domain = $desired_state.dns_hostname -replace '^[^.]+\.'
+
+    $output = $Action -eq 'output'
+
     $arguments = @(
+      'djoin.exe'
       '/PROVISION'
       '/REUSE'  # we're pre-creating the machine normally to set other fields, then overwriting it with this
       '/DOMAIN'
@@ -194,31 +196,37 @@ Function Invoke-OfflineDomainJoin {
       $BlobPath.FullName
     )
 
-    $argstring = Argv-ToString -arguments $arguments
-    $exe = 'djoin.exe'
-    $invocation = "$exe $argstring"
+    $invocation = Argv-ToString -arguments $arguments
     $result.djoin = @{
       invocation = $invocation
     }
-    $result.odj_blob = [String]::Empty
+    $result.odj_blob = ''
 
-    if ($PSCmdlet.ShouldProcess($exe, $argstring)) {
-      $djoin_result = Run-Command -command $invocation
-      $result.djoin.rc = $djoin_result.rc
-      $result.djoin.stdout = $djoin_result.stdout
-      $result.djoin.stderr = $djoin_result.stderr
+    if ($Action -eq 'path') {
+      $result.odj_blob_path = $BlobPath.FullName
+    }
 
-      if ($djoin_result.rc) {
-        Fail-Json -obj $result -message "Problem running djoin.exe. See returned values."
+    if ($PSCmdlet.ShouldProcess($argstring)) {
+      try {
+        $djoin_result = Run-Command -command $invocation
+        $result.djoin.rc = $djoin_result.rc
+        $result.djoin.stdout = $djoin_result.stdout
+        $result.djoin.stderr = $djoin_result.stderr
+
+        if ($djoin_result.rc) {
+          Fail-Json -obj $result -message "Problem running djoin.exe. See returned values."
+        }
+
+        if ($output) {
+          $bytes = [System.IO.File]::ReadAllBytes($BlobPath.FullName)
+          $data = [Convert]::ToBase64String($bytes)
+          $result.odj_blob = $data
+        }
       }
-
-      if ($ReturnBlob) {
-        $data = Get-Content -LiteralPath $BlobPath.FullName -Encoding Unicode -Raw
-        $result.odj_blob = $data.TrimEnd("`0")
-      }
-
-      if ($delete) {
-        $BlobPath.Delete()
+      finally {
+        if ($output) {
+          $BlobPath.Delete()
+        }
       }
     }
   }
@@ -268,9 +276,7 @@ If ($desired_state.state -eq "present") {
       }
     } Else { # $desired_state.state = "Present" & $initial_state.state = "Absent"
       Add-ConstructedState -desired_state $desired_state
-      if ($do_odj) {
-        Invoke-OfflineDomainJoin -desired_state $desired_state -ReturnBlob $odj_return_blob -BlobPath $odj_blob_path -WhatIf:$check_mode
-      }
+      Invoke-OfflineDomainJoin -desired_state $desired_state -Action $odj_action -BlobPath $odj_blob_path -WhatIf:$check_mode
     }
   } Else { # $desired_state.state = "Absent"
     If ($initial_state.state -eq "present") {

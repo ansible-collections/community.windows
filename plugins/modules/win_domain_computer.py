@@ -49,7 +49,8 @@ options:
     description:
       - Specifies the X.500 path of the Organizational Unit (OU) or container
         where the new object is created. Required when I(state=present).
-      - Special characters must be escaped, see U(https://docs.microsoft.com/en-us/previous-versions/windows/desktop/ldap/distinguished-names)
+      - "Special characters must be escaped,
+        see L(Distinguished Names,https://docs.microsoft.com/en-us/previous-versions/windows/desktop/ldap/distinguished-names) for details."
     type: str
   description:
     description:
@@ -92,22 +93,23 @@ options:
   offline_domain_join:
     description:
       - Provisions a computer in the directory and provides a BLOB file that can be used on the target computer/image to join it to the domain while offline.
+      - The C(none) value doesn't do any offline join operations.
+      - C(output) returns the BLOB in output. The BLOB should be treated as secret (it contains the machine password) so use C(no_log) when using this option.
+      - C(path) preserves the offline domain join BLOB file on the target machine for later use. The path will be returned.
       - If the computer already exists, no BLOB will be created/returned, and the module will operate as it would have without offline domain join.
-    type: bool
-  odj_return_blob:
-    description:
-      - Returns the BLOB in the module output. Note that the BLOB should be treated as a secret, as it contains the machine password.
-      - The module should be called with C(no_log) when using this option.
-      - The BLOB file contains a terminating null character which will not be included. See Notes.
+    type: str
+    choices:
+      - none
+      - output
+      - path
+    default: none
   odj_blob_path:
     description:
-      - The path to the file where the BLOB will be saved.
-      - Required when I(offline_domain_join=True) and I(odj_return_blob=False).
-      - If using I(odj_return_blob=True) this can be omitted, and a temporary file will be used and then destroyed.
-      - If I(odj_return_blob=True) and this is specified, it will be used and file will remain.
+      - The path to the file where the BLOB will be saved. If omitted, a temporary file will be used.
+      - If I(offline_domain_join=output) the file will be deleted after its contents are returned.
 notes:
   - "For more information on Offline Domain Join
-    see U(https://docs.microsoft.com/en-us/previous-versions/windows/it-pro/windows-server-2008-R2-and-2008/dd392267(v=ws.10))"
+    see L(the step-by-step guide,https://docs.microsoft.com/en-us/previous-versions/windows/it-pro/windows-server-2008-R2-and-2008/dd392267%28v=ws.10%29)."
   - When using the ODJ BLOB to join a computer to the domain, it must be written out to a file.
   - The file must be UTF-16 encoded (in PowerShell this encoding is called C(Unicode)), and it must end in a null character. See examples.
   - The C(djoin.exe) part of the offline domain join process will not use I(domain_server), I(domain_username), or I(domain_password).
@@ -155,10 +157,9 @@ EXAMPLES = r'''
     vars:
       target_blob_file: 'C:\ODJ\blob.txt'
     ansible.windows.win_shell: |
-      # add terminating null character to BLOB
-      $blob = "{{ computer_status.odj_blob }}`0"
-      $blob | Set-Content -LiteralPath '{{ target_blob_file }}' -Encoding Unicode -Force
-      & djoin.exe --% /RequestODJ /LoadFile "{{ target_blob_file }}" /LocalOS /WindowsPath "%SystemRoot%"
+      $blob = [Convert]::FromBase64String('{{ computer_status.odj_blob }}')
+      [IO.File]::WriteAllBytes('{{ target_blob_file }}', $blob)
+      & djoin.exe --% /RequestODJ /LoadFile '{{ target_blob_file }}' /LocalOS /WindowsPath "%SystemRoot%"
 
   - name: Restart to complete domain join
     ansible.windows.win_restart:
@@ -166,10 +167,17 @@ EXAMPLES = r'''
 
 RETURN = r'''
 odj_blob:
-  description: The offline domain join BLOB. This is an empty string when in check mode or when odj_return_blob is False.
-  returned: when offline_domain_join is True and the computer didn't exist
+  description:
+    - The offline domain join BLOB. This is an empty string when in check mode or when offline_domain_join is 'path'.
+    - This field contains the base64 encoded raw bytes of the offline domain join BLOB file.
+  returned: when offline_domain_join is not 'none' and the computer didn't exist
   type: str
   sample: <a long base64 string>
+odj_blob_file:
+  description: The path to the offline domain join BLOB file on the target host. If odj_blob_path was specified, this will match that path.
+  returned: when offline_domain_join is 'path' and the computer didn't exist
+  type: str
+  sample: 'C:\Users\admin\AppData\Local\Temp\e4vxonty.rkb'
 djoin:
   description: Information about the invocation of djoin.exe.
   returned: when offline_domain_join is True and the computer didn't exist
