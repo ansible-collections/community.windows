@@ -61,7 +61,7 @@ options:
     choices: [ absent, present ]
     default: present
 seealso:
-- module: win_chocolatey
+- module: chocolatey.chocolatey.win_chocolatey
 - name: Scoop website
   description: More information about Scoop
   link: https://scoop.sh
