@@ -77,6 +77,6 @@ author:
 
 EXAMPLES = r'''
 - name: Install jq.
-  win_scoop:
+  community.windows.win_scoop:
     name: jq
 '''
