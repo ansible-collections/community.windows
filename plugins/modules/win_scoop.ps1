@@ -113,11 +113,11 @@ function Get-ScoopPackages {
   $installed_packages = $res.stdout -split "`n" |
   Select-String '(.*?) \(v:(.*?)\) \[(.*?)\]' |
   ForEach-Object {
-    New-Object PSObject -Property ([Ordered]@{
-        "Package" = $_.Matches[0].Groups[1].Value
-        "Version" = $_.Matches[0].Groups[2].Value
-        "Bucket"  = $_.Matches[0].Groups[3].Value
-      })
+    [PSCustomObject]@{
+        Package = $_.Matches[0].Groups[1].Value
+        Version = $_.Matches[0].Groups[2].Value
+        Bucket  = $_.Matches[0].Groups[3].Value
+    }
   }
 
   return $installed_packages
