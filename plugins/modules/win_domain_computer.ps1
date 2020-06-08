@@ -206,6 +206,10 @@ Function Invoke-OfflineDomainJoin {
       $result.odj_blob_path = $BlobPath.FullName
     }
 
+    if (-not $BlobPath.Directory.Exists) {
+      Fail-Json -obj $result -message "BLOB path directory '$($BlobPath.Directory.FullName)' doesn't exist."
+    }
+
     if ($PSCmdlet.ShouldProcess($argstring)) {
       try {
         $djoin_result = Run-Command -command $invocation
@@ -224,7 +228,7 @@ Function Invoke-OfflineDomainJoin {
         }
       }
       finally {
-        if ($output) {
+        if ($output -and $BlobPath.Exists) {
           $BlobPath.Delete()
         }
       }

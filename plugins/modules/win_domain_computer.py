@@ -107,6 +107,7 @@ options:
     description:
       - The path to the file where the BLOB will be saved. If omitted, a temporary file will be used.
       - If I(offline_domain_join=output) the file will be deleted after its contents are returned.
+      - The parent directory for the BLOB file must exist; intermediate directories will not be created.
 notes:
   - "For more information on Offline Domain Join
     see L(the step-by-step guide,https://docs.microsoft.com/en-us/previous-versions/windows/it-pro/windows-server-2008-R2-and-2008/dd392267%28v=ws.10%29)."
