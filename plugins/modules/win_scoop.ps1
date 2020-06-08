@@ -146,7 +146,7 @@ function Install-ScoopPackage {
     [Parameter(Mandatory = $true)] [string]$scoop_path,
     [Parameter(Mandatory = $true)] [String[]]$packages
   )
-  $arguments = [System.Collections.ArrayList]@("powershell.exe", $scoop_path, "install")
+  $arguments = [System.Collections.Generic.List[String]]@("powershell.exe", $scoop_path, "install")
   $arguments.AddRange($packages)
 
   $common_args = Get-InstallScoopPackageArguments
@@ -181,7 +181,7 @@ function Uninstall-ScoopPackage {
     [Parameter(Mandatory = $true)] [String[]]$packages
   )
 
-  $arguments = [System.Collections.ArrayList]@("powershell.exe", $scoop_path, "uninstall")
+  $arguments = [System.Collections.Generic.List[String]]@("powershell.exe", $scoop_path, "uninstall")
   $arguments.AddRange($packages)
 
   $common_args = Get-UninstallScoopPackageArguments
