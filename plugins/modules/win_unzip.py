@@ -51,7 +51,7 @@ options:
     type: path
   password:
     description:
-   - If a zip file is encrypted with Password.
+      - If a zip file is encrypted with password.
       - Passing a value to a password parameter requires the PSCX module to be installed.
       - The I(recurse) option must be C(yes).
 notes:
