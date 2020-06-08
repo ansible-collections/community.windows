@@ -19,7 +19,7 @@ $dest = Get-AnsibleParam -obj $params -name "dest" -type "path" -failifempty $tr
 $creates = Get-AnsibleParam -obj $params -name "creates" -type "path"
 $recurse = Get-AnsibleParam -obj $params -name "recurse" -type "bool" -default $false
 $delete_archive = Get-AnsibleParam -obj $params -name "delete_archive" -type "bool" -default $false -aliases 'rm'
-$password= Get-AnsibleParam -obj $params -name "password" -type "str"
+$password = Get-AnsibleParam -obj $params -name "password" -type "str"
 
 # Fixes a fail error message (when the task actually succeeds) for a
 # "Convert-ToJson: The converted JSON string is in bad format"
@@ -128,7 +128,7 @@ If ($ext -eq ".zip" -And $recurse -eq $false) {
             Fail-Json -obj $result -message "Error unzipping '$src' to '$dest'!. Method: System.IO.Compression.ZipFile, Exception: $($_.Exception.Message)"
         }
     }
-}Else {
+} Else {
     # Check if PSCX is installed
     $list = Get-Module -ListAvailable
 
@@ -145,18 +145,20 @@ If ($ext -eq ".zip" -And $recurse -eq $false) {
         Fail-Json $result "Error importing module PSCX"
     }
 
-	Try{
-		If ($null -ne $password){
-                        $password= ConvertTo-SecureString $password -AsPlainText -Force
-                        Expand-Archive -Path $src -OutputPath $dest -Password $password -WhatIf:$check_mode
-                   }
-                Else{
-                        Expand-Archive -Path $src -OutputPath $dest -Force -WhatIf:$check_mode
-              }
-	}
-	Catch{
- 		Fail-Json -obj $result -message "Error expanding '$src' to '$dest'! Msg: $($_.Exception.Message)"
-	     }
+    $expand_params = @{
+        Path = $src
+        OutputPath = $dest
+        WhatIf = $check_mode
+    }
+    if ($null -ne $password) {
+        $expand_params.Password = ConvertTo-SecureString -String $password -AsPlainText -Force
+    }
+    Try {
+        Expand-Archive @expand_params
+    }
+    Catch {
+        Fail-Json -obj $result -message "Error expanding '$src' to '$dest'! Msg: $($_.Exception.Message)"
+    }
 
     If ($recurse) {
         Get-ChildItem -LiteralPath $dest -recurse | Where-Object {$pcx_extensions -contains $_.extension} | ForEach-Object {
