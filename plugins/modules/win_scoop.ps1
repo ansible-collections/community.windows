@@ -42,11 +42,8 @@ function Install-Scoop {
   $scoop_app = Get-Command -Name scoop.ps1 -Type ExternalScript -ErrorAction SilentlyContinue
   if ($null -eq $scoop_app) {
     # We need to install scoop
-    # Enable TLS1.1/TLS1.2 if they're available but disabled (eg. .NET 4.5)
+    # Enable TLS1.2 if it's available but disabled (eg. .NET 4.5)
     $security_protocols = [Net.ServicePointManager]::SecurityProtocol -bor [Net.SecurityProtocolType]::SystemDefault
-    if ([Net.SecurityProtocolType].GetMember("Tls11").Count -gt 0) {
-      $security_protocols = $security_protcols -bor [Net.SecurityProtocolType]::Tls11
-    }
     if ([Net.SecurityProtocolType].GetMember("Tls12").Count -gt 0) {
       $security_protocols = $security_protcols -bor [Net.SecurityProtocolType]::Tls12
     }
@@ -110,37 +107,35 @@ function Get-ScoopPackages {
     $module.FailJson("Error checking installed packages")
   }
 
-  $installed_packages = $res.stdout -split "`n" |
+  $res.stdout -split "`n" |
   Select-String '(.*?) \(v:(.*?)\) \[(.*?)\]' |
   ForEach-Object {
     [PSCustomObject]@{
-        Package = $_.Matches[0].Groups[1].Value
-        Version = $_.Matches[0].Groups[2].Value
-        Bucket  = $_.Matches[0].Groups[3].Value
+      Package = $_.Matches[0].Groups[1].Value
+      Version = $_.Matches[0].Groups[2].Value
+      Bucket  = $_.Matches[0].Groups[3].Value
     }
   }
-
-  return $installed_packages
 }
 
 function Get-InstallScoopPackageArguments {
-  $arguments = [System.Collections.ArrayList]@()
+  $arguments = [System.Collections.Generic.List[String]]@()
 
   if ($arch) {
-    $arguments.Add("--arch") > $null
-    $arguments.Add($arch) > $null
+    $arguments.Add("--arch")
+    $arguments.Add($arch)
   }
   if ($global) {
-    $arguments.Add("--global") > $null
+    $arguments.Add("--global")
   }
   if ($independent) {
-    $arguments.Add("--independent") > $null
+    $arguments.Add("--independent")
   }
   if ($no_cache) {
-    $arguments.Add("--no-cache") > $null
+    $arguments.Add("--no-cache")
   }
   if ($skip) {
-    $arguments.Add("--skip") > $null
+    $arguments.Add("--skip")
   }
 
   return , $arguments
@@ -168,13 +163,13 @@ function Install-ScoopPackage {
 }
 
 function Get-UninstallScoopPackageArguments {
-  $arguments = [System.Collections.ArrayList]@()
+  $arguments = [System.Collections.Generic.List[String]]@()
 
   if ($independent) {
-    $arguments.Add("--global") > $null
+    $arguments.Add("--global")
   }
   if ($purge) {
-    $arguments.Add("--purge") > $null
+    $arguments.Add("--purge")
   }
 
   return , $arguments
