@@ -1,9 +1,12 @@
 #!powershell
 
+# Copyright: (c) 2020, Brian Scholer (@briantist)
 # Copyright: (c) 2017, AMTEGA - Xunta de Galicia
 # GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 
 #Requires -Module Ansible.ModuleUtils.Legacy
+#Requires -Module Ansible.ModuleUtils.ArgvParser
+#Requires -Module Ansible.ModuleUtils.CommandUtil
 
 
 # ------------------------------------------------------------------------------
@@ -18,11 +21,12 @@ $params = Parse-Args $args -supports_check_mode $true
 
 $check_mode = Get-AnsibleParam -obj $params -name "_ansible_check_mode" -type "bool"  -default $false
 $diff_support = Get-AnsibleParam -obj $params -name "_ansible_diff" -type "bool" -default $false
+$temp = Get-AnsibleParam -obj $params -name '_ansible_remote_tmp' -type 'path' -default $env:TEMP
 
 $name = Get-AnsibleParam -obj $params -name "name" -failifempty $true -resultobj $result
-$sam_account_name = Get-AnsibleParam -obj $params -name "sam_account_name" -default "$name$"
+$sam_account_name = Get-AnsibleParam -obj $params -name "sam_account_name" -default "${name}$"
 If (-not $sam_account_name.EndsWith("$")) {
-  Fail-Json -obj $result -message "sam_account_name must end in $"
+  $sam_account_name = "${sam_account_name}$"
 }
 $enabled = Get-AnsibleParam -obj $params -name "enabled" -type "bool" -default $true
 $description = Get-AnsibleParam -obj $params -name "description" -default $null
@@ -30,6 +34,10 @@ $domain_username = Get-AnsibleParam -obj $params -name "domain_username" -type "
 $domain_password = Get-AnsibleParam -obj $params -name "domain_password" -type "str" -failifempty ($null -ne $domain_username)
 $domain_server = Get-AnsibleParam -obj $params -name "domain_server" -type "str"
 $state = Get-AnsibleParam -obj $params -name "state" -ValidateSet "present","absent" -default "present"
+
+$odj_action = Get-AnsibleParam -obj $params -name "offline_domain_join" -type "str" -ValidateSet "none","output","path" -default "none"
+$_default_blob_path = Join-Path -Path $temp -ChildPath ([System.IO.Path]::GetRandomFileName())
+$odj_blob_path = Get-AnsibleParam -obj $params -name "odj_blob_path" -type "str" -default $_default_blob_path
 
 $extra_args = @{}
 if ($null -ne $domain_username) {
@@ -74,12 +82,14 @@ Function Get-InitialState($desired_state) {
       @extra_args
   } Catch { $null }
   If ($computer) {
+      $null,$current_ou = $computer.DistinguishedName -split '(?<=[^\\](?:\\\\)*),'
+      $current_ou = $current_ou -join ','
+
       $initial_state = [ordered]@{
         name = $computer.Name
         sam_account_name = $computer.SamAccountName
         dns_hostname = $computer.DNSHostName
-        # Get OU from regexp that removes all characters to the first ","
-        ou = $computer.DistinguishedName -creplace "^[^,]*,",""
+        ou = $current_ou
         distinguished_name = $computer.DistinguishedName
         description = $computer.Description
         enabled = $computer.Enabled
@@ -146,6 +156,86 @@ Function Add-ConstructedState($desired_state) {
   $result.changed = $true
 }
 
+Function Invoke-OfflineDomainJoin {
+  [CmdletBinding(SupportsShouldProcess=$true)]
+  param(
+    [Parameter(Mandatory=$true)]
+    [System.Collections.IDictionary]
+    $desired_state ,
+
+    [Parameter(Mandatory=$true)]
+    [ValidateSet('none','output','path')]
+    [String]
+    $Action ,
+
+    [Parameter()]
+    [System.IO.FileInfo]
+    $BlobPath
+  )
+
+  End {
+    if ($Action -eq 'none') {
+      return
+    }
+
+    $dns_domain = $desired_state.dns_hostname -replace '^[^.]+\.'
+
+    $output = $Action -eq 'output'
+
+    $arguments = @(
+      'djoin.exe'
+      '/PROVISION'
+      '/REUSE'  # we're pre-creating the machine normally to set other fields, then overwriting it with this
+      '/DOMAIN'
+      $dns_domain
+      '/MACHINE'
+      $desired_state.sam_account_name.TrimEnd('$')  # this machine name is the short name
+      '/MACHINEOU'
+      $desired_state.ou
+      '/SAVEFILE'
+      $BlobPath.FullName
+    )
+
+    $invocation = Argv-ToString -arguments $arguments
+    $result.djoin = @{
+      invocation = $invocation
+    }
+    $result.odj_blob = ''
+
+    if ($Action -eq 'path') {
+      $result.odj_blob_path = $BlobPath.FullName
+    }
+
+    if (-not $BlobPath.Directory.Exists) {
+      Fail-Json -obj $result -message "BLOB path directory '$($BlobPath.Directory.FullName)' doesn't exist."
+    }
+
+    if ($PSCmdlet.ShouldProcess($argstring)) {
+      try {
+        $djoin_result = Run-Command -command $invocation
+        $result.djoin.rc = $djoin_result.rc
+        $result.djoin.stdout = $djoin_result.stdout
+        $result.djoin.stderr = $djoin_result.stderr
+
+        if ($djoin_result.rc) {
+          Fail-Json -obj $result -message "Problem running djoin.exe. See returned values."
+        }
+
+        if ($output) {
+          $bytes = [System.IO.File]::ReadAllBytes($BlobPath.FullName)
+          $data = [Convert]::ToBase64String($bytes)
+          $result.odj_blob = $data
+        }
+      }
+      finally {
+        if ($output -and $BlobPath.Exists) {
+          $BlobPath.Delete()
+        }
+      }
+    }
+  }
+}
+
 # ------------------------------------------------------------------------------
 Function Remove-ConstructedState($initial_state) {
   Try {
@@ -163,7 +253,7 @@ Function Remove-ConstructedState($initial_state) {
 }
 
 # ------------------------------------------------------------------------------
-Function are_hashtables_equal($x, $y) {
+Function Test-HashtableEquality($x, $y) {
   # Compare not nested HashTables
   Foreach ($key in $x.Keys) {
       If (($y.Keys -notcontains $key) -or ($x[$key] -cne $y[$key])) {
@@ -183,17 +273,18 @@ $initial_state = Get-InitialState($desired_state)
 
 If ($desired_state.state -eq "present") {
     If ($initial_state.state -eq "present") {
-      $in_desired_state = are_hashtables_equal $initial_state $desired_state
+      $in_desired_state = Test-HashtableEquality -X $initial_state -Y $desired_state
 
       If (-not $in_desired_state) {
-        Set-ConstructedState $initial_state $desired_state
+        Set-ConstructedState -initial_state $initial_state -desired_state $desired_state
       }
     } Else { # $desired_state.state = "Present" & $initial_state.state = "Absent"
-      Add-ConstructedState($desired_state)
+      Add-ConstructedState -desired_state $desired_state
+      Invoke-OfflineDomainJoin -desired_state $desired_state -Action $odj_action -BlobPath $odj_blob_path -WhatIf:$check_mode
     }
   } Else { # $desired_state.state = "Absent"
     If ($initial_state.state -eq "present") {
-      Remove-ConstructedState($initial_state)
+      Remove-ConstructedState -initial_state $initial_state
     }
   }
 
