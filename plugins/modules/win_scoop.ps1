@@ -9,26 +9,26 @@
 
 $spec = @{
   options = @{
-    arch        = @{ type = "str"; choices = "32bit", "64bit" }
-    independent = @{type = "bool"; default = $false }
-    global      = @{ type = "bool"; default = $false }
-    name        = @{ type = "list"; elements = "str"; required = $true }
-    no_cache    = @{type = "bool"; default = $false }
-    purge       = @{type = "bool"; default = $false }
-    skip        = @{type = "bool"; default = $false }
-    state       = @{ type = "str"; default = "present"; choices = "present", "absent" }
+    architecture  = @{ type = "str"; choices = "32bit", "64bit"; aliases = @(, "arch") }
+    independent   = @{type = "bool"; default = $false }
+    global        = @{ type = "bool"; default = $false }
+    name          = @{ type = "list"; elements = "str"; required = $true }
+    no_cache      = @{type = "bool"; default = $false }
+    purge         = @{type = "bool"; default = $false }
+    skip_checksum = @{type = "bool"; default = $false }
+    state         = @{ type = "str"; default = "present"; choices = "present", "absent" }
   }
 }
 
 $module = [Ansible.Basic.AnsibleModule]::Create($args, $spec)
 
-$arch = $module.Params.arch
+$architecture = $module.Params.architecture
 $independent = $module.Params.independent
 $global = $module.Params.global
 $name = $module.Params.name
 $no_cache = $module.Params.no_cache
 $purge = $module.Params.purge
-$skip = $module.Params.skip
+$skip_checksum = $module.Params.skip_checksum
 $state = $module.Params.state
 
 $module.Result.rc = 0
@@ -121,9 +121,9 @@ function Get-ScoopPackages {
 function Get-InstallScoopPackageArguments {
   $arguments = [System.Collections.Generic.List[String]]@()
 
-  if ($arch) {
+  if ($architecture) {
     $arguments.Add("--arch")
-    $arguments.Add($arch)
+    $arguments.Add($architecture)
   }
   if ($global) {
     $arguments.Add("--global")
@@ -134,7 +134,7 @@ function Get-InstallScoopPackageArguments {
   if ($no_cache) {
     $arguments.Add("--no-cache")
   }
-  if ($skip) {
+  if ($skip_checksum) {
     $arguments.Add("--skip")
   }
 

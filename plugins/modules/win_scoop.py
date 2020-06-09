@@ -12,11 +12,12 @@ description:
 - Manage packages using Scoop.
 - If Scoop is missing from the system, the module will install it.
 options:
-  arch:
+  architecture:
     description:
     - Force Scoop to install the package of a specific process architecture.
     type: str
     choices: [ 32bit, 64bit ]
+    aliases: [ arch ]
   global:
     description:
     - Install the app globally
@@ -43,7 +44,7 @@ options:
     - Remove all persistent data
     type: bool
     default: no
-  skip:
+  skip_checksum:
     description:
     - Skip hash validation
     type: bool
