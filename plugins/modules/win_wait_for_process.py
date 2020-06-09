@@ -4,13 +4,6 @@
 # Copyright: (c) 2017, Ansible Project
 # GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 
-# this is a windows documentation stub, actual code lives in the .ps1
-# file of the same name
-
-ANSIBLE_METADATA = {'metadata_version': '1.1',
-                    'status': ['preview'],
-                    'supported_by': 'community'}
-
 DOCUMENTATION = r'''
 ---
 module: win_wait_for_process
@@ -83,20 +76,20 @@ options:
     default: 300
 seealso:
 - module: wait_for
-- module: win_wait_for
+- module: ansible.windows.win_wait_for
 author:
 - Charles Crossan (@crossan007)
 '''
 
 EXAMPLES = r'''
 - name: Wait 300 seconds for all Oracle VirtualBox processes to stop. (VBoxHeadless, VirtualBox, VBoxSVC)
-  win_wait_for_process:
+  community.windows.win_wait_for_process:
     process_name_pattern: 'v(irtual)?box(headless|svc)?'
     state: absent
     timeout: 500
 
 - name: Wait 300 seconds for 3 instances of cmd to start, waiting 5 seconds between each check
-  win_wait_for_process:
+  community.windows.win_wait_for_process:
     process_name_exact: cmd
     state: present
     timeout: 500

@@ -4,10 +4,6 @@
 # Copyright: 2017, Dag Wieers (@dagwieers) <dag@wieers.com>
 # GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 
-ANSIBLE_METADATA = {'metadata_version': '1.1',
-                    'status': ['preview'],
-                    'supported_by': 'community'}
-
 DOCUMENTATION = r'''
 ---
 module: win_defrag
@@ -49,20 +45,20 @@ author:
 
 EXAMPLES = r'''
 - name: Defragment all local volumes (in parallel)
-  win_defrag:
+  community.windows.win_defrag:
     parallel: yes
 
 - name: 'Defragment all local volumes, except C: and D:'
-  win_defrag:
+  community.windows.win_defrag:
     exclude_volumes: [ C, D ]
 
 - name: 'Defragment volume D: with normal priority'
-  win_defrag:
+  community.windows.win_defrag:
     include_volumes: D
     priority: normal
 
 - name: Consolidate free space (useful when reducing volumes)
-  win_defrag:
+  community.windows.win_defrag:
     freespace_consolidation: yes
 '''
 

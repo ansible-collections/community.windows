@@ -4,10 +4,6 @@
 # Copyright: (c) 2020, Brian Scholer <@briantist>
 # GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 
-ANSIBLE_METADATA = {'metadata_version': '1.1',
-                    'status': ['preview'],
-                    'supported_by': 'community'}
-
 DOCUMENTATION = r'''
 ---
 module: win_psscript
@@ -25,7 +21,7 @@ options:
       - The registered name of the repository you want to install from.
       - Cannot be used when I(state=absent).
       - If ommitted, all repositories will be searched.
-      - To register a repository, use M(win_psrepository).
+      - To register a repository, use M(community.windows.win_psrepository).
     type: str
   scope:
     description:
@@ -80,9 +76,9 @@ options:
 requirements:
   - C(PowerShellGet) module v1.6.0+
 seealso:
-  - module: win_psrepository
-  - module: win_psrepository_info
-  - module: win_psmodule
+  - module: community.windows.win_psrepository
+  - module: community.windows.win_psrepository_info
+  - module: community.windows.win_psmodule
 notes:
   - Unlike PowerShell modules, scripts do not support side-by-side installations of multiple versions. Installing a new version will replace the existing one.
 author:
@@ -91,38 +87,38 @@ author:
 
 EXAMPLES = r'''
 - name: Install a script from PSGallery
-  win_psscript:
+  community.windows.win_psscript:
     name: Test-RPC
     repository: PSGallery
 
 - name: Find and install the latest version of a script from any repository
-  win_psscript:
+  community.windows.win_psscript:
     name: Get-WindowsAutoPilotInfo
     state: latest
 
 - name: Remove a script that isn't needed
-  win_psscript:
+  community.windows.win_psscript:
     name: Defrag-Partition
     state: absent
 
 - name: Install a specific version of a script for the current user
-  win_psscript:
+  community.windows.win_psscript:
     name: CleanOldFiles
     scope: current_user
     required_version: 3.10.2
 
 - name: Install a script below a certain version
-  win_psscript:
+  community.windows.win_psscript:
     name: New-FeatureEnable
     maximum_version: 2.99.99
 
 - name: Ensure a minimum version of a script is present
-  win_psscript:
+  community.windows.win_psscript:
     name: OldStandby
     minimum_version: 3.0.0
 
 - name: Install any available version that fits a specific range
-  win_psscript:
+  community.windows.win_psscript:
     name: FinickyScript
     minimum_version: 2.5.1
     maximum_version: 2.6.19

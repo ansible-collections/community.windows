@@ -4,10 +4,6 @@
 # Copyright: 2017, Dag Wieers (@dagwieers) <dag@wieers.com>
 # GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 
-ANSIBLE_METADATA = {'metadata_version': '1.1',
-                    'status': ['preview'],
-                    'supported_by': 'community'}
-
 DOCUMENTATION = r'''
 ---
 module: win_psexec
@@ -102,27 +98,27 @@ notes:
 - More information related to Microsoft PsExec is available from
   U(https://technet.microsoft.com/en-us/sysinternals/bb897553.aspx)
 seealso:
-- module: psexec
+- module: community.windows.psexec
 - module: raw
-- module: win_command
-- module: win_shell
+- module: ansible.windows.win_command
+- module: ansible.windows.win_shell
 author:
 - Dag Wieers (@dagwieers)
 '''
 
 EXAMPLES = r'''
 - name: Test the PsExec connection to the local system (target node) with your user
-  win_psexec:
+  community.windows.win_psexec:
     command: whoami.exe
 
 - name: Run regedit.exe locally (on target node) as SYSTEM and interactively
-  win_psexec:
+  community.windows.win_psexec:
     command: regedit.exe
     interactive: yes
     system: yes
 
 - name: Run the setup.exe installer on multiple servers using the Domain Administrator
-  win_psexec:
+  community.windows.win_psexec:
     command: E:\setup.exe /i /IACCEPTEULA
     hostnames:
     - remote_server1
@@ -132,7 +128,7 @@ EXAMPLES = r'''
     priority: high
 
 - name: Run PsExec from custom location C:\Program Files\sysinternals\
-  win_psexec:
+  community.windows.win_psexec:
     command: netsh advfirewall set allprofiles state off
     executable: C:\Program Files\sysinternals\psexec.exe
     hostnames: [ remote_server ]

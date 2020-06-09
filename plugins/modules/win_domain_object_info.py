@@ -4,10 +4,6 @@
 # Copyright: (c) 2020, Ansible Project
 # GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 
-ANSIBLE_METADATA = {'metadata_version': '1.1',
-                    'status': ['preview'],
-                    'supported_by': 'community'}
-
 DOCUMENTATION = r'''
 ---
 module: win_domain_object_info
@@ -95,24 +91,24 @@ author:
 
 EXAMPLES = r'''
 - name: Get all properties for the specified account using its DistinguishedName
-  win_domain_object_info:
+  community.windows.win_domain_object_info:
     identity: CN=Username,CN=Users,DC=domain,DC=com
     properties: '*'
 
 - name: Get the SID for all user accounts as a filter
-  win_domain_object_info:
+  community.windows.win_domain_object_info:
     filter: ObjectClass -eq 'user' -and objectCategory -eq 'Person'
     properties:
     - objectSid
 
 - name: Get the SID for all user accounts as a LDAP filter
-  win_domain_object_info:
+  community.windows.win_domain_object_info:
     ldap_filter: (&(objectClass=user)(objectCategory=Person))
     properties:
     - objectSid
 
 - name: Search all computer accounts in a specific path that were added after February 1st
-  win_domain_object_info:
+  community.windows.win_domain_object_info:
     filter: objectClass -eq 'computer' -and whenCreated -gt '20200201000000.0Z'
     properties: '*'
     search_scope: one_level

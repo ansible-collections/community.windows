@@ -4,13 +4,6 @@
 # Copyright: (c) 2015, Phil Schwartz <schwartzmx@gmail.com>
 # GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 
-# this is a windows documentation stub.  actual code lives in the .ps1
-# file of the same name
-
-ANSIBLE_METADATA = {'metadata_version': '1.1',
-                    'status': ['preview'],
-                    'supported_by': 'community'}
-
 DOCUMENTATION = r'''
 ---
 module: win_unzip
@@ -65,30 +58,26 @@ EXAMPLES = r'''
 # $ ansible -i hosts -m win_unzip -a "src=C:\LibraryToUnzip.zip dest=C:\Lib remove=yes" all
 
 - name: Unzip a bz2 (BZip) file
-  win_unzip:
+  community.windows.win_unzip:
     src: C:\Users\Phil\Logs.bz2
     dest: C:\Users\Phil\OldLogs
     creates: C:\Users\Phil\OldLogs
 
 - name: Unzip gz log
-  win_unzip:
+  community.windows.win_unzip:
     src: C:\Logs\application-error-logs.gz
     dest: C:\ExtractedLogs\application-error-logs
 
 # Unzip .zip file, recursively decompresses the contained .gz files and removes all unneeded compressed files after completion.
-- name: Unzip ApplicationLogs.zip and decompress all GZipped log files
-  hosts: all
-  gather_facts: no
-  tasks:
-    - name: Recursively decompress GZ files in ApplicationLogs.zip
-      win_unzip:
-        src: C:\Downloads\ApplicationLogs.zip
-        dest: C:\Application\Logs
-        recurse: yes
-        delete_archive: yes
+- name: Recursively decompress GZ files in ApplicationLogs.zip
+  community.windows.win_unzip:
+    src: C:\Downloads\ApplicationLogs.zip
+    dest: C:\Application\Logs
+    recurse: yes
+    delete_archive: yes
 
 - name: Install PSCX
-  win_psmodule:
+  community.windows.win_psmodule:
     name: Pscx
     state: present
 '''

@@ -3,13 +3,6 @@
 
 # GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 
-# this is a windows documentation stub.  actual code lives in the .ps1
-# file of the same name
-
-ANSIBLE_METADATA = {'metadata_version': '1.1',
-                    'status': ['preview'],
-                    'supported_by': 'community'}
-
 DOCUMENTATION = r'''
 ---
 module: win_domain_user
@@ -81,7 +74,7 @@ options:
     description:
       - C(always) will always update passwords.
       - C(on_create) will only set the password for newly created users.
-      - C(when_changed) will only set the password when changed (added in ansible 2.9).
+      - C(when_changed) will only set the password when changed.
     type: str
     choices: [ always, on_create, when_changed ]
     default: always
@@ -190,20 +183,20 @@ notes:
     2008R2 servers with AD and AD Web Services enabled, but this has not
     received the same degree of testing as Windows 2012R2.
 seealso:
-- module: win_domain
-- module: win_domain_controller
-- module: win_domain_computer
-- module: win_domain_group
-- module: win_domain_membership
-- module: win_user
-- module: win_user_profile
+- module: ansible.windows.win_domain
+- module: ansible.windows.win_domain_controller
+- module: community.windows.win_domain_computer
+- module: community.windows.win_domain_group
+- module: ansible.windows.win_domain_membership
+- module: ansible.windows.win_user
+- module: community.windows.win_user_profile
 author:
     - Nick Chandler (@nwchandler)
 '''
 
 EXAMPLES = r'''
 - name: Ensure user bob is present with address information
-  win_domain_user:
+  community.windows.win_domain_user:
     name: bob
     firstname: Bob
     surname: Smith
@@ -221,7 +214,7 @@ EXAMPLES = r'''
       telephoneNumber: 555-123456
 
 - name: Ensure user bob is created and use custom credentials to create the user
-  win_domain_user:
+  community.windows.win_domain_user:
     name: bob
     firstname: Bob
     surname: Smith
@@ -232,7 +225,7 @@ EXAMPLES = r'''
     domain_server: domain@DOMAIN.COM
 
 - name: Ensure user bob is present in OU ou=test,dc=domain,dc=local
-  win_domain_user:
+  community.windows.win_domain_user:
     name: bob
     password: B0bP4ssw0rd
     state: present
@@ -241,7 +234,7 @@ EXAMPLES = r'''
       - Domain Admins
 
 - name: Ensure user bob is absent
-  win_domain_user:
+  community.windows.win_domain_user:
     name: bob
     state: absent
 '''

@@ -4,16 +4,6 @@
 # Copyright: (c) 2019, Thomas Moore (@tmmruk)
 # GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 
-# this is a windows documentation stub.  actual code lives in the .ps1
-# file of the same name
-
-from __future__ import (absolute_import, division, print_function)
-__metaclass__ = type
-
-ANSIBLE_METADATA = {'metadata_version': '1.1',
-                    'status': ['preview'],
-                    'supported_by': 'community'}
-
 DOCUMENTATION = r'''
 ---
 module: win_netbios
@@ -48,26 +38,25 @@ notes:
 
 EXAMPLES = r'''
 - name: Disable NetBIOS system wide
-  win_netbios:
+  community.windows.win_netbios:
     state: disabled
 
 - name: Disable NetBIOS on Ethernet2
-  win_netbios:
+  community.windows.win_netbios:
     state: disabled
     adapter_names:
       - Ethernet2
 
 - name: Enable NetBIOS on Public and Backup adapters
-  win_netbios:
+  community.windows.win_netbios:
     state: enabled
     adapter_names:
       - Public
       - Backup
 
 - name: Set NetBIOS to system default on all adapters
-  win_netbios:
+  community.windows.win_netbios:
     state: default
-
 '''
 
 RETURN = r'''

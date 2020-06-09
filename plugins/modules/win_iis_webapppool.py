@@ -4,10 +4,6 @@
 # Copyright: (c) 2015, Henrik Wallström <henrik@wallstroms.nu>
 # GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 
-ANSIBLE_METADATA = {'metadata_version': '1.1',
-                    'status': ['preview'],
-                    'supported_by': 'community'}
-
 DOCUMENTATION = r'''
 ---
 module: win_iis_webapppool
@@ -53,10 +49,10 @@ options:
     choices: [ absent, present, restarted, started, stopped ]
     default: present
 seealso:
-- module: win_iis_virtualdirectory
-- module: win_iis_webapplication
-- module: win_iis_webbinding
-- module: win_iis_website
+- module: community.windows.win_iis_virtualdirectory
+- module: community.windows.win_iis_webapplication
+- module: community.windows.win_iis_webbinding
+- module: community.windows.win_iis_website
 author:
 - Henrik Wallström (@henrikwallstrom)
 - Jordan Borean (@jborean93)
@@ -64,34 +60,34 @@ author:
 
 EXAMPLES = r'''
 - name: Return information about an existing application pool
-  win_iis_webapppool:
+  community.windows.win_iis_webapppool:
     name: DefaultAppPool
     state: present
 
 - name: Create a new application pool in 'Started' state
-  win_iis_webapppool:
+  community.windows.win_iis_webapppool:
     name: AppPool
     state: started
 
 - name: Stop an application pool
-  win_iis_webapppool:
+  community.windows.win_iis_webapppool:
     name: AppPool
     state: stopped
 
 - name: Restart an application pool (non-idempotent)
-  win_iis_webapppool:
+  community.windows.win_iis_webapppool:
     name: AppPool
     state: restarted
 
 - name: Change application pool attributes using new dict style
-  win_iis_webapppool:
+  community.windows.win_iis_webapppool:
     name: AppPool
     attributes:
       managedRuntimeVersion: v4.0
       autoStart: no
 
 - name: Creates an application pool, sets attributes and starts it
-  win_iis_webapppool:
+  community.windows.win_iis_webapppool:
     name: AnotherAppPool
     state: started
     attributes:
@@ -101,7 +97,7 @@ EXAMPLES = r'''
 # In the below example we are setting attributes in child element processModel
 # https://www.iis.net/configreference/system.applicationhost/applicationpools/add/processmodel
 - name: Manage child element and set identity of application pool
-  win_iis_webapppool:
+  community.windows.win_iis_webapppool:
     name: IdentitiyAppPool
     state: started
     attributes:
@@ -112,7 +108,7 @@ EXAMPLES = r'''
       processModel.loadUserProfile: true
 
 - name: Manage a timespan attribute
-  win_iis_webapppool:
+  community.windows.win_iis_webapppool:
     name: TimespanAppPool
     state: started
     attributes:

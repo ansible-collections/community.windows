@@ -4,13 +4,6 @@
 # Copyright: (c) 2019, Hitachi ID Systems, Inc.
 # GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 
-# This is a windows documentation stub. The actual code lives in the .ps1
-# file of the same name.
-
-ANSIBLE_METADATA = {'metadata_version': '1.1',
-                    'status': ['preview'],
-                    'supported_by': 'community'}
-
 DOCUMENTATION = r'''
 ---
 module: win_dns_record
@@ -72,14 +65,14 @@ EXAMPLES = r'''
 # Demonstrate creating a matching A and PTR record.
 
 - name: Create database server record
-  win_dns_record:
+  community.windows.win_dns_record:
     name: "cgyl1404p.amer.example.com"
     type: "A"
     value: "10.1.1.1"
     zone: "amer.example.com"
 
 - name: Create matching PTR record
-  win_dns_record:
+  community.windows.win_dns_record:
     name: "1.1.1"
     type: "PTR"
     value: "db1"
@@ -88,14 +81,14 @@ EXAMPLES = r'''
 # Demonstrate replacing an A record with a CNAME
 
 - name: Remove static record
-  win_dns_record:
+  community.windows.win_dns_record:
     name: "db1"
     type: "A"
     state: absent
     zone: "amer.example.com"
 
 - name: Create database server alias
-  win_dns_record:
+  community.windows.win_dns_record:
     name: "db1"
     type: "CNAME"
     value: "cgyl1404p.amer.example.com"
@@ -104,7 +97,7 @@ EXAMPLES = r'''
 # Demonstrate creating multiple A records for the same name
 
 - name: Create multiple A record values for www
-  win_dns_record:
+  community.windows.win_dns_record:
     name: "www"
     type: "A"
     values:
@@ -117,7 +110,7 @@ EXAMPLES = r'''
 # for a pre-existing name
 
 - name: Update www host with new addresses
-  win_dns_record:
+  community.windows.win_dns_record:
     name: "www"
     type: "A"
     values:

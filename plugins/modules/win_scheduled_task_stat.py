@@ -4,13 +4,6 @@
 # Copyright: (c) 2017, Ansible Project
 # GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 
-# this is a windows documentation stub.  actual code lives in the .ps1
-# file of the same name
-
-ANSIBLE_METADATA = {'metadata_version': '1.1',
-                    'status': ['preview'],
-                    'supported_by': 'community'}
-
 DOCUMENTATION = r'''
 ---
 module: win_scheduled_task_stat
@@ -18,7 +11,7 @@ short_description: Get information about Windows Scheduled Tasks
 description:
 - Will return whether the folder and task exists.
 - Returns the names of tasks in the folder specified.
-- Use M(win_scheduled_task) to configure a scheduled task.
+- Use M(community.windows.win_scheduled_task) to configure a scheduled task.
 options:
   path:
     description: The folder path where the task lives.
@@ -30,24 +23,24 @@ options:
     - If C(name) is set and exists, will return information on the task itself.
     type: str
 seealso:
-- module: win_scheduled_task
+- module: community.windows.win_scheduled_task
 author:
 - Jordan Borean (@jborean93)
 '''
 
 EXAMPLES = r'''
 - name: Get information about a folder
-  win_scheduled_task_stat:
+  community.windows.win_scheduled_task_stat:
     path: \folder name
   register: task_folder_stat
 
 - name: Get information about a task in the root folder
-  win_scheduled_task_stat:
+  community.windows.win_scheduled_task_stat:
     name: task name
   register: task_stat
 
 - name: Get information about a task in a custom folder
-  win_scheduled_task_stat:
+  community.windows.win_scheduled_task_stat:
     path: \folder name
     name: task name
   register: task_stat

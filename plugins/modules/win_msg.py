@@ -4,13 +4,6 @@
 # Copyright: (c) 2017, Jon Hawkesworth (@jhawkesworth) <figs@unity.demon.co.uk>
 # GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 
-# this is a windows documentation stub.  actual code lives in the .ps1
-# file of the same name
-
-ANSIBLE_METADATA = {'metadata_version': '1.1',
-                    'status': ['preview'],
-                    'supported_by': 'community'}
-
 DOCUMENTATION = r'''
 ---
 module: win_msg
@@ -48,15 +41,15 @@ notes:
    - The module does not support sending to users listed in a file.
    - Setting wait to C(yes) can result in long run times on systems with many logged in users.
 seealso:
-- module: win_say
-- module: win_toast
+- module: community.windows.win_say
+- module: community.windows.win_toast
 author:
 - Jon Hawkesworth (@jhawkesworth)
 '''
 
 EXAMPLES = r'''
 - name: Warn logged in users of impending upgrade
-  win_msg:
+  community.windows.win_msg:
     display_seconds: 60
     msg: Automated upgrade about to start.  Please save your work and log off before {{ deployment_start_time }}
 '''

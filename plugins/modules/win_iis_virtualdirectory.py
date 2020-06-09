@@ -4,10 +4,6 @@
 # Copyright: (c) 2015, Henrik Wallström <henrik@wallstroms.nu>
 # GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 
-ANSIBLE_METADATA = {'metadata_version': '1.1',
-                    'status': ['preview'],
-                    'supported_by': 'community'}
-
 DOCUMENTATION = r'''
 ---
 module: win_iis_virtualdirectory
@@ -42,30 +38,30 @@ options:
       - The specified folder must already exist.
     type: str
 seealso:
-- module: win_iis_webapplication
-- module: win_iis_webapppool
-- module: win_iis_webbinding
-- module: win_iis_website
+- module: community.windows.win_iis_webapplication
+- module: community.windows.win_iis_webapppool
+- module: community.windows.win_iis_webbinding
+- module: community.windows.win_iis_website
 author:
 - Henrik Wallström (@henrikwallstrom)
 '''
 
 EXAMPLES = r'''
 - name: Create a virtual directory if it does not exist
-  win_iis_virtualdirectory:
+  community.windows.win_iis_virtualdirectory:
     name: somedirectory
     site: somesite
     state: present
     physical_path: C:\virtualdirectory\some
 
 - name: Remove a virtual directory if it exists
-  win_iis_virtualdirectory:
+  community.windows.win_iis_virtualdirectory:
     name: somedirectory
     site: somesite
     state: absent
 
 - name: Create a virtual directory on an application if it does not exist
-  win_iis_virtualdirectory:
+  community.windows.win_iis_virtualdirectory:
     name: somedirectory
     site: somesite
     application: someapp

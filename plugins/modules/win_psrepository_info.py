@@ -4,10 +4,6 @@
 # Copyright: (c) 2020, Brian Scholer <@briantist>
 # GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 
-ANSIBLE_METADATA = {'metadata_version': '1.1',
-                    'status': ['preview'],
-                    'supported_by': 'community'}
-
 DOCUMENTATION = r'''
 ---
 module: win_psrepository_info
@@ -25,27 +21,27 @@ options:
 requirements:
   - C(PowerShellGet) module
 seealso:
-  - module: win_psrepository
+  - module: community.windows.win_psrepository
 author:
   - Brian Scholer (@briantist)
 '''
 
 EXAMPLES = r'''
 - name: Get info for a single repository
-  win_psrepository_info:
+  community.windows.win_psrepository_info:
     name: PSGallery
   register: repo_info
 
 - name: Find all repositories that start with 'MyCompany'
-  win_psrepository_info:
+  community.windows.win_psrepository_info:
     name: MyCompany*
 
 - name: Get info for all repositories
-  win_psrepository_info:
+  community.windows.win_psrepository_info:
   register: repo_info
 
 - name: Remove all repositories that don't have a publish_location set
-  win_psrepository:
+  community.windows.win_psrepository:
     name: "{{ item }}"
     state: absent
   loop: "{{ repo_info.repositories | rejectattr('publish_location', 'none') | list }}"

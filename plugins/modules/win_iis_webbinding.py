@@ -5,10 +5,6 @@
 # Copyright: (c) 2017, Henrik Wallström <henrik@wallstroms.nu>
 # GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 
-ANSIBLE_METADATA = {'metadata_version': '1.1',
-                    'status': ['preview'],
-                    'supported_by': 'community'}
-
 DOCUMENTATION = r'''
 ---
 module: win_iis_webbinding
@@ -65,10 +61,10 @@ options:
       - Set to C(1) to enable SNI.
     type: str
 seealso:
-- module: win_iis_virtualdirectory
-- module: win_iis_webapplication
-- module: win_iis_webapppool
-- module: win_iis_website
+- module: community.windows.win_iis_virtualdirectory
+- module: community.windows.win_iis_webapplication
+- module: community.windows.win_iis_webapppool
+- module: community.windows.win_iis_website
 author:
   - Noah Sparks (@nwsparks)
   - Henrik Wallström (@henrikwallstrom)
@@ -76,26 +72,26 @@ author:
 
 EXAMPLES = r'''
 - name: Add a HTTP binding on port 9090
-  win_iis_webbinding:
+  community.windows.win_iis_webbinding:
     name: Default Web Site
     port: 9090
     state: present
 
 - name: Remove the HTTP binding on port 9090
-  win_iis_webbinding:
+  community.windows.win_iis_webbinding:
     name: Default Web Site
     port: 9090
     state: absent
 
 - name: Remove the default http binding
-  win_iis_webbinding:
+  community.windows.win_iis_webbinding:
     name: Default Web Site
     port: 80
     ip: '*'
     state: absent
 
 - name: Add a HTTPS binding
-  win_iis_webbinding:
+  community.windows.win_iis_webbinding:
     name: Default Web Site
     protocol: https
     port: 443
@@ -104,7 +100,7 @@ EXAMPLES = r'''
     state: present
 
 - name: Add a HTTPS binding with host header and SNI enabled
-  win_iis_webbinding:
+  community.windows.win_iis_webbinding:
     name: Default Web Site
     protocol: https
     port: 443
@@ -123,7 +119,6 @@ website_state:
   returned: always
   type: str
   sample: "Started"
-  version_added: "2.5"
 operation_type:
   description:
     - The type of operation performed
@@ -131,7 +126,6 @@ operation_type:
   returned: on success
   type: str
   sample: "removed"
-  version_added: "2.5"
 binding_info:
   description:
     - Information on the binding being manipulated
@@ -148,5 +142,4 @@ binding_info:
       "protocol": "https",
       "sslFlags": "not supported"
     }
-  version_added: "2.5"
 '''

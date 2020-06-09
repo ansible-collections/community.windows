@@ -4,10 +4,6 @@
 # Copyright: (c) 2017, Red Hat, Inc.
 # GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 
-ANSIBLE_METADATA = {'metadata_version': '1.1',
-                    'status': ['preview'],
-                    'supported_by': 'core'}
-
 DOCUMENTATION = r'''
 module: win_disk_image
 short_description: Manage ISO/VHD/VHDX mounts on Windows hosts
@@ -35,7 +31,7 @@ author:
 EXAMPLES = r'''
 # Run installer from mounted ISO, then unmount
 - name: Ensure an ISO is mounted
-  win_disk_image:
+  community.windows.win_disk_image:
     image_path: C:\install.iso
     state: present
   register: disk_image_out
@@ -47,7 +43,7 @@ EXAMPLES = r'''
     state: present
 
 - name: Unmount ISO
-  win_disk_image:
+  community.windows.win_disk_image:
     image_path: C:\install.iso
     state: absent
 '''

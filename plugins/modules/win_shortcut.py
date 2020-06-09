@@ -4,10 +4,6 @@
 # Copyright: (c) 2016, Dag Wieers (@dagwieers) <dag@wieers.com>
 # GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 
-ANSIBLE_METADATA = {'metadata_version': '1.1',
-                    'status': ['preview'],
-                    'supported_by': 'community'}
-
 DOCUMENTATION = r'''
 ---
 module: win_shortcut
@@ -35,7 +31,6 @@ options:
   arguments:
     description:
     - Additional arguments for the executable defined in C(src).
-    - Was originally just C(args) but renamed in Ansible 2.8.
     type: str
     aliases: [ args ]
   directory:
@@ -76,20 +71,20 @@ notes:
 - 'The following options can include Windows environment variables: C(dest), C(args), C(description), C(dest), C(directory), C(icon) C(src)'
 - 'Windows has two types of shortcuts: Application and URL shortcuts. URL shortcuts only consists of C(dest) and C(src)'
 seealso:
-- module: win_file
+- module: ansible.windows.win_file
 author:
 - Dag Wieers (@dagwieers)
 '''
 
 EXAMPLES = r'''
 - name: Create an application shortcut on the desktop
-  win_shortcut:
+  community.windows.win_shortcut:
     src: C:\Program Files\Mozilla Firefox\Firefox.exe
     dest: C:\Users\Public\Desktop\Mozilla Firefox.lnk
     icon: C:\Program Files\Mozilla Firefox\Firefox.exe,0
 
 - name: Create the same shortcut using environment variables
-  win_shortcut:
+  community.windows.win_shortcut:
     description: The Mozilla Firefox web browser
     src: '%ProgramFiles%\Mozilla Firefox\Firefox.exe'
     dest: '%Public%\Desktop\Mozilla Firefox.lnk'
@@ -98,12 +93,12 @@ EXAMPLES = r'''
     hotkey: Ctrl+Alt+F
 
 - name: Create an application shortcut for an executable in PATH to your desktop
-  win_shortcut:
+  community.windows.win_shortcut:
     src: cmd.exe
     dest: Desktop\Command prompt.lnk
 
 - name: Create an application shortcut for the Ansible website
-  win_shortcut:
+  community.windows.win_shortcut:
     src: '%ProgramFiles%\Google\Chrome\Application\chrome.exe'
     dest: '%UserProfile%\Desktop\Ansible website.lnk'
     arguments: --new-window https://ansible.com/
@@ -112,7 +107,7 @@ EXAMPLES = r'''
     hotkey: Ctrl+Alt+A
 
 - name: Create a URL shortcut for the Ansible website
-  win_shortcut:
+  community.windows.win_shortcut:
     src: https://ansible.com/
     dest: '%Public%\Desktop\Ansible website.url'
 '''

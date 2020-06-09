@@ -5,13 +5,6 @@
 # Copyright: (c) 2017, Daniele Lazzari <lazzari@mailup.com>
 # GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 
-# this is a windows documentation stub.  actual code lives in the .ps1
-# file of the same name
-
-ANSIBLE_METADATA = {'metadata_version': '1.1',
-                    'status': ['preview'],
-                    'supported_by': 'community'}
-
 DOCUMENTATION = r'''
 ---
 module: win_psmodule
@@ -28,7 +21,7 @@ options:
     description:
       - If C(present) a new module is installed.
       - If C(absent) a module is removed.
-      - If C(latest) a module is updated to the newest version. This option was added in version 2.8.
+      - If C(latest) a module is updated to the newest version.
     type: str
     choices: [ absent, latest, present ]
     default: present
@@ -70,7 +63,7 @@ options:
     description:
       - URL of the custom repository to register.
       - This option is deprecated and will be removed in Ansible 2.12. Use the
-        M(win_psrepository) module instead.
+        M(community.windows.win_psrepository) module instead.
     type: str
 notes:
   - PowerShell modules needed
@@ -81,7 +74,7 @@ notes:
   - On PowerShell 5.x required modules and a package provider will be updated under the first run of the win_psmodule module.
   - On PowerShell 3.x and 4.x you have to install them before using the win_psmodule.
 seealso:
-- module: win_psrepository
+- module: community.windows.win_psrepository
 author:
 - Wojciech Sciesinski (@it-praktyk)
 - Daniele Lazzari (@dlazz)
@@ -90,41 +83,41 @@ author:
 EXAMPLES = r'''
 ---
 - name: Add a PowerShell module
-  win_psmodule:
+  community.windows.win_psmodule:
     name: PowerShellModule
     state: present
 
 - name: Add an exact version of PowerShell module
-  win_psmodule:
+  community.windows.win_psmodule:
     name: PowerShellModule
     required_version: "4.0.2"
     state: present
 
 - name: Install or update an existing PowerShell module to the newest version
-  win_psmodule:
+  community.windows.win_psmodule:
     name: PowerShellModule
     state: latest
 
 - name: Install newer version of built-in Windows module
-  win_psmodule:
+  community.windows.win_psmodule:
     name: Pester
     skip_publisher_check: yes
     state: present
 
 - name: Add a PowerShell module and register a repository
-  win_psmodule:
+  community.windows.win_psmodule:
     name: MyCustomModule
     repository: MyRepository
     state: present
 
 - name: Add a PowerShell module from a specific repository
-  win_psmodule:
+  community.windows.win_psmodule:
     name: PowerShellModule
     repository: MyRepository
     state: present
 
 - name: Remove a PowerShell module
-  win_psmodule:
+  community.windows.win_psmodule:
     name: PowerShellModule
     state: absent
 '''

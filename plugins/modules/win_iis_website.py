@@ -4,10 +4,6 @@
 # Copyright: (c) 2015, Henrik Wallström <henrik@wallstroms.nu>
 # GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 
-ANSIBLE_METADATA = {'metadata_version': '1.1',
-                    'status': ['preview'],
-                    'supported_by': 'community'}
-
 DOCUMENTATION = r'''
 ---
 module: win_iis_website
@@ -60,10 +56,10 @@ options:
       - Custom site Parameters from string where properties are separated by a pipe and property name/values by colon Ex. "foo:1|bar:2"
     type: str
 seealso:
-- module: win_iis_virtualdirectory
-- module: win_iis_webapplication
-- module: win_iis_webapppool
-- module: win_iis_webbinding
+- module: community.windows.win_iis_virtualdirectory
+- module: community.windows.win_iis_webapplication
+- module: community.windows.win_iis_webapppool
+- module: community.windows.win_iis_webbinding
 author:
 - Henrik Wallström (@henrikwallstrom)
 '''
@@ -73,7 +69,7 @@ EXAMPLES = r'''
 # Start a website
 
 - name: Acme IIS site
-  win_iis_website:
+  community.windows.win_iis_website:
     name: Acme
     state: started
     port: 80
@@ -86,14 +82,14 @@ EXAMPLES = r'''
 
 # Remove Default Web Site and the standard port 80 binding
 - name: Remove Default Web Site
-  win_iis_website:
+  community.windows.win_iis_website:
     name: "Default Web Site"
     state: absent
 
 # Some commandline examples:
 
 # This return information about an existing host
-# $ ansible -i vagrant-inventory -m win_iis_website -a "name='Default Web Site'" window
+# $ ansible -i vagrant-inventory -m community.windows.win_iis_website -a "name='Default Web Site'" window
 # host | success >> {
 #     "changed": false,
 #     "site": {
@@ -109,11 +105,11 @@ EXAMPLES = r'''
 # }
 
 # This stops an existing site.
-# $ ansible -i hosts -m win_iis_website -a "name='Default Web Site' state=stopped" host
+# $ ansible -i hosts -m community.windows.win_iis_website -a "name='Default Web Site' state=stopped" host
 
 # This creates a new site.
-# $ ansible -i hosts -m win_iis_website -a "name=acme physical_path=C:\\sites\\acme" host
+# $ ansible -i hosts -m community.windows.win_iis_website -a "name=acme physical_path=C:\\sites\\acme" host
 
 # Change logfile.
-# $ ansible -i hosts -m win_iis_website -a "name=acme physical_path=C:\\sites\\acme" host
+# $ ansible -i hosts -m community.windows.win_iis_website -a "name=acme physical_path=C:\\sites\\acme" host
 '''
