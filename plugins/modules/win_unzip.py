@@ -49,6 +49,10 @@ options:
     description:
       - If this file or directory exists the specified src will not be extracted.
     type: path
+  password:
+    description:
+      - If a zip file is encrypted with password.
+      - Passing a value to a password parameter requires the PSCX module to be installed.
 notes:
 - This module is not really idempotent, it will extract the archive every time, and report a change.
 - For extracting any compression types other than .zip, the PowerShellCommunityExtensions (PSCX) Module is required.  This module (in conjunction with PSCX)
@@ -91,6 +95,13 @@ EXAMPLES = r'''
   win_psmodule:
     name: Pscx
     state: present
+
+- name: Unzip .7z file which is password encrypted
+  community.windows.win_unzip:
+    src: C:\Downloads\ApplicationLogs.7z
+    dest: C:\Application\Logs
+    password: abcd
+    delete_archive: yes
 '''
 
 RETURN = r'''
