@@ -103,7 +103,7 @@ If (-Not (Test-Path -LiteralPath $dest -PathType Container)){
     }
 }
 
-If ($ext -eq ".zip" -And $recurse -eq $false) {
+If ($ext -eq ".zip" -And $recurse -eq $false -And -Not $password) {
     # TODO: PS v5 supports zip extraction, use that if available
     $use_legacy = $false
     try {
@@ -146,7 +146,6 @@ If ($ext -eq ".zip" -And $recurse -eq $false) {
     }
 
     $expand_params = @{
-        Path = $src
         OutputPath = $dest
         WhatIf = $check_mode
     }
@@ -154,7 +153,7 @@ If ($ext -eq ".zip" -And $recurse -eq $false) {
         $expand_params.Password = ConvertTo-SecureString -String $password -AsPlainText -Force
     }
     Try {
-        Expand-Archive @expand_params
+        Expand-Archive -Path $src @expand_params
     }
     Catch {
         Fail-Json -obj $result -message "Error expanding '$src' to '$dest'! Msg: $($_.Exception.Message)"
@@ -163,7 +162,7 @@ If ($ext -eq ".zip" -And $recurse -eq $false) {
     If ($recurse) {
         Get-ChildItem -LiteralPath $dest -recurse | Where-Object {$pcx_extensions -contains $_.extension} | ForEach-Object {
             Try {
-                Expand-Archive $_.FullName -OutputPath $dest -Force -WhatIf:$check_mode
+                Expand-Archive -Path $_.FullName -Force @expand_params
             } Catch {
                 Fail-Json -obj $result -message "Error recursively expanding '$src' to '$dest'! Msg: $($_.Exception.Message)"
             }
