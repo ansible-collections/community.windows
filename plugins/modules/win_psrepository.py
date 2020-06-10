@@ -66,7 +66,8 @@ notes:
   - You can not use C(win_psrepository) to re-register (add) removed PSGallery, use the command C(Register-PSRepository -Default) instead.
   - When registering or setting I(source_location), PowerShellGet will transform the location according to internal rules, such as following HTTP/S redirects.
   - This can result in a C(CHANGED) status on each run as the values will never match and will be "reset" each time.
-  - To work around that, find the true destination value with M(community.windows.win_psrepository_info) or C(Get-PSRepository) and update the playbook to match.
+  - To work around that, find the true destination value with M(community.windows.win_psrepository_info) or C(Get-PSRepository) and update the playbook to
+    match.
   - When updating an existing repository, all options except I(name) are optional. Only supplied options will be updated. Use I(force=True) to exactly match.
   - I(script_location), I(publish_location), and I(script_publish_location) are optional but once set can only be cleared with I(force=True).
   - Using I(force=True) will unregister and re-register the repository if there are any changes, so that it exactly matches the options specified.

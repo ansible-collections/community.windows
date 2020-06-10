@@ -350,7 +350,7 @@ except ImportError:
 def remove_artifacts(module, client):
     try:
         client.remove_service()
-except (SMBException, PypsexecException) as exc:
+    except (SMBException, PypsexecException) as exc:
         module.warn("Failed to cleanup PAExec service and executable: %s"
                     % to_text(exc))
 
@@ -509,4 +509,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-
