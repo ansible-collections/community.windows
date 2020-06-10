@@ -8,7 +8,7 @@
 #AnsibleRequires -CSharpUtil Ansible.Basic
 
 $spec = @{
-  options = @{
+  options             = @{
     architecture  = @{ type = "str"; choices = "32bit", "64bit"; aliases = @(, "arch") }
     independent   = @{type = "bool"; default = $false }
     global        = @{ type = "bool"; default = $false }
@@ -18,6 +18,7 @@ $spec = @{
     skip_checksum = @{type = "bool"; default = $false }
     state         = @{ type = "str"; default = "present"; choices = "present", "absent" }
   }
+  supports_check_mode = $true
 }
 
 $module = [Ansible.Basic.AnsibleModule]::Create($args, $spec)
@@ -153,11 +154,14 @@ function Install-ScoopPackage {
   $arguments.AddRange($common_args)
 
   $command = Argv-ToString -arguments $arguments
-  $res = Run-Command -Command $command
-  $module.Result.rc = $res.rc
+  
+  if (-not $module.CheckMode) {
+    $res = Run-Command -Command $command
+    $module.Result.rc = $res.rc
 
-  if ($module.Verbosity -gt 1) {
-    $module.Result.stdout = $res.stdout
+    if ($module.Verbosity -gt 1) {
+      $module.Result.stdout = $res.stdout
+    }
   }
   $module.Result.changed = $true
 }
@@ -188,13 +192,19 @@ function Uninstall-ScoopPackage {
   $arguments.AddRange($common_args)
 
   $command = Argv-ToString -arguments $arguments
-  $res = Run-Command -Command $command
-  $module.Result.rc = $res.rc
+  
+  if (-not $module.CheckMode) {
+    $res = Run-Command -Command $command
+    $module.Result.rc = $res.rc
 
-  if ($module.Verbosity -gt 1) {
-    $module.Result.stdout = $res.stdout
+    if ($module.Verbosity -gt 1) {
+      $module.Result.stdout = $res.stdout
+    }
+    if (-not ($res.stdout -match "ERROR '(.*?)' isn't installed.")) {
+      $module.Result.changed = $true
+    }
   }
-  if (-not ($res.stdout -match "ERROR '(.*?)' isn't installed.")) {
+  else {
     $module.Result.changed = $true
   }
 }
@@ -215,11 +225,10 @@ if ($state -in @("present")) {
       $package
     }
   }
-  }
+}
 
-  if ($missing_packages) {
-    Install-ScoopPackage -scoop_path $scoop_path -packages $missing_packages
-  }
+if ($missing_packages) {
+  Install-ScoopPackage -scoop_path $scoop_path -packages $missing_packages
 }
 
 $module.ExitJson()
