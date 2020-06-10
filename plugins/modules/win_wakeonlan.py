@@ -4,10 +4,6 @@
 # Copyright: (c) 2017, Dag Wieers <dag@wieers.com>
 # GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 
-ANSIBLE_METADATA = {'metadata_version': '1.1',
-                    'status': ['preview'],
-                    'supported_by': 'community'}
-
 DOCUMENTATION = r'''
 ---
 module: win_wakeonlan
@@ -45,12 +41,12 @@ author:
 
 EXAMPLES = r'''
 - name: Send a magic Wake-on-LAN packet to 00:00:5E:00:53:66
-  win_wakeonlan:
+  community.windows.win_wakeonlan:
     mac: 00:00:5E:00:53:66
     broadcast: 192.0.2.23
 
 - name: Send a magic Wake-On-LAN packet on port 9 to 00-00-5E-00-53-66
-  win_wakeonlan:
+  community.windows.win_wakeonlan:
     mac: 00-00-5E-00-53-66
     port: 9
   delegate_to: remote_system

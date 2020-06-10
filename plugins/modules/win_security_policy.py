@@ -3,13 +3,6 @@
 
 # GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 
-# this is a windows documentation stub, actual code lives in the .ps1
-# file of the same name
-
-ANSIBLE_METADATA = {'metadata_version': '1.1',
-                    'status': ['preview'],
-                    'supported_by': 'community'}
-
 DOCUMENTATION = r'''
 ---
 module: win_security_policy
@@ -26,7 +19,7 @@ options:
       'Event Log', 'Restricted Groups', 'System Services', 'Registry' and
       'File System'
     - If wanting to edit the C(Privilege Rights) section, use the
-      M(win_user_right) module instead.
+      M(ansible.windows.win_user_right) module instead.
     type: str
     required: yes
   key:
@@ -50,34 +43,34 @@ notes:
   it if the value differs.
 - You can also run C(SecEdit.exe /export /cfg C:\temp\output.ini) to view the
   current policies set on your system.
-- When assigning user rights, use the M(win_user_right) module instead.
+- When assigning user rights, use the M(ansible.windows.win_user_right) module instead.
 seealso:
-- module: win_user_right
+- module: ansible.windows.win_user_right
 author:
 - Jordan Borean (@jborean93)
 '''
 
 EXAMPLES = r'''
 - name: Change the guest account name
-  win_security_policy:
+  community.windows.win_security_policy:
     section: System Access
     key: NewGuestName
     value: Guest Account
 
 - name: Set the maximum password age
-  win_security_policy:
+  community.windows.win_security_policy:
     section: System Access
     key: MaximumPasswordAge
     value: 15
 
 - name: Do not store passwords using reversible encryption
-  win_security_policy:
+  community.windows.win_security_policy:
     section: System Access
     key: ClearTextPassword
     value: 0
 
 - name: Enable system events
-  win_security_policy:
+  community.windows.win_security_policy:
     section: Event Audit
     key: AuditSystemEvents
     value: 1

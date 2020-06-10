@@ -5,10 +5,6 @@
 # SPDX-License-Identifier: GPL-3.0-only
 # GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 
-ANSIBLE_METADATA = {'status': ['preview'],
-                    'supported_by': 'community',
-                    'metadata_version': '1.1'}
-
 DOCUMENTATION = r'''
 ---
 module: win_dhcp_lease
@@ -94,7 +90,7 @@ options:
 
 EXAMPLES = r'''
 - name: Ensure DHCP reservation exists
-  win_dhcp_lease:
+  community.windows.win_dhcp_lease:
     type: reservation
     ip: 192.168.100.205
     scope_id: 192.168.100.0
@@ -103,23 +99,23 @@ EXAMPLES = r'''
     description: Testing Server
 
 - name: Ensure DHCP lease or reservation does not exist
-  win_dhcp_lease:
+  community.windows.win_dhcp_lease:
     mac: 00:B1:8A:D1:5A:1F
     state: absent
 
 - name: Ensure DHCP lease or reservation does not exist
-  win_dhcp_lease:
+  community.windows.win_dhcp_lease:
     ip: 192.168.100.205
     state: absent
 
 - name: Convert DHCP lease to reservation & update description
-  win_dhcp_lease:
+  community.windows.win_dhcp_lease:
     type: reservation
     ip: 192.168.100.205
     description: Testing Server
 
 - name: Convert DHCP reservation to lease
-  win_dhcp_lease:
+  community.windows.win_dhcp_lease:
     type: lease
     ip: 192.168.100.205
 '''

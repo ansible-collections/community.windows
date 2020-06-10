@@ -4,17 +4,13 @@
 # Copyright: (c) 2017, Ansible Project
 # GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 
-ANSIBLE_METADATA = {'metadata_version': '1.1',
-                    'status': ['preview'],
-                    'supported_by': 'community'}
-
 DOCUMENTATION = r'''
 ---
 module: win_domain_group
 short_description: Creates, modifies or removes domain groups
 description:
 - Creates, modifies or removes groups in Active Directory.
-- For local groups, use the M(win_group) module instead.
+- For local groups, use the M(ansible.windows.win_group) module instead.
 options:
   attributes:
     description:
@@ -106,37 +102,37 @@ options:
 notes:
 - This must be run on a host that has the ActiveDirectory powershell module installed.
 seealso:
-- module: win_domain
-- module: win_domain_controller
-- module: win_domain_computer
-- module: win_domain_membership
-- module: win_domain_user
-- module: win_group
-- module: win_group_membership
+- module: ansible.windows.win_domain
+- module: ansible.windows.win_domain_controller
+- module: community.windows.win_domain_computer
+- module: ansible.windows.win_domain_membership
+- module: community.windows.win_domain_user
+- module: ansible.windows.win_group
+- module: ansible.windows.win_group_membership
 author:
 - Jordan Borean (@jborean93)
 '''
 
 EXAMPLES = r'''
 - name: Ensure the group Cow exists using sAMAccountName
-  win_domain_group:
+  community.windows.win_domain_group:
     name: Cow
     scope: global
     path: OU=groups,DC=ansible,DC=local
 
 - name: Ensure the group Cow doesn't exist using the Distinguished Name
-  win_domain_group:
+  community.windows.win_domain_group:
     name: CN=Cow,OU=groups,DC=ansible,DC=local
     state: absent
 
 - name: Delete group ignoring the protection flag
-  win_domain_group:
+  community.windows.win_domain_group:
     name: Cow
     state: absent
     ignore_protection: yes
 
 - name: Create group with delete protection enabled and custom attributes
-  win_domain_group:
+  community.windows.win_domain_group:
     name: Ansible Users
     scope: domainlocal
     category: security
@@ -146,19 +142,19 @@ EXAMPLES = r'''
     ignore_protection: yes
 
 - name: Change the OU of a group using the SID and ignore the protection flag
-  win_domain_group:
+  community.windows.win_domain_group:
     name: S-1-5-21-2171456218-3732823212-122182344-1189
     scope: global
     organizational_unit: OU=groups,DC=ansible,DC=local
     ignore_protection: yes
 
 - name: Add managed_by user
-  win_domain_group:
+  community.windows.win_domain_group:
     name: Group Name Here
     managed_by: Domain Admins
 
 - name: Add group and specify the AD domain services to use for the create
-  win_domain_group:
+  community.windows.win_domain_group:
     name: Test Group
     domain_username: user@CORP.ANSIBLE.COM
     domain_password: Password01!

@@ -4,13 +4,6 @@
 # Copyright: (c) 2015, Heyo
 # GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 
-# this is a windows documentation stub.  actual code lives in the .ps1
-# file of the same name
-
-ANSIBLE_METADATA = {'metadata_version': '1.1',
-                    'status': ['preview'],
-                    'supported_by': 'community'}
-
 DOCUMENTATION = r'''
 ---
 module: win_nssm
@@ -19,7 +12,7 @@ description:
     - Install a Windows service using the NSSM wrapper.
     - NSSM is a service helper which doesn't suck. See U(https://nssm.cc/) for more information.
 requirements:
-    - "nssm >= 2.24.0 # (install via M(win_chocolatey)) C(win_chocolatey: name=nssm)"
+    - "nssm >= 2.24.0 # (install via M(chocolatey.chocolatey.win_chocolatey)) C(win_chocolatey: name=nssm)"
 options:
   name:
     description:
@@ -30,7 +23,7 @@ options:
     description:
       - State of the service on the system.
       - Values C(started), C(stopped), and C(restarted) are deprecated since v2.8,
-        please use the M(win_service) module instead to start, stop or restart the service.
+        please use the M(ansible.windows.win_service) module instead to start, stop or restart the service.
     type: str
     choices: [ absent, present, started, stopped, restarted ]
     default: present
@@ -82,25 +75,25 @@ options:
   dependencies:
     description:
       - Service dependencies that has to be started to trigger startup, separated by comma.
-      - DEPRECATED since v2.8, please use the M(win_service) module instead.
+      - DEPRECATED since v2.8, please use the M(ansible.windows.win_service) module instead.
     type: list
   user:
     description:
       - User to be used for service startup.
-      - DEPRECATED since v2.8, please use the M(win_service) module instead.
+      - DEPRECATED since v2.8, please use the M(ansible.windows.win_service) module instead.
     type: str
   password:
     description:
       - Password to be used for service startup.
-      - DEPRECATED since v2.8, please use the M(win_service) module instead.
+      - DEPRECATED since v2.8, please use the M(ansible.windows.win_service) module instead.
     type: str
   start_mode:
     description:
       - If C(auto) is selected, the service will start at bootup.
-      - C(delayed) causes a delayed but automatic start after boot (added in version 2.5).
+      - C(delayed) causes a delayed but automatic start after boot.
       - C(manual) means that the service will start only when another service needs it.
       - C(disabled) means that the service will stay off, regardless if it is needed or not.
-      - DEPRECATED since v2.8, please use the M(win_service) module instead.
+      - DEPRECATED since v2.8, please use the M(ansible.windows.win_service) module instead.
     type: str
     choices: [ auto, delayed, disabled, manual ]
     default: auto
@@ -146,10 +139,10 @@ options:
       - 14
       - 15
 seealso:
-  - module: win_service
+  - module: ansible.windows.win_service
 notes:
   - The service will NOT be started after its creation when C(state=present).
-  - Once the service is created, you can use the M(win_service) module to start it or configure
+  - Once the service is created, you can use the M(ansible.windowswin_service) module to start it or configure
     some additionals properties, such as its startup type, dependencies, service account, and so on.
 author:
   - Adam Keech (@smadam813)
@@ -162,13 +155,13 @@ author:
 
 EXAMPLES = r'''
 - name: Install the foo service
-  win_nssm:
+  community.windows.win_nssm:
     name: foo
     application: C:\windows\foo.exe
 
 # This will yield the following command: C:\windows\foo.exe bar "true"
 - name: Install the Consul service with a list of parameters
-  win_nssm:
+  community.windows.win_nssm:
     name: Consul
     application: C:\consul\consul.exe
     arguments:
@@ -177,7 +170,7 @@ EXAMPLES = r'''
 
 # This is strictly equivalent to the previous example
 - name: Install the Consul service with an arbitrary string of parameters
-  win_nssm:
+  community.windows.win_nssm:
     name: Consul
     application: C:\consul\consul.exe
     arguments: agent -config-dir=C:\consul\config
@@ -185,7 +178,7 @@ EXAMPLES = r'''
 
 # Install the foo service, and then configure and start it with win_service
 - name: Install the foo service, redirecting stdout and stderr to the same file
-  win_nssm:
+  community.windows.win_nssm:
     name: foo
     application: C:\windows\foo.exe
     stdout_file: C:\windows\foo.log
@@ -201,7 +194,7 @@ EXAMPLES = r'''
     state: started
 
 - name: Remove the foo service
-  win_nssm:
+  community.windows.win_nssm:
     name: foo
     state: absent
 '''

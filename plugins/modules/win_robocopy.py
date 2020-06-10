@@ -4,13 +4,6 @@
 # Copyright: (c) 2015, Corwin Brown <blakfeld@gmail.com>
 # GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 
-# this is a windows documentation stub.  actual code lives in the .ps1
-# file of the same name
-
-ANSIBLE_METADATA = {'metadata_version': '1.1',
-                    'status': ['preview'],
-                    'supported_by': 'community'}
-
 DOCUMENTATION = r'''
 ---
 module: win_robocopy
@@ -54,44 +47,44 @@ notes:
 - This module does not currently support all Robocopy flags.
 seealso:
 - module: ansible.posix.synchronize
-- module: win_copy
+- module: ansible.windows.win_copy
 author:
 - Corwin Brown (@blakfeld)
 '''
 
 EXAMPLES = r'''
 - name: Sync the contents of one directory to another
-  win_robocopy:
+  community.windows.win_robocopy:
     src: C:\DirectoryOne
     dest: C:\DirectoryTwo
 
 - name: Sync the contents of one directory to another, including subdirectories
-  win_robocopy:
+  community.windows.win_robocopy:
     src: C:\DirectoryOne
     dest: C:\DirectoryTwo
     recurse: yes
 
 - name: Sync the contents of one directory to another, and remove any files/directories found in destination that do not exist in the source
-  win_robocopy:
+  community.windows.win_robocopy:
     src: C:\DirectoryOne
     dest: C:\DirectoryTwo
     purge: yes
 
 - name: Sync content in recursive mode, removing any files/directories found in destination that do not exist in the source
-  win_robocopy:
+  community.windows.win_robocopy:
     src: C:\DirectoryOne
     dest: C:\DirectoryTwo
     recurse: yes
     purge: yes
 
 - name: Sync two directories in recursive and purging mode, specifying additional special flags
-  win_robocopy:
+  community.windows.win_robocopy:
     src: C:\DirectoryOne
     dest: C:\DirectoryTwo
     flags: /E /PURGE /XD SOME_DIR /XF SOME_FILE /MT:32
 
 - name: Sync one file from a remote UNC path in recursive and purging mode, specifying additional special flags
-  win_robocopy:
+  community.windows.win_robocopy:
     src: \\Server1\Directory One
     dest: C:\DirectoryTwo
     flags: file.zip /E /PURGE /XD SOME_DIR /XF SOME_FILE /MT:32

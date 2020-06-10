@@ -4,13 +4,6 @@
 # Copyright: (c) 2016, Ansible, inc
 # GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 
-# this is a windows documentation stub.  actual code lives in the .ps1
-# file of the same name
-
-ANSIBLE_METADATA = {'metadata_version': '1.1',
-                    'status': ['preview'],
-                    'supported_by': 'community'}
-
 DOCUMENTATION = r'''
 ---
 module: win_certificate_info
@@ -39,25 +32,25 @@ options:
     choices: [ CurrentUser, LocalMachine ]
     default: LocalMachine
 seealso:
-- module: win_certificate_store
+- module: ansible.windows.win_certificate_store
 author:
 - Micah Hunsberger (@mhunsber)
 '''
 
 EXAMPLES = r'''
 - name: Obtain information about a particular certificate in the computer's personal store
-  win_certificate_info:
+  community.windows.win_certificate_info:
     thumbprint: BD7AF104CF1872BDB518D95C9534EA941665FD27
   register: mycert
 
 # thumbprint can also be lower case
 - name: Obtain information about a particular certificate in the computer's personal store
-  win_certificate_info:
+  community.windows.win_certificate_info:
     thumbprint: bd7af104cf1872bdb518d95c9534ea941665fd27
   register: mycert
 
 - name: Obtain information about all certificates in the root store
-  win_certificate_info:
+  community.windows.win_certificate_info:
     store_name: Root
   register: ca
 
@@ -72,7 +65,7 @@ EXAMPLES = r'''
   register: mycert
 
 - name: Obtain information on each certificate that was touched
-  win_certificate_info:
+  community.windows.win_certificate_info:
     thumbprint: "{{ item }}"
   register: mycert_stats
   loop: "{{ mycert.thumbprints }}"

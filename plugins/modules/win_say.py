@@ -4,13 +4,6 @@
 # Copyright: (c) 2016, Jon Hawkesworth (@jhawkesworth) <figs@unity.demon.co.uk>
 # GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 
-# this is a windows documentation stub.  actual code lives in the .ps1
-# file of the same name
-
-ANSIBLE_METADATA = {'metadata_version': '1.1',
-                    'status': ['preview'],
-                    'supported_by': 'community'}
-
 DOCUMENTATION = r'''
 ---
 module: win_say
@@ -66,31 +59,31 @@ notes:
 
    - Speech can be surprisingly slow, so it's best to keep message text short.
 seealso:
-- module: win_msg
-- module: win_toast
+- module: community.windows.win_msg
+- module: community.windows.win_toast
 author:
 - Jon Hawkesworth (@jhawkesworth)
 '''
 
 EXAMPLES = r'''
 - name: Warn of impending deployment
-  win_say:
+  community.windows.win_say:
     msg: Warning, deployment commencing in 5 minutes, please log out.
 
 - name: Using a different voice and a start sound
-  win_say:
+  community.windows.win_say:
     start_sound_path: C:\Windows\Media\ding.wav
     msg: Warning, deployment commencing in 5 minutes, please log out.
     voice: Microsoft Hazel Desktop
 
 - name: With start and end sound
-  win_say:
+  community.windows.win_say:
     start_sound_path: C:\Windows\Media\Windows Balloon.wav
     msg: New software installed
     end_sound_path: C:\Windows\Media\chimes.wav
 
 - name: Text from file example
-  win_say:
+  community.windows.win_say:
     start_sound_path: C:\Windows\Media\Windows Balloon.wav
     msg_file: AppData\Local\Temp\morning_report.txt
     end_sound_path: C:\Windows\Media\chimes.wav

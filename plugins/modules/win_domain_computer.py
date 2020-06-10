@@ -5,10 +5,6 @@
 # Copyright: (c) 2017, AMTEGA - Xunta de Galicia
 # GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 
-ANSIBLE_METADATA = {'metadata_version': '1.1',
-                    'status': ['preview'],
-                    'supported_by': 'community'}
-
 DOCUMENTATION = r'''
 ---
 module: win_domain_computer
@@ -115,11 +111,11 @@ notes:
   - The file must be UTF-16 encoded (in PowerShell this encoding is called C(Unicode)), and it must end in a null character. See examples.
   - The C(djoin.exe) part of the offline domain join process will not use I(domain_server), I(domain_username), or I(domain_password).
 seealso:
-- module: win_domain
-- module: win_domain_controller
-- module: win_domain_group
-- module: win_domain_membership
-- module: win_domain_user
+- module: ansible.windows.win_domain
+- module: ansible.windows.win_domain_controller
+- module: community.windows.win_domain_group
+- module: ansible.windows.win_domain_membership
+- module: community.windows.win_domain_user
 author:
 - Daniel Sánchez Fábregas (@Daniel-Sanchez-Fabregas)
 - Brian Scholer (@briantist)

@@ -4,13 +4,6 @@
 # Copyright: (c) 2018, Ansible Project
 # GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 
-# this is a windows documentation stub.  actual code lives in the .ps1
-# file of the same name
-
-ANSIBLE_METADATA = {'metadata_version': '1.1',
-                    'status': ['preview'],
-                    'supported_by': 'community'}
-
 DOCUMENTATION = r'''
 ---
 module: win_xml
@@ -83,13 +76,13 @@ seealso:
 
 EXAMPLES = r'''
 - name: Apply our filter to Tomcat web.xml
-  win_xml:
+  community.windows.win_xml:
    path: C:\apache-tomcat\webapps\myapp\WEB-INF\web.xml
    fragment: '<filter><filter-name>MyFilter</filter-name><filter-class>com.example.MyFilter</filter-class></filter>'
    xpath: '/*'
 
 - name: Apply sslEnabledProtocols to Tomcat's server.xml
-  win_xml:
+  community.windows.win_xml:
    path: C:\Tomcat\conf\server.xml
    xpath: '//Server/Service[@name="Catalina"]/Connector[@port="9443"]'
    attribute: 'sslEnabledProtocols'
@@ -97,13 +90,13 @@ EXAMPLES = r'''
    type: attribute
 
 - name: remove debug configuration nodes from nlog.conf
-  win_xml:
+  community.windows.win_xml:
    path: C:\IISApplication\nlog.conf
    xpath: /nlog/rules/logger[@name="debug"]/descendant::*
    state: absent
 
 - name: count configured connectors in Tomcat's server.xml
-  win_xml:
+  community.windows.win_xml:
    path: C:\Tomcat\conf\server.xml
    xpath: //Server/Service/Connector
    count: yes
@@ -114,7 +107,7 @@ EXAMPLES = r'''
     msg="Connector count is {{connector_count.count}}"
 
 - name: ensure all lang=en attributes to lang=nl
-  win_xml:
+  community.windows.win_xml:
    path: C:\Data\Books.xml
    xpath: //@[lang="en"]
    attribute: lang

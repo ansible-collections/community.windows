@@ -7,14 +7,6 @@
 from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
-
-ANSIBLE_METADATA = {
-    'metadata_version': '1.1',
-    'status': ['preview'],
-    'supported_by': 'community'
-}
-
-
 DOCUMENTATION = r'''
 ---
 module: psexec
@@ -204,16 +196,16 @@ notes:
   U(https://github.com/jborean93/pypsexec).
 seealso:
 - module: raw
-- module: win_command
-- module: win_psexec
-- module: win_shell
+- module: ansible.windows.win_command
+- module: community.windows.win_psexec
+- module: ansible.windows.win_shell
 author:
 - Jordan Borean (@jborean93)
 '''
 
 EXAMPLES = r'''
 - name: Run a cmd.exe command
-  psexec:
+  community.windows.psexec:
     hostname: server
     connection_username: username
     connection_password: password
@@ -221,7 +213,7 @@ EXAMPLES = r'''
     arguments: /c echo Hello World
 
 - name: Run a PowerShell command
-  psexec:
+  community.windows.psexec:
     hostname: server.domain.local
     connection_username: username@DOMAIN.LOCAL
     connection_password: password
@@ -229,7 +221,7 @@ EXAMPLES = r'''
     arguments: Write-Host Hello World
 
 - name: Send data through stdin
-  psexec:
+  community.windows.psexec:
     hostname: 192.168.1.2
     connection_username: username
     connection_password: password
@@ -241,7 +233,7 @@ EXAMPLES = r'''
       exit 0
 
 - name: Run the process as a different user
-  psexec:
+  community.windows.psexec:
     hostname: server
     connection_user: username
     connection_password: password
@@ -251,7 +243,7 @@ EXAMPLES = r'''
     process_password: anotherpassword
 
 - name: Run the process asynchronously
-  psexec:
+  community.windows.psexec:
     hostname: server
     connection_username: username
     connection_password: password
@@ -260,14 +252,14 @@ EXAMPLES = r'''
     asynchronous: yes
 
 - name: Use Kerberos authentication for the connection (requires smbprotocol[kerberos])
-  psexec:
+  community.windows.psexec:
     hostname: host.domain.local
     connection_username: user@DOMAIN.LOCAL
     executable: C:\some\path\to\executable.exe
     arguments: /s
 
 - name: Disable encryption to work with WIndows 7/Server 2008 (R2)
-  psexec:
+  community.windows.psexec:
     hostanme: windows-pc
     connection_username: Administrator
     connection_password: Password01
@@ -279,7 +271,7 @@ EXAMPLES = r'''
     arguments: (New-Object -ComObject Microsoft.Update.Session).CreateUpdateInstaller().IsBusy
 
 - name: Download and run ConfigureRemotingForAnsible.ps1 to setup WinRM
-  psexec:
+  community.windows.psexec:
     hostname: '{{ hostvars[inventory_hostname]["ansible_host"] | default(inventory_hostname) }}'
     connection_username: '{{ ansible_user }}'
     connection_password: '{{ ansible_password }}'

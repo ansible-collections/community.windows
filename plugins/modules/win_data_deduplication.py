@@ -4,10 +4,6 @@
 # Copyright: 2019, rnsc(@rnsc) <github@rnsc.be>
 # GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 
-ANSIBLE_METADATA = {'metadata_version': '1.1',
-                    'status': ['preview'],
-                    'supported_by': 'community'}
-
 DOCUMENTATION = r'''
 ---
 module: win_data_deduplication
@@ -67,12 +63,12 @@ author:
 
 EXAMPLES = r'''
 - name: Enable Data Deduplication on D
-  win_data_deduplication:
+  community.windows.win_data_deduplication:
     drive_letter: 'D'
     state: present
 
 - name: Enable Data Deduplication on D
-  win_data_deduplication:
+  community.windows.win_data_deduplication:
     drive_letter: 'D'
     state: present
     settings:

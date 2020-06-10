@@ -5,13 +5,6 @@
 # Copyright: (c) 2017, Ansible Project
 # GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 
-# this is a windows documentation stub.  actual code lives in the .ps1
-# file of the same name
-
-ANSIBLE_METADATA = {'metadata_version': '1.1',
-                    'status': ['preview'],
-                    'supported_by': 'community'}
-
 DOCUMENTATION = r'''
 ---
 module: win_toast
@@ -56,15 +49,15 @@ notes:
    - Messages are only sent to the local host where the module is run.
    - You must run this module with async, otherwise it will hang until the expire period has passed.
 seealso:
-- module: win_msg
-- module: win_say
+- module: community.windows.win_msg
+- module: community.windows.win_say
 author:
 - Jon Hawkesworth (@jhawkesworth)
 '''
 
 EXAMPLES = r'''
 - name: Warn logged in users of impending upgrade (note use of async to stop the module from waiting until notification expires).
-  win_toast:
+  community.windows.win_toast:
     expire: 60
     title: System Upgrade Notification
     msg: Automated upgrade about to start.  Please save your work and log off before {{ deployment_start_time }}

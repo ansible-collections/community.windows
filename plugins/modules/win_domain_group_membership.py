@@ -4,10 +4,6 @@
 # Copyright: (c) 2017, Andrew Saraceni <andrew.saraceni@gmail.com>
 # GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 
-ANSIBLE_METADATA = {'metadata_version': '1.1',
-                    'status': ['preview'],
-                    'supported_by': 'community'}
-
 DOCUMENTATION = r'''
 ---
 module: win_domain_group_membership
@@ -57,43 +53,43 @@ options:
 notes:
 - This must be run on a host that has the ActiveDirectory powershell module installed.
 seealso:
-- module: win_domain_user
-- module: win_domain_group
+- module: community.windows.win_domain_user
+- module: community.windows.win_domain_group
 author:
     - Marius Rieder (@jiuka)
 '''
 
 EXAMPLES = r'''
 - name: Add a domain user/group to a domain group
-  win_domain_group_membership:
+  community.windows.win_domain_group_membership:
     name: Foo
     members:
       - Bar
     state: present
 
 - name: Remove a domain user/group from a domain group
-  win_domain_group_membership:
+  community.windows.win_domain_group_membership:
     name: Foo
     members:
       - Bar
     state: absent
 
 - name: Ensure only a domain user/group exists in a domain group
-  win_domain_group_membership:
+  community.windows.win_domain_group_membership:
     name: Foo
     members:
       - Bar
     state: pure
 
 - name: Add a computer to a domain group
-  win_domain_group_membership:
+  community.windows.win_domain_group_membership:
     name: Foo
     members:
       - DESKTOP$
     state: present
 
 - name: Add a domain user/group from another Domain in the multi-domain forest to a domain group
-  win_domain_group_membership:
+  community.windows.win_domain_group_membership:
     domain_server: DomainAAA.cloud
     name: GroupinDomainAAA
     members:

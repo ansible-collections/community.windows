@@ -4,13 +4,6 @@
 # Copyright: (c) 2018, Micah Hunsberger (@mhunsber)
 # GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 
-# this is a windows documentation stub.  actual code lives in the .ps1
-# file of the same name
-
-ANSIBLE_METADATA = {'metadata_version': '1.1',
-                    'status': ['preview'],
-                    'supported_by': 'community'}
-
 DOCUMENTATION = r'''
 ---
 module: win_hosts
@@ -78,26 +71,26 @@ notes:
     name, then the alias will be removed from the entry and either added to or removed
     from (depending on I(action)) an entry with the provided canonical name.
 seealso:
-  - module: win_template
-  - module: win_file
-  - module: win_copy
+  - module: ansible.windows.win_template
+  - module: ansible.windows.win_file
+  - module: ansible.windows.win_copy
 '''
 
 EXAMPLES = r'''
 - name: Add 127.0.0.1 as an A record for localhost
-  win_hosts:
+  community.windows.win_hosts:
     state: present
     canonical_name: localhost
     ip_address: 127.0.0.1
 
 - name: Add ::1 as an AAAA record for localhost
-  win_hosts:
+  community.windows.win_hosts:
     state: present
     canonical_name: localhost
     ip_address: '::1'
 
 - name: Remove 'bar' and 'zed' from the list of aliases for foo (192.168.1.100)
-  win_hosts:
+  community.windows.win_hosts:
     state: present
     canonical_name: foo
     ip_address: 192.168.1.100
@@ -107,17 +100,17 @@ EXAMPLES = r'''
       - zed
 
 - name: Remove hosts entries with canonical name 'bar'
-  win_hosts:
+  community.windows.win_hosts:
     state: absent
     canonical_name: bar
 
 - name: Remove 10.2.0.1 from the list of hosts
-  win_hosts:
+  community.windows.win_hosts:
     state: absent
     ip_address: 10.2.0.1
 
 - name: Ensure all name resolution is handled by DNS
-  win_hosts:
+  community.windows.win_hosts:
     state: absent
 '''
 

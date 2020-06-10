@@ -4,10 +4,6 @@
 # Copyright: (c) 2015, Sam Liu <sam.liu@activenetwork.com>
 # GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 
-ANSIBLE_METADATA = {'metadata_version': '1.1',
-                    'status': ['preview'],
-                    'supported_by': 'community'}
-
 DOCUMENTATION = r'''
 ---
 module: win_file_version
@@ -24,14 +20,14 @@ options:
     type: path
     required: yes
 seealso:
-- module: win_file
+- module: ansible.windows.win_file
 author:
 - Sam Liu (@SamLiu79)
 '''
 
 EXAMPLES = r'''
 - name: Get acm instance version
-  win_file_version:
+  community.windows.win_file_version:
     path: C:\Windows\System32\cmd.exe
   register: exe_file_version
 

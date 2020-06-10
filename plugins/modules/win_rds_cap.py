@@ -4,10 +4,6 @@
 # Copyright: (c) 2018, Kevin Subileau (@ksubileau)
 # GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 
-ANSIBLE_METADATA = {'metadata_version': '1.1',
-                    'status': ['preview'],
-                    'supported_by': 'community'}
-
 DOCUMENTATION = r'''
 ---
 module: win_rds_cap
@@ -104,14 +100,14 @@ requirements:
   - Windows Server 2008R2 (6.1) or higher.
   - The Windows Feature "RDS-Gateway" must be enabled.
 seealso:
-- module: win_rds_cap
-- module: win_rds_rap
-- module: win_rds_settings
+- module: community.windows.win_rds_cap
+- module: community.windows.win_rds_rap
+- module: community.windows.win_rds_settings
 '''
 
 EXAMPLES = r'''
 - name: Create a new RDS CAP with a 30 minutes timeout and clipboard redirection enabled
-  win_rds_cap:
+  community.windows.win_rds_cap:
     name: My CAP
     user_groups:
       - BUILTIN\users

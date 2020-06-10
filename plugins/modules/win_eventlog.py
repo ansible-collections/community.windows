@@ -4,13 +4,6 @@
 # Copyright: (c) 2017, Andrew Saraceni <andrew.saraceni@gmail.com>
 # GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 
-# this is a windows documentation stub.  actual code lives in the .ps1
-# file of the same name
-
-ANSIBLE_METADATA = {'metadata_version': '1.1',
-                    'status': ['preview'],
-                    'supported_by': 'community'}
-
 DOCUMENTATION = r'''
 ---
 module: win_eventlog
@@ -72,14 +65,14 @@ options:
       - This option is only used when C(overflow_action) is C(OverwriteOlder).
     type: int
 seealso:
-- module: win_eventlog_entry
+- module: community.windows.win_eventlog_entry
 author:
     - Andrew Saraceni (@andrewsaraceni)
 '''
 
 EXAMPLES = r'''
 - name: Add a new event log with two custom sources
-  win_eventlog:
+  community.windows.win_eventlog:
     name: MyNewLog
     sources:
       - NewLogSource1
@@ -87,7 +80,7 @@ EXAMPLES = r'''
     state: present
 
 - name: Change the category and message resource files used for NewLogSource1
-  win_eventlog:
+  community.windows.win_eventlog:
     name: MyNewLog
     sources:
       - NewLogSource1
@@ -96,26 +89,26 @@ EXAMPLES = r'''
     state: present
 
 - name: Change the maximum size and overflow action for MyNewLog
-  win_eventlog:
+  community.windows.win_eventlog:
     name: MyNewLog
     maximum_size: 16MB
     overflow_action: DoNotOverwrite
     state: present
 
 - name: Clear event entries for MyNewLog
-  win_eventlog:
+  community.windows.win_eventlog:
     name: MyNewLog
     state: clear
 
 - name: Remove NewLogSource2 from MyNewLog
-  win_eventlog:
+  community.windows.win_eventlog:
     name: MyNewLog
     sources:
       - NewLogSource2
     state: absent
 
 - name: Remove MyNewLog and all remaining sources
-  win_eventlog:
+  community.windows.win_eventlog:
     name: MyNewLog
     state: absent
 '''
