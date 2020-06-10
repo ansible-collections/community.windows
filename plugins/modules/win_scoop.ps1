@@ -154,7 +154,7 @@ function Install-ScoopPackage {
   $arguments.AddRange($common_args)
 
   $command = Argv-ToString -arguments $arguments
-  
+
   if (-not $module.CheckMode) {
     $res = Run-Command -Command $command
     $module.Result.rc = $res.rc
@@ -192,7 +192,7 @@ function Uninstall-ScoopPackage {
   $arguments.AddRange($common_args)
 
   $command = Argv-ToString -arguments $arguments
-  
+
   if (-not $module.CheckMode) {
     $res = Run-Command -Command $command
     $module.Result.rc = $res.rc
