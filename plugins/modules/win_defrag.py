@@ -19,10 +19,12 @@ options:
     - A list of drive letters or mount point paths of the volumes to be defragmented.
     - If this parameter is omitted, all volumes (not excluded) will be fragmented.
     type: list
+    elements: str
   exclude_volumes:
     description:
     - A list of drive letters or mount point paths to exclude from defragmentation.
     type: list
+    elements: str
   freespace_consolidation:
     description:
     - Perform free space consolidation on the specified volumes.

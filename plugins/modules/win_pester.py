@@ -25,6 +25,7 @@ options:
       - Runs only tests in Describe blocks with specified Tags values.
       - Accepts multiple comma separated tags.
     type: list
+    elements: str
   output_file:
     description:
       - Generates an output test report.

@@ -44,15 +44,15 @@ function Get-RabbitmqPathFromRegistry
     $reg64Path = "HKLM:\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall\RabbitMQ"
     $reg32Path = "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\RabbitMQ"
 
-    if (Test-Path $reg64Path) {
+    if (Test-Path -LiteralPath $reg64Path) {
         $regPath = $reg64Path
-    } elseif (Test-Path $reg32Path) {
+    } elseif (Test-Path -LiteralPath $reg32Path) {
         $regPath = $reg32Path
     }
 
     if ($regPath) {
-        $path = Split-Path -Parent (Get-ItemProperty $regPath "UninstallString").UninstallString
-        $version = (Get-ItemProperty $regPath "DisplayVersion").DisplayVersion
+        $path = Split-Path -Parent (Get-ItemProperty -LiteralPath $regPath "UninstallString").UninstallString
+        $version = (Get-ItemProperty -LiteralPath $regPath "DisplayVersion").DisplayVersion
         return "$path\rabbitmq_server-$version"
     }
 }
@@ -60,12 +60,12 @@ function Get-RabbitmqPathFromRegistry
 function Get-RabbitmqBinPath($installation_path)
 {
     $result = Join-Path -Path $installation_path -ChildPath 'bin'
-    if (Test-Path $result) {
+    if (Test-Path -LiteralPath $result) {
         return $result
     }
 
     $result = Join-Path -Path $installation_path -ChildPath 'sbin'
-    if (Test-Path $result) {
+    if (Test-Path -LiteralPath $result) {
         return $result
     }
 }

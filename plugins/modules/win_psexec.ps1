@@ -13,7 +13,7 @@ $spec = @{
     options = @{
         command = @{ type='str'; required=$true }
         executable = @{ type='path'; default='psexec.exe' }
-        hostnames = @{ type='list' }
+        hostnames = @{ type='list'; elements='str' }
         username = @{ type='str' }
         password = @{ type='str'; no_log=$true }
         chdir = @{ type='path' }

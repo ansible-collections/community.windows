@@ -16,6 +16,7 @@ options:
     description:
     - The name of the process(es) for which to wait.  The name of the process(es) should not include the file extension suffix.
     type: list
+    elements: str
   process_name_pattern:
     description:
     - RegEx pattern matching desired process(es).

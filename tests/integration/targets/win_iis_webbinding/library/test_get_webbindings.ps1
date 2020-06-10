@@ -16,7 +16,7 @@ $ip = Get-AnsibleParam $params -name "ip" -default '*'
 $result = @{
   changed = $false
 }
-function Create-BindingInfo {
+function New-BindingInfo {
     $ht = @{
         'bindingInformation' = $args[0].bindingInformation
         'ip' = $args[0].bindingInformation.split(':')[0]
@@ -102,7 +102,7 @@ Catch {
 If ($current_bindings)
 {
     Try {
-        $binding_info = Create-BindingInfo $current_bindings
+        $binding_info = New-BindingInfo $current_bindings
     }
     Catch {
         Fail-Json -obj $result -message "Failed to create binding info - $($_.Exception.Message)"

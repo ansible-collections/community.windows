@@ -50,7 +50,7 @@ Try {
     If (-not $physical_path) {
       Fail-Json -obj $result -message "missing required arguments: physical_path"
     }
-    ElseIf (-not (Test-Path $physical_path)) {
+    ElseIf (-not (Test-Path -LiteralPath $physical_path)) {
       Fail-Json -obj $result -message "specified folder must already exist: physical_path"
     }
 
@@ -82,7 +82,7 @@ Try {
     # Fix for error "New-Item : Index was outside the bounds of the array."
     # This is a bug in the New-WebSite commandlet. Apparently there must be at least one site configured in IIS otherwise New-WebSite crashes.
     # For more details, see http://stackoverflow.com/questions/3573889/ps-c-new-website-blah-throws-index-was-outside-the-bounds-of-the-array
-    $sites_list = get-childitem -Path IIS:\sites
+    $sites_list = Get-ChildItem -LiteralPath IIS:\sites
     if ($null -eq $sites_list) {
       if ($site_id) {
         $site_parameters.ID = $site_id
@@ -105,13 +105,13 @@ Try {
   If($site) {
     # Change Physical Path if needed
     if($physical_path) {
-      If (-not (Test-Path $physical_path)) {
+      If (-not (Test-Path -LiteralPath $physical_path)) {
         Fail-Json -obj $result -message "specified folder must already exist: physical_path"
       }
 
-      $folder = Get-Item $physical_path
+      $folder = Get-Item -LiteralPath $physical_path
       If($folder.FullName -ne $site.PhysicalPath) {
-        Set-ItemProperty "IIS:\Sites\$($site.Name)" -name physicalPath -value $folder.FullName
+        Set-ItemProperty -LiteralPath "IIS:\Sites\$($site.Name)" -name physicalPath -value $folder.FullName
         $result.changed = $true
       }
     }
@@ -119,7 +119,7 @@ Try {
     # Change Application Pool if needed
     if($application_pool) {
       If($application_pool -ne $site.applicationPool) {
-        Set-ItemProperty "IIS:\Sites\$($site.Name)" -name applicationPool -value $application_pool
+        Set-ItemProperty -LiteralPath "IIS:\Sites\$($site.Name)" -name applicationPool -value $application_pool
         $result.changed = $true
       }
     }
@@ -127,7 +127,7 @@ Try {
     # Set properties
     if($parameters) {
       $parameters | ForEach-Object {
-        $property_value = Get-ItemProperty "IIS:\Sites\$($site.Name)" $_[0]
+        $property_value = Get-ItemProperty -LiteralPath "IIS:\Sites\$($site.Name)" $_[0]
 
         switch ($property_value.GetType().Name)
         {

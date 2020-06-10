@@ -26,7 +26,7 @@ $result = @{
 #################
 ### Functions ###
 #################
-function Create-BindingInfo {
+function New-BindingInfo {
     $ht = @{
         'bindingInformation' = $args[0].bindingInformation
         'ip' = $args[0].bindingInformation.split(':')[0]
@@ -154,7 +154,7 @@ If ($certificateHash -and $state -eq 'present')
 
     #validate cert path
     $cert_path = "cert:\LocalMachine\$certificateStoreName\$certificateHash"
-    If (-Not (Test-Path $cert_path) )
+    If (-Not (Test-Path -LiteralPath $cert_path) )
     {
         Fail-Json -obj $result -message "Unable to locate certificate at $cert_path"
     }
@@ -238,7 +238,7 @@ If ($current_bindings -and $state -eq 'absent')
     # removing bindings from iis may not also remove them from iis:\sslbindings
 
     $result.operation_type = 'removed'
-    $result.binding_info = $current_bindings | ForEach-Object {Create-BindingInfo $_}
+    $result.binding_info = $current_bindings | ForEach-Object {New-BindingInfo $_}
     Exit-Json -obj $result
 }
 ElseIf (-Not $current_bindings -and $state -eq 'absent')
@@ -309,14 +309,14 @@ ElseIf ($current_bindings)
         $result.changed = $true
         $result.operation_type = 'updated'
         $result.website_state = (Get-Website | Where-Object {$_.Name -eq $Name}).State
-        $result.binding_info = Create-BindingInfo (Get-SingleWebBinding $binding_parameters)
+        $result.binding_info = New-BindingInfo (Get-SingleWebBinding $binding_parameters)
         Exit-Json -obj $result #exit changed true
     }
     Else
     {
         $result.operation_type = 'matched'
         $result.website_state = (Get-Website | Where-Object {$_.Name -eq $Name}).State
-        $result.binding_info = Create-BindingInfo (Get-SingleWebBinding $binding_parameters)
+        $result.binding_info = New-BindingInfo (Get-SingleWebBinding $binding_parameters)
         Exit-Json -obj $result #exit changed false
     }
 }
@@ -366,10 +366,10 @@ ElseIf (-not $current_bindings -and $state -eq 'present')
     $result.operation_type = 'added'
     $result.website_state = (Get-Website | Where-Object {$_.Name -eq $Name}).State
 
-    # incase there are no bindings we do a check before calling Create-BindingInfo
+    # incase there are no bindings we do a check before calling New-BindingInfo
     $web_binding = Get-SingleWebBinding $binding_parameters
     if ($web_binding) {
-        $result.binding_info = Create-BindingInfo $web_binding
+        $result.binding_info = New-BindingInfo $web_binding
     } else {
         $result.binding_info = $null
     }
