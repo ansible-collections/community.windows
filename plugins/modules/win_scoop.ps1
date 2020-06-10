@@ -210,11 +210,11 @@ if ($state -in @("absent")) {
 }
 
 if ($state -in @("present")) {
-  $missing_packages = [System.Collections.ArrayList]@()
-  foreach ($package in $name) {
-    if ($installed_packages.Package -notcontains $package) {
-      $missing_packages.Add($package)
+  $missing_packages = foreach ($package in $name) {
+    if ($installed_packages.Package -notcontains $packages) {
+      $package
     }
+  }
   }
 
   if ($missing_packages) {
