@@ -141,7 +141,7 @@ Function Test-RegistryProperty($reg_key, $property) {
 
 Function Copy-RegistryKey($source, $target) {
     # Using Copy-Item -Recurse is giving me weird results, doing it recursively
-    Copy-Item -Path -LiteralPath $source -Destination $target -WhatIf:$check_mode
+    Copy-Item -LiteralPath $source -Destination $target -WhatIf:$check_mode
 
     foreach($key in Get-ChildItem -LiteralPath $source) {
         $sourceKey = "$source\$($key.PSChildName)"
