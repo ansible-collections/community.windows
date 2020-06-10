@@ -34,7 +34,7 @@ function WriteLines($outlines, $path, $linesep, $encodingobj, $validate, $check_
 		If ($process.ExitCode -ne 0) {
 			[string] $output = $process.StandardOutput.ReadToEnd();
 			[string] $error = $process.StandardError.ReadToEnd();
-			Remove-Item $temppath -force;
+			Remove-Item -LiteralPath $temppath -force;
 			Fail-Json @{} "failed to validate $cmdname $cmdargs with error: $output $error";
 		}
 
@@ -43,14 +43,14 @@ function WriteLines($outlines, $path, $linesep, $encodingobj, $validate, $check_
 	# Commit changes to the path
 	$cleanpath = $path.Replace("/", "\");
 	Try {
-		Copy-Item -Path $temppath -Destination $cleanpath -Force -WhatIf:$check_mode;
+		Copy-Item -LiteralPath $temppath -Destination $cleanpath -Force -WhatIf:$check_mode;
 	}
 	Catch {
 		Fail-Json @{} "Cannot write to: $cleanpath ($($_.Exception.Message))";
 	}
 
 	Try {
-		Remove-Item -Path $temppath -Force -WhatIf:$check_mode;
+		Remove-Item -LiteralPath $temppath -Force -WhatIf:$check_mode;
 	}
 	Catch {
 		Fail-Json @{} "Cannot remove temporary file: $temppath ($($_.Exception.Message))";

@@ -8,7 +8,7 @@
 $spec = @{
     options = @{
         state = @{ type = "str"; choices = "enabled", "disabled", "default"; required = $true }
-        adapter_names = @{ type = "list"; required = $false }
+        adapter_names = @{ type = "list"; elements = "str"; required = $false }
     }
     supports_check_mode = $true
 }

@@ -45,6 +45,7 @@ options:
       - A list of additional names (cname records) for the host entry.
       - Only applicable when C(state=present).
     type: list
+    elements: str
   action:
     choices:
       - add

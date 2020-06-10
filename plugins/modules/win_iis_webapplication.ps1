@@ -43,7 +43,7 @@ try {
     if (-not $physical_path) {
       Fail-Json $result "missing required arguments: path"
     }
-    if (-not (Test-Path -Path $physical_path)) {
+    if (-not (Test-Path -LiteralPath $physical_path)) {
       Fail-Json $result "specified folder must already exist: path"
     }
 
@@ -74,14 +74,14 @@ try {
 
     # Change Physical Path if needed
     if ($physical_path) {
-      if (-not (Test-Path -Path $physical_path)) {
+      if (-not (Test-Path -LiteralPath $physical_path)) {
         Fail-Json $result "specified folder must already exist: path"
       }
 
-      $app_folder = Get-Item $application.PhysicalPath
-      $folder = Get-Item $physical_path
+      $app_folder = Get-Item -LiteralPath $application.PhysicalPath
+      $folder = Get-Item -LiteralPath $physical_path
       if ($folder.FullName -ne $app_folder.FullName) {
-        Set-ItemProperty "IIS:\Sites\$($site)\$($name)" -name physicalPath -value $physical_path -WhatIf:$check_mode
+        Set-ItemProperty -LiteralPath "IIS:\Sites\$($site)\$($name)" -name physicalPath -value $physical_path -WhatIf:$check_mode
         $result.changed = $true
       }
     }
@@ -89,30 +89,30 @@ try {
     # Change Application Pool if needed
     if ($application_pool) {
       if ($application_pool -ne $application.applicationPool) {
-        Set-ItemProperty "IIS:\Sites\$($site)\$($name)" -name applicationPool -value $application_pool -WhatIf:$check_mode
+        Set-ItemProperty -LiteralPath "IIS:\Sites\$($site)\$($name)" -name applicationPool -value $application_pool -WhatIf:$check_mode
         $result.changed = $true
       }
     }
 
     # Change username and password if needed
-    $app_user = Get-ItemProperty -Path "IIS:\Sites\$($site)\$($name)" -Name 'userName'
-    $app_pass = Get-ItemProperty -Path "IIS:\Sites\$($site)\$($name)" -Name 'password'
+    $app_user = Get-ItemProperty -LiteralPath "IIS:\Sites\$($site)\$($name)" -Name 'userName'
+    $app_pass = Get-ItemProperty -LiteralPath "IIS:\Sites\$($site)\$($name)" -Name 'password'
     if ($connect_as -eq 'pass_through') {
       if ($app_user -ne '') {
-        Clear-ItemProperty -Path "IIS:\Sites\$($site)\$($name)" -Name 'userName' -WhatIf:$check_mode
+        Clear-ItemProperty -LiteralPath "IIS:\Sites\$($site)\$($name)" -Name 'userName' -WhatIf:$check_mode
         $result.changed = $true
       }
       if ($app_pass -ne '') {
-        Clear-ItemProperty -Path "IIS:\Sites\$($site)\$($name)" -Name 'password' -WhatIf:$check_mode
+        Clear-ItemProperty -LiteralPath "IIS:\Sites\$($site)\$($name)" -Name 'password' -WhatIf:$check_mode
         $result.changed = $true
       }
     } elseif ($connect_as -eq 'specific_user') {
       if ($app_user -ne $username) {
-        Set-ItemProperty -Path "IIS:\Sites\$($site)\$($name)" -Name 'userName' -Value $username -WhatIf:$check_mode
+        Set-ItemProperty -LiteralPath "IIS:\Sites\$($site)\$($name)" -Name 'userName' -Value $username -WhatIf:$check_mode
         $result.changed = $true
       }
       if ($app_pass -ne $password) {
-        Set-ItemProperty -Path "IIS:\Sites\$($site)\$($name)" -Name 'password' -Value $password -WhatIf:$check_mode
+        Set-ItemProperty -LiteralPath "IIS:\Sites\$($site)\$($name)" -Name 'password' -Value $password -WhatIf:$check_mode
         $result.changed = $true
       }
     }
@@ -124,7 +124,7 @@ try {
 # When in check-mode or on removal, this may fail
 $application = Get-WebApplication -Site $site -Name $name
 if ($application) {
-  $app_user = Get-ItemProperty -Path "IIS:\Sites\$($site)\$($name)" -Name 'userName'
+  $app_user = Get-ItemProperty -LiteralPath "IIS:\Sites\$($site)\$($name)" -Name 'userName'
   if ($app_user -eq '') {
     $result.connect_as = 'pass_through'
   } else {

@@ -45,7 +45,7 @@ try {
     If (-not $physical_path) {
       Fail-Json -obj $result -message "missing required arguments: physical_path"
     }
-    If (-not (Test-Path $physical_path)) {
+    If (-not (Test-Path -LiteralPath $physical_path)) {
       Fail-Json -obj $result -message "specified folder must already exist: physical_path"
     }
 
@@ -65,7 +65,7 @@ try {
 
   # Remove directory
   If ($state -eq 'absent' -and $directory) {
-    Remove-Item $directory_path -Recurse -Force
+    Remove-Item -LiteralPath $directory_path -Recurse -Force
     $result.changed = $true
   }
 
@@ -74,14 +74,14 @@ try {
 
     # Change Physical Path if needed
     if($physical_path) {
-      If (-not (Test-Path $physical_path)) {
+      If (-not (Test-Path -LiteralPath $physical_path)) {
         Fail-Json -obj $result -message "specified folder must already exist: physical_path"
       }
 
-      $vdir_folder = Get-Item $directory.PhysicalPath
-      $folder = Get-Item $physical_path
+      $vdir_folder = Get-Item -LiteralPath $directory.PhysicalPath
+      $folder = Get-Item -LiteralPath $physical_path
       If($folder.FullName -ne $vdir_folder.FullName) {
-        Set-ItemProperty $directory_path -name physicalPath -value $physical_path
+        Set-ItemProperty -LiteralPath $directory_path -name physicalPath -value $physical_path
         $result.changed = $true
       }
     }

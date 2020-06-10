@@ -46,6 +46,7 @@ options:
     - When C(type=PTR) only the partial part of the IP should be given.
     aliases: [ values ]
     type: list
+    elements: str
   zone:
     description:
     - The name of the zone to manage (eg C(example.com)).

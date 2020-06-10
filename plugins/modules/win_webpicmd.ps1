@@ -48,8 +48,7 @@ Function Test-IsInstalledFromWebPI
         [string]$package
     )
 
-    $cmd = "$executable /list /listoption:installed"
-    $results = invoke-expression $cmd
+    $results = &$executable /list /listoption:installed
 
     if ($LastExitCode -ne 0)
     {
@@ -77,9 +76,7 @@ Function Install-WithWebPICmd
         [string]$package
     )
 
-    $cmd = "$executable /install /products:$package /accepteula /suppressreboot"
-
-    $results = invoke-expression $cmd
+    $results = &$executable /install /products:$package /accepteula /suppressreboot
 
     if ($LastExitCode -ne 0)
     {

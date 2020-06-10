@@ -9,8 +9,8 @@
 
 $spec = @{
     options = @{
-        include_volumes = @{ type='list' }
-        exclude_volumes = @{ type='list' }
+        include_volumes = @{ type='list'; elements='str' }
+        exclude_volumes = @{ type='list'; elements='str' }
         freespace_consolidation = @{ type='bool'; default=$false }
         priority = @{ type='str'; default='low'; choices=@( 'low', 'normal') }
         parallel = @{ type='bool'; default=$false }

@@ -29,6 +29,7 @@ options:
     - The hostnames to run the command.
     - If not provided, the command is run locally.
     type: list
+    elements: str
   username:
     description:
     - The (remote) user to run the command as.
@@ -84,6 +85,7 @@ options:
     description:
     - Used to run the command at a different priority.
     choices: [ abovenormal, background, belownormal, high, low, realtime ]
+    type: str
   timeout:
     description:
     - The connection timeout in seconds

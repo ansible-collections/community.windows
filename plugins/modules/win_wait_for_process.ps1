@@ -9,7 +9,7 @@
 
 $spec = @{
     options = @{
-        process_name_exact = @{ type='list' }
+        process_name_exact = @{ type='list'; elements='str' }
         process_name_pattern = @{ type='str' }
         pid = @{ type='int'; default=0 }
         owner = @{ type='str' }

@@ -27,6 +27,7 @@ options:
       - List of adapter names for which to manage NetBIOS settings. If this option is omitted then configuration is applied to all adapters on the system.
       - The adapter name used is the connection caption in the Network Control Panel or via C(Get-NetAdapter), eg C(Ethernet 2).
     type: list
+    elements: str
     required: no
 
 author:

@@ -33,7 +33,7 @@ $result = @{
     src = $src -replace '\$',''
 }
 
-Function Extract-Zip($src, $dest) {
+Function Expand-Zip($src, $dest) {
     $archive = [System.IO.Compression.ZipFile]::Open($src, [System.IO.Compression.ZipArchiveMode]::Read, [System.Text.Encoding]::UTF8)
     foreach ($entry in $archive.Entries) {
         $archive_name = $entry.FullName
@@ -63,7 +63,7 @@ Function Extract-Zip($src, $dest) {
     $archive.Dispose()
 }
 
-Function Extract-ZipLegacy($src, $dest) {
+Function Expand-ZipLegacy($src, $dest) {
     # [System.IO.Compression.ZipFile] was only added in .net 4.5, this is used
     # when .net is older than that.
     $shell = New-Object -ComObject Shell.Application
@@ -117,13 +117,13 @@ If ($ext -eq ".zip" -And $recurse -eq $false -And -Not $password) {
 
     if ($use_legacy) {
         try {
-            Extract-ZipLegacy -src $src -dest $dest
+            Expand-ZipLegacy -src $src -dest $dest
         } catch {
             Fail-Json -obj $result -message "Error unzipping '$src' to '$dest'!. Method: COM Shell.Application, Exception: $($_.Exception.Message)"
         }
     } else {
         try {
-            Extract-Zip -src $src -dest $dest
+            Expand-Zip -src $src -dest $dest
         } catch {
             Fail-Json -obj $result -message "Error unzipping '$src' to '$dest'!. Method: System.IO.Compression.ZipFile, Exception: $($_.Exception.Message)"
         }
