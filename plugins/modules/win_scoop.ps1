@@ -157,7 +157,13 @@ function Install-ScoopPackage {
 
   if (-not $module.CheckMode) {
     $res = Run-Command -Command $command
-    $module.Result.rc = $res.rc
+    if ($res.rc -ne 0) {
+      $module.Result.command = $command
+      $module.Result.rc = $res.rc
+      $module.Result.stdout = $res.stdout
+      $module.Result.stderr = $res.stderr
+      $module.FailJson("Error installing $packages")
+    }
 
     if ($module.Verbosity -gt 1) {
       $module.Result.stdout = $res.stdout
@@ -195,7 +201,13 @@ function Uninstall-ScoopPackage {
 
   if (-not $module.CheckMode) {
     $res = Run-Command -Command $command
-    $module.Result.rc = $res.rc
+    if ($res.rc -ne 0) {
+      $module.Result.command = $command
+      $module.Result.rc = $res.rc
+      $module.Result.stdout = $res.stdout
+      $module.Result.stderr = $res.stderr
+      $module.FailJson("Error uninstalling $packages")
+    }
 
     if ($module.Verbosity -gt 1) {
       $module.Result.stdout = $res.stdout
