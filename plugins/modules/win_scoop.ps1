@@ -221,7 +221,7 @@ if ($state -in @("absent")) {
 
 if ($state -in @("present")) {
   $missing_packages = foreach ($package in $name) {
-    if ($installed_packages.Package -notcontains $packages) {
+    if ($installed_packages.Package -notcontains $package) {
       $package
     }
   }
