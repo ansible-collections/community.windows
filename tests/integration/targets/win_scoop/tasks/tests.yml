@@ -19,6 +19,11 @@
     that:
       - not install_idempotent is changed
 
+- name: remove package before check mode test
+  win_scoop:
+    name: '{{ test_scoop_package1 }}'
+    state: absent
+
 - name: install package check mode
   win_scoop:
     name: '{{ test_scoop_package1 }}'
@@ -53,6 +58,10 @@
     that:
       - not remove_idempotent is changed
 
+- name: install package before check mode test
+  win_scoop:
+    name: '{{ test_scoop_package1 }}'
+
 - name: remove package check mode
   win_scoop:
     name: '{{ test_scoop_package1 }}'
@@ -60,7 +69,7 @@
   check_mode: yes
   register: remove_check
 
-- name: assert install package check mode
+- name: assert remove package check mode
   assert:
     that:
       - remove_check is changed
