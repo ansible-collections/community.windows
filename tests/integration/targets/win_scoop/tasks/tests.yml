@@ -34,7 +34,7 @@
   assert:
     that:
       - install_check is changed
-      - install_check.stdout == ""
+      - install_check.stdout is not defined
 
 - name: remove package
   win_scoop:
@@ -73,7 +73,7 @@
   assert:
     that:
       - remove_check is changed
-      - remove_check.stdout == ""
+      - remove_check.stdout is not defined
 
 - name: install multiple packages locally
   win_scoop:
