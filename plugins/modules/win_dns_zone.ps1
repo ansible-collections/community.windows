@@ -35,9 +35,9 @@ $parms = @{ name = $name }
 Function Get-DnsZoneObject {
     Param([PSObject]$Object)
     $parms = @{
-        name     = $Object.ZoneName.toLower()
-        type     = $Object.ZoneType.toLower()
-        paused   = $Object.IsPaused
+        name = $Object.ZoneName.toLower()
+        type = $Object.ZoneType.toLower()
+        paused = $Object.IsPaused
         shutdown = $Object.IsShutdown
     }
 
@@ -74,14 +74,13 @@ Try {
     # determine current zone state
     $current_zone = Get-DnsServerZone -name $name
     $module.Diff.before = Get-DnsZoneObject -Object $current_zone
-
     if (-not $type) { $type = $current_zone.ZoneType.toLower() }
     if ($current_zone.ZoneType -like $type) { $current_zone_type_match = $true }
     # check for fast fails
-    if ($current_zone.ReplicationScope -like 'none' -and $replication -in @('legacy','forest','domain')) {
+    if ($current_zone.ReplicationScope -like 'none' -and $replication -in @('legacy', 'forest', 'domain')) {
         $module.FailJson("Converting a file backed DNS zone to Active Directory integrated zone is unsupported")
     }
-    if ($current_zone.ReplicationScope -in @('legacy','forest','domain') -and $replication -like 'none') {
+    if ($current_zone.ReplicationScope -in @('legacy', 'forest', 'domain') -and $replication -like 'none') {
         $module.FailJson("Converting Active Directory integrated zone to a file backed DNS zone is unsupported")
     }
     if ($current_zone.IsDsIntegrated -eq $false -and $parms.DynamicUpdate -eq 'secure') {

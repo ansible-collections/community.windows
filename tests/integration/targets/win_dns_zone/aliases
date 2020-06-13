@@ -1,1 +1,2 @@
-unsupported  # Requires AD domain setup, too long to run in CI
+shippable/windows/group2
+skip/windows/2012

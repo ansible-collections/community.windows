@@ -5,10 +5,6 @@
 # SPDX-License-Identifier: GPL-3.0-only
 # GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 
-ANSIBLE_METADATA = {'status': ['preview'],
-                    'supported_by': 'community',
-                    'metadata_version': '1.1'}
-
 DOCUMENTATION = r'''
 ---
 module: win_dns_zone
@@ -88,19 +84,19 @@ options:
 
 EXAMPLES = r'''
 - name: Ensure primary zone is present
-  win_dns_zone:
+  community.windows.win_dns_zone:
     name: wpinner.euc.vmware.com
     replication: domain
     type: primary
     state: present
 
 - name: Ensure DNS zone is absent
-  win_dns_zone:
+  community.windows.win_dns_zone:
     name: jamals.euc.vmware.com
     state: absent
 
 - name: Ensure forwarder has specific DNS servers
-  win_dns_zone:
+  community.windows.win_dns_zone:
     name: jamals.euc.vmware.com
     type: forwarder
     dns_servers:
@@ -109,7 +105,7 @@ EXAMPLES = r'''
       - 10.245.51.102
 
 - name: Ensure stub zone has specific DNS servers
-  win_dns_zone:
+  community.windows.win_dns_zone:
     name: virajp.euc.vmware.com
     type: stub
     dns_servers:
@@ -117,12 +113,12 @@ EXAMPLES = r'''
       - 10.58.2.101
 
 - name: Ensure stub zone is converted to a secondary zone
-  win_dns_zone:
+  community.windows.win_dns_zone:
     name: virajp.euc.vmware.com
     type: secondary
 
 - name: Ensure secondary zone is present with no replication
-  win_dns_zone:
+  community.windows.win_dns_zone:
     name: dgemzer.euc.vmware.com
     type: secondary
     replication: none
@@ -130,7 +126,7 @@ EXAMPLES = r'''
       - 10.19.20.1
 
 - name: Ensure secondary zone is converted to a primary zone
-  win_dns_zone:
+  community.windows.win_dns_zone:
     name: dgemzer.euc.vmware.com
     type: primary
     replication: none
@@ -138,25 +134,25 @@ EXAMPLES = r'''
       - 10.19.20.1
 
 - name: Ensure primary DNS zone is present without replication
-  win_dns_zone:
+  community.windows.win_dns_zone:
     name: basavaraju.euc.vmware.com
     replication: none
     type: primary
 
 - name: Ensure primary DNS zone has nonsecureandsecure dynamic updates enabled
-  win_dns_zone:
+  community.windows.win_dns_zone:
     name: basavaraju.euc.vmware.com
     replication: none
     dynamic_update: nonsecureandsecure
     type: primary
 
 - name: Ensure DNS zone is absent
-  win_dns_zone:
+  community.windows.win_dns_zone:
     name: marshallb.euc.vmware.com
     state: absent
 
 - name: Ensure DNS zones are absent
-  win_dns_zone:
+  community.windows.win_dns_zone:
     name: "{{ item }}"
     state: absent
   loop:
