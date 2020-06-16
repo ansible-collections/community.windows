@@ -1,0 +1,6 @@
+---
+test_scoop_package1: grep
+test_scoop_package2: sed
+test_scoop_packages:
+  - '{{ test_scoop_package1 }}'
+  - '{{ test_scoop_package2 }}'

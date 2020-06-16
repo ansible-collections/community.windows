@@ -1,0 +1,8 @@
+---
+- name: ensure test packages are uninstalled
+  win_scoop:
+    name: '{{ test_scoop_packages }}'
+    state: absent
+
+- name: run tests
+  include_tasks: tests.yml
