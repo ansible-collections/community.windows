@@ -18,3 +18,4 @@ homepage: https://github.com/ansible-collections/community.windows
 issues: https://github.com/ansible-collections/community.windows/issues
 build_ignore:
 - tests/integration/inventory*
+- changelogs/.plugin-cache.yaml
