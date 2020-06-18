@@ -1,11 +1,17 @@
 # Ansible Collection: community.windows
 
-[![Run Status](https://api.shippable.com/projects/5e6068ebe4b17a000756145d/badge?branch=master)](https://app.shippable.com/github/ansible-collections/community.windows/dashboard/jobs) 
+[![Run Status](https://api.shippable.com/projects/5e6068ebe4b17a000756145d/badge?branch=master)](https://app.shippable.com/github/ansible-collections/community.windows/dashboard/jobs)
 [![codecov](https://codecov.io/gh/ansible-collections/community.windows/branch/master/graph/badge.svg)](https://codecov.io/gh/ansible-collections/community.windows)
 
 This repo hosts the `community.windows` Ansible Collection.
 
 The collection includes the community plugins to help the management of Windows hosts.
+
+
+## Included content
+
+<!--start collection content-->
+<!--end collection content-->
 
 
 ## Installation and Usage
@@ -28,6 +34,25 @@ collections:
 
 If you want to develop new content for this collection or improve what's already here, the easiest way to work on the collection is to clone it into one of the configured [`COLLECTIONS_PATHS`](https://docs.ansible.com/ansible/latest/reference_appendices/config.html#collections-paths), and work on it there.
 
+
+### Generating plugin docs
+
+Currently module documentation is generated manually using
+[add_docs.py](https://github.com/ansible-network/collection_prep/blob/master/add_docs.py). This should be run whenever
+there are any major doc changes or additional plugins have been added to ensure a docpage is viewable online in this
+repo. The following commands will run the doc generator and create the updated doc pages under [docs](docs).
+
+```bash
+# This is the path to the ansible.windows checkout
+COLLECTION_PATH=~/ansible_collections/community/windows
+
+cd /tmp
+git clone https://github.com/ansible-network/collection_prep.git
+cd collection_prep
+python add_docs.py -p "${COLLECTION_PATH}"
+```
+
+
 ### Testing with `ansible-test`
 
 The `tests` directory contains configuration for running sanity and integration tests using [`ansible-test`](https://docs.ansible.com/ansible/latest/dev_guide/testing_integration.html).
@@ -42,10 +67,13 @@ You can run the collection's test suites with the commands:
 
 The current process for publishing new versions of the Windows Community Collection is manual, and requires a user who has access to the `community` namespace on Ansible Galaxy to publish the build artifact.
 
-  1. Ensure `CHANGELOG.md` contains all the latest changes.
-  2. Update `galaxy.yml` with the new `version` for the collection.
-  3. Create a release in GitHub to tag the commit at the version to build.
-  4. Run the following commands to build and release the new version on Galaxy:
+  1. Update the CHANGELOG:
+    1. Make sure you have [`antsibull-changelog`](https://pypi.org/project/antsibull-changelog/) installed.
+    1. Make sure there are fragments for all known changes in `changelogs/fragments`.
+    1. Run `antsibull-changelog release`
+  1. Update `galaxy.yml` with the new `version` for the collection.
+  1. Create a release in GitHub to tag the commit at the version to build.
+  1. Run the following commands to build and release the new version on Galaxy:
 
      ```
      ansible-galaxy collection build
