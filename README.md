@@ -20,6 +20,11 @@ PEP440 is the schema used to describe the versions of Ansible.
 ## Included content
 
 <!--start collection content-->
+### Lookup plugins
+Name | Description
+--- | ---
+[community.windows.laps_password](https://github.com/ansible-collections/community.windows/blob/master/docs/community.windows.laps_password_lookup.rst)|Retrieves the LAPS password for a server.
+
 ### Modules
 Name | Description
 --- | ---

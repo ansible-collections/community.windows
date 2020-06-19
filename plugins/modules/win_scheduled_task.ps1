@@ -768,7 +768,7 @@ for ($i = 0; $i -lt $triggers.Count; $i++) {
             }
             $result.deprecations += @{
                 msg = "repetition is a list, should be defined as a dict"
-                date = [DateTime]::ParseExact("2021-07-01", "yyyy-MM-dd", $null)
+                date = "2021-07-01"
                 collection_name = "community.windows"
             }
             $trigger.repetition = $trigger.repetition[0]

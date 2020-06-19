@@ -300,8 +300,8 @@ function Add-DepByDate {
         [Parameter(Mandatory=$true)]
         [String]$Message,
 
-        [Parameter(Madnatory=$true)]
-        [DateTime]$Date
+        [Parameter(Mandatory=$true)]
+        [String]$Date
     )
 
     # Legacy doesn't natively support deprecate by date, need to do this manually until we use Ansible.Basic
@@ -323,7 +323,7 @@ if (($null -ne $appParameters) -and ($null -ne $appArguments)) {
 if ($null -ne $appParameters) {
     $dep = @{
         Message = "The parameter 'app_parameters' will be removed soon, use 'arguments' instead"
-        Date = [DateTime]::ParseExact("2022-07-01", "yyyy-MM-dd", $null)
+        Date = "2022-07-01"
     }
     Add-DepByDate @dep
 
@@ -350,35 +350,35 @@ if ($null -ne $appParameters) {
 if ($state -in @("started","stopped","restarted")) {
     $dep = @{
         Message = "The values 'started', 'stopped', and 'restarted' for 'state' will be removed soon, use the win_service module to start or stop the service instead"
-        Date = [DateTime]::ParseExact("2022-07-01", "yyyy-MM-dd", $null)
+        Date = "2022-07-01"
     }
     Add-DepByDate @dep
 }
 if ($params.ContainsKey('start_mode')) {
     $dep = @{
         Message = "The parameter 'start_mode' will be removed soon, use the win_service module instead"
-        Date = [DateTime]::ParseExact("2022-07-01", "yyyy-MM-dd", $null)
+        Date = "2022-07-01"
     }
     Add-DepByDate @dep
 }
 if ($null -ne $dependencies) {
     $dep = @{
         Message = "The parameter 'dependencies' will be removed soon, use the win_service module instead"
-        Date = [DateTime]::ParseExact("2022-07-01", "yyyy-MM-dd", $null)
+        Date = "2022-07-01"
     }
     Add-DepByDate @dep
 }
 if ($null -ne $user) {
     $dep = @{
         Message = "The parameter 'user' will be removed soon, use the win_service module instead"
-        Date = [DateTime]::ParseExact("2022-07-01", "yyyy-MM-dd", $null)
+        Date = "2022-07-01"
     }
     Add-DepByDate @dep
 }
 if ($null -ne $password) {
     $dep = @{
         Message = "The parameter 'password' will be removed soon, use the win_service module instead"
-        Date = [DateTime]::ParseExact("2022-07-01", "yyyy-MM-dd", $null)
+        Date = "2022-07-01"
     }
     Add-DepByDate @dep
 }
