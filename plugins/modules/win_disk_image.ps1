@@ -61,8 +61,6 @@ If($state -eq "present") {
       Fail-Json -message "Unable to retrieve drive letter from mounted image"
     }
 
-    # mount_path is deprecated and will be removed in 2.11, use mount_paths which contains all the partitions instead
-    $result.mount_path = $drive_letters[0] + ":\"
     $result.mount_paths = @($drive_letters | ForEach-Object { "$($_):\" })
   }
 }

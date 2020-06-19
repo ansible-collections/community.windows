@@ -313,7 +313,15 @@ Function Install-Repository {
         [string]$Url,
         [bool]$CheckMode
     )
-    Add-DeprecationWarning -obj $result -message "Adding a repo with this module is deprecated, the repository parameter should only be used to select a repo. Use win_psrepository to manage repos" -version 2.12
+    # Legacy doesn't natively support deprecate by date, need to do this manually until we use Ansible.Basic
+    if (-not $result.ContainsKey('deprecations')) {
+        $result.deprecations = @()
+    }
+    $result.deprecations += @{
+        msg = "Adding a repo with this module is deprecated, the repository parameter should only be used to select a repo. Use community.windows.win_psrepository to manage repos"
+        date = "2021-07-01"
+        collection_name = "community.windows"
+    }
     # Install NuGet provider if needed.
     Install-NugetProvider -CheckMode $CheckMode
 
@@ -341,7 +349,15 @@ Function Remove-Repository{
         [string]$Name,
         [bool]$CheckMode
     )
-    Add-DeprecationWarning -obj $result -message "Removing a repo with this module is deprecated, use win_psrepository to manage repos" -version 2.12
+    # Legacy doesn't natively support deprecate by date, need to do this manually until we use Ansible.Basic
+    if (-not $result.ContainsKey('deprecations')) {
+        $result.deprecations = @()
+    }
+    $result.deprecations += @{
+        msg = "Removing a repo with this module is deprecated, use community.windows.win_psrepository to manage repos"
+        date = "2021-07-01"
+        collection_name = "community.windows"
+    }
 
     $Repo = (Get-PSRepository).Name
 

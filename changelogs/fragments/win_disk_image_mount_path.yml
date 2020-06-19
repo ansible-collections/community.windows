@@ -1,0 +1,2 @@
+removed_features:
+- win_disk_image - removed the deprecated return value ``mount_path`` in favour of ``mount_paths``.
