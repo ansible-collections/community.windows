@@ -23,6 +23,10 @@
     ansible.windows.win_get_url:
       url: https://ansible-ci-files.s3.amazonaws.com/test/integration/targets/setup_win_psget/Microsoft.PackageManagement.NuGetProvider-2.8.5.208.dll
       dest: C:\Program Files\PackageManagement\ProviderAssemblies\nuget\2.8.5.208\Microsoft.PackageManagement.NuGetProvider.dll
+    register: nuget_download_res
+    until: nuget_download_res is successful
+    retries: 3
+    delay: 5
 
 - name: get version and install location of PackageManagement and PowerShellGet
   ansible.windows.win_shell: |
@@ -61,6 +65,10 @@
       url: '{{ item.url }}'
       dest: '{{ remote_tmp_dir }}\{{ item.name }}.zip'  # .zip is required for win_unzip
     when: item.name in installed_modules
+    register: download_res
+    until: download_res is successful
+    retries: 3
+    delay: 5
     loop:
     - name: PackageManagement
       url: https://ansible-ci-files.s3.amazonaws.com/test/integration/targets/setup_win_psget/packagemanagement.1.1.7.nupkg
