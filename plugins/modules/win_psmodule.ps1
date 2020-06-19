@@ -319,7 +319,7 @@ Function Install-Repository {
     }
     $result.deprecations += @{
         msg = "Adding a repo with this module is deprecated, the repository parameter should only be used to select a repo. Use community.windows.win_psrepository to manage repos"
-        date = "2022-07-01"
+        date = "2021-07-01"
         collection_name = "community.windows"
     }
     # Install NuGet provider if needed.
@@ -355,7 +355,7 @@ Function Remove-Repository{
     }
     $result.deprecations += @{
         msg = "Removing a repo with this module is deprecated, use community.windows.win_psrepository to manage repos"
-        date = "2022-07-01"
+        date = "2021-07-01"
         collection_name = "community.windows"
     }
 
