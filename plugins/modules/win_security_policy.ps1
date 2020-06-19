@@ -134,7 +134,7 @@ Function ConvertFrom-Ini($file_path) {
 }
 
 if ($section -eq "Privilege Rights") {
-    Add-Warning -obj $result -message "Using this module to edit rights and privileges is error-prone, use the win_user_right module instead"
+    Add-Warning -obj $result -message "Using this module to edit rights and privileges is error-prone, use the ansible.windows.win_user_right module instead"
 }
 
 $will_change = $false

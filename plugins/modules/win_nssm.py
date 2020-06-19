@@ -22,8 +22,8 @@ options:
   state:
     description:
       - State of the service on the system.
-      - Values C(started), C(stopped), and C(restarted) are deprecated since v2.8,
-        please use the M(ansible.windows.win_service) module instead to start, stop or restart the service.
+      - Values C(started), C(stopped), and C(restarted) are deprecated and will be removed on a major release after
+        C(2021-07-01). Please use the M(ansible.windows.win_service) module instead to start, stop or restart the service.
     type: str
     choices: [ absent, present, started, stopped, restarted ]
     default: present
@@ -68,24 +68,26 @@ options:
     description:
       - Parameters to be passed to the application when it starts.
       - This can be either a simple string or a list.
-      - This parameter was renamed from I(app_parameters_free_form) in 2.8.
       - This is mutually exclusive with I(app_parameters).
     aliases: [ app_parameters_free_form ]
     type: str
   dependencies:
     description:
       - Service dependencies that has to be started to trigger startup, separated by comma.
-      - DEPRECATED since v2.8, please use the M(ansible.windows.win_service) module instead.
+      - DEPRECATED, will be removed in a major release after C(2021-07-01), please use the
+        M(ansible.windows.win_service) module instead.
     type: list
   user:
     description:
       - User to be used for service startup.
-      - DEPRECATED since v2.8, please use the M(ansible.windows.win_service) module instead.
+      - DEPRECATED, will be removed in a major release after C(2021-07-01), please use the
+        M(ansible.windows.win_service) module instead.
     type: str
   password:
     description:
       - Password to be used for service startup.
-      - DEPRECATED since v2.8, please use the M(ansible.windows.win_service) module instead.
+      - DEPRECATED, will be removed in a major release after C(2021-07-01), please use the
+        M(ansible.windows.win_service) module instead.
     type: str
   start_mode:
     description:
@@ -93,7 +95,8 @@ options:
       - C(delayed) causes a delayed but automatic start after boot.
       - C(manual) means that the service will start only when another service needs it.
       - C(disabled) means that the service will stay off, regardless if it is needed or not.
-      - DEPRECATED since v2.8, please use the M(ansible.windows.win_service) module instead.
+      - DEPRECATED, will be removed in a major release after C(2021-07-01), please use the
+        M(ansible.windows.win_service) module instead.
     type: str
     choices: [ auto, delayed, disabled, manual ]
     default: auto

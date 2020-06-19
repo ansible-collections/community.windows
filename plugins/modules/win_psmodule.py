@@ -62,7 +62,7 @@ options:
   url:
     description:
       - URL of the custom repository to register.
-      - This option is deprecated and will be removed in Ansible 2.12. Use the
+      - DEPRECATED, will be removed in a major release after C(2021-07-01), please use the
         M(community.windows.win_psrepository) module instead.
     type: str
 notes:

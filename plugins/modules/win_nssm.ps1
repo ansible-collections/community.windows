@@ -43,7 +43,7 @@ $app_rotate_online = Get-AnsibleParam -obj $params -name "app_rotate_online" -ty
 $app_stop_method_console = Get-AnsibleParam -obj $params -name "app_stop_method_console" -type "int"
 $app_stop_method_skip = Get-AnsibleParam -obj $params -name "app_stop_method_skip" -type "int" -validateset 1,2,3,4,5,6,7,8,9,10,11,12,13,14,15
 
-# Deprecated options since 2.8. Remove in 2.12
+# Deprecated options, will be removed in a major release after 2021-07-01.
 $startMode = Get-AnsibleParam -obj $params -name "start_mode" -type "str" -default "auto" -validateset $start_modes_map.Keys -resultobj $result
 $dependencies = Get-AnsibleParam -obj $params -name "dependencies" -type "list"
 $user = Get-AnsibleParam -obj $params -name "user" -type "str"
@@ -294,13 +294,38 @@ function Stop-NssmService {
     }
 }
 
+function Add-DepByDate {
+    [CmdletBinding()]
+    param(
+        [Parameter(Mandatory=$true)]
+        [String]$Message,
+
+        [Parameter(Madnatory=$true)]
+        [DateTime]$Date
+    )
+
+    # Legacy doesn't natively support deprecate by date, need to do this manually until we use Ansible.Basic
+    if (-not $result.ContainsKey('deprecations')) {
+        $result.deprecations = @()
+    }
+    $result.deprecations += @{
+        msg = $Message
+        date = $Date
+        collection_name = "community.windows"
+    }
+}
+
 if (($null -ne $appParameters) -and ($null -ne $appArguments)) {
     Fail-Json $result "'app_parameters' and 'arguments' are mutually exclusive but have both been set."
 }
 
 # Backward compatibility for old parameters style. Remove the block bellow in 2.12
 if ($null -ne $appParameters) {
-    Add-DeprecationWarning -obj $result -message "The parameter 'app_parameters' will be removed soon, use 'arguments' instead" -version 2.12
+    $dep = @{
+        Message = "The parameter 'app_parameters' will be removed soon, use 'arguments' instead"
+        Date = [DateTime]::ParseExact("2022-07-01", "yyyy-MM-dd", $null)
+    }
+    Add-DepByDate @dep
 
     if ($appParameters -isnot [string]) {
         Fail-Json -obj $result -message "The app_parameters parameter must be a string representing a dictionary."
@@ -323,19 +348,39 @@ if ($null -ne $appParameters) {
 }
 
 if ($state -in @("started","stopped","restarted")) {
-    Add-DeprecationWarning -obj $result -message "The values 'started', 'stopped', and 'restarted' for 'state' will be removed soon, use the win_service module to start or stop the service instead" -version 2.12
+    $dep = @{
+        Message = "The values 'started', 'stopped', and 'restarted' for 'state' will be removed soon, use the win_service module to start or stop the service instead"
+        Date = [DateTime]::ParseExact("2022-07-01", "yyyy-MM-dd", $null)
+    }
+    Add-DepByDate @dep
 }
 if ($params.ContainsKey('start_mode')) {
-    Add-DeprecationWarning -obj $result -message "The parameter 'start_mode' will be removed soon, use the win_service module instead" -version 2.12
+    $dep = @{
+        Message = "The parameter 'start_mode' will be removed soon, use the win_service module instead"
+        Date = [DateTime]::ParseExact("2022-07-01", "yyyy-MM-dd", $null)
+    }
+    Add-DepByDate @dep
 }
 if ($null -ne $dependencies) {
-    Add-DeprecationWarning -obj $result -message "The parameter 'dependencies' will be removed soon, use the win_service module instead" -version 2.12
+    $dep = @{
+        Message = "The parameter 'dependencies' will be removed soon, use the win_service module instead"
+        Date = [DateTime]::ParseExact("2022-07-01", "yyyy-MM-dd", $null)
+    }
+    Add-DepByDate @dep
 }
 if ($null -ne $user) {
-    Add-DeprecationWarning -obj $result -message "The parameter 'user' will be removed soon, use the win_service module instead" -version 2.12
+    $dep = @{
+        Message = "The parameter 'user' will be removed soon, use the win_service module instead"
+        Date = [DateTime]::ParseExact("2022-07-01", "yyyy-MM-dd", $null)
+    }
+    Add-DepByDate @dep
 }
 if ($null -ne $password) {
-    Add-DeprecationWarning -obj $result -message "The parameter 'password' will be removed soon, use the win_service module instead" -version 2.12
+    $dep = @{
+        Message = "The parameter 'password' will be removed soon, use the win_service module instead"
+        Date = [DateTime]::ParseExact("2022-07-01", "yyyy-MM-dd", $null)
+    }
+    Add-DepByDate @dep
 }
 
 if ($state -ne 'absent') {
