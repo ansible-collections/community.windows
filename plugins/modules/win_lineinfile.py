@@ -95,8 +95,8 @@ options:
     choices: [ unix, windows ]
     default: windows
 seealso:
-- module: assemble
-- module: lineinfile
+- module: ansible.builtin.assemble
+- module: ansible.builtin.lineinfile
 author:
 - Brian Lloyd (@brianlloyd)
 '''

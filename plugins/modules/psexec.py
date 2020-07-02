@@ -195,7 +195,7 @@ notes:
 - For more information on this module and the various host requirements, see
   U(https://github.com/jborean93/pypsexec).
 seealso:
-- module: raw
+- module: ansible.builtin.raw
 - module: ansible.windows.win_command
 - module: community.windows.win_psexec
 - module: ansible.windows.win_shell
