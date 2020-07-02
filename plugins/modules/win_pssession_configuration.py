@@ -353,7 +353,7 @@ EXAMPLES = r'''
         RoleCapabilities:
           - PasswordResetter
           - EmployeeOffboarder
-      'CORP\Webmasters':
+      'CORP\Webhosts':
         RoleCapabilities: IISAdmin
     visible_functions:
       - tabexpansion2

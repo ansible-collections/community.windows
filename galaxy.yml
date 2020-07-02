@@ -13,7 +13,7 @@ tags:
 dependencies:
   ansible.windows: 0.0.1-beta.2
 repository: https://github.com/ansible-collections/community.windows
-documentation: https://github.com/ansible-collections/community.windows/tree/master/docs
+documentation: https://github.com/ansible-collections/community.windows/tree/main/docs
 homepage: https://github.com/ansible-collections/community.windows
 issues: https://github.com/ansible-collections/community.windows/issues
 build_ignore:

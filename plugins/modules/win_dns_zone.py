@@ -53,7 +53,7 @@ options:
   forwarder_timeout:
     description:
       - Specifies a length of time, in seconds, that a DNS server waits for a
-        master server to resolve a query.
+        remote DNS server to resolve a query.
       - Accepts integer values between 0 and 15.
       - If the provided value is not valid, it will be omitted and a warning
         will be issued.
@@ -73,8 +73,8 @@ options:
     choices: [ forest, domain, legacy, none ]
   dns_servers:
     description:
-      - Specifies an list of IP addresses of the master servers of the zone.
-      - DNS queries for a forwarded zone are sent to master servers.
+      - Specifies an list of IP addresses of the primary servers of the zone.
+      - DNS queries for a forwarded zone are sent to primary servers.
       - Required if l(type=secondary), l(type=forwarder) or l(type=stub),
         otherwise ignored.
       - At least one server is required.

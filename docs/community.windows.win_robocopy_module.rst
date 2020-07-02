@@ -128,7 +128,7 @@ Notes
 -----
 
 .. note::
-   - This is not a complete port of the :ref:`synchronize <synchronize_module>` module. Unlike the :ref:`synchronize <synchronize_module>` module this only performs the sync/copy on the remote machine, not from the master to the remote machine.
+   - This is not a complete port of the :ref:`synchronize <synchronize_module>` module. Unlike the :ref:`synchronize <synchronize_module>` module this only performs the sync/copy on the remote machine, not from the Ansible controller to the remote machine.
    - This module does not currently support all Robocopy flags.
 
 
@@ -148,7 +148,7 @@ Examples
 
 .. code-block:: yaml+jinja
 
-    
+
     - name: Sync the contents of one directory to another
       community.windows.win_robocopy:
         src: C:\DirectoryOne
