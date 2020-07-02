@@ -11,7 +11,7 @@ short_description: Manages XML file content on Windows hosts
 description:
     - Manages XML nodes, attributes and text, using xpath to select which xml nodes need to be managed.
     - XML fragments, formatted as strings, are used to specify the desired state of a part or parts of XML files on remote Windows servers.
-    - For non-Windows targets, use the M(xml) module instead.
+    - For non-Windows targets, use the M(community.general.xml) module instead.
 options:
     attribute:
         description:

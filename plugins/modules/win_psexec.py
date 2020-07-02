@@ -101,7 +101,7 @@ notes:
   U(https://technet.microsoft.com/en-us/sysinternals/bb897553.aspx)
 seealso:
 - module: community.windows.psexec
-- module: raw
+- module: ansible.builtin.raw
 - module: ansible.windows.win_command
 - module: ansible.windows.win_shell
 author:

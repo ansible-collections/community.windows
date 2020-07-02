@@ -76,7 +76,7 @@ options:
     type: int
     default: 300
 seealso:
-- module: wait_for
+- module: ansible.builtin.wait_for
 - module: ansible.windows.win_wait_for
 author:
 - Charles Crossan (@crossan007)
