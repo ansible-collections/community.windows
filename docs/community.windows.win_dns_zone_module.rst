@@ -52,8 +52,8 @@ Parameters
                                 <td>
                                                                                                                                                             </td>
                                                                 <td>
-                                            <div>Specifies an list of IP addresses of the master servers of the zone.</div>
-                                            <div>DNS queries for a forwarded zone are sent to master servers.</div>
+                                            <div>Specifies an list of IP addresses of the primary servers of the zone.</div>
+                                            <div>DNS queries for a forwarded zone are sent to primary servers.</div>
                                             <div>Required if l(type=secondary), l(type=forwarder) or l(type=stub), otherwise ignored.</div>
                                             <div>At least one server is required.</div>
                                                         </td>
@@ -92,7 +92,7 @@ Parameters
                                 <td>
                                                                                                                                                             </td>
                                                                 <td>
-                                            <div>Specifies a length of time, in seconds, that a DNS server waits for a master server to resolve a query.</div>
+                                            <div>Specifies a length of time, in seconds, that a DNS server waits for a remote DNS server to resolve a query.</div>
                                             <div>Accepts integer values between 0 and 15.</div>
                                             <div>If the provided value is not valid, it will be omitted and a warning will be issued.</div>
                                                         </td>
@@ -191,7 +191,7 @@ Examples
 
 .. code-block:: yaml+jinja
 
-    
+
     - name: Ensure primary zone is present
       community.windows.win_dns_zone:
         name: wpinner.euc.vmware.com

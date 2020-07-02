@@ -874,7 +874,7 @@ Examples
 
 .. code-block:: yaml+jinja
 
-    
+
     - name: Register a session configuration that loads modules automatically
       community.windows.win_pssession_configuration:
         name: WebAdmin
@@ -903,7 +903,7 @@ Examples
             RoleCapabilities:
               - PasswordResetter
               - EmployeeOffboarder
-          'CORP\Webmasters':
+          'CORP\Webhosts':
             RoleCapabilities: IISAdmin
         visible_functions:
           - tabexpansion2

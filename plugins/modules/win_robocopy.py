@@ -43,7 +43,7 @@ options:
     type: str
 notes:
 - This is not a complete port of the M(synchronize) module. Unlike the M(synchronize) module this only performs the sync/copy on the remote machine,
-  not from the master to the remote machine.
+  not from the Ansible controller to the remote machine.
 - This module does not currently support all Robocopy flags.
 seealso:
 - module: ansible.posix.synchronize
