@@ -8,11 +8,12 @@
 #AnsibleRequires -CSharpUtil Ansible.Basic
 
 $spec = @{
-  options = @{
+  options             = @{
     name  = @{ type = "str"; required = $true }
     repo  = @{ type = "str" }
     state = @{ type = "str"; default = "present"; choices = "present", "absent" }
   }
+  supports_check_mode = $true
 }
 
 $module = [Ansible.Basic.AnsibleModule]::Create($args, $spec)
@@ -29,11 +30,8 @@ function Install-Scoop {
   $scoop_app = Get-Command -Name scoop.ps1 -Type ExternalScript -ErrorAction SilentlyContinue
   if ($null -eq $scoop_app) {
     # We need to install scoop
-    # Enable TLS1.1/TLS1.2 if they're available but disabled (eg. .NET 4.5)
+    # Enable TLS1.2 if it's available but disabled (eg. .NET 4.5)
     $security_protocols = [Net.ServicePointManager]::SecurityProtocol -bor [Net.SecurityProtocolType]::SystemDefault
-    if ([Net.SecurityProtocolType].GetMember("Tls11").Count -gt 0) {
-      $security_protocols = $security_protcols -bor [Net.SecurityProtocolType]::Tls11
-    }
     if ([Net.SecurityProtocolType].GetMember("Tls12").Count -gt 0) {
       $security_protocols = $security_protcols -bor [Net.SecurityProtocolType]::Tls12
     }
@@ -87,8 +85,10 @@ function Get-ScoopBuckets {
     [Parameter(Mandatory = $true)] [string]$scoop_path
   )
 
-  $command = Argv-ToString -arguments @("powershell.exe", $scoop_path, "bucket", "list")
+  $arguments = [System.Collections.Generic.List[String]]@("powershell.exe", $scoop_path, "bucket", "list")
+  $command = Argv-ToString -arguments $arguments
   $res = Run-Command -Command $command
+
   if ($res.rc -ne 0) {
     $module.Result.command = $command
     $module.Result.rc = $res.rc
@@ -105,18 +105,20 @@ function Uninstall-ScoopBucket {
     [Parameter(Mandatory = $true)] [string]$scoop_path,
     [Parameter(Mandatory = $true)] [String]$bucket
   )
-  $arguments = [System.Collections.ArrayList]@("powershell.exe", $scoop_path, "bucket", "rm")
+  $arguments = [System.Collections.Generic.List[String]]@("powershell.exe", $scoop_path, "bucket", "rm")
   $arguments.Add($bucket)
   if ($repo) {
     $arguments.Add($repo)
   }
 
   $command = Argv-ToString -arguments $arguments
-  $res = Run-Command -Command $command
-  $module.Result.rc = $res.rc
+  if (-not $module.CheckMode) {
+    $res = Run-Command -Command $command
+    $module.Result.rc = $res.rc
 
-  if ($module.Verbosity -gt 1) {
-    $module.Result.stdout = $res.stdout
+    if ($module.Verbosity -gt 1) {
+      $module.Result.stdout = $res.stdout
+    }
   }
   $module.Result.changed = $true
 }
@@ -134,11 +136,13 @@ function Install-ScoopBucket {
   }
 
   $command = Argv-ToString -arguments $arguments
-  $res = Run-Command -Command $command
-  $module.Result.rc = $res.rc
+  if (-not $module.CheckMode) {
+    $res = Run-Command -Command $command
+    $module.Result.rc = $res.rc
 
-  if ($module.Verbosity -gt 1) {
-    $module.Result.stdout = $res.stdout
+    if ($module.Verbosity -gt 1) {
+      $module.Result.stdout = $res.stdout
+    }
   }
   $module.Result.changed = $true
 }
