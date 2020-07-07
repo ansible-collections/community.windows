@@ -109,12 +109,14 @@ function Get-ScoopPackages {
   }
 
   $res.stdout -split "`n" |
-  Select-String '(.*?) \(v:(.*?)\) \[(.*?)\]' |
+  Select-String '(.*?) \(v:(.*?)\)( \*global\*)? \[(.*?)\](\{32bit\})?' |
   ForEach-Object {
     [PSCustomObject]@{
       Package = $_.Matches[0].Groups[1].Value
       Version = $_.Matches[0].Groups[2].Value
-      Bucket  = $_.Matches[0].Groups[3].Value
+      Global  = -not ([string]::IsNullOrWhiteSpace($_.Matches[0].Groups[3].Value))
+      Bucket  = $_.Matches[0].Groups[4].Value
+      x86     = -not ([string]::IsNullOrWhiteSpace($_.Matches[0].Groups[5].Value))
     }
   }
 }
@@ -175,7 +177,7 @@ function Install-ScoopPackage {
 function Get-UninstallScoopPackageArguments {
   $arguments = [System.Collections.Generic.List[String]]@()
 
-  if ($independent) {
+  if ($global) {
     $arguments.Add("--global")
   }
   if ($purge) {
@@ -227,13 +229,20 @@ $installed_packages = Get-ScoopPackages -scoop_path $scoop_path
 
 if ($state -in @("absent")) {
   # Always attempt uninstall
-  # Packages can be in a broken state where they don't appear scoop export
+  # Packages can be in a broken state where they don't in appear scoop export
   Uninstall-ScoopPackage -scoop_path $scoop_path -packages $name
 }
 
 if ($state -in @("present")) {
   $missing_packages = foreach ($package in $name) {
-    if ($installed_packages.Package -notcontains $package) {
+    if (
+      ($installed_packages.Package -notcontains $package) -or 
+      ($installed_packages.Package -contains $package -and (
+          ($installed_packages.Where( { $_.Package -eq $package }).Global -contains $true -and -not $global) -or 
+          ($installed_packages.Where( { $_.Package -eq $package }).Global -notcontains $true -and $global)
+        )
+      )
+    ) {
       $package
     }
   }
