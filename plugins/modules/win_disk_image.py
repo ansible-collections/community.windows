@@ -49,11 +49,6 @@ EXAMPLES = r'''
 '''
 
 RETURN = r'''
-mount_path:
-    description: Filesystem path where the target image is mounted, this has been deprecated in favour of C(mount_paths).
-    returned: when C(state) is C(present)
-    type: str
-    sample: F:\
 mount_paths:
     description: A list of filesystem paths mounted from the target image.
     returned: when C(state) is C(present)

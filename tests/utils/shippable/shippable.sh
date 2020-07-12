@@ -29,7 +29,14 @@ python -V
 command -v pip
 pip --version
 pip list --disable-pip-version-check
-pip install https://github.com/ansible/ansible/archive/devel.tar.gz --disable-pip-version-check
+
+if [[ "${script}" =~ ^(sanity|units)$ ]]; then
+    ansible_branch="${args[1]}"
+else
+    ansible_branch="devel"
+fi
+
+pip install "https://github.com/ansible/ansible/archive/${ansible_branch}.tar.gz" --disable-pip-version-check
 
 export ANSIBLE_COLLECTIONS_PATHS="${HOME}/.ansible"
 SHIPPABLE_RESULT_DIR="$(pwd)/shippable"

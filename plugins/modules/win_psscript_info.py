@@ -125,12 +125,12 @@ scripts:
       description:
         - The address of the icon of the script.
       type: str
-      sample: 'https://raw.githubusercontent.com/scripter/script/master/logo.png'
+      sample: 'https://raw.githubusercontent.com/scripter/script/main/logo.png'
     license_uri:
       description:
         - The address of the license for the script.
       type: str
-      sample: 'https://raw.githubusercontent.com/scripter/script/master/LICENSE'
+      sample: 'https://raw.githubusercontent.com/scripter/script/main/LICENSE'
     project_uri:
       description:
         - The address of the script's project.

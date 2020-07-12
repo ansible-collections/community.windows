@@ -22,8 +22,8 @@
     that:
     - dep_repo_add is changed
     - dep_repo_add.deprecations|length == 1
-    - dep_repo_add.deprecations[0].msg == 'Adding a repo with this module is deprecated, the repository parameter should only be used to select a repo. Use win_psrepository to manage repos'
-    - dep_repo_add.deprecations[0].version == 2.12
+    - dep_repo_add.deprecations[0].msg == 'Adding a repo with this module is deprecated, the repository parameter should only be used to select a repo. Use community.windows.win_psrepository to manage repos'
+    - dep_repo_add.deprecations[0].date == '2021-07-01'
 
 - name: install package (check mode)
   win_psmodule:
