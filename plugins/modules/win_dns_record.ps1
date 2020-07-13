@@ -8,10 +8,13 @@
 $spec = @{
     options = @{
         name = @{ type = "str"; required = $true }
+        port = @{ type = "int"; default = [int]"" }
+        priority = @{ type = "int"; default = "0" }
         state = @{ type = "str"; choices = "absent", "present"; default = "present" }
         ttl = @{ type = "int"; default = "3600" }
-        type = @{ type = "str"; choices = "A","AAAA","CNAME","PTR"; required = $true }
+        type = @{ type = "str"; choices = "A","AAAA","CNAME","PTR","SRV"; required = $true }
         value = @{ type = "list"; elements = "str"; default = @() ; aliases=@( 'values' )}
+        weight = @{ type = "int"; default = "0" }
         zone = @{ type = "str"; required = $true }
         computer_name = @{ type = "str" }
     }
@@ -21,10 +24,13 @@ $spec = @{
 $module = [Ansible.Basic.AnsibleModule]::Create($args, $spec)
 
 $name = $module.Params.name
+$port = $module.Params.port
+$priority = $module.Params.priority
 $state = $module.Params.state
 $ttl = $module.Params.ttl
 $type = $module.Params.type
 $values = $module.Params.value
+$weight = $module.Params.weight
 $zone = $module.Params.zone
 $dns_computer_name = $module.Params.computer_name
 
@@ -67,6 +73,7 @@ $record_argument_name = @{
     # MX = "MailExchange";
     # NS = "NameServer";
     PTR = "PtrDomainName";
+    SRV = "DomainName";
     # TXT = "DescriptiveText"
 }[$type]
 
@@ -123,8 +130,20 @@ if ($null -ne $values -and $values.Count -gt 0) {
     foreach ($value in $values) {
         $splat_args = @{ $type = $true; $record_argument_name = $value }
         $module.Result.debug_splat_args = $splat_args
+        $srv_args = @{ ZoneName = $zone
+                       DomainName = $value
+                       Weight = $weight
+                       Priority = $priority
+                       Port = $port
+                       TimeToLive = $ttl
+        }
         try {
-            Add-DnsServerResourceRecord -ZoneName $zone -Name $name -AllowUpdateAny -TimeToLive $ttl @splat_args -WhatIf:$module.CheckMode @extra_args
+            if ($type -ne 'SRV') {
+                Add-DnsServerResourceRecord -ZoneName $zone -Name $name -AllowUpdateAny -TimeToLive $ttl @splat_args -WhatIf:$module.CheckMode @extra_args
+            }
+            else {
+                Add-DnsServerResourceRecord -SRV -Name $name @srv_args @extra_args -WhatIf:$module.CheckMode
+            }
         } catch {
             $module.FailJson("Error adding DNS $type resource $name in zone $zone with value $value", $_)
         }
