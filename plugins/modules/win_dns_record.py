@@ -31,7 +31,7 @@ options:
     - The priority number for each service in SRV record.
     - Optional for C(type=SRV).
     - Supported only for C(type=SRV).
-    default: 0
+    default: "0"
     type: int
   state:
     description:
@@ -66,7 +66,7 @@ options:
     - Weightage given to each service record in SRV record.
     - Optional for C(type=SRV).
     - Supported only for C(type=SRV).
-    default: 0
+    default: "0"
     type: int
   zone:
     description:
