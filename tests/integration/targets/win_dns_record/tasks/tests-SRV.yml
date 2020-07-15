@@ -44,7 +44,6 @@
       - cmd_result is not changed
       - cmd_result_actual.stdout == 'ansible.example.com.\r\n'
 
-
 - name: 'TYPE=SRV - update address (check mode)'
   win_dns_record: {zone: '{{ win_dns_record_zone }}', name: test1, value: altansible.example.com, weight: 5, priority: 2, port: 755, type: SRV}
   register: cmd_result
@@ -90,7 +89,6 @@
     that:
       - cmd_result is not changed
       - cmd_result_actual.stdout == 'altansible.example.com.\r\n'
-
 
 - name: 'TYPE=SRV - update TTL (check mode)'
   win_dns_record: {zone: '{{ win_dns_record_zone }}', name: test1, value: altansible.example.com, weight: 5, priority: 2, port: 755, ttl: 7200, type: SRV}
@@ -138,7 +136,6 @@
       - cmd_result is not changed
       - cmd_result_actual.stdout == '7200\r\n'
 
-
 - name: 'TYPE=SRV - update weight (check mode)'
   win_dns_record: {zone: '{{ win_dns_record_zone }}', name: test1, value: altansible.example.com, weight: 1, priority: 2, port: 755, type: SRV}
   register: cmd_result
@@ -184,8 +181,6 @@
     that:
       - cmd_result is not changed
       - cmd_result_actual.stdout == '1\r\n'
-
-
 
 - name: 'TYPE=SRV - update port (check mode)'
   win_dns_record: {zone: '{{ win_dns_record_zone }}', name: test1, value: altansible.example.com, weight: 1, priority: 2, port: 355, type: SRV}
@@ -233,8 +228,6 @@
       - cmd_result is not changed
       - cmd_result_actual.stdout == '355\r\n'
 
-
-
 - name: 'TYPE=SRV - update priority (check mode)'
   win_dns_record: {zone: '{{ win_dns_record_zone }}', name: test1, value: altansible.example.com, weight: 1, priority: 7, port: 355, type: SRV}
   register: cmd_result
@@ -281,8 +274,6 @@
       - cmd_result is not changed
       - cmd_result_actual.stdout == '7\r\n'
 
-
-
 - name: 'TYPE=SRV - remove record (check mode)'
   win_dns_record: {zone: '{{ win_dns_record_zone }}', name: test1, type: SRV, state: absent}
   register: cmd_result
@@ -328,12 +319,3 @@
     that:
       - cmd_result is not changed
       - cmd_result_actual.stdout == 'absent\r\n'
-
-
-
-
-
-
-
-
-
