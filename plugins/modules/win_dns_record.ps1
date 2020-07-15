@@ -8,16 +8,17 @@
 $spec = @{
     options = @{
         name = @{ type = "str"; required = $true }
-        port = @{ type = "int"; default = [int]"" }
-        priority = @{ type = "int"; default = "0" }
+        port = @{ type = "int"}
+        priority = @{ type = "int"}
         state = @{ type = "str"; choices = "absent", "present"; default = "present" }
         ttl = @{ type = "int"; default = "3600" }
         type = @{ type = "str"; choices = "A","AAAA","CNAME","PTR","SRV"; required = $true }
         value = @{ type = "list"; elements = "str"; default = @() ; aliases=@( 'values' )}
-        weight = @{ type = "int"; default = "0" }
+        weight = @{ type = "int"}
         zone = @{ type = "str"; required = $true }
         computer_name = @{ type = "str" }
     }
+    required_if = @(,@("type", "SRV", @("port", "priority", "weight")))
     supports_check_mode = $true
 }
 
@@ -138,11 +139,11 @@ if ($null -ne $values -and $values.Count -gt 0) {
                        TimeToLive = $ttl
         }
         try {
-            if ($type -ne 'SRV') {
-                Add-DnsServerResourceRecord -ZoneName $zone -Name $name -AllowUpdateAny -TimeToLive $ttl @splat_args -WhatIf:$module.CheckMode @extra_args
+            if ($type -eq 'SRV') {
+                Add-DnsServerResourceRecord -SRV -Name $name @srv_args @extra_args -WhatIf:$module.CheckMode
             }
             else {
-                Add-DnsServerResourceRecord -SRV -Name $name @srv_args @extra_args -WhatIf:$module.CheckMode
+                Add-DnsServerResourceRecord -ZoneName $zone -Name $name -AllowUpdateAny -TimeToLive $ttl @splat_args -WhatIf:$module.CheckMode @extra_args
             }
         } catch {
             $module.FailJson("Error adding DNS $type resource $name in zone $zone with value $value", $_)

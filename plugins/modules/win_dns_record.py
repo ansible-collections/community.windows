@@ -22,16 +22,14 @@ options:
   port:
     description:
     - The port number of the record.
-    - Optional for C(type=SRV).
+    - Required when C(type=SRV).
     - Supported only for C(type=SRV).
-    default: ""
     type: int
   priority:
     description:
     - The priority number for each service in SRV record.
-    - Optional for C(type=SRV).
+    - Required when C(type=SRV).
     - Supported only for C(type=SRV).
-    default: "0"
     type: int
   state:
     description:
@@ -64,9 +62,8 @@ options:
   weight:
     description:
     - Weightage given to each service record in SRV record.
-    - Optional for C(type=SRV).
+    - Required when C(type=SRV).
     - Supported only for C(type=SRV).
-    default: "0"
     type: int
   zone:
     description:
@@ -149,6 +146,7 @@ EXAMPLES = r'''
     port: 995
     state: present
     type: "SRV"
+    weight: 2
     values: "amer.example.com"
     zone: "example.com"
 '''
