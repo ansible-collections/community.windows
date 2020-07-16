@@ -87,19 +87,21 @@ $changes = @{
 
 $records = Get-DnsServerResourceRecord -ZoneName $zone -Name $name -RRType $type -Node -ErrorAction:Ignore @extra_args | Sort-Object
 if($type -eq 'SRV' -and $null -ne $records){
-    $record_port_old = $records.RecordData.Port.ToString()
-    $record_priority_old = $records.RecordData.Priority.ToString()
-    $record_weight_old = $records.RecordData.Weight.ToString()
-    if($port -ne $record_port_old -or $priority -ne $record_priority_old -or $weight -ne $record_weight_old ){
-        $new_record = $records.Clone()
-        $new_record.RecordData.Port = $port
-        $new_record.RecordData.Priority = $priority
-        $new_record.RecordData.Weight = $weight
+    foreach($record in $records){
+        $record_port_old = $records.RecordData.Port.ToString()
+        $record_priority_old = $records.RecordData.Priority.ToString()
+        $record_weight_old = $records.RecordData.Weight.ToString()
+        if($port -ne $record_port_old -or $priority -ne $record_priority_old -or $weight -ne $record_weight_old ){
+            $new_record = $records.Clone()
+            $new_record.RecordData.Port = $port
+            $new_record.RecordData.Priority = $priority
+            $new_record.RecordData.Weight = $weight
 
-        Set-DnsServerResourceRecord -ZoneName $zone -OldInputObject $records -NewInputObject $new_record -WhatIf:$module.CheckMode @extra_args
-        $changes.before += "[$zone] $($record.HostName) $($records.RecordData.Port) IN $type $record_port_old $record_weight_old $record_priority_old`n"
-        $changes.after += "[$zone] $($record.HostName) $($records.RecordData.Port) IN $type $port $weight $priority`n"
-        $module.Result.changed = $true
+            Set-DnsServerResourceRecord -ZoneName $zone -OldInputObject $records -NewInputObject $new_record -WhatIf:$module.CheckMode @extra_args
+            $changes.before += "[$zone] $($record.HostName) $($records.RecordData.Port) IN $type $record_port_old $record_weight_old $record_priority_old`n"
+            $changes.after += "[$zone] $($record.HostName) $($records.RecordData.Port) IN $type $port $weight $priority`n"
+            $module.Result.changed = $true
+        }
     }
 }
 if ($null -ne $records) {
