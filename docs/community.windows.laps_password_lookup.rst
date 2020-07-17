@@ -23,7 +23,7 @@ Synopsis
 
 Requirements
 ------------
-The below requirements are needed on the local master node that executes this lookup.
+The below requirements are needed on the local Ansible controller node that executes this lookup.
 
 - python-ldap
 

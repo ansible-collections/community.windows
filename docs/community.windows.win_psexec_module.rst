@@ -341,8 +341,8 @@ See Also
 
    :ref:`community.windows.psexec_module`
       The official documentation on the **community.windows.psexec** module.
-   :ref:`raw_module`
-      The official documentation on the **raw** module.
+   :ref:`ansible.builtin.raw_module`
+      The official documentation on the **ansible.builtin.raw** module.
    :ref:`ansible.windows.win_command_module`
       The official documentation on the **ansible.windows.win_command** module.
    :ref:`ansible.windows.win_shell_module`

@@ -105,6 +105,11 @@ Parameters
                                                                                                                                                             </td>
                                                                 <td>
                                             <div>Custom site Parameters from string where properties are separated by a pipe and property name/values by colon Ex. &quot;foo:1|bar:2&quot;</div>
+                                            <div>Some custom parameters that you can use are listed below, this isn&#x27;t a definitive list but some common parameters.</div>
+                                            <div><code>logfile.directory</code> - Physical path to store Logs, e.g. <code>D:\IIS-LOGs\</code>.</div>
+                                            <div><code>logfile.period</code> - Log file rollover scheduled accepting these values, how frequently the log file should be rolled-over, e.g. <code>Hourly, Daily, Weekly, Monthly</code>.</div>
+                                            <div><code>logfile.LogFormat</code> - Log file format, by default IIS uses <code>W3C</code>.</div>
+                                            <div><code>logfile.truncateSize</code> - The size at which the log file contents will be trunsted, expressed in bytes.</div>
                                                         </td>
             </tr>
                                 <tr>
@@ -236,6 +241,19 @@ Examples
       community.windows.win_iis_website:
         name: "Default Web Site"
         state: absent
+
+    # Create a WebSite with custom Logging configuration (Logs Location, Format and Rolling Over).
+
+    - name: Creating WebSite with Custom Log location, Format 3WC and rolling over every hour.
+      community.windows.win_iis_website:
+        name: MyCustom_Web_Shop_Site
+        state: started
+        port: 80
+        ip: '*'
+        hostname: '*'
+        physical_path: D:\wwwroot\websites\my-shop-site
+        parameters: logfile.directory:D:\IIS-LOGS\websites\my-shop-site|logfile.period:Hourly|logFile.logFormat:W3C
+        application_pool: my-shop-site
 
     # Some commandline examples:
 

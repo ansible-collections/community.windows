@@ -95,7 +95,7 @@ Examples
 
 .. code-block:: yaml+jinja
 
-
+    
     - name: Get info about all script on the system
       community.windows.win_psscript_info:
 
@@ -448,10 +448,10 @@ Common return values are documented `here <https://docs.ansible.com/ansible/late
                                             <div style="font-size: smaller"><b>Sample:</b></div>
                                                 <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">## 1.5.5
     - Add optional param for detailed info
-
+    
     ## 1.4.7
     - Bug fix for deadlock when getting parameters in an event
-
+    
     ## 1.1.4
     - Bug fix when installing package from private feeds</div>
                                     </td>
@@ -549,7 +549,7 @@ Common return values are documented `here <https://docs.ansible.com/ansible/late
                                                 <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">1.2.3</div>
                                     </td>
             </tr>
-
+                    
                                         </table>
     <br/><br/>
 

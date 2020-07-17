@@ -17,7 +17,7 @@ community.windows.win_wakeonlan
 Synopsis
 --------
 - The ``win_wakeonlan`` module sends magic Wake-on-LAN (WoL) broadcast packets.
-- For non-Windows targets, use the :ref:`wakeonlan <wakeonlan_module>` module instead.
+- For non-Windows targets, use the :ref:`community.general.wakeonlan <community.general.wakeonlan_module>` module instead.
 
 
 

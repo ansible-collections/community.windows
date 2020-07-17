@@ -423,8 +423,8 @@ See Also
 
 .. seealso::
 
-   :ref:`raw_module`
-      The official documentation on the **raw** module.
+   :ref:`ansible.builtin.raw_module`
+      The official documentation on the **ansible.builtin.raw** module.
    :ref:`ansible.windows.win_command_module`
       The official documentation on the **ansible.windows.win_command** module.
    :ref:`community.windows.win_psexec_module`

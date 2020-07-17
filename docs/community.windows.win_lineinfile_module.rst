@@ -263,10 +263,10 @@ See Also
 
 .. seealso::
 
-   :ref:`assemble_module`
-      The official documentation on the **assemble** module.
-   :ref:`lineinfile_module`
-      The official documentation on the **lineinfile** module.
+   :ref:`ansible.builtin.assemble_module`
+      The official documentation on the **ansible.builtin.assemble** module.
+   :ref:`ansible.builtin.lineinfile_module`
+      The official documentation on the **ansible.builtin.lineinfile** module.
 
 
 Examples

@@ -19,7 +19,7 @@ Synopsis
 - Unzips compressed files and archives.
 - Supports .zip files natively.
 - Supports other formats supported by the Powershell Community Extensions (PSCX) module (basically everything 7zip supports).
-- For non-Windows targets, use the :ref:`unarchive <unarchive_module>` module instead.
+- For non-Windows targets, use the :ref:`ansible.builtin.unarchive <ansible.builtin.unarchive_module>` module instead.
 
 
 
@@ -159,8 +159,8 @@ See Also
 
 .. seealso::
 
-   :ref:`unarchive_module`
-      The official documentation on the **unarchive** module.
+   :ref:`ansible.builtin.unarchive_module`
+      The official documentation on the **ansible.builtin.unarchive** module.
 
 
 Examples

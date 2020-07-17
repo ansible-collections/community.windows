@@ -1,6 +1,6 @@
 namespace: community
 name: windows
-version: 0.0.1
+version: 0.2.0
 readme: README.md
 authors:
 - Jordan Borean @jborean93
@@ -11,7 +11,7 @@ license_file: COPYING
 tags:
 - windows
 dependencies:
-  ansible.windows: 0.0.1-beta.2
+  ansible.windows: '>=0.0.0,<2.0.0'
 repository: https://github.com/ansible-collections/community.windows
 documentation: https://github.com/ansible-collections/community.windows/tree/main/docs
 homepage: https://github.com/ansible-collections/community.windows

@@ -207,8 +207,8 @@ See Also
 
 .. seealso::
 
-   :ref:`wait_for_module`
-      The official documentation on the **wait_for** module.
+   :ref:`ansible.builtin.wait_for_module`
+      The official documentation on the **ansible.builtin.wait_for** module.
    :ref:`ansible.windows.win_wait_for_module`
       The official documentation on the **ansible.windows.win_wait_for** module.
 

@@ -191,7 +191,7 @@ Examples
 
 .. code-block:: yaml+jinja
 
-
+    
     - name: Ensure primary zone is present
       community.windows.win_dns_zone:
         name: wpinner.euc.vmware.com
