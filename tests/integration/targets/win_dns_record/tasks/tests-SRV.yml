@@ -275,7 +275,7 @@
       - cmd_result_actual.stdout == '7\r\n'
 
 - name: 'TYPE=SRV - remove record (check mode)'
-  win_dns_record: {zone: '{{ win_dns_record_zone }}', name: test1, type: SRV, state: absent}
+  win_dns_record: {zone: '{{ win_dns_record_zone }}', name: test1, weight: 1, priority: 7, port: 355, type: SRV, state: absent}
   register: cmd_result
   check_mode: yes
 
@@ -291,7 +291,7 @@
       - cmd_result_actual.stdout == 'exists\r\n'
 
 - name: 'TYPE=SRV - remove record'
-  win_dns_record: {zone: '{{ win_dns_record_zone }}', name: test1, type: SRV, state: absent}
+  win_dns_record: {zone: '{{ win_dns_record_zone }}', name: test1, weight: 1, priority: 7, port: 355, type: SRV, state: absent}
   register: cmd_result
 
 - name: 'TYPE=SRV - remove record get results'
@@ -306,7 +306,7 @@
       - cmd_result_actual.stdout == 'absent\r\n'
 
 - name: 'TYPE=SRV - remove record (idempotent)'
-  win_dns_record: {zone: '{{ win_dns_record_zone }}', name: test1, type: SRV, state: absent}
+  win_dns_record: {zone: '{{ win_dns_record_zone }}', name: test1, weight: 1, priority: 7, port: 355, type: SRV, state: absent}
   register: cmd_result
 
 - name: 'TYPE=SRV - remove record get results (idempotent)'

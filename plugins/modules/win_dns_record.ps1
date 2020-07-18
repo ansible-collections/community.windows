@@ -86,24 +86,7 @@ $changes = @{
 
 
 $records = Get-DnsServerResourceRecord -ZoneName $zone -Name $name -RRType $type -Node -ErrorAction:Ignore @extra_args | Sort-Object
-if($type -eq 'SRV' -and $null -ne $records){
-    foreach($record in $records){
-        $record_port_old = $records.RecordData.Port.ToString()
-        $record_priority_old = $records.RecordData.Priority.ToString()
-        $record_weight_old = $records.RecordData.Weight.ToString()
-        if($port -ne $record_port_old -or $priority -ne $record_priority_old -or $weight -ne $record_weight_old ){
-            $new_record = $records.Clone()
-            $new_record.RecordData.Port = $port
-            $new_record.RecordData.Priority = $priority
-            $new_record.RecordData.Weight = $weight
 
-            Set-DnsServerResourceRecord -ZoneName $zone -OldInputObject $records -NewInputObject $new_record -WhatIf:$module.CheckMode @extra_args
-            $changes.before += "[$zone] $($record.HostName) $($records.RecordData.Port) IN $type $record_port_old $record_weight_old $record_priority_old`n"
-            $changes.after += "[$zone] $($record.HostName) $($records.RecordData.Port) IN $type $port $weight $priority`n"
-            $module.Result.changed = $true
-        }
-    }
-}
 if ($null -ne $records) {
     # We use [Hashtable]$required_values below as a set rather than a map.
     # It provides quick lookup to test existing DNS record against. By removing
@@ -116,16 +99,22 @@ if ($null -ne $records) {
 
     foreach ($record in $records) {
         $record_value = $record.RecordData.$record_argument_name.ToString()
-
+        $record_port_old = $record.RecordData.Port.ToString()
+        $record_priority_old = $record.RecordData.Priority.ToString()
+        $record_weight_old = $record.RecordData.Weight.ToString()
+        
         if ($required_values.ContainsKey($record_value)) {
             # This record matches one of the values; but does it match the TTL?
             if ($record.TimeToLive -ne $ttl) {
                 $new_record = $record.Clone()
                 $new_record.TimeToLive = $ttl
+                $new_record.RecordData.Port = $port
+                $new_record.RecordData.Priority = $priority
+                $new_record.RecordData.Weight = $weight
                 Set-DnsServerResourceRecord -ZoneName $zone -OldInputObject $record -NewInputObject $new_record -WhatIf:$module.CheckMode @extra_args
 
-                $changes.before += "[$zone] $($record.HostName) $($record.TimeToLive.TotalSeconds) IN $type $record_value`n"
-                $changes.after += "[$zone] $($record.HostName) $($ttl.TotalSeconds) IN $type $record_value`n"
+                $changes.before += "[$zone] $($record.HostName) $($record.TimeToLive.TotalSeconds) IN $type $record_value $record_port_old $record_weight_old $record_priority_old`n"
+                $changes.after += "[$zone] $($record.HostName) $($ttl.TotalSeconds) IN $type $record_value $port $weight $priority`n"
                 $module.Result.changed = $true
             }
 
