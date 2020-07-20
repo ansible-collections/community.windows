@@ -98,13 +98,16 @@ if ($null -ne $records) {
     }
     foreach ($record in $records) {
       $record_value = $record.RecordData.$record_argument_name.ToString()
-      if($type -eq 'SRV'){
-        $record_port_old = $record.RecordData.Port.ToString()
-        $record_priority_old = $record.RecordData.Priority.ToString()
-        $record_weight_old = $record.RecordData.Weight.ToString()
-          if ($required_values.ContainsKey($record_value)) {
-            # This record matches one of the values; but does it match the TTL?
-              if ($record.TimeToLive -ne $ttl -or $port -ne $record_port_old -or $priority -ne $record_priority_old -or $weight -ne $record_weight_old) {
+      if(-Not $required_values.ContainsKey($record_value)){
+        $record | Remove-DnsServerResourceRecord -ZoneName $zone -Force -WhatIf:$module.CheckMode @extra_args
+        $changes.before += "[$zone] $($record.HostName) $($record.TimeToLive.TotalSeconds) IN $type $record_value`n"
+        $module.Result.changed = $true
+        } else{
+            if($type -eq 'SRV'){
+                $record_port_old = $record.RecordData.Port.ToString()
+                $record_priority_old = $record.RecordData.Priority.ToString()
+                $record_weight_old = $record.RecordData.Weight.ToString()
+                if ($record.TimeToLive -ne $ttl -or $port -ne $record_port_old -or $priority -ne $record_priority_old -or $weight -ne $record_weight_old) {
                     $new_record = $record.Clone()
                     $new_record.TimeToLive = $ttl
                     $new_record.RecordData.Port = $port
@@ -115,20 +118,10 @@ if ($null -ne $records) {
                     $changes.before += "[$zone] $($record.HostName) $($record.TimeToLive.TotalSeconds) IN $type $record_value $record_port_old $record_weight_old $record_priority_old`n"
                     $changes.after += "[$zone] $($record.HostName) $($ttl.TotalSeconds) IN $type $record_value $port $weight $priority`n"
                     $module.Result.changed = $true
-              }
-              # Cross this one off the list, so we don't try adding it later
-              $required_values.Remove($record_value)
-          } else {
-                # This record doesn't match any of the values, and must be removed
-                $record | Remove-DnsServerResourceRecord -ZoneName $zone -Force -WhatIf:$module.CheckMode @extra_args
-                $changes.before += "[$zone] $($record.HostName) $($record.TimeToLive.TotalSeconds) IN $type $record_value`n"
-                $module.Result.changed = $true
-            }
-            # Whatever is left in $required_values needs to be added
-            $values = $required_values.Keys
-      }
-        else{
-            if ($required_values.ContainsKey($record_value)) {
+                }r
+                  $required_values.Remove($record_value)
+            } else{
+                 # This record matches one of the values; but does it match the TTL?
                 if ($record.TimeToLive -ne $ttl) {
                     $new_record = $record.Clone()
                     $new_record.TimeToLive = $ttl
@@ -137,14 +130,11 @@ if ($null -ne $records) {
                     $changes.after += "[$zone] $($record.HostName) $($ttl.TotalSeconds) IN $type $record_value`n"
                     $module.Result.changed = $true
                 }
+                # Cross this one off the list, so we don't try adding it late
                 $required_values.Remove($record_value)
-            } else {
-                $record | Remove-DnsServerResourceRecord -ZoneName $zone -Force -WhatIf:$module.CheckMode @extra_args
-
-                $changes.before += "[$zone] $($record.HostName) $($record.TimeToLive.TotalSeconds) IN $type $record_value`n"
-                $module.Result.changed = $true
             }
-            $values = $required_values.Keys
+          # Whatever is left in $required_values needs to be added
+          $values = $required_values.Keys
         }
     }
 }
