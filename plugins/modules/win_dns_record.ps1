@@ -118,7 +118,7 @@ if ($null -ne $records) {
                     $changes.before += "[$zone] $($record.HostName) $($record.TimeToLive.TotalSeconds) IN $type $record_value $record_port_old $record_weight_old $record_priority_old`n"
                     $changes.after += "[$zone] $($record.HostName) $($ttl.TotalSeconds) IN $type $record_value $port $weight $priority`n"
                     $module.Result.changed = $true
-                }r
+                }
                   $required_values.Remove($record_value)
             } else{
                  # This record matches one of the values; but does it match the TTL?
