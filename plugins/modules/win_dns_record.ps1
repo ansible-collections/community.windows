@@ -119,7 +119,6 @@ if ($null -ne $records) {
                     $changes.after += "[$zone] $($record.HostName) $($ttl.TotalSeconds) IN $type $record_value $port $weight $priority`n"
                     $module.Result.changed = $true
                 }
-                  $required_values.Remove($record_value)
             } else{
                  # This record matches one of the values; but does it match the TTL?
                 if ($record.TimeToLive -ne $ttl) {
@@ -130,9 +129,9 @@ if ($null -ne $records) {
                     $changes.after += "[$zone] $($record.HostName) $($ttl.TotalSeconds) IN $type $record_value`n"
                     $module.Result.changed = $true
                 }
-                # Cross this one off the list, so we don't try adding it late
-                $required_values.Remove($record_value)
             }
+          # Cross this one off the list, so we don't try adding it late
+          $required_values.Remove($record_value)
           # Whatever is left in $required_values needs to be added
           $values = $required_values.Keys
         }
