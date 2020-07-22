@@ -1,0 +1,43 @@
+# Below are the cases tested Windows Server 2016 with network adapters('Etherner0' and 'Ethernet1)
+---
+- name: fail when interface isn't set
+  win_ipv6:
+    status: enable
+  ignore_errors: yes
+
+- name: fail when status isn't set
+  win_ipv6:
+    interface: 'Ethernet0'
+  ignore_errors: yes
+
+- name: fail when interface doesn't exist
+  win_ipv6:
+    interface: 'Ethernet10'
+    status: enable
+  ignore_errors: yes
+
+- name: fail when status is inapppropriate 
+  win_ipv6:
+    interface: 'Ethernet0'
+    status: disable_inappropriate
+  ignore_errors: yes
+
+- name: enable an interface
+  win_ipv6:
+    interface: 'Ethernet0'
+    status: enable
+
+- name: disable an interface
+  win_ipv6:
+    interface: 'Ethernet0'
+    status: disable
+
+- name: enable all the interfaces
+  win_ipv6:
+    interface: '*'
+    status: enable
+
+- name: disable all the interfaces
+  win_ipv6:
+    interface: '*'
+    status: disable

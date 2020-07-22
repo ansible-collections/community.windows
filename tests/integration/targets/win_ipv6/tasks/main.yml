@@ -1,5 +1,3 @@
 ---
-- name: disable ms_tcpip6 of all the network adapater interface
-  win_ipv6:
-    interface: '*'
-    status: disable
+- name: Test in normal mode
+  include: tests.yml
