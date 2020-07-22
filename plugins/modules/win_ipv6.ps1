@@ -1,6 +1,6 @@
 #!powershell
 #
-# (c) 2020, LW<GR.LW.U.TKY-ITSS@shi-g.com>
+# (c) 2020, ライトウェルの人 <@jirolin>
 #
 # This file is part of Ansible
 #
@@ -33,14 +33,17 @@ $result = @{
     changed = $false
 }
 
-if(!$Interface_name) { Fail-Json -message "Absolute Interface is not specified for Interface" }
-if(!$status) { Fail-Json -message "Absolute status is not specified for status" }
+If(!$Interface_name) { Fail-Json -message "Absolute Interface is not specified for Interface" }
+If(!$status) { Fail-Json -message "Absolute status is not specified for status" }
 
-if ($status -eq 'enable'){
+If ($status -eq 'enable'){
     $status = $true
-}else {
+}ElseIf ($status -eq 'disable') {
     $status = $false
+}Else {
+    Fail-Json -message "Specify the status as 'enable' or 'disable'"
 }
+
 
 $Interfaces = @($Interface_name)
 
@@ -48,9 +51,8 @@ Try {
     If($Interface_name -eq "*") {
         $Interfaces = Get-NetAdapter | Select-Object -ExpandProperty Name
     }ElseIf(@(Get-NetAdapter | Where-Object Name -eq $Interface_name).Count -eq 0) {
-        throw "Invalid network adapter name: {0}" -f $Interface_name
+        Fail-Json -message "Invalid network adapter name: $Interface_name"
     }
-
 
     ForEach($Interface_name in $Interfaces) {
         $current_status = (Get-NetAdapterBinding | where-object {$_.Name -match $Interface_name} | where-object {$_.ComponentID -match "ms_tcpip6"}).Enabled
@@ -66,15 +68,10 @@ Try {
         $result.changed = $result.changed -or $check_Idempotency
 
         If($result.changed) {
-            If(-not $check_mode) {
-                if ($status -eq $true){
-                    Enable-NetAdapterBinding -Name $Interface_name -ComponentID ms_tcpip6
-                }else {
-                    Disable-NetAdapterBinding -Name $Interface_name -ComponentID ms_tcpip6
-                }
-            }
-            Else {
-                Write-DebugLog "Check mode, skipping"
+            If ($status -eq $true){
+                Enable-NetAdapterBinding -Name $Interface_name -ComponentID ms_tcpip6 -WhatIf:$check_mode
+            }Else {
+                Disable-NetAdapterBinding -Name $Interface_name -ComponentID ms_tcpip6 -WhatIf:$check_mode
             }
         }
     }
@@ -83,7 +80,7 @@ Try {
 Catch {
     $excep = $_
 
-    Write-DebugLog "Exception: $($excep | out-string)"
+    Fail-Json -message "Exception: $($excep | out-string)"
 
     Throw
 }
