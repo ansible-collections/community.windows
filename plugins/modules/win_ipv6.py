@@ -19,7 +19,6 @@ options:
       - Name of Network Adapter Interface. For example, 'Ethernet0' or '*'.
     type: str
     required: yes
-    version_added: "2.10"
   state:
     description:
       - Specify the state of ms_tcpip6 of interfaces.
@@ -28,7 +27,6 @@ options:
       - enable
       - disable
     required: yes
-    version_added: "2.9"
 
 author:
   - ライトウェルの人 (@jirolin)
@@ -36,7 +34,7 @@ author:
 
 
 EXAMPLES = r'''
-- name: Disable ms_tcpip6 of Interface "Ethernet0" 
+- name: Disable ms_tcpip6 of Interface "Ethernet0"
   win_ipv6:
     interface: 'Ethernet0'
     status: disable
@@ -47,4 +45,3 @@ EXAMPLES = r'''
     status: enable
 
 '''
-
