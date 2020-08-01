@@ -225,7 +225,7 @@ function Uninstall-ScoopPackage {
 
 $scoop_path = Install-Scoop
 
-$installed_packages = Get-ScoopPackages -scoop_path $scoop_path
+$installed_packages = @(Get-ScoopPackages -scoop_path $scoop_path)
 
 if ($state -in @("absent")) {
   # Always attempt uninstall
