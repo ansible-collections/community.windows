@@ -36,7 +36,7 @@ options:
     choices: [ absent, present ]
     default: present
 seealso:
-- module: win_scoop
+- module: community.windows.win_scoop
 - name: Scoop website
   description: More information about Scoop
   link: https://scoop.sh
@@ -49,16 +49,16 @@ author:
 
 EXAMPLES = r'''
 - name: Add the extras bucket
-  win_scoop_bucket:
+  community.windows.win_scoop_bucket:
     name: extras
 
 - name: Remove the versions bucket
-  win_scoop_bucket:
+  community.windows.win_scoop_bucket:
     name: versions
     state: absent
 
 - name: Add a custom bucket
-  win_scoop_bucket:
+  community.windows.win_scoop_bucket:
     name: my-bucket
     repo: https://github.com/example/my-bucket
 '''

@@ -22,50 +22,12 @@ $name = $module.Params.name
 $repo = $module.Params.repo
 $state = $module.Params.state
 
-function Install-Scoop {
+function Get-Scoop {
   # Scoop doesn't have refreshenv like Chocolatey
   # Let's try to update PATH first
   $env:Path = [System.Environment]::GetEnvironmentVariable("Path", "Machine") + ";" + [System.Environment]::GetEnvironmentVariable("Path", "User")
 
   $scoop_app = Get-Command -Name scoop.ps1 -Type ExternalScript -ErrorAction SilentlyContinue
-  if ($null -eq $scoop_app) {
-    # We need to install scoop
-    # Enable TLS1.2 if it's available but disabled (eg. .NET 4.5)
-    $security_protocols = [Net.ServicePointManager]::SecurityProtocol -bor [Net.SecurityProtocolType]::SystemDefault
-    if ([Net.SecurityProtocolType].GetMember("Tls12").Count -gt 0) {
-      $security_protocols = $security_protcols -bor [Net.SecurityProtocolType]::Tls12
-    }
-    [Net.ServicePointManager]::SecurityProtocol = $security_protocols
-
-    $client = New-Object -TypeName System.Net.WebClient
-
-    $script_url = "https://get.scoop.sh"
-
-    try {
-      $install_script = $client.DownloadString($script_url)
-    }
-    catch {
-      $module.FailJson("Failed to download Scoop script from '$script_url'; $($_.Exception.Message)", $_)
-    }
-
-    if (-not $module.CheckMode) {
-      $res = Run-Command -Command "powershell.exe -" -stdin $install_script -environment $environment
-      if ($res.rc -ne 0) {
-        $module.Result.rc = $res.rc
-        $module.Result.stdout = $res.stdout
-        $module.Result.stderr = $res.stderr
-        $module.FailJson("Scoop bootstrap installation failed.")
-      }
-      $module.Warn("Scoop was missing from this system, so it was installed during this task run.")
-    }
-    $module.Result.changed = $true
-
-    # Refresh PATH
-    $env:Path = [System.Environment]::GetEnvironmentVariable("Path", "Machine") + ";" + [System.Environment]::GetEnvironmentVariable("Path", "User")
-
-    # locate the newly installed scoop.ps1
-    $scoop_app = Get-Command -Name scoop.ps1 -Type ExternalScript -ErrorAction SilentlyContinue
-  }
 
   if ($module.CheckMode -and $null -eq $scoop_app) {
     $module.Result.skipped = $true
@@ -85,7 +47,7 @@ function Get-ScoopBuckets {
     [Parameter(Mandatory = $true)] [string]$scoop_path
   )
 
-  $arguments = [System.Collections.Generic.List[String]]@("powershell.exe", $scoop_path, "bucket", "list")
+  $arguments = @("powershell.exe", $scoop_path, "bucket", "list")
   $command = Argv-ToString -arguments $arguments
   $res = Run-Command -Command $command
 
@@ -147,7 +109,7 @@ function Install-ScoopBucket {
   $module.Result.changed = $true
 }
 
-$scoop_path = Install-Scoop
+$scoop_path = Get-Scoop
 
 $installed_buckets = Get-ScoopBuckets -scoop_path $scoop_path
 
