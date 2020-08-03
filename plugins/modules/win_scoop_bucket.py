@@ -7,6 +7,7 @@
 DOCUMENTATION = r'''
 ---
 module: win_scoop_bucket
+version_added: 1.0.0
 short_description: Manage Scoop buckets
 description:
 - Manage Scoop buckets
