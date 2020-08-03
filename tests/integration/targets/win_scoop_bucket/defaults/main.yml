@@ -1,0 +1,9 @@
+---
+test_scoop_bucket1:
+  name: extras
+test_scoop_bucket2:
+  name: versions
+  repo: https://github.com/ScoopInstaller/Versions
+test_scoop_buckets:
+  - '{{ test_scoop_bucket1 }}'
+  - '{{ test_scoop_bucket2 }}'

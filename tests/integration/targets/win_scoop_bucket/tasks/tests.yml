@@ -1,0 +1,86 @@
+---
+- name: add known bucket
+  win_scoop_bucket:
+    name: '{{ test_scoop_bucket1.name }}'
+  register: add_known
+
+- name: assert add add known bucket
+  assert:
+    that:
+      - add_known is changed
+
+- name: add known bucket (idempotent)
+  win_scoop_bucket:
+    name: '{{ test_scoop_bucket1.name }}'
+  register: add_known_idempotent
+
+- name: assert add known bucket (idempotent)
+  assert:
+    that:
+      - not add_known_idempotent is changed
+
+- name: remove known bucket
+  win_scoop_bucket:
+    name: '{{ test_scoop_bucket1.name }}'
+    state: absent
+  register: remove_known
+
+- name: assert remove known bucket
+  assert:
+    that:
+      - remove_known is changed
+
+- name: remove known bucket (idempotent)
+  win_scoop_bucket:
+    name: '{{ test_scoop_bucket1.name }}'
+    state: absent
+  register: remove_known_idempotent
+
+- name: assert remove package
+  assert:
+    that:
+      - not remove_known_idempotent is changed
+
+- name: add custom bucket
+  win_scoop_bucket:
+    name: '{{ test_scoop_bucket2.name }}'
+    repo: '{{ test_scoop_bucket2.repo }}'
+  register: add_custom
+
+- name: assert add add custom bucket
+  assert:
+    that:
+      - add_custom is changed
+
+- name: add custom bucket (idempotent)
+  win_scoop_bucket:
+    name: '{{ test_scoop_bucket2.name }}'
+    repo: '{{ test_scoop_bucket2.repo }}'
+  register: add_custom_idempotent
+
+- name: assert add custom bucket (idempotent)
+  assert:
+    that:
+      - not add_custom_idempotent is changed
+
+- name: remove custom bucket
+  win_scoop_bucket:
+    name: '{{ test_scoop_bucket2.name }}'
+    state: absent
+  register: remove_custom
+
+- name: assert remove custom bucket
+  assert:
+    that:
+      - remove_custom is changed
+
+- name: remove custom bucket (idempotent)
+  win_scoop_bucket:
+    name: '{{ test_scoop_bucket2.name }}'
+    state: absent
+  register: remove_custom_idempotent
+
+- name: assert remove package
+  assert:
+    that:
+      - not remove_custom_idempotent is changed

@@ -1,0 +1,18 @@
+---
+- name: install git
+  win_scoop:
+    name: git
+
+- name: ensure test buckets are removed
+  win_scoop_bucket:
+    name: '{{ item.name }}'
+    state: absent
+  with_items: '{{ test_scoop_buckets }}'
+
+- name: run tests
+  include_tasks: tests.yml
+
+- name: uninstall git
+  win_scoop:
+    name: git
+    state: absent
