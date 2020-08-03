@@ -25,12 +25,14 @@ options:
     - Required when C(type=SRV).
     - Supported only for C(type=SRV).
     type: int
+    version_added: 1.0.0
   priority:
     description:
     - The priority number for each service in SRV record.
     - Required when C(type=SRV).
     - Supported only for C(type=SRV).
     type: int
+    version_added: 1.0.0
   state:
     description:
     - Whether the record should exist or not.
@@ -49,6 +51,7 @@ options:
   type:
     description:
     - The type of DNS record to manage.
+    - C(SRV) was added in the 1.0.0 release of this collection.
     choices: [ A, AAAA, CNAME, PTR, SRV ]
     required: yes
     type: str
@@ -65,6 +68,7 @@ options:
     - Required when C(type=SRV).
     - Supported only for C(type=SRV).
     type: int
+    version_added: 1.0.0
   zone:
     description:
     - The name of the zone to manage (eg C(example.com)).
