@@ -8,23 +8,30 @@
 $spec = @{
     options = @{
         name = @{ type = "str"; required = $true }
+        port = @{ type = "int"}
+        priority = @{ type = "int"}
         state = @{ type = "str"; choices = "absent", "present"; default = "present" }
         ttl = @{ type = "int"; default = "3600" }
-        type = @{ type = "str"; choices = "A","AAAA","CNAME","PTR"; required = $true }
+        type = @{ type = "str"; choices = "A","AAAA","CNAME","PTR","SRV"; required = $true }
         value = @{ type = "list"; elements = "str"; default = @() ; aliases=@( 'values' )}
+        weight = @{ type = "int"}
         zone = @{ type = "str"; required = $true }
         computer_name = @{ type = "str" }
     }
+    required_if = @(,@("type", "SRV", @("port", "priority", "weight")))
     supports_check_mode = $true
 }
 
 $module = [Ansible.Basic.AnsibleModule]::Create($args, $spec)
 
 $name = $module.Params.name
+$port = $module.Params.port
+$priority = $module.Params.priority
 $state = $module.Params.state
 $ttl = $module.Params.ttl
 $type = $module.Params.type
 $values = $module.Params.value
+$weight = $module.Params.weight
 $zone = $module.Params.zone
 $dns_computer_name = $module.Params.computer_name
 
@@ -52,7 +59,7 @@ if ($ttl -lt 1 -or $ttl -gt 31557600) {
 $ttl = New-TimeSpan -Seconds $ttl
 
 
-if (($type -eq 'CNAME' -or $type -eq 'PTR') -and $null -ne $values -and $values.Count -gt 0 -and $zone[-1] -ne '.') {
+if (($type -eq 'CNAME' -or $type -eq 'PTR' -or $type -eq 'SRV') -and $null -ne $values -and $values.Count -gt 0 -and $zone[-1] -ne '.') {
     # CNAMEs and PTRs should be '.'-terminated, or record matching will fail
     $values = $values | ForEach-Object {
         if ($_ -Like "*.") { $_ } else { "$_." }
@@ -67,6 +74,7 @@ $record_argument_name = @{
     # MX = "MailExchange";
     # NS = "NameServer";
     PTR = "PtrDomainName";
+    SRV = "DomainName";
     # TXT = "DescriptiveText"
 }[$type]
 
@@ -78,6 +86,7 @@ $changes = @{
 
 
 $records = Get-DnsServerResourceRecord -ZoneName $zone -Name $name -RRType $type -Node -ErrorAction:Ignore @extra_args | Sort-Object
+
 if ($null -ne $records) {
     # We use [Hashtable]$required_values below as a set rather than a map.
     # It provides quick lookup to test existing DNS record against. By removing
@@ -87,35 +96,46 @@ if ($null -ne $records) {
     foreach ($value in $values) {
         $required_values[$value.ToString()] = $null
     }
-
     foreach ($record in $records) {
-        $record_value = $record.RecordData.$record_argument_name.ToString()
+      $record_value = $record.RecordData.$record_argument_name.ToString()
+      if(-Not $required_values.ContainsKey($record_value)){
+        $record | Remove-DnsServerResourceRecord -ZoneName $zone -Force -WhatIf:$module.CheckMode @extra_args
+        $changes.before += "[$zone] $($record.HostName) $($record.TimeToLive.TotalSeconds) IN $type $record_value`n"
+        $module.Result.changed = $true
+        } else{
+            if($type -eq 'SRV'){
+                $record_port_old = $record.RecordData.Port.ToString()
+                $record_priority_old = $record.RecordData.Priority.ToString()
+                $record_weight_old = $record.RecordData.Weight.ToString()
+                if ($record.TimeToLive -ne $ttl -or $port -ne $record_port_old -or $priority -ne $record_priority_old -or $weight -ne $record_weight_old) {
+                    $new_record = $record.Clone()
+                    $new_record.TimeToLive = $ttl
+                    $new_record.RecordData.Port = $port
+                    $new_record.RecordData.Priority = $priority
+                    $new_record.RecordData.Weight = $weight
+                    Set-DnsServerResourceRecord -ZoneName $zone -OldInputObject $record -NewInputObject $new_record -WhatIf:$module.CheckMode @extra_args
 
-        if ($required_values.ContainsKey($record_value)) {
-            # This record matches one of the values; but does it match the TTL?
-            if ($record.TimeToLive -ne $ttl) {
-                $new_record = $record.Clone()
-                $new_record.TimeToLive = $ttl
-                Set-DnsServerResourceRecord -ZoneName $zone -OldInputObject $record -NewInputObject $new_record -WhatIf:$module.CheckMode @extra_args
-
-                $changes.before += "[$zone] $($record.HostName) $($record.TimeToLive.TotalSeconds) IN $type $record_value`n"
-                $changes.after += "[$zone] $($record.HostName) $($ttl.TotalSeconds) IN $type $record_value`n"
-                $module.Result.changed = $true
+                    $changes.before += "[$zone] $($record.HostName) $($record.TimeToLive.TotalSeconds) IN $type $record_value $record_port_old $record_weight_old $record_priority_old`n"
+                    $changes.after += "[$zone] $($record.HostName) $($ttl.TotalSeconds) IN $type $record_value $port $weight $priority`n"
+                    $module.Result.changed = $true
+                }
+            } else{
+                 # This record matches one of the values; but does it match the TTL?
+                if ($record.TimeToLive -ne $ttl) {
+                    $new_record = $record.Clone()
+                    $new_record.TimeToLive = $ttl
+                    Set-DnsServerResourceRecord -ZoneName $zone -OldInputObject $record -NewInputObject $new_record -WhatIf:$module.CheckMode @extra_args
+                    $changes.before += "[$zone] $($record.HostName) $($record.TimeToLive.TotalSeconds) IN $type $record_value`n"
+                    $changes.after += "[$zone] $($record.HostName) $($ttl.TotalSeconds) IN $type $record_value`n"
+                    $module.Result.changed = $true
+                }
             }
-
-            # Cross this one off the list, so we don't try adding it later
-            $required_values.Remove($record_value)
-        } else {
-            # This record doesn't match any of the values, and must be removed
-            $record | Remove-DnsServerResourceRecord -ZoneName $zone -Force -WhatIf:$module.CheckMode @extra_args
-
-            $changes.before += "[$zone] $($record.HostName) $($record.TimeToLive.TotalSeconds) IN $type $record_value`n"
-            $module.Result.changed = $true
+          # Cross this one off the list, so we don't try adding it late
+          $required_values.Remove($record_value)
+          # Whatever is left in $required_values needs to be added
+          $values = $required_values.Keys
         }
     }
-
-    # Whatever is left in $required_values needs to be added
-    $values = $required_values.Keys
 }
 
 
@@ -123,8 +143,20 @@ if ($null -ne $values -and $values.Count -gt 0) {
     foreach ($value in $values) {
         $splat_args = @{ $type = $true; $record_argument_name = $value }
         $module.Result.debug_splat_args = $splat_args
+        $srv_args = @{ ZoneName = $zone
+                       DomainName = $value
+                       Weight = $weight
+                       Priority = $priority
+                       Port = $port
+                       TimeToLive = $ttl
+        }
         try {
-            Add-DnsServerResourceRecord -ZoneName $zone -Name $name -AllowUpdateAny -TimeToLive $ttl @splat_args -WhatIf:$module.CheckMode @extra_args
+            if ($type -eq 'SRV') {
+                Add-DnsServerResourceRecord -SRV -Name $name @srv_args @extra_args -WhatIf:$module.CheckMode
+            }
+            else {
+                Add-DnsServerResourceRecord -ZoneName $zone -Name $name -AllowUpdateAny -TimeToLive $ttl @splat_args -WhatIf:$module.CheckMode @extra_args
+            }
         } catch {
             $module.FailJson("Error adding DNS $type resource $name in zone $zone with value $value", $_)
         }

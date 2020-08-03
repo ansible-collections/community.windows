@@ -19,6 +19,20 @@ options:
     - The name of the record.
     required: yes
     type: str
+  port:
+    description:
+    - The port number of the record.
+    - Required when C(type=SRV).
+    - Supported only for C(type=SRV).
+    type: int
+    version_added: 1.0.0
+  priority:
+    description:
+    - The priority number for each service in SRV record.
+    - Required when C(type=SRV).
+    - Supported only for C(type=SRV).
+    type: int
+    version_added: 1.0.0
   state:
     description:
     - Whether the record should exist or not.
@@ -37,7 +51,8 @@ options:
   type:
     description:
     - The type of DNS record to manage.
-    choices: [ A, AAAA, CNAME, PTR ]
+    - C(SRV) was added in the 1.0.0 release of this collection.
+    choices: [ A, AAAA, CNAME, PTR, SRV ]
     required: yes
     type: str
   value:
@@ -47,6 +62,13 @@ options:
     aliases: [ values ]
     type: list
     elements: str
+  weight:
+    description:
+    - Weightage given to each service record in SRV record.
+    - Required when C(type=SRV).
+    - Supported only for C(type=SRV).
+    type: int
+    version_added: 1.0.0
   zone:
     description:
     - The name of the zone to manage (eg C(example.com)).
@@ -117,6 +139,19 @@ EXAMPLES = r'''
     values:
       - 10.0.42.5  # this old value was kept (others removed)
       - 10.0.42.12  # this new value was added
+    zone: "example.com"
+
+# Demonstate creating a SRV record
+
+- name: Creating a SRV record with port number and priority
+  community.windows.win_dns_record:
+    name: "test"
+    priority: 5
+    port: 995
+    state: present
+    type: "SRV"
+    weight: 2
+    values: "amer.example.com"
     zone: "example.com"
 '''
 
