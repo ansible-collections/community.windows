@@ -1,0 +1,2 @@
+minor_changes:
+- win_dns_record - Added support for managing ``SRV`` records
