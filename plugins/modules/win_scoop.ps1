@@ -238,8 +238,8 @@ if ($state -in @("present")) {
     if (
       ($installed_packages.Package -notcontains $package) -or
       (($installed_packages.Package -contains $package) -and (
-          (($installed_packages.Where( { $_.Package -eq $package }).Global -contains $true) -and -not $global) -or
-          (($installed_packages.Where( { $_.Package -eq $package }).Global -notcontains $true) -and $global)
+          ((($installed_packages | Where-Object { $_.Package -eq $package }).Global -contains $true) -and -not $global) -or
+          ((($installed_packages | Where-Object { $_.Package -eq $package }).Global -notcontains $true) -and $global)
         )
       )
     ) {
