@@ -11,7 +11,6 @@ version_added: 1.0.0
 short_description: Manage Scoop buckets
 description:
 - Manage Scoop buckets
-- If Scoop is missing from the system, the module will install it.
 requirements:
 - git
 options:
