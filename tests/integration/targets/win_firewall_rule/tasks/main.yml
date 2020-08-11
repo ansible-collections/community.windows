@@ -179,7 +179,7 @@
     enabled: no
 
 - name: Get the actual values from the changed firewall rule
-  win_shell: '(New-Object -ComObject HNetCfg.FwPolicy2).Rules | Where-Object { $_.Name -eq "http" } | Foreach-Object { $_.LocalPorts; $_.Enabled; $_.Action; $_.Direction; $_.Protocol }'
+  ansible.windows.win_shell: '(New-Object -ComObject HNetCfg.FwPolicy2).Rules | Where-Object { $_.Name -eq "http" } | Foreach-Object { $_.LocalPorts; $_.Enabled; $_.Action; $_.Direction; $_.Protocol }'
   register: firewall_rule_actual
 
 - name: Ensure that disabling the rule did not change the previous values
@@ -411,7 +411,7 @@
   register: add_firewall_rule_with_edge_traversal
 
 # Setup action creates ansible_distribution_version variable
-- setup:
+- ansible.windows.setup:
 
 - name: Check that creating firewall rule with enge traversal option 'deferapp' succeeds with a change
   assert:
