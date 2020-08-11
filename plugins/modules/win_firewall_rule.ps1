@@ -112,7 +112,7 @@ $params = Parse-Args $args -supports_check_mode $true
 $check_mode = Get-AnsibleParam -obj $params -name "_ansible_check_mode" -type "bool" -default $false
 $diff_support = Get-AnsibleParam -obj $params -name "_ansible_diff" -type "bool" -default $false
 
-$name = Get-AnsibleParam -obj $params -name "name" -failifempty $true
+$name = Get-AnsibleParam -obj $params -name "name"
 $description = Get-AnsibleParam -obj $params -name "description" -type "str"
 $direction = Get-AnsibleParam -obj $params -name "direction" -type "str" -validateset "in","out"
 $action = Get-AnsibleParam -obj $params -name "action" -type "str" -validateset "allow","block"
@@ -188,63 +188,84 @@ try {
     $fwPropertiesToCompare = @('Name','Description','Direction','Action','ApplicationName','Grouping','ServiceName','Enabled','Profiles','LocalAddresses','RemoteAddresses','LocalPorts','RemotePorts','Protocol','InterfaceTypes', 'EdgeTraversalOptions', 'SecureFlags','IcmpTypesAndCodes')
     $userPassedArguments = @($name, $description, $direction, $action, $program, $group, $service, $enabled, $profiles, $localip, $remoteip, $localport, $remoteport, $protocol, $interfacetypes, $edge, $security, $icmp_type_code)
 
-    if ($state -eq "absent") {
-        if ($null -eq $existingRule) {
-            $result.msg = "Firewall rule '$name' does not exist."
-        } else {
-            if ($diff_support) {
-                foreach ($prop in $fwPropertiesToCompare) {
-                    $result.diff.prepared += "-[$($prop)='$($existingRule.$prop)']`n"
-                }
-            }
+    if($null -eq $name -and $null -ne $enabled -and $null -ne $group) {
+        $getFW= Get-NetFirewallRule -PolicyStore ActiveStore -Group $group
+        $enable = If ($enabled -eq "yes") {"True"} Else {"False"}
+        $getFWenabled = Get-NetFirewallRule -PolicyStore ActiveStore -Group $group -Enabled $enable -ErrorAction SilentlyContinue
 
-            if (-not $check_mode) {
-                $fw.Rules.Remove($existingRule.Name)
-            }
-            $result.changed = $true
-            $result.msg = "Firewall rule '$name' removed."
+        if($getFW.count -eq $getFWenabled.count) {
+            $result.msg = "All the firewall rules in '$group' are '$enabled'"
         }
-    } elseif ($state -eq "present") {
-        if ($null -eq $existingRule) {
-            if ($diff_support) {
-                foreach ($prop in $fwPropertiesToCompare) {
-                    $result.diff.prepared += "+[$($prop)='$($new_rule.$prop)']`n"
-                }
+        else {
+            if($enabled -eq "yes") {
+                Enable-NetFirewallRule -DisplayGroup $group
             }
-
-            if (-not $check_mode) {
-                $fw.Rules.Add($new_rule)
+            else {
+                Disable-NetFirewallRule -DisplayGroup $group
             }
             $result.changed = $true
-            $result.msg = "Firewall rule '$name' created."
-        } else {
-            for($i = 0; $i -lt $fwPropertiesToCompare.Length; $i++) {
-                $prop = $fwPropertiesToCompare[$i]
-                if($null -ne $userPassedArguments[$i]) { # only change values the user passes in task definition
-                    if ($existingRule.$prop -ne $new_rule.$prop) {
-                        if ($diff_support) {
-                            $result.diff.prepared += "-[$($prop)='$($existingRule.$prop)']`n"
-                            $result.diff.prepared += "+[$($prop)='$($new_rule.$prop)']`n"
-                        }
-
-                        if (-not $check_mode) {
-                            # Profiles value cannot be a uint32, but the "all profiles" value (0x7FFFFFFF) will often become a uint32, so must cast to [int]
-                            # to prevent InvalidCastException under PS5+
-                            If($prop -eq 'Profiles') {
-                                $existingRule.Profiles = [int] $new_rule.$prop
-                            }
-                            Else {
-                                $existingRule.$prop = $new_rule.$prop
-                            }
-                        }
-                        $result.changed = $true
+            $result.msg = "Firewall group '$group' rules are updated."
+        }
+    }
+    else {
+        if ($state -eq "absent") {
+            if ($null -eq $existingRule) {
+                $result.msg = "Firewall rule '$name' does not exist."
+            } else {
+                if ($diff_support) {
+                    foreach ($prop in $fwPropertiesToCompare) {
+                        $result.diff.prepared += "-[$($prop)='$($existingRule.$prop)']`n"
                     }
                 }
+
+                if (-not $check_mode) {
+                    $fw.Rules.Remove($existingRule.Name)
+                }
+                $result.changed = $true
+                $result.msg = "Firewall rule '$name' removed."
             }
-            if ($result.changed) {
-                $result.msg = "Firewall rule '$name' changed."
+        } elseif ($state -eq "present") {
+            if ($null -eq $existingRule) {
+                if ($diff_support) {
+                    foreach ($prop in $fwPropertiesToCompare) {
+                        $result.diff.prepared += "+[$($prop)='$($new_rule.$prop)']`n"
+                    }
+                }
+
+                if (-not $check_mode) {
+                    $fw.Rules.Add($new_rule)
+                }
+                $result.changed = $true
+                $result.msg = "Firewall rule '$name' created."
             } else {
-                $result.msg = "Firewall rule '$name' already exists."
+                for($i = 0; $i -lt $fwPropertiesToCompare.Length; $i++) {
+                    $prop = $fwPropertiesToCompare[$i]
+                    if($null -ne $userPassedArguments[$i]) { # only change values the user passes in task definition
+                        if ($existingRule.$prop -ne $new_rule.$prop) {
+                            if ($diff_support) {
+                                $result.diff.prepared += "-[$($prop)='$($existingRule.$prop)']`n"
+                                $result.diff.prepared += "+[$($prop)='$($new_rule.$prop)']`n"
+                            }
+
+                            if (-not $check_mode) {
+                                # Profiles value cannot be a uint32, but the "all profiles" value (0x7FFFFFFF) will often become a uint32, so must cast to [int]
+                                # to prevent InvalidCastException under PS5+
+                                If($prop -eq 'Profiles') {
+                                    $existingRule.Profiles = [int] $new_rule.$prop
+                                }
+                                Else {
+                                    $existingRule.$prop = $new_rule.$prop
+                                }
+                            }
+                            $result.changed = $true
+                        }
+                    }
+                }
+                if ($result.changed) {
+                    $result.msg = "Firewall rule '$name' changed."
+                } else {
+                    $result.msg = "Firewall rule '$name' already exists."
+                }
             }
         }
     }
