@@ -5,14 +5,9 @@
 # Copyright: (c) 2017, Artem Zinenko <zinenkoartem@gmail.com>
 # GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 
-ANSIBLE_METADATA = {'metadata_version': '1.1',
-                    'status': ['preview'],
-                    'supported_by': 'community'}
-
 DOCUMENTATION = r'''
 ---
 module: win_firewall_rule
-version_added: "2.0"
 short_description: Windows firewall automation
 description:
   - Allows you to create/remove/update firewall rules.
@@ -37,7 +32,6 @@ options:
   group:
     description:
       - The group name for the rule.
-    version_added: '2.9'
     type: str
   direction:
     description:
@@ -105,8 +99,19 @@ options:
       - Defaults to C(domain,private,public) when creating a new rule.
     type: list
     aliases: [ profile ]
+  icmp_type_code:
+    description:
+      - The ICMP types and codes for the rule.
+      - This is only valid when I(protocol) is C(icmpv4) or C(icmpv6).
+      - Each entry follows the format C(type:code) where C(type) is the type
+        number and C(code) is the code number for that type or C(*) for all
+        codes.
+      - Set the value to just C(*) to apply the rule for all ICMP type codes.
+      - See U(https://www.iana.org/assignments/icmp-parameters/icmp-parameters.xhtml)
+        for a list of ICMP types and the codes that apply to them.
+    type: list
 seealso:
-- module: win_firewall
+- module: community.windows.win_firewall
 author:
   - Artem Zinenko (@ar7z1)
   - Timothy Vandenbrande (@TimothyVandenbrande)
@@ -114,7 +119,7 @@ author:
 
 EXAMPLES = r'''
 - name: Firewall rule to allow SMTP on TCP port 25
-  win_firewall_rule:
+  community.windows.win_firewall_rule:
     name: SMTP
     localport: 25
     action: allow
@@ -124,7 +129,7 @@ EXAMPLES = r'''
     enabled: yes
 
 - name: Firewall rule to allow RDP on TCP port 3389
-  win_firewall_rule:
+  community.windows.win_firewall_rule:
     name: Remote Desktop
     localport: 3389
     action: allow
@@ -135,7 +140,7 @@ EXAMPLES = r'''
     enabled: yes
 
 - name: Firewall rule to be created for application group
-  win_firewall_rule:
+  community.windows.win_firewall_rule:
     name: SMTP
     group: application
     localport: 25
@@ -151,7 +156,7 @@ EXAMPLES = r'''
     enabled: yes
 
 - name: Firewall rule to allow port range
-  win_firewall_rule:
+  community.windows.win_firewall_rule:
     name: Sample port range
     localport: 5000-5010
     action: allow
@@ -160,8 +165,8 @@ EXAMPLES = r'''
     state: present
     enabled: yes
 
-- name: Firewall rule to allow ICMP v4 (ping)
-  win_firewall_rule:
+- name: Firewall rule to allow ICMP v4 echo (ping)
+  community.windows.win_firewall_rule:
     name: ICMP Allow incoming V4 echo request
     enabled: yes
     state: present
@@ -169,4 +174,17 @@ EXAMPLES = r'''
     action: allow
     direction: in
     protocol: icmpv4
+    icmp_type_code:
+    - '8:*'
+
+- name: Firewall rule to alloc ICMP v4 on all type codes
+  community.windows.win_firewall_rule:
+    name: ICMP Allow incoming V4 echo request
+    enabled: yes
+    state: present
+    profiles: private
+    action: allow
+    direction: in
+    protocol: icmpv4
+    icmp_type_code: '*'
 '''
