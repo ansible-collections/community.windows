@@ -133,6 +133,10 @@ $icmp_type_code = Get-AnsibleParam -obj $params -name "icmp_type_code" -type "li
 
 $state = Get-AnsibleParam -obj $params -name "state" -type "str" -default "present" -validateset "present","absent"
 
+if (-not $name -and -not $group) {
+    Fail-Json -obj $result -message "Either name or group must be specified"
+}
+
 if ($diff_support) {
     $result.diff = @{}
     $result.diff.prepared = ""
@@ -146,15 +150,20 @@ if ($null -ne $icmp_type_code) {
 try {
     $fw = New-Object -ComObject HNetCfg.FwPolicy2
 
-    $existingRule = $fw.Rules | Where-Object { $_.Name -eq $name }
-
-    if ($existingRule -is [System.Array]) {
-        Fail-Json $result "Multiple firewall rules with name '$name' found."
+    # If name was specified, filter the rules by name, otherwise find all the rules in the group.
+    $existingRules = $fw.Rules | Where-Object {
+        if ($name) {
+            $_.Name -eq $name
+        } else {
+            $_.Grouping -eq $group
+        }
     }
 
-        # INetFwRule interface description: https://msdn.microsoft.com/en-us/library/windows/desktop/aa365344(v=vs.85).aspx
+    # INetFwRule interface description: https://msdn.microsoft.com/en-us/library/windows/desktop/aa365344(v=vs.85).aspx
     $new_rule = New-Object -ComObject HNetCfg.FWRule
-    $new_rule.Name = $name
+    if ($name) {
+        $new_rule.Name = $name
+    }
     # the default for enabled in module description is "true", but the actual COM object defaults to "false" when created
     if ($null -ne $enabled) { $new_rule.Enabled = $enabled } else { $new_rule.Enabled = $true }
     if ($null -ne $description) { $new_rule.Description = $description }
@@ -185,66 +194,68 @@ try {
         }
     }
 
-    $fwPropertiesToCompare = @('Name','Description','Direction','Action','ApplicationName','Grouping','ServiceName','Enabled','Profiles','LocalAddresses','RemoteAddresses','LocalPorts','RemotePorts','Protocol','InterfaceTypes', 'EdgeTraversalOptions', 'SecureFlags','IcmpTypesAndCodes')
-    $userPassedArguments = @($name, $description, $direction, $action, $program, $group, $service, $enabled, $profiles, $localip, $remoteip, $localport, $remoteport, $protocol, $interfacetypes, $edge, $security, $icmp_type_code)
+    $fwPropertiesToCompare = @('Description','Direction','Action','ApplicationName','Grouping','ServiceName','Enabled','Profiles','LocalAddresses','RemoteAddresses','LocalPorts','RemotePorts','Protocol','InterfaceTypes', 'EdgeTraversalOptions', 'SecureFlags','IcmpTypesAndCodes')
+    $userPassedArguments = @($description, $direction, $action, $program, $group, $service, $enabled, $profiles, $localip, $remoteip, $localport, $remoteport, $protocol, $interfacetypes, $edge, $security, $icmp_type_code)
 
-    if($null -eq $name -and $null -ne $enabled -and $null -ne $group) {
-        $getFW= Get-NetFirewallRule -PolicyStore ActiveStore -Group $group
-        $enable = If ($enabled -eq "yes") {"True"} Else {"False"}
-        $getFWenabled = Get-NetFirewallRule -PolicyStore ActiveStore -Group $group -Enabled $enable -ErrorAction SilentlyContinue
-
-        if($getFW.count -eq $getFWenabled.count) {
-            $result.msg = "All the firewall rules in '$group' are '$enabled'"
-        }
-        else {
-            if($enabled -eq "yes") {
-                Enable-NetFirewallRule -DisplayGroup $group
-            }
-            else {
-                Disable-NetFirewallRule -DisplayGroup $group
-            }
-            $result.changed = $true
-            $result.msg = "Firewall group '$group' rules are updated."
-        }
-    }
-    else {
-        if ($state -eq "absent") {
-            if ($null -eq $existingRule) {
+    if ($state -eq "absent") {
+        if (-not $existingRules) {
+            if ($name) {
                 $result.msg = "Firewall rule '$name' does not exist."
             } else {
-                if ($diff_support) {
-                    foreach ($prop in $fwPropertiesToCompare) {
-                        $result.diff.prepared += "-[$($prop)='$($existingRule.$prop)']`n"
-                    }
-                }
-
-                if (-not $check_mode) {
-                    $fw.Rules.Remove($existingRule.Name)
-                }
-                $result.changed = $true
-                $result.msg = "Firewall rule '$name' removed."
+                $result.msg = "No firewall rules in group '$group' exist."
             }
-        } elseif ($state -eq "present") {
-            if ($null -eq $existingRule) {
+
+        } else {
+            $rules = foreach ($rule in $existingRules) {
+                $rule.Name  # Output name for module msg string.
+
                 if ($diff_support) {
+                    $result.diff.prepared += "-[$($rule.Name)]`n"
                     foreach ($prop in $fwPropertiesToCompare) {
-                        $result.diff.prepared += "+[$($prop)='$($new_rule.$prop)']`n"
+                        $result.diff.prepared += "-$($prop)='$($rule.$prop)'`n"
                     }
                 }
 
                 if (-not $check_mode) {
-                    $fw.Rules.Add($new_rule)
+                    $fw.Rules.Remove($rule.Name)
                 }
                 $result.changed = $true
-                $result.msg = "Firewall rule '$name' created."
-            } else {
+            }
+            $result.msg = "Firewall rule(s) '$($rules -join "', '")' removed."
+        }
+    } elseif ($state -eq "present") {
+        if (-not $existingRules -and $name) {
+            # name was specified and no rules were found, create the rule
+            if ($diff_support) {
+                $result.diff.prepared += "+[$($new_rule.Name)]`n"
+                foreach ($prop in $fwPropertiesToCompare) {
+                    $result.diff.prepared += "+$($prop)='$($new_rule.$prop)'`n"
+                }
+            }
+
+            if (-not $check_mode) {
+                $fw.Rules.Add($new_rule)
+            }
+            $result.changed = $true
+            $result.msg = "Firewall rule '$name' created."
+        } elseif ($existingRules) {
+            # Either name or group was specified which matched existing rules, check the properties
+            $changedRules = [System.Collections.Generic.List[String]]@()
+            $unchangedRules = [System.Collections.Generic.List[String]]@()
+
+            foreach ($existingRule in $existingRules) {
+                if ($diff_support) {
+                    $result.diff.prepared += "[$($existingRule.Name)]`n"
+                }
+
+                $changed = $false
                 for($i = 0; $i -lt $fwPropertiesToCompare.Length; $i++) {
                     $prop = $fwPropertiesToCompare[$i]
                     if($null -ne $userPassedArguments[$i]) { # only change values the user passes in task definition
                         if ($existingRule.$prop -ne $new_rule.$prop) {
                             if ($diff_support) {
-                                $result.diff.prepared += "-[$($prop)='$($existingRule.$prop)']`n"
-                                $result.diff.prepared += "+[$($prop)='$($new_rule.$prop)']`n"
+                                $result.diff.prepared += "-$($prop)='$($existingRule.$prop)'`n"
+                                $result.diff.prepared += "+$($prop)='$($new_rule.$prop)'`n"
                             }
 
                             if (-not $check_mode) {
@@ -257,16 +268,20 @@ try {
                                     $existingRule.$prop = $new_rule.$prop
                                 }
                             }
-                            $result.changed = $true
+                            $changed = $true
                         }
                     }
                 }
-                if ($result.changed) {
-                    $result.msg = "Firewall rule '$name' changed."
+
+                if ($changed) {
+                    $result.changed = $true
+                    $changedRules.Add($existingRule.Name)
                 } else {
-                    $result.msg = "Firewall rule '$name' already exists."
+                    $unchangedRules.Add($existingRule.Name)
                 }
             }
+
+            $result.msg = "Firewall rule(s) changed '$($changedRules -join "', '")' - unchanged '$($unchangedRules -join "', '")'"
         }
     }
 } catch [Exception] {

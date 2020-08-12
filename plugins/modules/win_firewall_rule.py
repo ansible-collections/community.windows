@@ -16,7 +16,6 @@ options:
     description:
       - Whether this firewall rule is enabled or disabled.
       - Defaults to C(true) when creating a new rule.
-      - If provided with a group only then it will enabled or disabled all the rules in a group.
     type: bool
     aliases: [ enable ]
   state:
@@ -28,10 +27,12 @@ options:
   name:
     description:
       - The rule's display name.
+      - This is required unless I(group) is specified.
     type: str
   group:
     description:
       - The group name for the rule.
+      - If I(name) is not specified then the module will set the firewall options for all the rules in this group.
     type: str
   direction:
     description:
@@ -110,6 +111,9 @@ options:
       - See U(https://www.iana.org/assignments/icmp-parameters/icmp-parameters.xhtml)
         for a list of ICMP types and the codes that apply to them.
     type: list
+notes:
+- Multiple firewall rules can share the same I(name), if there are multiple matches then the module will set the user
+  defined options for each matching rule.
 seealso:
 - module: community.windows.win_firewall
 author:
