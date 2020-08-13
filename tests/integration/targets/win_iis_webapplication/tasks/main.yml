@@ -70,3 +70,15 @@
   - assert:
       that:
         - "stat_result.stat.checksum == copy_result.checksum"
+
+  - name: remove IIS feature if it was installed
+    ansible.windows.win_feature:
+      name: Web-Server
+      state: absent
+      include_management_tools: True
+    when: feature_install is changed
+    register: feature_uninstall
+
+  - name: reboot after removing IIS features
+    ansible.windows.win_reboot:
+    when: feature_uninstall.reboot_required | default(False)
