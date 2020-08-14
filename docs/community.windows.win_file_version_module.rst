@@ -27,28 +27,28 @@ Parameters
 .. raw:: html
 
     <table  border=0 cellpadding=0 class="documentation-table">
-        <tr>
+<tr>
             <th colspan="1">Parameter</th>
             <th>Choices/<font color="blue">Defaults</font></th>
-                        <th width="100%">Comments</th>
+            <th width="100%">Comments</th>
         </tr>
-                    <tr>
-                                                                <td colspan="1">
+            <tr>
+                <td colspan="1">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>path</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
                         <span style="color: purple">path</span>
-                                                 / <span style="color: red">required</span>                    </div>
-                                    </td>
-                                <td>
-                                                                                                                                                            </td>
-                                                                <td>
-                                            <div>File to get version.</div>
-                                            <div>Always provide absolute path.</div>
-                                                        </td>
+ / <span style="color: red">required</span>                    </div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>File to get version.</div>
+                        <div>Always provide absolute path.</div>
+                </td>
             </tr>
-                        </table>
+    </table>
     <br/>
 
 
@@ -73,7 +73,6 @@ Examples
 
 .. code-block:: yaml+jinja
 
-    
     - name: Get acm instance version
       community.windows.win_file_version:
         path: C:\Windows\System32\cmd.exe
@@ -81,7 +80,6 @@ Examples
 
     - debug:
         msg: '{{ exe_file_version }}'
-
 
 
 
@@ -97,112 +95,112 @@ Common return values are documented `here <https://docs.ansible.com/ansible/late
             <th>Returned</th>
             <th width="100%">Description</th>
         </tr>
-                    <tr>
-                                <td colspan="1">
+            <tr>
+                <td colspan="1">
                     <div class="ansibleOptionAnchor" id="return-"></div>
                     <b>file_build_part</b>
                     <a class="ansibleOptionLink" href="#return-" title="Permalink to this return value"></a>
                     <div style="font-size: small">
                       <span style="color: purple">string</span>
-                                          </div>
-                                    </td>
+                    </div>
+                </td>
                 <td>no error</td>
                 <td>
-                                                                        <div>build number of the file.</div>
-                                                                <br/>
-                                    </td>
+                            <div>build number of the file.</div>
+                    <br/>
+                </td>
             </tr>
-                                <tr>
-                                <td colspan="1">
+            <tr>
+                <td colspan="1">
                     <div class="ansibleOptionAnchor" id="return-"></div>
                     <b>file_major_part</b>
                     <a class="ansibleOptionLink" href="#return-" title="Permalink to this return value"></a>
                     <div style="font-size: small">
                       <span style="color: purple">string</span>
-                                          </div>
-                                    </td>
+                    </div>
+                </td>
                 <td>no error</td>
                 <td>
-                                                                        <div>the major part of the version number.</div>
-                                                                <br/>
-                                    </td>
+                            <div>the major part of the version number.</div>
+                    <br/>
+                </td>
             </tr>
-                                <tr>
-                                <td colspan="1">
+            <tr>
+                <td colspan="1">
                     <div class="ansibleOptionAnchor" id="return-"></div>
                     <b>file_minor_part</b>
                     <a class="ansibleOptionLink" href="#return-" title="Permalink to this return value"></a>
                     <div style="font-size: small">
                       <span style="color: purple">string</span>
-                                          </div>
-                                    </td>
+                    </div>
+                </td>
                 <td>no error</td>
                 <td>
-                                                                        <div>the minor part of the version number of the file.</div>
-                                                                <br/>
-                                    </td>
+                            <div>the minor part of the version number of the file.</div>
+                    <br/>
+                </td>
             </tr>
-                                <tr>
-                                <td colspan="1">
+            <tr>
+                <td colspan="1">
                     <div class="ansibleOptionAnchor" id="return-"></div>
                     <b>file_private_part</b>
                     <a class="ansibleOptionLink" href="#return-" title="Permalink to this return value"></a>
                     <div style="font-size: small">
                       <span style="color: purple">string</span>
-                                          </div>
-                                    </td>
+                    </div>
+                </td>
                 <td>no error</td>
                 <td>
-                                                                        <div>file private part number.</div>
-                                                                <br/>
-                                    </td>
+                            <div>file private part number.</div>
+                    <br/>
+                </td>
             </tr>
-                                <tr>
-                                <td colspan="1">
+            <tr>
+                <td colspan="1">
                     <div class="ansibleOptionAnchor" id="return-"></div>
                     <b>file_version</b>
                     <a class="ansibleOptionLink" href="#return-" title="Permalink to this return value"></a>
                     <div style="font-size: small">
                       <span style="color: purple">string</span>
-                                          </div>
-                                    </td>
+                    </div>
+                </td>
                 <td>no error</td>
                 <td>
-                                                                        <div>File version number..</div>
-                                                                <br/>
-                                    </td>
+                            <div>File version number..</div>
+                    <br/>
+                </td>
             </tr>
-                                <tr>
-                                <td colspan="1">
+            <tr>
+                <td colspan="1">
                     <div class="ansibleOptionAnchor" id="return-"></div>
                     <b>path</b>
                     <a class="ansibleOptionLink" href="#return-" title="Permalink to this return value"></a>
                     <div style="font-size: small">
                       <span style="color: purple">string</span>
-                                          </div>
-                                    </td>
+                    </div>
+                </td>
                 <td>always</td>
                 <td>
-                                                                        <div>file path</div>
-                                                                <br/>
-                                    </td>
+                            <div>file path</div>
+                    <br/>
+                </td>
             </tr>
-                                <tr>
-                                <td colspan="1">
+            <tr>
+                <td colspan="1">
                     <div class="ansibleOptionAnchor" id="return-"></div>
                     <b>product_version</b>
                     <a class="ansibleOptionLink" href="#return-" title="Permalink to this return value"></a>
                     <div style="font-size: small">
                       <span style="color: purple">string</span>
-                                          </div>
-                                    </td>
+                    </div>
+                </td>
                 <td>no error</td>
                 <td>
-                                                                        <div>The version of the product this file is distributed with.</div>
-                                                                <br/>
-                                    </td>
+                            <div>The version of the product this file is distributed with.</div>
+                    <br/>
+                </td>
             </tr>
-                        </table>
+    </table>
     <br/><br/>
 
 
@@ -214,5 +212,3 @@ Authors
 ~~~~~~~
 
 - Sam Liu (@SamLiu79)
-
-

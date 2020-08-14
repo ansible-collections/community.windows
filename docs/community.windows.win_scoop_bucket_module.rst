@@ -1,13 +1,14 @@
-.. _community.windows.win_computer_description_module:
+.. _community.windows.win_scoop_bucket_module:
 
 
-******************************************
-community.windows.win_computer_description
-******************************************
+**********************************
+community.windows.win_scoop_bucket
+**********************************
 
-**Set windows description, owner and organization**
+**Manage Scoop buckets**
 
 
+Version added: 1.0.0
 
 .. contents::
    :local:
@@ -16,9 +17,15 @@ community.windows.win_computer_description
 
 Synopsis
 --------
-- This module sets Windows description that is shown under My Computer properties. Module also sets Windows license owner and organization. License information can be viewed by running winver commad.
+- Manage Scoop buckets
 
 
+
+Requirements
+------------
+The below requirements are needed on the host that executes this module.
+
+- git
 
 
 Parameters
@@ -35,22 +42,22 @@ Parameters
             <tr>
                 <td colspan="1">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>description</b>
+                    <b>name</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
                         <span style="color: purple">string</span>
-                    </div>
+ / <span style="color: red">required</span>                    </div>
                 </td>
                 <td>
                 </td>
                 <td>
-                        <div>String value to apply to Windows descripton. Specify value of &quot;&quot; to clear the value.</div>
+                        <div>Name of the Scoop bucket.</div>
                 </td>
             </tr>
             <tr>
                 <td colspan="1">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>organization</b>
+                    <b>repo</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
                         <span style="color: purple">string</span>
@@ -59,22 +66,28 @@ Parameters
                 <td>
                 </td>
                 <td>
-                        <div>String value of organization that the Windows is licensed to. Specify value of &quot;&quot; to clear the value.</div>
+                        <div>Git repository that contains the scoop bucket</div>
                 </td>
             </tr>
             <tr>
                 <td colspan="1">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>owner</b>
+                    <b>state</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
                         <span style="color: purple">string</span>
                     </div>
                 </td>
                 <td>
+                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                    <li>absent</li>
+                                    <li><div style="color: blue"><b>present</b>&nbsp;&larr;</div></li>
+                        </ul>
                 </td>
                 <td>
-                        <div>String value of the persona that the Windows is licensed to. Specify value of &quot;&quot; to clear the value.</div>
+                        <div>State of the Scoop bucket.</div>
+                        <div>When <code>absent</code>, will ensure the package is not installed.</div>
+                        <div>When <code>present</code>, will ensure the package is installed.</div>
                 </td>
             </tr>
     </table>
@@ -82,35 +95,37 @@ Parameters
 
 
 
+See Also
+--------
+
+.. seealso::
+
+   :ref:`community.windows.win_scoop_module`
+      The official documentation on the **community.windows.win_scoop** module.
+   `Scoop website <https://scoop.sh>`_
+       More information about Scoop
+   `Scoop directory <https://rasa.github.io/scoop-directory/>`_
+       A directory of buckets for the scoop package manager for Windows
+
 
 Examples
 --------
 
 .. code-block:: yaml+jinja
 
-    - name: Set Windows description, owner and organization
-      community.windows.win_computer_description:
-       description: Best Box
-       owner: RusoSova
-       organization: MyOrg
-      register: result
+    - name: Add the extras bucket
+      community.windows.win_scoop_bucket:
+        name: extras
 
-    - name: Set Windows description only
-      community.windows.win_computer_description:
-       description: This is my Windows machine
-      register: result
+    - name: Remove the versions bucket
+      community.windows.win_scoop_bucket:
+        name: versions
+        state: absent
 
-    - name: Set organization and clear owner field
-      community.windows.win_computer_description:
-       owner: ''
-       organization: Black Mesa
-
-    - name: Clear organization, description and owner
-      community.windows.win_computer_description:
-       organization: ""
-       owner: ""
-       description: ""
-      register: result
+    - name: Add a custom bucket
+      community.windows.win_scoop_bucket:
+        name: my-bucket
+        repo: https://github.com/example/my-bucket
 
 
 
@@ -122,4 +137,4 @@ Status
 Authors
 ~~~~~~~
 
-- RusoSova (@RusoSova)
+- Jamie Magee (@JamieMagee)

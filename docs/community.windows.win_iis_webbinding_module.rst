@@ -27,160 +27,160 @@ Parameters
 .. raw:: html
 
     <table  border=0 cellpadding=0 class="documentation-table">
-        <tr>
+<tr>
             <th colspan="1">Parameter</th>
             <th>Choices/<font color="blue">Defaults</font></th>
-                        <th width="100%">Comments</th>
+            <th width="100%">Comments</th>
         </tr>
-                    <tr>
-                                                                <td colspan="1">
+            <tr>
+                <td colspan="1">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>certificate_hash</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
                         <span style="color: purple">string</span>
-                                                                    </div>
-                                    </td>
-                                <td>
-                                                                                                                                                            </td>
-                                                                <td>
-                                            <div>Certificate hash (thumbprint) for the SSL binding. The certificate hash is the unique identifier for the certificate.</div>
-                                                        </td>
+                    </div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>Certificate hash (thumbprint) for the SSL binding. The certificate hash is the unique identifier for the certificate.</div>
+                </td>
             </tr>
-                                <tr>
-                                                                <td colspan="1">
+            <tr>
+                <td colspan="1">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>certificate_store_name</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
                         <span style="color: purple">string</span>
-                                                                    </div>
-                                    </td>
-                                <td>
-                                                                                                                                                                    <b>Default:</b><br/><div style="color: blue">"my"</div>
-                                    </td>
-                                                                <td>
-                                            <div>Name of the certificate store where the certificate for the binding is located.</div>
-                                                        </td>
+                    </div>
+                </td>
+                <td>
+                        <b>Default:</b><br/><div style="color: blue">"my"</div>
+                </td>
+                <td>
+                        <div>Name of the certificate store where the certificate for the binding is located.</div>
+                </td>
             </tr>
-                                <tr>
-                                                                <td colspan="1">
+            <tr>
+                <td colspan="1">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>host_header</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
                         <span style="color: purple">string</span>
-                                                                    </div>
-                                    </td>
-                                <td>
-                                                                                                                                                            </td>
-                                                                <td>
-                                            <div>The host header to bind to / use for the new site.</div>
-                                            <div>If you are creating/removing a catch-all binding, omit this parameter rather than defining it as &#x27;*&#x27;.</div>
-                                                        </td>
+                    </div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>The host header to bind to / use for the new site.</div>
+                        <div>If you are creating/removing a catch-all binding, omit this parameter rather than defining it as &#x27;*&#x27;.</div>
+                </td>
             </tr>
-                                <tr>
-                                                                <td colspan="1">
+            <tr>
+                <td colspan="1">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>ip</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
                         <span style="color: purple">string</span>
-                                                                    </div>
-                                    </td>
-                                <td>
-                                                                                                                                                                    <b>Default:</b><br/><div style="color: blue">"*"</div>
-                                    </td>
-                                                                <td>
-                                            <div>The IP address to bind to / use for the new site.</div>
-                                                        </td>
+                    </div>
+                </td>
+                <td>
+                        <b>Default:</b><br/><div style="color: blue">"*"</div>
+                </td>
+                <td>
+                        <div>The IP address to bind to / use for the new site.</div>
+                </td>
             </tr>
-                                <tr>
-                                                                <td colspan="1">
+            <tr>
+                <td colspan="1">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>name</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
                         <span style="color: purple">string</span>
-                                                 / <span style="color: red">required</span>                    </div>
-                                    </td>
-                                <td>
-                                                                                                                                                            </td>
-                                                                <td>
-                                            <div>Names of web site.</div>
-                                                                <div style="font-size: small; color: darkgreen"><br/>aliases: website</div>
-                                    </td>
+ / <span style="color: red">required</span>                    </div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>Names of web site.</div>
+                        <div style="font-size: small; color: darkgreen"><br/>aliases: website</div>
+                </td>
             </tr>
-                                <tr>
-                                                                <td colspan="1">
+            <tr>
+                <td colspan="1">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>port</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
                         <span style="color: purple">string</span>
-                                                                    </div>
-                                    </td>
-                                <td>
-                                                                                                                                                                    <b>Default:</b><br/><div style="color: blue">80</div>
-                                    </td>
-                                                                <td>
-                                            <div>The port to bind to / use for the new site.</div>
-                                                        </td>
+                    </div>
+                </td>
+                <td>
+                        <b>Default:</b><br/><div style="color: blue">80</div>
+                </td>
+                <td>
+                        <div>The port to bind to / use for the new site.</div>
+                </td>
             </tr>
-                                <tr>
-                                                                <td colspan="1">
+            <tr>
+                <td colspan="1">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>protocol</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
                         <span style="color: purple">string</span>
-                                                                    </div>
-                                    </td>
-                                <td>
-                                                                                                                                                                    <b>Default:</b><br/><div style="color: blue">"http"</div>
-                                    </td>
-                                                                <td>
-                                            <div>The protocol to be used for the Web binding (usually HTTP, HTTPS, or FTP).</div>
-                                                        </td>
+                    </div>
+                </td>
+                <td>
+                        <b>Default:</b><br/><div style="color: blue">"http"</div>
+                </td>
+                <td>
+                        <div>The protocol to be used for the Web binding (usually HTTP, HTTPS, or FTP).</div>
+                </td>
             </tr>
-                                <tr>
-                                                                <td colspan="1">
+            <tr>
+                <td colspan="1">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>ssl_flags</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
                         <span style="color: purple">string</span>
-                                                                    </div>
-                                    </td>
-                                <td>
-                                                                                                                                                            </td>
-                                                                <td>
-                                            <div>This parameter is only valid on Server 2012 and newer.</div>
-                                            <div>Primarily used for enabling and disabling server name indication (SNI).</div>
-                                            <div>Set to <code>0</code> to disable SNI.</div>
-                                            <div>Set to <code>1</code> to enable SNI.</div>
-                                                        </td>
+                    </div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>This parameter is only valid on Server 2012 and newer.</div>
+                        <div>Primarily used for enabling and disabling server name indication (SNI).</div>
+                        <div>Set to <code>0</code> to disable SNI.</div>
+                        <div>Set to <code>1</code> to enable SNI.</div>
+                </td>
             </tr>
-                                <tr>
-                                                                <td colspan="1">
+            <tr>
+                <td colspan="1">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>state</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
                         <span style="color: purple">string</span>
-                                                                    </div>
-                                    </td>
-                                <td>
-                                                                                                                            <ul style="margin: 0; padding: 0"><b>Choices:</b>
-                                                                                                                                                                <li>absent</li>
-                                                                                                                                                                                                <li><div style="color: blue"><b>present</b>&nbsp;&larr;</div></li>
-                                                                                    </ul>
-                                                                            </td>
-                                                                <td>
-                                            <div>State of the binding.</div>
-                                                        </td>
+                    </div>
+                </td>
+                <td>
+                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                    <li>absent</li>
+                                    <li><div style="color: blue"><b>present</b>&nbsp;&larr;</div></li>
+                        </ul>
+                </td>
+                <td>
+                        <div>State of the binding.</div>
+                </td>
             </tr>
-                        </table>
+    </table>
     <br/>
 
 
@@ -205,7 +205,6 @@ Examples
 
 .. code-block:: yaml+jinja
 
-    
     - name: Add a HTTP binding on port 9090
       community.windows.win_iis_webbinding:
         name: Default Web Site
@@ -246,7 +245,6 @@ Examples
 
 
 
-
 Return Values
 -------------
 Common return values are documented `here <https://docs.ansible.com/ansible/latest/reference_appendices/common_return_values.html#common-return-values>`_, the following are the fields unique to this module:
@@ -259,21 +257,21 @@ Common return values are documented `here <https://docs.ansible.com/ansible/late
             <th>Returned</th>
             <th width="100%">Description</th>
         </tr>
-                    <tr>
-                                <td colspan="1">
+            <tr>
+                <td colspan="1">
                     <div class="ansibleOptionAnchor" id="return-"></div>
                     <b>binding_info</b>
                     <a class="ansibleOptionLink" href="#return-" title="Permalink to this return value"></a>
                     <div style="font-size: small">
                       <span style="color: purple">dictionary</span>
-                                          </div>
-                                    </td>
+                    </div>
+                </td>
                 <td>on success</td>
                 <td>
-                                                                        <div>Information on the binding being manipulated</div>
-                                                                <br/>
-                                            <div style="font-size: smaller"><b>Sample:</b></div>
-                                                <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">&quot;binding_info&quot;: {
+                            <div>Information on the binding being manipulated</div>
+                    <br/>
+                        <div style="font-size: smaller"><b>Sample:</b></div>
+                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">&quot;binding_info&quot;: {
       &quot;bindingInformation&quot;: &quot;127.0.0.1:443:&quot;,
       &quot;certificateHash&quot;: &quot;FF3910CE089397F1B5A77EB7BAFDD8F44CDE77DD&quot;,
       &quot;certificateStoreName&quot;: &quot;MY&quot;,
@@ -283,45 +281,45 @@ Common return values are documented `here <https://docs.ansible.com/ansible/late
       &quot;protocol&quot;: &quot;https&quot;,
       &quot;sslFlags&quot;: &quot;not supported&quot;
     }</div>
-                                    </td>
+                </td>
             </tr>
-                                <tr>
-                                <td colspan="1">
+            <tr>
+                <td colspan="1">
                     <div class="ansibleOptionAnchor" id="return-"></div>
                     <b>operation_type</b>
                     <a class="ansibleOptionLink" href="#return-" title="Permalink to this return value"></a>
                     <div style="font-size: small">
                       <span style="color: purple">string</span>
-                                          </div>
-                                    </td>
+                    </div>
+                </td>
                 <td>on success</td>
                 <td>
-                                                                        <div>The type of operation performed</div>
-                                                    <div>Can be removed, updated, matched, or added</div>
-                                                                <br/>
-                                            <div style="font-size: smaller"><b>Sample:</b></div>
-                                                <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">removed</div>
-                                    </td>
+                            <div>The type of operation performed</div>
+                            <div>Can be removed, updated, matched, or added</div>
+                    <br/>
+                        <div style="font-size: smaller"><b>Sample:</b></div>
+                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">removed</div>
+                </td>
             </tr>
-                                <tr>
-                                <td colspan="1">
+            <tr>
+                <td colspan="1">
                     <div class="ansibleOptionAnchor" id="return-"></div>
                     <b>website_state</b>
                     <a class="ansibleOptionLink" href="#return-" title="Permalink to this return value"></a>
                     <div style="font-size: small">
                       <span style="color: purple">string</span>
-                                          </div>
-                                    </td>
+                    </div>
+                </td>
                 <td>always</td>
                 <td>
-                                                                        <div>The state of the website being targetted</div>
-                                                    <div>Can be helpful in case you accidentally cause a binding collision which can result in the targetted site being stopped</div>
-                                                                <br/>
-                                            <div style="font-size: smaller"><b>Sample:</b></div>
-                                                <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">Started</div>
-                                    </td>
+                            <div>The state of the website being targetted</div>
+                            <div>Can be helpful in case you accidentally cause a binding collision which can result in the targetted site being stopped</div>
+                    <br/>
+                        <div style="font-size: smaller"><b>Sample:</b></div>
+                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">Started</div>
+                </td>
             </tr>
-                        </table>
+    </table>
     <br/><br/>
 
 
@@ -334,5 +332,3 @@ Authors
 
 - Noah Sparks (@nwsparks)
 - Henrik Wallström (@henrikwallstrom)
-
-

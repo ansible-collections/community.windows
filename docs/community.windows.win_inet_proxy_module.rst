@@ -29,106 +29,106 @@ Parameters
 .. raw:: html
 
     <table  border=0 cellpadding=0 class="documentation-table">
-        <tr>
+<tr>
             <th colspan="1">Parameter</th>
             <th>Choices/<font color="blue">Defaults</font></th>
-                        <th width="100%">Comments</th>
+            <th width="100%">Comments</th>
         </tr>
-                    <tr>
-                                                                <td colspan="1">
+            <tr>
+                <td colspan="1">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>auto_config_url</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
                         <span style="color: purple">string</span>
-                                                                    </div>
-                                    </td>
-                                <td>
-                                                                                                                                                            </td>
-                                                                <td>
-                                            <div>The URL of a proxy configuration script.</div>
-                                            <div>Proxy configuration scripts are typically JavaScript files with the <code>.pac</code> extension that implement the C(FindProxyForUR<a href='host'>url</a> function.</div>
-                                            <div>Omit, set to null or an empty string to remove the auto config URL.</div>
-                                            <div>This corresponds to the checkbox <em>Use automatic configuration script</em> in the connection settings window.</div>
-                                                        </td>
+                    </div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>The URL of a proxy configuration script.</div>
+                        <div>Proxy configuration scripts are typically JavaScript files with the <code>.pac</code> extension that implement the C(FindProxyForUR<a href='host'>url</a> function.</div>
+                        <div>Omit, set to null or an empty string to remove the auto config URL.</div>
+                        <div>This corresponds to the checkbox <em>Use automatic configuration script</em> in the connection settings window.</div>
+                </td>
             </tr>
-                                <tr>
-                                                                <td colspan="1">
+            <tr>
+                <td colspan="1">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>auto_detect</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
                         <span style="color: purple">boolean</span>
-                                                                    </div>
-                                    </td>
-                                <td>
-                                                                                                                                                                                                                    <ul style="margin: 0; padding: 0"><b>Choices:</b>
-                                                                                                                                                                <li>no</li>
-                                                                                                                                                                                                <li><div style="color: blue"><b>yes</b>&nbsp;&larr;</div></li>
-                                                                                    </ul>
-                                                                            </td>
-                                                                <td>
-                                            <div>Whether to configure WinINet to automatically detect proxy settings through Web Proxy Auto-Detection <code>WPAD</code>.</div>
-                                            <div>This corresponds to the checkbox <em>Automatically detect settings</em> in the connection settings window.</div>
-                                                        </td>
+                    </div>
+                </td>
+                <td>
+                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                    <li>no</li>
+                                    <li><div style="color: blue"><b>yes</b>&nbsp;&larr;</div></li>
+                        </ul>
+                </td>
+                <td>
+                        <div>Whether to configure WinINet to automatically detect proxy settings through Web Proxy Auto-Detection <code>WPAD</code>.</div>
+                        <div>This corresponds to the checkbox <em>Automatically detect settings</em> in the connection settings window.</div>
+                </td>
             </tr>
-                                <tr>
-                                                                <td colspan="1">
+            <tr>
+                <td colspan="1">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>bypass</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
                         <span style="color: purple">list</span>
-                         / <span style="color: purple">elements=string</span>                                            </div>
-                                    </td>
-                                <td>
-                                                                                                                                                            </td>
-                                                                <td>
-                                            <div>A list of hosts that will bypass the set proxy when being accessed.</div>
-                                            <div>Use <code>&lt;local&gt;</code> to match hostnames that are not fully qualified domain names. This is useful when needing to connect to intranet sites using just the hostname. If defined, this should be the last entry in the bypass list.</div>
-                                            <div>Use <code>&lt;-loopback&gt;</code> to stop automatically bypassing the proxy when connecting through any loopback address like <code>127.0.0.1</code>, <code>localhost</code>, or the local hostname.</div>
-                                            <div>Omit, set to null or an empty string/list to remove the bypass list.</div>
-                                            <div>If this is set then <em>proxy</em> must also be set.</div>
-                                                        </td>
+ / <span style="color: purple">elements=string</span>                    </div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>A list of hosts that will bypass the set proxy when being accessed.</div>
+                        <div>Use <code>&lt;local&gt;</code> to match hostnames that are not fully qualified domain names. This is useful when needing to connect to intranet sites using just the hostname. If defined, this should be the last entry in the bypass list.</div>
+                        <div>Use <code>&lt;-loopback&gt;</code> to stop automatically bypassing the proxy when connecting through any loopback address like <code>127.0.0.1</code>, <code>localhost</code>, or the local hostname.</div>
+                        <div>Omit, set to null or an empty string/list to remove the bypass list.</div>
+                        <div>If this is set then <em>proxy</em> must also be set.</div>
+                </td>
             </tr>
-                                <tr>
-                                                                <td colspan="1">
+            <tr>
+                <td colspan="1">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>connection</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
                         <span style="color: purple">string</span>
-                                                                    </div>
-                                    </td>
-                                <td>
-                                                                                                                                                            </td>
-                                                                <td>
-                                            <div>The name of the IE connection to set the proxy settings for.</div>
-                                            <div>These are the connections under the <em>Dial-up and Virtual Private Network</em> header in the IE settings.</div>
-                                            <div>When omitted, the default LAN connection is used.</div>
-                                                        </td>
+                    </div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>The name of the IE connection to set the proxy settings for.</div>
+                        <div>These are the connections under the <em>Dial-up and Virtual Private Network</em> header in the IE settings.</div>
+                        <div>When omitted, the default LAN connection is used.</div>
+                </td>
             </tr>
-                                <tr>
-                                                                <td colspan="1">
+            <tr>
+                <td colspan="1">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>proxy</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
                         <span style="color: purple">raw</span>
-                                                                    </div>
-                                    </td>
-                                <td>
-                                                                                                                                                            </td>
-                                                                <td>
-                                            <div>A string or dict that specifies the proxy to be set.</div>
-                                            <div>If setting a string, should be in the form <code>hostname</code>, <code>hostname:port</code>, or <code>protocol=hostname:port</code>.</div>
-                                            <div>If the port is undefined, the default port for the protocol in use is used.</div>
-                                            <div>If setting a dict, the keys should be the protocol and the values should be the hostname and/or port for that protocol.</div>
-                                            <div>Valid protocols are <code>http</code>, <code>https</code>, <code>ftp</code>, and <code>socks</code>.</div>
-                                            <div>Omit, set to null or an empty string to remove the proxy settings.</div>
-                                                        </td>
+                    </div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>A string or dict that specifies the proxy to be set.</div>
+                        <div>If setting a string, should be in the form <code>hostname</code>, <code>hostname:port</code>, or <code>protocol=hostname:port</code>.</div>
+                        <div>If the port is undefined, the default port for the protocol in use is used.</div>
+                        <div>If setting a dict, the keys should be the protocol and the values should be the hostname and/or port for that protocol.</div>
+                        <div>Valid protocols are <code>http</code>, <code>https</code>, <code>ftp</code>, and <code>socks</code>.</div>
+                        <div>Omit, set to null or an empty string to remove the proxy settings.</div>
+                </td>
             </tr>
-                        </table>
+    </table>
     <br/>
 
 
@@ -158,7 +158,6 @@ Examples
 
 .. code-block:: yaml+jinja
 
-    
     # This should be set before running the win_inet_proxy module
     - name: Configure IE proxy settings to apply to all users
       ansible.windows.win_regedit:
@@ -240,7 +239,6 @@ Examples
 
 
 
-
 Status
 ------
 
@@ -249,5 +247,3 @@ Authors
 ~~~~~~~
 
 - Jordan Borean (@jborean93)
-
-

@@ -30,79 +30,79 @@ Parameters
 .. raw:: html
 
     <table  border=0 cellpadding=0 class="documentation-table">
-        <tr>
+<tr>
             <th colspan="1">Parameter</th>
             <th>Choices/<font color="blue">Defaults</font></th>
-                        <th width="100%">Comments</th>
+            <th width="100%">Comments</th>
         </tr>
-                    <tr>
-                                                                <td colspan="1">
+            <tr>
+                <td colspan="1">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>copy_settings</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
                         <span style="color: purple">boolean</span>
-                                                                    </div>
-                                    </td>
-                                <td>
-                                                                                                                                                                                                                    <ul style="margin: 0; padding: 0"><b>Choices:</b>
-                                                                                                                                                                <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
-                                                                                                                                                                                                <li>yes</li>
-                                                                                    </ul>
-                                                                            </td>
-                                                                <td>
-                                            <div>This will copy the current format and location values to new user profiles and the welcome screen. This will only run if <code>location</code>, <code>format</code> or <code>unicode_language</code> has resulted in a change. If this process runs then it will always result in a change.</div>
-                                                        </td>
+                    </div>
+                </td>
+                <td>
+                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                    <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
+                                    <li>yes</li>
+                        </ul>
+                </td>
+                <td>
+                        <div>This will copy the current format and location values to new user profiles and the welcome screen. This will only run if <code>location</code>, <code>format</code> or <code>unicode_language</code> has resulted in a change. If this process runs then it will always result in a change.</div>
+                </td>
             </tr>
-                                <tr>
-                                                                <td colspan="1">
+            <tr>
+                <td colspan="1">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>format</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
                         <span style="color: purple">string</span>
-                                                                    </div>
-                                    </td>
-                                <td>
-                                                                                                                                                            </td>
-                                                                <td>
-                                            <div>The language format to set for the current user, see <a href='https://msdn.microsoft.com/en-us/library/system.globalization.cultureinfo.aspx'>https://msdn.microsoft.com/en-us/library/system.globalization.cultureinfo.aspx</a> for a list of culture names to use.</div>
-                                            <div>This needs to be set if <code>location</code> or <code>unicode_language</code> is not set.</div>
-                                                        </td>
+                    </div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>The language format to set for the current user, see <a href='https://msdn.microsoft.com/en-us/library/system.globalization.cultureinfo.aspx'>https://msdn.microsoft.com/en-us/library/system.globalization.cultureinfo.aspx</a> for a list of culture names to use.</div>
+                        <div>This needs to be set if <code>location</code> or <code>unicode_language</code> is not set.</div>
+                </td>
             </tr>
-                                <tr>
-                                                                <td colspan="1">
+            <tr>
+                <td colspan="1">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>location</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
                         <span style="color: purple">string</span>
-                                                                    </div>
-                                    </td>
-                                <td>
-                                                                                                                                                            </td>
-                                                                <td>
-                                            <div>The location to set for the current user, see <a href='https://msdn.microsoft.com/en-us/library/dd374073.aspx'>https://msdn.microsoft.com/en-us/library/dd374073.aspx</a> for a list of GeoIDs you can use and what location it relates to.</div>
-                                            <div>This needs to be set if <code>format</code> or <code>unicode_language</code> is not set.</div>
-                                                        </td>
+                    </div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>The location to set for the current user, see <a href='https://msdn.microsoft.com/en-us/library/dd374073.aspx'>https://msdn.microsoft.com/en-us/library/dd374073.aspx</a> for a list of GeoIDs you can use and what location it relates to.</div>
+                        <div>This needs to be set if <code>format</code> or <code>unicode_language</code> is not set.</div>
+                </td>
             </tr>
-                                <tr>
-                                                                <td colspan="1">
+            <tr>
+                <td colspan="1">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>unicode_language</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
                         <span style="color: purple">string</span>
-                                                                    </div>
-                                    </td>
-                                <td>
-                                                                                                                                                            </td>
-                                                                <td>
-                                            <div>The unicode language format to set for all users, see <a href='https://msdn.microsoft.com/en-us/library/system.globalization.cultureinfo.aspx'>https://msdn.microsoft.com/en-us/library/system.globalization.cultureinfo.aspx</a> for a list of culture names to use.</div>
-                                            <div>This needs to be set if <code>location</code> or <code>format</code> is not set. After setting this value a reboot is required for it to take effect.</div>
-                                                        </td>
+                    </div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>The unicode language format to set for all users, see <a href='https://msdn.microsoft.com/en-us/library/system.globalization.cultureinfo.aspx'>https://msdn.microsoft.com/en-us/library/system.globalization.cultureinfo.aspx</a> for a list of culture names to use.</div>
+                        <div>This needs to be set if <code>location</code> or <code>format</code> is not set. After setting this value a reboot is required for it to take effect.</div>
+                </td>
             </tr>
-                        </table>
+    </table>
     <br/>
 
 
@@ -121,7 +121,6 @@ Examples
 
 .. code-block:: yaml+jinja
 
-    
     - name: Set the region format to English United States
       community.windows.win_region:
         format: en-US
@@ -157,7 +156,6 @@ Examples
 
 
 
-
 Return Values
 -------------
 Common return values are documented `here <https://docs.ansible.com/ansible/latest/reference_appendices/common_return_values.html#common-return-values>`_, the following are the fields unique to this module:
@@ -170,24 +168,24 @@ Common return values are documented `here <https://docs.ansible.com/ansible/late
             <th>Returned</th>
             <th width="100%">Description</th>
         </tr>
-                    <tr>
-                                <td colspan="1">
+            <tr>
+                <td colspan="1">
                     <div class="ansibleOptionAnchor" id="return-"></div>
                     <b>restart_required</b>
                     <a class="ansibleOptionLink" href="#return-" title="Permalink to this return value"></a>
                     <div style="font-size: small">
                       <span style="color: purple">boolean</span>
-                                          </div>
-                                    </td>
+                    </div>
+                </td>
                 <td>success</td>
                 <td>
-                                                                        <div>Whether a reboot is required for the change to take effect.</div>
-                                                                <br/>
-                                            <div style="font-size: smaller"><b>Sample:</b></div>
-                                                <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">True</div>
-                                    </td>
+                            <div>Whether a reboot is required for the change to take effect.</div>
+                    <br/>
+                        <div style="font-size: smaller"><b>Sample:</b></div>
+                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">True</div>
+                </td>
             </tr>
-                        </table>
+    </table>
     <br/><br/>
 
 
@@ -199,5 +197,3 @@ Authors
 ~~~~~~~
 
 - Jordan Borean (@jborean93)
-
-

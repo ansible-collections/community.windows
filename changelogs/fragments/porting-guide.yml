@@ -1,4 +1,0 @@
-breaking_changes:
-  - win_pester - no longer runs all ``*.ps1`` file in the directory specified due to it executing potentially unknown scripts. It will follow the default behaviour of only running tests for files that are like ``*.tests.ps1`` which is built into Pester itself.
-removed_features:
-  - win_psexec - removed the deprecated ``extra_opts`` option.

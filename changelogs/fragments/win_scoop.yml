@@ -1,2 +1,0 @@
-bugfixes:
-  - win_scoop - add checks for globally installed packages for better idempotency checks

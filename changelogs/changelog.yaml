@@ -83,3 +83,34 @@ releases:
     - win_timezone-Allow-dstoff.yml
     - win_unzip-paths.yaml
     release_date: '2020-07-18'
+  1.0.0:
+    changes:
+      breaking_changes:
+      - win_pester - no longer runs all ``*.ps1`` file in the directory specified
+        due to it executing potentially unknown scripts. It will follow the default
+        behaviour of only running tests for files that are like ``*.tests.ps1`` which
+        is built into Pester itself.
+      bugfixes:
+      - win_scoop - add checks for globally installed packages for better idempotency
+        checks
+      minor_changes:
+      - win_dns_record - Added support for managing ``SRV`` records
+      - win_firewall_rule - Support editing rules by the group it belongs to
+      - win_firewall_rule - Support editing rules that have a duplicated name
+      release_summary:
+      - This is the first official release of ``community.windows`` to be included
+        in Ansible 2.10. While the version has a major change bump it is still backwards
+        compatible with `0.2.0`.
+      removed_features:
+      - win_psexec - removed the deprecated ``extra_opts`` option.
+    fragments:
+    - 1.0.0-summary.yml
+    - porting-guide.yml
+    - win_dns_record_SRV.yml
+    - win_firewall_rule_group_state.yml
+    - win_scoop.yml
+    modules:
+    - description: Manage Scoop buckets
+      name: win_scoop_bucket
+      namespace: ''
+    release_date: '2020-08-14'

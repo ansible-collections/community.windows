@@ -1,3 +1,0 @@
-minor_changes:
-- win_firewall_rule - Support editing rules that have a duplicated name
-- win_firewall_rule - Support editing rules by the group it belongs to

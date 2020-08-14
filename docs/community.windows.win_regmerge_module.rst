@@ -32,42 +32,42 @@ Parameters
 .. raw:: html
 
     <table  border=0 cellpadding=0 class="documentation-table">
-        <tr>
+<tr>
             <th colspan="1">Parameter</th>
             <th>Choices/<font color="blue">Defaults</font></th>
-                        <th width="100%">Comments</th>
+            <th width="100%">Comments</th>
         </tr>
-                    <tr>
-                                                                <td colspan="1">
+            <tr>
+                <td colspan="1">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>compare_key</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
                         <span style="color: purple">string</span>
-                                                                    </div>
-                                    </td>
-                                <td>
-                                                                                                                                                            </td>
-                                                                <td>
-                                            <div>The parent key to use when comparing the contents of the registry to the contents of the file.  Needs to be in HKLM or HKCU part of registry. Use a PS-Drive style path for example HKLM:\SOFTWARE not HKEY_LOCAL_MACHINE\SOFTWARE If not supplied, or the registry key is not found, no comparison will be made, and the module will report changed.</div>
-                                                        </td>
+                    </div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>The parent key to use when comparing the contents of the registry to the contents of the file.  Needs to be in HKLM or HKCU part of registry. Use a PS-Drive style path for example HKLM:\SOFTWARE not HKEY_LOCAL_MACHINE\SOFTWARE If not supplied, or the registry key is not found, no comparison will be made, and the module will report changed.</div>
+                </td>
             </tr>
-                                <tr>
-                                                                <td colspan="1">
+            <tr>
+                <td colspan="1">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>path</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
                         <span style="color: purple">path</span>
-                                                 / <span style="color: red">required</span>                    </div>
-                                    </td>
-                                <td>
-                                                                                                                                                            </td>
-                                                                <td>
-                                            <div>The full path including file name to the registry file on the remote machine to be merged</div>
-                                                        </td>
+ / <span style="color: red">required</span>                    </div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>The full path including file name to the registry file on the remote machine to be merged</div>
+                </td>
             </tr>
-                        </table>
+    </table>
     <br/>
 
 
@@ -96,7 +96,6 @@ Examples
 
 .. code-block:: yaml+jinja
 
-    
     - name: Merge in a registry file without comparing to current registry
       community.windows.win_regmerge:
         path: C:\autodeploy\myCompany-settings.reg
@@ -105,7 +104,6 @@ Examples
       community.windows.win_regmerge:
         path: C:\autodeploy\myCompany-settings.reg
         compare_to: HKLM:\SOFTWARE\myCompany
-
 
 
 
@@ -121,56 +119,56 @@ Common return values are documented `here <https://docs.ansible.com/ansible/late
             <th>Returned</th>
             <th width="100%">Description</th>
         </tr>
-                    <tr>
-                                <td colspan="1">
+            <tr>
+                <td colspan="1">
                     <div class="ansibleOptionAnchor" id="return-"></div>
                     <b>compare_to_key_found</b>
                     <a class="ansibleOptionLink" href="#return-" title="Permalink to this return value"></a>
                     <div style="font-size: small">
                       <span style="color: purple">boolean</span>
-                                          </div>
-                                    </td>
+                    </div>
+                </td>
                 <td>when comparison key not found in registry</td>
                 <td>
-                                                                        <div>whether the parent registry key has been found for comparison</div>
-                                                                <br/>
-                                    </td>
+                            <div>whether the parent registry key has been found for comparison</div>
+                    <br/>
+                </td>
             </tr>
-                                <tr>
-                                <td colspan="1">
+            <tr>
+                <td colspan="1">
                     <div class="ansibleOptionAnchor" id="return-"></div>
                     <b>compared</b>
                     <a class="ansibleOptionLink" href="#return-" title="Permalink to this return value"></a>
                     <div style="font-size: small">
                       <span style="color: purple">boolean</span>
-                                          </div>
-                                    </td>
+                    </div>
+                </td>
                 <td>when a comparison key has been supplied and comparison has been attempted</td>
                 <td>
-                                                                        <div>whether a comparison has taken place between the registry and the file</div>
-                                                                <br/>
-                                            <div style="font-size: smaller"><b>Sample:</b></div>
-                                                <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">True</div>
-                                    </td>
+                            <div>whether a comparison has taken place between the registry and the file</div>
+                    <br/>
+                        <div style="font-size: smaller"><b>Sample:</b></div>
+                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">True</div>
+                </td>
             </tr>
-                                <tr>
-                                <td colspan="1">
+            <tr>
+                <td colspan="1">
                     <div class="ansibleOptionAnchor" id="return-"></div>
                     <b>difference_count</b>
                     <a class="ansibleOptionLink" href="#return-" title="Permalink to this return value"></a>
                     <div style="font-size: small">
                       <span style="color: purple">integer</span>
-                                          </div>
-                                    </td>
+                    </div>
+                </td>
                 <td>changed</td>
                 <td>
-                                                                        <div>number of differences between the registry and the file</div>
-                                                                <br/>
-                                            <div style="font-size: smaller"><b>Sample:</b></div>
-                                                <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">1</div>
-                                    </td>
+                            <div>number of differences between the registry and the file</div>
+                    <br/>
+                        <div style="font-size: smaller"><b>Sample:</b></div>
+                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">1</div>
+                </td>
             </tr>
-                        </table>
+    </table>
     <br/><br/>
 
 
@@ -182,5 +180,3 @@ Authors
 ~~~~~~~
 
 - Jon Hawkesworth (@jhawkesworth)
-
-

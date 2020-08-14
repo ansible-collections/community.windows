@@ -95,6 +95,7 @@ Name | Description
 [community.windows.win_scheduled_task](https://github.com/ansible-collections/community.windows/blob/main/docs/community.windows.win_scheduled_task_module.rst)|Manage scheduled tasks
 [community.windows.win_scheduled_task_stat](https://github.com/ansible-collections/community.windows/blob/main/docs/community.windows.win_scheduled_task_stat_module.rst)|Get information about Windows Scheduled Tasks
 [community.windows.win_scoop](https://github.com/ansible-collections/community.windows/blob/main/docs/community.windows.win_scoop_module.rst)|Manage packages using Scoop
+[community.windows.win_scoop_bucket](https://github.com/ansible-collections/community.windows/blob/main/docs/community.windows.win_scoop_bucket_module.rst)|Manage Scoop buckets
 [community.windows.win_security_policy](https://github.com/ansible-collections/community.windows/blob/main/docs/community.windows.win_security_policy_module.rst)|Change local security policy settings
 [community.windows.win_shortcut](https://github.com/ansible-collections/community.windows/blob/main/docs/community.windows.win_shortcut_module.rst)|Manage shortcuts on Windows
 [community.windows.win_snmp](https://github.com/ansible-collections/community.windows/blob/main/docs/community.windows.win_snmp_module.rst)|Configures the Windows SNMP service

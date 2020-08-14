@@ -5,6 +5,41 @@ Community Windows Release Notes
 .. contents:: Topics
 
 
+v1.0.0
+======
+
+Release Summary
+---------------
+
+- This is the first official release of ``community.windows`` to be included in Ansible 2.10. While the version has a major change bump it is still backwards compatible with `0.2.0`.
+
+Minor Changes
+-------------
+
+- win_dns_record - Added support for managing ``SRV`` records
+- win_firewall_rule - Support editing rules by the group it belongs to
+- win_firewall_rule - Support editing rules that have a duplicated name
+
+Breaking Changes / Porting Guide
+--------------------------------
+
+- win_pester - no longer runs all ``*.ps1`` file in the directory specified due to it executing potentially unknown scripts. It will follow the default behaviour of only running tests for files that are like ``*.tests.ps1`` which is built into Pester itself.
+
+Removed Features (previously deprecated)
+----------------------------------------
+
+- win_psexec - removed the deprecated ``extra_opts`` option.
+
+Bugfixes
+--------
+
+- win_scoop - add checks for globally installed packages for better idempotency checks
+
+New Modules
+-----------
+
+- win_scoop_bucket - Manage Scoop buckets
+
 v0.2.0
 ======
 
