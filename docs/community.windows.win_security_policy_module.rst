@@ -27,62 +27,62 @@ Parameters
 .. raw:: html
 
     <table  border=0 cellpadding=0 class="documentation-table">
-<tr>
+        <tr>
             <th colspan="1">Parameter</th>
             <th>Choices/<font color="blue">Defaults</font></th>
-            <th width="100%">Comments</th>
+                        <th width="100%">Comments</th>
         </tr>
-            <tr>
-                <td colspan="1">
+                    <tr>
+                                                                <td colspan="1">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>key</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
                         <span style="color: purple">string</span>
- / <span style="color: red">required</span>                    </div>
-                </td>
-                <td>
-                </td>
-                <td>
-                        <div>The ini key of the section or policy name to modify.</div>
-                        <div>The module will return an error if this key is invalid.</div>
-                </td>
+                                                 / <span style="color: red">required</span>                    </div>
+                                    </td>
+                                <td>
+                                                                                                                                                            </td>
+                                                                <td>
+                                            <div>The ini key of the section or policy name to modify.</div>
+                                            <div>The module will return an error if this key is invalid.</div>
+                                                        </td>
             </tr>
-            <tr>
-                <td colspan="1">
+                                <tr>
+                                                                <td colspan="1">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>section</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
                         <span style="color: purple">string</span>
- / <span style="color: red">required</span>                    </div>
-                </td>
-                <td>
-                </td>
-                <td>
-                        <div>The ini section the key exists in.</div>
-                        <div>If the section does not exist then the module will return an error.</div>
-                        <div>Example sections to use are &#x27;Account Policies&#x27;, &#x27;Local Policies&#x27;, &#x27;Event Log&#x27;, &#x27;Restricted Groups&#x27;, &#x27;System Services&#x27;, &#x27;Registry&#x27; and &#x27;File System&#x27;</div>
-                        <div>If wanting to edit the <code>Privilege Rights</code> section, use the <span class='module'>ansible.windows.win_user_right</span> module instead.</div>
-                </td>
+                                                 / <span style="color: red">required</span>                    </div>
+                                    </td>
+                                <td>
+                                                                                                                                                            </td>
+                                                                <td>
+                                            <div>The ini section the key exists in.</div>
+                                            <div>If the section does not exist then the module will return an error.</div>
+                                            <div>Example sections to use are &#x27;Account Policies&#x27;, &#x27;Local Policies&#x27;, &#x27;Event Log&#x27;, &#x27;Restricted Groups&#x27;, &#x27;System Services&#x27;, &#x27;Registry&#x27; and &#x27;File System&#x27;</div>
+                                            <div>If wanting to edit the <code>Privilege Rights</code> section, use the <span class='module'>ansible.windows.win_user_right</span> module instead.</div>
+                                                        </td>
             </tr>
-            <tr>
-                <td colspan="1">
+                                <tr>
+                                                                <td colspan="1">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>value</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
                         <span style="color: purple">string</span>
- / <span style="color: red">required</span>                    </div>
-                </td>
-                <td>
-                </td>
-                <td>
-                        <div>The value for the ini key or policy name.</div>
-                        <div>If the key takes in a boolean value then 0 = False and 1 = True.</div>
-                </td>
+                                                 / <span style="color: red">required</span>                    </div>
+                                    </td>
+                                <td>
+                                                                                                                                                            </td>
+                                                                <td>
+                                            <div>The value for the ini key or policy name.</div>
+                                            <div>If the key takes in a boolean value then 0 = False and 1 = True.</div>
+                                                        </td>
             </tr>
-    </table>
+                        </table>
     <br/>
 
 
@@ -148,126 +148,126 @@ Common return values are documented `here <https://docs.ansible.com/ansible/late
             <th>Returned</th>
             <th width="100%">Description</th>
         </tr>
-            <tr>
-                <td colspan="1">
+                    <tr>
+                                <td colspan="1">
                     <div class="ansibleOptionAnchor" id="return-"></div>
                     <b>import_log</b>
                     <a class="ansibleOptionLink" href="#return-" title="Permalink to this return value"></a>
                     <div style="font-size: small">
                       <span style="color: purple">string</span>
-                    </div>
-                </td>
+                                          </div>
+                                    </td>
                 <td>secedit.exe /import run and change occurred</td>
                 <td>
-                            <div>The log of the SecEdit.exe /configure job that configured the local policies. This is used for debugging purposes on failures.</div>
-                    <br/>
-                        <div style="font-size: smaller"><b>Sample:</b></div>
-                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">Completed 6 percent (0/15) \tProcess Privilege Rights area.</div>
-                </td>
+                                                                        <div>The log of the SecEdit.exe /configure job that configured the local policies. This is used for debugging purposes on failures.</div>
+                                                                <br/>
+                                            <div style="font-size: smaller"><b>Sample:</b></div>
+                                                <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">Completed 6 percent (0/15) \tProcess Privilege Rights area.</div>
+                                    </td>
             </tr>
-            <tr>
-                <td colspan="1">
+                                <tr>
+                                <td colspan="1">
                     <div class="ansibleOptionAnchor" id="return-"></div>
                     <b>key</b>
                     <a class="ansibleOptionLink" href="#return-" title="Permalink to this return value"></a>
                     <div style="font-size: small">
                       <span style="color: purple">string</span>
-                    </div>
-                </td>
+                                          </div>
+                                    </td>
                 <td>success</td>
                 <td>
-                            <div>The key in the section passed to the module to modify.</div>
-                    <br/>
-                        <div style="font-size: smaller"><b>Sample:</b></div>
-                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">NewGuestName</div>
-                </td>
+                                                                        <div>The key in the section passed to the module to modify.</div>
+                                                                <br/>
+                                            <div style="font-size: smaller"><b>Sample:</b></div>
+                                                <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">NewGuestName</div>
+                                    </td>
             </tr>
-            <tr>
-                <td colspan="1">
+                                <tr>
+                                <td colspan="1">
                     <div class="ansibleOptionAnchor" id="return-"></div>
                     <b>rc</b>
                     <a class="ansibleOptionLink" href="#return-" title="Permalink to this return value"></a>
                     <div style="font-size: small">
                       <span style="color: purple">integer</span>
-                    </div>
-                </td>
+                                          </div>
+                                    </td>
                 <td>failure with secedit calls</td>
                 <td>
-                            <div>The return code after a failure when running SecEdit.exe.</div>
-                    <br/>
-                        <div style="font-size: smaller"><b>Sample:</b></div>
-                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">-1</div>
-                </td>
+                                                                        <div>The return code after a failure when running SecEdit.exe.</div>
+                                                                <br/>
+                                            <div style="font-size: smaller"><b>Sample:</b></div>
+                                                <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">-1</div>
+                                    </td>
             </tr>
-            <tr>
-                <td colspan="1">
+                                <tr>
+                                <td colspan="1">
                     <div class="ansibleOptionAnchor" id="return-"></div>
                     <b>section</b>
                     <a class="ansibleOptionLink" href="#return-" title="Permalink to this return value"></a>
                     <div style="font-size: small">
                       <span style="color: purple">string</span>
-                    </div>
-                </td>
+                                          </div>
+                                    </td>
                 <td>success</td>
                 <td>
-                            <div>The section passed to the module to modify.</div>
-                    <br/>
-                        <div style="font-size: smaller"><b>Sample:</b></div>
-                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">System Access</div>
-                </td>
+                                                                        <div>The section passed to the module to modify.</div>
+                                                                <br/>
+                                            <div style="font-size: smaller"><b>Sample:</b></div>
+                                                <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">System Access</div>
+                                    </td>
             </tr>
-            <tr>
-                <td colspan="1">
+                                <tr>
+                                <td colspan="1">
                     <div class="ansibleOptionAnchor" id="return-"></div>
                     <b>stderr</b>
                     <a class="ansibleOptionLink" href="#return-" title="Permalink to this return value"></a>
                     <div style="font-size: small">
                       <span style="color: purple">string</span>
-                    </div>
-                </td>
+                                          </div>
+                                    </td>
                 <td>failure with secedit calls</td>
                 <td>
-                            <div>The output of the STDERR buffer after a failure when running SecEdit.exe.</div>
-                    <br/>
-                        <div style="font-size: smaller"><b>Sample:</b></div>
-                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">failed to import security policy</div>
-                </td>
+                                                                        <div>The output of the STDERR buffer after a failure when running SecEdit.exe.</div>
+                                                                <br/>
+                                            <div style="font-size: smaller"><b>Sample:</b></div>
+                                                <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">failed to import security policy</div>
+                                    </td>
             </tr>
-            <tr>
-                <td colspan="1">
+                                <tr>
+                                <td colspan="1">
                     <div class="ansibleOptionAnchor" id="return-"></div>
                     <b>stdout</b>
                     <a class="ansibleOptionLink" href="#return-" title="Permalink to this return value"></a>
                     <div style="font-size: small">
                       <span style="color: purple">string</span>
-                    </div>
-                </td>
+                                          </div>
+                                    </td>
                 <td>failure with secedit calls</td>
                 <td>
-                            <div>The output of the STDOUT buffer after a failure when running SecEdit.exe.</div>
-                    <br/>
-                        <div style="font-size: smaller"><b>Sample:</b></div>
-                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">check log for error details</div>
-                </td>
+                                                                        <div>The output of the STDOUT buffer after a failure when running SecEdit.exe.</div>
+                                                                <br/>
+                                            <div style="font-size: smaller"><b>Sample:</b></div>
+                                                <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">check log for error details</div>
+                                    </td>
             </tr>
-            <tr>
-                <td colspan="1">
+                                <tr>
+                                <td colspan="1">
                     <div class="ansibleOptionAnchor" id="return-"></div>
                     <b>value</b>
                     <a class="ansibleOptionLink" href="#return-" title="Permalink to this return value"></a>
                     <div style="font-size: small">
                       <span style="color: purple">string</span>
-                    </div>
-                </td>
+                                          </div>
+                                    </td>
                 <td>success</td>
                 <td>
-                            <div>The value passed to the module to modify to.</div>
-                    <br/>
-                        <div style="font-size: smaller"><b>Sample:</b></div>
-                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">Guest Account</div>
-                </td>
+                                                                        <div>The value passed to the module to modify to.</div>
+                                                                <br/>
+                                            <div style="font-size: smaller"><b>Sample:</b></div>
+                                                <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">Guest Account</div>
+                                    </td>
             </tr>
-    </table>
+                        </table>
     <br/><br/>
 
 

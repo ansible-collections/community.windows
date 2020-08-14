@@ -28,99 +28,99 @@ Parameters
 .. raw:: html
 
     <table  border=0 cellpadding=0 class="documentation-table">
-<tr>
+        <tr>
             <th colspan="1">Parameter</th>
             <th>Choices/<font color="blue">Defaults</font></th>
-            <th width="100%">Comments</th>
+                        <th width="100%">Comments</th>
         </tr>
-            <tr>
-                <td colspan="1">
+                    <tr>
+                                                                <td colspan="1">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>dest</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
                         <span style="color: purple">path</span>
- / <span style="color: red">required</span>                    </div>
-                </td>
-                <td>
-                </td>
-                <td>
-                        <div>Destination file/directory to sync (Will receive contents of src).</div>
-                </td>
+                                                 / <span style="color: red">required</span>                    </div>
+                                    </td>
+                                <td>
+                                                                                                                                                            </td>
+                                                                <td>
+                                            <div>Destination file/directory to sync (Will receive contents of src).</div>
+                                                        </td>
             </tr>
-            <tr>
-                <td colspan="1">
+                                <tr>
+                                                                <td colspan="1">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>flags</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
                         <span style="color: purple">string</span>
-                    </div>
-                </td>
-                <td>
-                </td>
-                <td>
-                        <div>Directly supply Robocopy flags.</div>
-                        <div>If set, <code>purge</code> and <code>recurse</code> will be ignored.</div>
-                </td>
+                                                                    </div>
+                                    </td>
+                                <td>
+                                                                                                                                                            </td>
+                                                                <td>
+                                            <div>Directly supply Robocopy flags.</div>
+                                            <div>If set, <code>purge</code> and <code>recurse</code> will be ignored.</div>
+                                                        </td>
             </tr>
-            <tr>
-                <td colspan="1">
+                                <tr>
+                                                                <td colspan="1">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>purge</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
                         <span style="color: purple">boolean</span>
-                    </div>
-                </td>
-                <td>
-                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
-                                    <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
-                                    <li>yes</li>
-                        </ul>
-                </td>
-                <td>
-                        <div>Deletes any files/directories found in the destination that do not exist in the source.</div>
-                        <div>Toggles the <code>/purge</code> flag to RoboCopy.</div>
-                        <div>If <code>flags</code> is set, this will be ignored.</div>
-                </td>
+                                                                    </div>
+                                    </td>
+                                <td>
+                                                                                                                                                                                                                    <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                                                                                                                                                <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
+                                                                                                                                                                                                <li>yes</li>
+                                                                                    </ul>
+                                                                            </td>
+                                                                <td>
+                                            <div>Deletes any files/directories found in the destination that do not exist in the source.</div>
+                                            <div>Toggles the <code>/purge</code> flag to RoboCopy.</div>
+                                            <div>If <code>flags</code> is set, this will be ignored.</div>
+                                                        </td>
             </tr>
-            <tr>
-                <td colspan="1">
+                                <tr>
+                                                                <td colspan="1">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>recurse</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
                         <span style="color: purple">boolean</span>
-                    </div>
-                </td>
-                <td>
-                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
-                                    <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
-                                    <li>yes</li>
-                        </ul>
-                </td>
-                <td>
-                        <div>Includes all subdirectories (Toggles the <code>/e</code> flag to RoboCopy).</div>
-                        <div>If <code>flags</code> is set, this will be ignored.</div>
-                </td>
+                                                                    </div>
+                                    </td>
+                                <td>
+                                                                                                                                                                                                                    <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                                                                                                                                                <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
+                                                                                                                                                                                                <li>yes</li>
+                                                                                    </ul>
+                                                                            </td>
+                                                                <td>
+                                            <div>Includes all subdirectories (Toggles the <code>/e</code> flag to RoboCopy).</div>
+                                            <div>If <code>flags</code> is set, this will be ignored.</div>
+                                                        </td>
             </tr>
-            <tr>
-                <td colspan="1">
+                                <tr>
+                                                                <td colspan="1">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>src</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
                         <span style="color: purple">path</span>
- / <span style="color: red">required</span>                    </div>
-                </td>
-                <td>
-                </td>
-                <td>
-                        <div>Source file/directory to sync.</div>
-                </td>
+                                                 / <span style="color: red">required</span>                    </div>
+                                    </td>
+                                <td>
+                                                                                                                                                            </td>
+                                                                <td>
+                                            <div>Source file/directory to sync.</div>
+                                                        </td>
             </tr>
-    </table>
+                        </table>
     <br/>
 
 
@@ -198,156 +198,156 @@ Common return values are documented `here <https://docs.ansible.com/ansible/late
             <th>Returned</th>
             <th width="100%">Description</th>
         </tr>
-            <tr>
-                <td colspan="1">
+                    <tr>
+                                <td colspan="1">
                     <div class="ansibleOptionAnchor" id="return-"></div>
                     <b>cmd</b>
                     <a class="ansibleOptionLink" href="#return-" title="Permalink to this return value"></a>
                     <div style="font-size: small">
                       <span style="color: purple">string</span>
-                    </div>
-                </td>
+                                          </div>
+                                    </td>
                 <td>always</td>
                 <td>
-                            <div>The used command line.</div>
-                    <br/>
-                        <div style="font-size: smaller"><b>Sample:</b></div>
-                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">robocopy C:\DirectoryOne C:\DirectoryTwo /e /purge</div>
-                </td>
+                                                                        <div>The used command line.</div>
+                                                                <br/>
+                                            <div style="font-size: smaller"><b>Sample:</b></div>
+                                                <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">robocopy C:\DirectoryOne C:\DirectoryTwo /e /purge</div>
+                                    </td>
             </tr>
-            <tr>
-                <td colspan="1">
+                                <tr>
+                                <td colspan="1">
                     <div class="ansibleOptionAnchor" id="return-"></div>
                     <b>dest</b>
                     <a class="ansibleOptionLink" href="#return-" title="Permalink to this return value"></a>
                     <div style="font-size: small">
                       <span style="color: purple">string</span>
-                    </div>
-                </td>
+                                          </div>
+                                    </td>
                 <td>always</td>
                 <td>
-                            <div>The Destination file/directory of the sync.</div>
-                    <br/>
-                        <div style="font-size: smaller"><b>Sample:</b></div>
-                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">C:\Some\Path</div>
-                </td>
+                                                                        <div>The Destination file/directory of the sync.</div>
+                                                                <br/>
+                                            <div style="font-size: smaller"><b>Sample:</b></div>
+                                                <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">C:\Some\Path</div>
+                                    </td>
             </tr>
-            <tr>
-                <td colspan="1">
+                                <tr>
+                                <td colspan="1">
                     <div class="ansibleOptionAnchor" id="return-"></div>
                     <b>flags</b>
                     <a class="ansibleOptionLink" href="#return-" title="Permalink to this return value"></a>
                     <div style="font-size: small">
                       <span style="color: purple">string</span>
-                    </div>
-                </td>
+                                          </div>
+                                    </td>
                 <td>always</td>
                 <td>
-                            <div>Any flags passed in by the user.</div>
-                    <br/>
-                        <div style="font-size: smaller"><b>Sample:</b></div>
-                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">/e /purge</div>
-                </td>
+                                                                        <div>Any flags passed in by the user.</div>
+                                                                <br/>
+                                            <div style="font-size: smaller"><b>Sample:</b></div>
+                                                <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">/e /purge</div>
+                                    </td>
             </tr>
-            <tr>
-                <td colspan="1">
+                                <tr>
+                                <td colspan="1">
                     <div class="ansibleOptionAnchor" id="return-"></div>
                     <b>msg</b>
                     <a class="ansibleOptionLink" href="#return-" title="Permalink to this return value"></a>
                     <div style="font-size: small">
                       <span style="color: purple">string</span>
-                    </div>
-                </td>
+                                          </div>
+                                    </td>
                 <td>always</td>
                 <td>
-                            <div>Output interpreted into a concise message.</div>
-                    <br/>
-                        <div style="font-size: smaller"><b>Sample:</b></div>
-                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">No files copied!</div>
-                </td>
+                                                                        <div>Output interpreted into a concise message.</div>
+                                                                <br/>
+                                            <div style="font-size: smaller"><b>Sample:</b></div>
+                                                <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">No files copied!</div>
+                                    </td>
             </tr>
-            <tr>
-                <td colspan="1">
+                                <tr>
+                                <td colspan="1">
                     <div class="ansibleOptionAnchor" id="return-"></div>
                     <b>output</b>
                     <a class="ansibleOptionLink" href="#return-" title="Permalink to this return value"></a>
                     <div style="font-size: small">
                       <span style="color: purple">string</span>
-                    </div>
-                </td>
+                                          </div>
+                                    </td>
                 <td>success</td>
                 <td>
-                            <div>The output of running the robocopy command.</div>
-                    <br/>
-                        <div style="font-size: smaller"><b>Sample:</b></div>
-                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">------------------------------------\n   ROBOCOPY     ::     Robust File Copy for Windows         \n------------------------------------\n</div>
-                </td>
+                                                                        <div>The output of running the robocopy command.</div>
+                                                                <br/>
+                                            <div style="font-size: smaller"><b>Sample:</b></div>
+                                                <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">------------------------------------\n   ROBOCOPY     ::     Robust File Copy for Windows         \n------------------------------------\n</div>
+                                    </td>
             </tr>
-            <tr>
-                <td colspan="1">
+                                <tr>
+                                <td colspan="1">
                     <div class="ansibleOptionAnchor" id="return-"></div>
                     <b>purge</b>
                     <a class="ansibleOptionLink" href="#return-" title="Permalink to this return value"></a>
                     <div style="font-size: small">
                       <span style="color: purple">boolean</span>
-                    </div>
-                </td>
+                                          </div>
+                                    </td>
                 <td>always</td>
                 <td>
-                            <div>Whether or not the purge flag was toggled.</div>
-                    <br/>
-                </td>
+                                                                        <div>Whether or not the purge flag was toggled.</div>
+                                                                <br/>
+                                    </td>
             </tr>
-            <tr>
-                <td colspan="1">
+                                <tr>
+                                <td colspan="1">
                     <div class="ansibleOptionAnchor" id="return-"></div>
                     <b>rc</b>
                     <a class="ansibleOptionLink" href="#return-" title="Permalink to this return value"></a>
                     <div style="font-size: small">
                       <span style="color: purple">integer</span>
-                    </div>
-                </td>
+                                          </div>
+                                    </td>
                 <td>success</td>
                 <td>
-                            <div>The return code returned by robocopy.</div>
-                    <br/>
-                        <div style="font-size: smaller"><b>Sample:</b></div>
-                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">1</div>
-                </td>
+                                                                        <div>The return code returned by robocopy.</div>
+                                                                <br/>
+                                            <div style="font-size: smaller"><b>Sample:</b></div>
+                                                <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">1</div>
+                                    </td>
             </tr>
-            <tr>
-                <td colspan="1">
+                                <tr>
+                                <td colspan="1">
                     <div class="ansibleOptionAnchor" id="return-"></div>
                     <b>recurse</b>
                     <a class="ansibleOptionLink" href="#return-" title="Permalink to this return value"></a>
                     <div style="font-size: small">
                       <span style="color: purple">boolean</span>
-                    </div>
-                </td>
+                                          </div>
+                                    </td>
                 <td>always</td>
                 <td>
-                            <div>Whether or not the recurse flag was toggled.</div>
-                    <br/>
-                </td>
+                                                                        <div>Whether or not the recurse flag was toggled.</div>
+                                                                <br/>
+                                    </td>
             </tr>
-            <tr>
-                <td colspan="1">
+                                <tr>
+                                <td colspan="1">
                     <div class="ansibleOptionAnchor" id="return-"></div>
                     <b>src</b>
                     <a class="ansibleOptionLink" href="#return-" title="Permalink to this return value"></a>
                     <div style="font-size: small">
                       <span style="color: purple">string</span>
-                    </div>
-                </td>
+                                          </div>
+                                    </td>
                 <td>always</td>
                 <td>
-                            <div>The Source file/directory of the sync.</div>
-                    <br/>
-                        <div style="font-size: smaller"><b>Sample:</b></div>
-                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">C:\Some\Path</div>
-                </td>
+                                                                        <div>The Source file/directory of the sync.</div>
+                                                                <br/>
+                                            <div style="font-size: smaller"><b>Sample:</b></div>
+                                                <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">C:\Some\Path</div>
+                                    </td>
             </tr>
-    </table>
+                        </table>
     <br/><br/>
 
 

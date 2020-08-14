@@ -27,184 +27,184 @@ Parameters
 .. raw:: html
 
     <table  border=0 cellpadding=0 class="documentation-table">
-<tr>
+        <tr>
             <th colspan="1">Parameter</th>
             <th>Choices/<font color="blue">Defaults</font></th>
-            <th width="100%">Comments</th>
+                        <th width="100%">Comments</th>
         </tr>
-            <tr>
-                <td colspan="1">
+                    <tr>
+                                                                <td colspan="1">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>allow_clobber</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
                         <span style="color: purple">boolean</span>
-                    </div>
-                </td>
-                <td>
-                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
-                                    <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
-                                    <li>yes</li>
-                        </ul>
-                </td>
-                <td>
-                        <div>If <code>yes</code> allows install modules that contains commands those have the same names as commands that already exists.</div>
-                </td>
+                                                                    </div>
+                                    </td>
+                                <td>
+                                                                                                                                                                                                                    <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                                                                                                                                                <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
+                                                                                                                                                                                                <li>yes</li>
+                                                                                    </ul>
+                                                                            </td>
+                                                                <td>
+                                            <div>If <code>yes</code> allows install modules that contains commands those have the same names as commands that already exists.</div>
+                                                        </td>
             </tr>
-            <tr>
-                <td colspan="1">
+                                <tr>
+                                                                <td colspan="1">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>allow_prerelease</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
                         <span style="color: purple">boolean</span>
-                    </div>
-                </td>
-                <td>
-                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
-                                    <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
-                                    <li>yes</li>
-                        </ul>
-                </td>
-                <td>
-                        <div>If <code>yes</code> installs modules marked as prereleases.</div>
-                        <div>It doesn&#x27;t work with the parameters <code>minimum_version</code> and/or <code>maximum_version</code>.</div>
-                        <div>It doesn&#x27;t work with the <code>state</code> set to absent.</div>
-                </td>
+                                                                    </div>
+                                    </td>
+                                <td>
+                                                                                                                                                                                                                    <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                                                                                                                                                <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
+                                                                                                                                                                                                <li>yes</li>
+                                                                                    </ul>
+                                                                            </td>
+                                                                <td>
+                                            <div>If <code>yes</code> installs modules marked as prereleases.</div>
+                                            <div>It doesn&#x27;t work with the parameters <code>minimum_version</code> and/or <code>maximum_version</code>.</div>
+                                            <div>It doesn&#x27;t work with the <code>state</code> set to absent.</div>
+                                                        </td>
             </tr>
-            <tr>
-                <td colspan="1">
+                                <tr>
+                                                                <td colspan="1">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>maximum_version</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
                         <span style="color: purple">string</span>
-                    </div>
-                </td>
-                <td>
-                </td>
-                <td>
-                        <div>The maximum version of the PowerShell module that has to be installed.</div>
-                </td>
+                                                                    </div>
+                                    </td>
+                                <td>
+                                                                                                                                                            </td>
+                                                                <td>
+                                            <div>The maximum version of the PowerShell module that has to be installed.</div>
+                                                        </td>
             </tr>
-            <tr>
-                <td colspan="1">
+                                <tr>
+                                                                <td colspan="1">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>minimum_version</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
                         <span style="color: purple">string</span>
-                    </div>
-                </td>
-                <td>
-                </td>
-                <td>
-                        <div>The minimum version of the PowerShell module that has to be installed.</div>
-                </td>
+                                                                    </div>
+                                    </td>
+                                <td>
+                                                                                                                                                            </td>
+                                                                <td>
+                                            <div>The minimum version of the PowerShell module that has to be installed.</div>
+                                                        </td>
             </tr>
-            <tr>
-                <td colspan="1">
+                                <tr>
+                                                                <td colspan="1">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>name</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
                         <span style="color: purple">string</span>
- / <span style="color: red">required</span>                    </div>
-                </td>
-                <td>
-                </td>
-                <td>
-                        <div>Name of the Windows PowerShell module that has to be installed.</div>
-                </td>
+                                                 / <span style="color: red">required</span>                    </div>
+                                    </td>
+                                <td>
+                                                                                                                                                            </td>
+                                                                <td>
+                                            <div>Name of the Windows PowerShell module that has to be installed.</div>
+                                                        </td>
             </tr>
-            <tr>
-                <td colspan="1">
+                                <tr>
+                                                                <td colspan="1">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>repository</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
                         <span style="color: purple">string</span>
-                    </div>
-                </td>
-                <td>
-                </td>
-                <td>
-                        <div>Name of the custom repository to use.</div>
-                </td>
+                                                                    </div>
+                                    </td>
+                                <td>
+                                                                                                                                                            </td>
+                                                                <td>
+                                            <div>Name of the custom repository to use.</div>
+                                                        </td>
             </tr>
-            <tr>
-                <td colspan="1">
+                                <tr>
+                                                                <td colspan="1">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>required_version</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
                         <span style="color: purple">string</span>
-                    </div>
-                </td>
-                <td>
-                </td>
-                <td>
-                        <div>The exact version of the PowerShell module that has to be installed.</div>
-                </td>
+                                                                    </div>
+                                    </td>
+                                <td>
+                                                                                                                                                            </td>
+                                                                <td>
+                                            <div>The exact version of the PowerShell module that has to be installed.</div>
+                                                        </td>
             </tr>
-            <tr>
-                <td colspan="1">
+                                <tr>
+                                                                <td colspan="1">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>skip_publisher_check</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
                         <span style="color: purple">boolean</span>
-                    </div>
-                </td>
-                <td>
-                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
-                                    <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
-                                    <li>yes</li>
-                        </ul>
-                </td>
-                <td>
-                        <div>If <code>yes</code>, allows you to install a different version of a module that already exists on your computer in the case when a different one is not digitally signed by a trusted publisher and the newest existing module is digitally signed by a trusted publisher.</div>
-                </td>
+                                                                    </div>
+                                    </td>
+                                <td>
+                                                                                                                                                                                                                    <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                                                                                                                                                <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
+                                                                                                                                                                                                <li>yes</li>
+                                                                                    </ul>
+                                                                            </td>
+                                                                <td>
+                                            <div>If <code>yes</code>, allows you to install a different version of a module that already exists on your computer in the case when a different one is not digitally signed by a trusted publisher and the newest existing module is digitally signed by a trusted publisher.</div>
+                                                        </td>
             </tr>
-            <tr>
-                <td colspan="1">
+                                <tr>
+                                                                <td colspan="1">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>state</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
                         <span style="color: purple">string</span>
-                    </div>
-                </td>
-                <td>
-                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
-                                    <li>absent</li>
-                                    <li>latest</li>
-                                    <li><div style="color: blue"><b>present</b>&nbsp;&larr;</div></li>
-                        </ul>
-                </td>
-                <td>
-                        <div>If <code>present</code> a new module is installed.</div>
-                        <div>If <code>absent</code> a module is removed.</div>
-                        <div>If <code>latest</code> a module is updated to the newest version.</div>
-                </td>
+                                                                    </div>
+                                    </td>
+                                <td>
+                                                                                                                            <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                                                                                                                                                <li>absent</li>
+                                                                                                                                                                                                <li>latest</li>
+                                                                                                                                                                                                <li><div style="color: blue"><b>present</b>&nbsp;&larr;</div></li>
+                                                                                    </ul>
+                                                                            </td>
+                                                                <td>
+                                            <div>If <code>present</code> a new module is installed.</div>
+                                            <div>If <code>absent</code> a module is removed.</div>
+                                            <div>If <code>latest</code> a module is updated to the newest version.</div>
+                                                        </td>
             </tr>
-            <tr>
-                <td colspan="1">
+                                <tr>
+                                                                <td colspan="1">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>url</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
                         <span style="color: purple">string</span>
-                    </div>
-                </td>
-                <td>
-                </td>
-                <td>
-                        <div>URL of the custom repository to register.</div>
-                        <div>DEPRECATED, will be removed in a major release after <code>2021-07-01</code>, please use the <span class='module'>community.windows.win_psrepository</span> module instead.</div>
-                </td>
+                                                                    </div>
+                                    </td>
+                                <td>
+                                                                                                                                                            </td>
+                                                                <td>
+                                            <div>URL of the custom repository to register.</div>
+                                            <div>DEPRECATED, will be removed in a major release after <code>2021-07-01</code>, please use the <span class='module'>community.windows.win_psrepository</span> module instead.</div>
+                                                        </td>
             </tr>
-    </table>
+                        </table>
     <br/>
 
 
@@ -286,58 +286,58 @@ Common return values are documented `here <https://docs.ansible.com/ansible/late
             <th>Returned</th>
             <th width="100%">Description</th>
         </tr>
-            <tr>
-                <td colspan="1">
+                    <tr>
+                                <td colspan="1">
                     <div class="ansibleOptionAnchor" id="return-"></div>
                     <b>nuget_changed</b>
                     <a class="ansibleOptionLink" href="#return-" title="Permalink to this return value"></a>
                     <div style="font-size: small">
                       <span style="color: purple">boolean</span>
-                    </div>
-                </td>
+                                          </div>
+                                    </td>
                 <td>always</td>
                 <td>
-                            <div>True when Nuget package provider is installed.</div>
-                    <br/>
-                        <div style="font-size: smaller"><b>Sample:</b></div>
-                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">True</div>
-                </td>
+                                                                        <div>True when Nuget package provider is installed.</div>
+                                                                <br/>
+                                            <div style="font-size: smaller"><b>Sample:</b></div>
+                                                <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">True</div>
+                                    </td>
             </tr>
-            <tr>
-                <td colspan="1">
+                                <tr>
+                                <td colspan="1">
                     <div class="ansibleOptionAnchor" id="return-"></div>
                     <b>output</b>
                     <a class="ansibleOptionLink" href="#return-" title="Permalink to this return value"></a>
                     <div style="font-size: small">
                       <span style="color: purple">string</span>
-                    </div>
-                </td>
+                                          </div>
+                                    </td>
                 <td>always</td>
                 <td>
-                            <div>A message describing the task result.</div>
-                    <br/>
-                        <div style="font-size: smaller"><b>Sample:</b></div>
-                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">Module PowerShellCookbook installed</div>
-                </td>
+                                                                        <div>A message describing the task result.</div>
+                                                                <br/>
+                                            <div style="font-size: smaller"><b>Sample:</b></div>
+                                                <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">Module PowerShellCookbook installed</div>
+                                    </td>
             </tr>
-            <tr>
-                <td colspan="1">
+                                <tr>
+                                <td colspan="1">
                     <div class="ansibleOptionAnchor" id="return-"></div>
                     <b>repository_changed</b>
                     <a class="ansibleOptionLink" href="#return-" title="Permalink to this return value"></a>
                     <div style="font-size: small">
                       <span style="color: purple">boolean</span>
-                    </div>
-                </td>
+                                          </div>
+                                    </td>
                 <td>always</td>
                 <td>
-                            <div>True when a custom repository is installed or removed.</div>
-                    <br/>
-                        <div style="font-size: smaller"><b>Sample:</b></div>
-                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">True</div>
-                </td>
+                                                                        <div>True when a custom repository is installed or removed.</div>
+                                                                <br/>
+                                            <div style="font-size: smaller"><b>Sample:</b></div>
+                                                <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">True</div>
+                                    </td>
             </tr>
-    </table>
+                        </table>
     <br/><br/>
 
 

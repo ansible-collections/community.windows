@@ -27,112 +27,112 @@ Parameters
 .. raw:: html
 
     <table  border=0 cellpadding=0 class="documentation-table">
-<tr>
+        <tr>
             <th colspan="1">Parameter</th>
             <th>Choices/<font color="blue">Defaults</font></th>
-            <th width="100%">Comments</th>
+                        <th width="100%">Comments</th>
         </tr>
-            <tr>
-                <td colspan="1">
+                    <tr>
+                                                                <td colspan="1">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>end_sound_path</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
                         <span style="color: purple">path</span>
-                    </div>
-                </td>
-                <td>
-                </td>
-                <td>
-                        <div>Full path to a <code>.wav</code> file containing a sound to play after the text has been spoken.</div>
-                        <div>Useful on conference calls to alert other speakers that ansible has finished speaking.</div>
-                </td>
+                                                                    </div>
+                                    </td>
+                                <td>
+                                                                                                                                                            </td>
+                                                                <td>
+                                            <div>Full path to a <code>.wav</code> file containing a sound to play after the text has been spoken.</div>
+                                            <div>Useful on conference calls to alert other speakers that ansible has finished speaking.</div>
+                                                        </td>
             </tr>
-            <tr>
-                <td colspan="1">
+                                <tr>
+                                                                <td colspan="1">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>msg</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
                         <span style="color: purple">string</span>
-                    </div>
-                </td>
-                <td>
-                </td>
-                <td>
-                        <div>The text to be spoken.</div>
-                        <div>Use either <code>msg</code> or <code>msg_file</code>.</div>
-                        <div>Optional so that you can use this module just to play sounds.</div>
-                </td>
+                                                                    </div>
+                                    </td>
+                                <td>
+                                                                                                                                                            </td>
+                                                                <td>
+                                            <div>The text to be spoken.</div>
+                                            <div>Use either <code>msg</code> or <code>msg_file</code>.</div>
+                                            <div>Optional so that you can use this module just to play sounds.</div>
+                                                        </td>
             </tr>
-            <tr>
-                <td colspan="1">
+                                <tr>
+                                                                <td colspan="1">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>msg_file</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
                         <span style="color: purple">path</span>
-                    </div>
-                </td>
-                <td>
-                </td>
-                <td>
-                        <div>Full path to a windows format text file containing the text to be spoken.</div>
-                        <div>Use either <code>msg</code> or <code>msg_file</code>.</div>
-                        <div>Optional so that you can use this module just to play sounds.</div>
-                </td>
+                                                                    </div>
+                                    </td>
+                                <td>
+                                                                                                                                                            </td>
+                                                                <td>
+                                            <div>Full path to a windows format text file containing the text to be spoken.</div>
+                                            <div>Use either <code>msg</code> or <code>msg_file</code>.</div>
+                                            <div>Optional so that you can use this module just to play sounds.</div>
+                                                        </td>
             </tr>
-            <tr>
-                <td colspan="1">
+                                <tr>
+                                                                <td colspan="1">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>speech_speed</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
                         <span style="color: purple">integer</span>
-                    </div>
-                </td>
-                <td>
-                        <b>Default:</b><br/><div style="color: blue">0</div>
-                </td>
-                <td>
-                        <div>How fast or slow to speak the text.</div>
-                        <div>Must be an integer value in the range -10 to 10.</div>
-                        <div>-10 is slowest, 10 is fastest.</div>
-                </td>
+                                                                    </div>
+                                    </td>
+                                <td>
+                                                                                                                                                                    <b>Default:</b><br/><div style="color: blue">0</div>
+                                    </td>
+                                                                <td>
+                                            <div>How fast or slow to speak the text.</div>
+                                            <div>Must be an integer value in the range -10 to 10.</div>
+                                            <div>-10 is slowest, 10 is fastest.</div>
+                                                        </td>
             </tr>
-            <tr>
-                <td colspan="1">
+                                <tr>
+                                                                <td colspan="1">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>start_sound_path</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
                         <span style="color: purple">path</span>
-                    </div>
-                </td>
-                <td>
-                </td>
-                <td>
-                        <div>Full path to a <code>.wav</code> file containing a sound to play before the text is spoken.</div>
-                        <div>Useful on conference calls to alert other speakers that ansible has something to say.</div>
-                </td>
+                                                                    </div>
+                                    </td>
+                                <td>
+                                                                                                                                                            </td>
+                                                                <td>
+                                            <div>Full path to a <code>.wav</code> file containing a sound to play before the text is spoken.</div>
+                                            <div>Useful on conference calls to alert other speakers that ansible has something to say.</div>
+                                                        </td>
             </tr>
-            <tr>
-                <td colspan="1">
+                                <tr>
+                                                                <td colspan="1">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>voice</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
                         <span style="color: purple">string</span>
-                    </div>
-                </td>
-                <td>
-                </td>
-                <td>
-                        <div>Which voice to use. See notes for how to discover installed voices.</div>
-                        <div>If the requested voice is not available the default voice will be used. Example voice names from Windows 10 are <code>Microsoft Zira Desktop</code> and <code>Microsoft Hazel Desktop</code>.</div>
-                </td>
+                                                                    </div>
+                                    </td>
+                                <td>
+                                                                                                                                                            </td>
+                                                                <td>
+                                            <div>Which voice to use. See notes for how to discover installed voices.</div>
+                                            <div>If the requested voice is not available the default voice will be used. Example voice names from Windows 10 are <code>Microsoft Zira Desktop</code> and <code>Microsoft Hazel Desktop</code>.</div>
+                                                        </td>
             </tr>
-    </table>
+                        </table>
     <br/>
 
 
@@ -203,58 +203,58 @@ Common return values are documented `here <https://docs.ansible.com/ansible/late
             <th>Returned</th>
             <th width="100%">Description</th>
         </tr>
-            <tr>
-                <td colspan="1">
+                    <tr>
+                                <td colspan="1">
                     <div class="ansibleOptionAnchor" id="return-"></div>
                     <b>message_text</b>
                     <a class="ansibleOptionLink" href="#return-" title="Permalink to this return value"></a>
                     <div style="font-size: small">
                       <span style="color: purple">string</span>
-                    </div>
-                </td>
+                                          </div>
+                                    </td>
                 <td>success</td>
                 <td>
-                            <div>The text that the module attempted to speak.</div>
-                    <br/>
-                        <div style="font-size: smaller"><b>Sample:</b></div>
-                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">Warning, deployment commencing in 5 minutes.</div>
-                </td>
+                                                                        <div>The text that the module attempted to speak.</div>
+                                                                <br/>
+                                            <div style="font-size: smaller"><b>Sample:</b></div>
+                                                <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">Warning, deployment commencing in 5 minutes.</div>
+                                    </td>
             </tr>
-            <tr>
-                <td colspan="1">
+                                <tr>
+                                <td colspan="1">
                     <div class="ansibleOptionAnchor" id="return-"></div>
                     <b>voice</b>
                     <a class="ansibleOptionLink" href="#return-" title="Permalink to this return value"></a>
                     <div style="font-size: small">
                       <span style="color: purple">string</span>
-                    </div>
-                </td>
+                                          </div>
+                                    </td>
                 <td>success</td>
                 <td>
-                            <div>The voice used to speak the text.</div>
-                    <br/>
-                        <div style="font-size: smaller"><b>Sample:</b></div>
-                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">Microsoft Hazel Desktop</div>
-                </td>
+                                                                        <div>The voice used to speak the text.</div>
+                                                                <br/>
+                                            <div style="font-size: smaller"><b>Sample:</b></div>
+                                                <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">Microsoft Hazel Desktop</div>
+                                    </td>
             </tr>
-            <tr>
-                <td colspan="1">
+                                <tr>
+                                <td colspan="1">
                     <div class="ansibleOptionAnchor" id="return-"></div>
                     <b>voice_info</b>
                     <a class="ansibleOptionLink" href="#return-" title="Permalink to this return value"></a>
                     <div style="font-size: small">
                       <span style="color: purple">string</span>
-                    </div>
-                </td>
+                                          </div>
+                                    </td>
                 <td>when requested voice could not be loaded</td>
                 <td>
-                            <div>The voice used to speak the text.</div>
-                    <br/>
-                        <div style="font-size: smaller"><b>Sample:</b></div>
-                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">Could not load voice TestVoice, using system default voice</div>
-                </td>
+                                                                        <div>The voice used to speak the text.</div>
+                                                                <br/>
+                                            <div style="font-size: smaller"><b>Sample:</b></div>
+                                                <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">Could not load voice TestVoice, using system default voice</div>
+                                    </td>
             </tr>
-    </table>
+                        </table>
     <br/><br/>
 
 

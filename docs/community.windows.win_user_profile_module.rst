@@ -29,91 +29,91 @@ Parameters
 .. raw:: html
 
     <table  border=0 cellpadding=0 class="documentation-table">
-<tr>
+        <tr>
             <th colspan="1">Parameter</th>
             <th>Choices/<font color="blue">Defaults</font></th>
-            <th width="100%">Comments</th>
+                        <th width="100%">Comments</th>
         </tr>
-            <tr>
-                <td colspan="1">
+                    <tr>
+                                                                <td colspan="1">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>name</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
                         <span style="color: purple">string</span>
-                    </div>
-                </td>
-                <td>
-                </td>
-                <td>
-                        <div>Specifies the base name for the profile path.</div>
-                        <div>When <em>state</em> is <code>present</code> this is used to create the profile for <em>username</em> at a specific path within the profile directory.</div>
-                        <div>This cannot be used to specify a path outside of the profile directory but rather it specifies a folder(s) within this directory.</div>
-                        <div>If a profile for another user already exists at the same path, then a 3 digit incremental number is appended by Windows automatically.</div>
-                        <div>When <em>state</em> is <code>absent</code> and <em>username</em> is not set, then the module will remove all profiles that point to the profile path derived by this value.</div>
-                        <div>This is useful if the account no longer exists but the profile still remains.</div>
-                </td>
+                                                                    </div>
+                                    </td>
+                                <td>
+                                                                                                                                                            </td>
+                                                                <td>
+                                            <div>Specifies the base name for the profile path.</div>
+                                            <div>When <em>state</em> is <code>present</code> this is used to create the profile for <em>username</em> at a specific path within the profile directory.</div>
+                                            <div>This cannot be used to specify a path outside of the profile directory but rather it specifies a folder(s) within this directory.</div>
+                                            <div>If a profile for another user already exists at the same path, then a 3 digit incremental number is appended by Windows automatically.</div>
+                                            <div>When <em>state</em> is <code>absent</code> and <em>username</em> is not set, then the module will remove all profiles that point to the profile path derived by this value.</div>
+                                            <div>This is useful if the account no longer exists but the profile still remains.</div>
+                                                        </td>
             </tr>
-            <tr>
-                <td colspan="1">
+                                <tr>
+                                                                <td colspan="1">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>remove_multiple</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
                         <span style="color: purple">boolean</span>
-                    </div>
-                </td>
-                <td>
-                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
-                                    <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
-                                    <li>yes</li>
-                        </ul>
-                </td>
-                <td>
-                        <div>When <em>state</em> is <code>absent</code> and the value for <em>name</em> matches multiple profiles the module will fail.</div>
-                        <div>Set this value to <code>yes</code> to force the module to delete all the profiles found.</div>
-                </td>
+                                                                    </div>
+                                    </td>
+                                <td>
+                                                                                                                                                                                                                    <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                                                                                                                                                <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
+                                                                                                                                                                                                <li>yes</li>
+                                                                                    </ul>
+                                                                            </td>
+                                                                <td>
+                                            <div>When <em>state</em> is <code>absent</code> and the value for <em>name</em> matches multiple profiles the module will fail.</div>
+                                            <div>Set this value to <code>yes</code> to force the module to delete all the profiles found.</div>
+                                                        </td>
             </tr>
-            <tr>
-                <td colspan="1">
+                                <tr>
+                                                                <td colspan="1">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>state</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
                         <span style="color: purple">string</span>
-                    </div>
-                </td>
-                <td>
-                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
-                                    <li>absent</li>
-                                    <li><div style="color: blue"><b>present</b>&nbsp;&larr;</div></li>
-                        </ul>
-                </td>
-                <td>
-                        <div>Will ensure the profile exists when set to <code>present</code>.</div>
-                        <div>When creating a profile the <em>username</em> option must be set to a valid account.</div>
-                        <div>Will remove the profile(s) when set to <code>absent</code>.</div>
-                        <div>When removing a profile either <em>username</em> must be set to a valid account, or <em>name</em> is set to the profile&#x27;s base name.</div>
-                </td>
+                                                                    </div>
+                                    </td>
+                                <td>
+                                                                                                                            <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                                                                                                                                                <li>absent</li>
+                                                                                                                                                                                                <li><div style="color: blue"><b>present</b>&nbsp;&larr;</div></li>
+                                                                                    </ul>
+                                                                            </td>
+                                                                <td>
+                                            <div>Will ensure the profile exists when set to <code>present</code>.</div>
+                                            <div>When creating a profile the <em>username</em> option must be set to a valid account.</div>
+                                            <div>Will remove the profile(s) when set to <code>absent</code>.</div>
+                                            <div>When removing a profile either <em>username</em> must be set to a valid account, or <em>name</em> is set to the profile&#x27;s base name.</div>
+                                                        </td>
             </tr>
-            <tr>
-                <td colspan="1">
+                                <tr>
+                                                                <td colspan="1">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>username</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
                         <span style="color: purple">sid</span>
-                    </div>
-                </td>
-                <td>
-                </td>
-                <td>
-                        <div>The account name of security identifier (SID) for the profile.</div>
-                        <div>This must be set when <em>state</em> is <code>present</code> and must be a valid account or the SID of a valid account.</div>
-                        <div>When <em>state</em> is <code>absent</code> then this must still be a valid account number but the SID can be a deleted user&#x27;s SID.</div>
-                </td>
+                                                                    </div>
+                                    </td>
+                                <td>
+                                                                                                                                                            </td>
+                                                                <td>
+                                            <div>The account name of security identifier (SID) for the profile.</div>
+                                            <div>This must be set when <em>state</em> is <code>present</code> and must be a valid account or the SID of a valid account.</div>
+                                            <div>When <em>state</em> is <code>absent</code> then this must still be a valid account number but the SID can be a deleted user&#x27;s SID.</div>
+                                                        </td>
             </tr>
-    </table>
+                        </table>
     <br/>
 
 
@@ -180,24 +180,24 @@ Common return values are documented `here <https://docs.ansible.com/ansible/late
             <th>Returned</th>
             <th width="100%">Description</th>
         </tr>
-            <tr>
-                <td colspan="1">
+                    <tr>
+                                <td colspan="1">
                     <div class="ansibleOptionAnchor" id="return-"></div>
                     <b>path</b>
                     <a class="ansibleOptionLink" href="#return-" title="Permalink to this return value"></a>
                     <div style="font-size: small">
                       <span style="color: purple">string</span>
-                    </div>
-                </td>
+                                          </div>
+                                    </td>
                 <td>always</td>
                 <td>
-                            <div>The full path to the profile for the account. This will be null if <code>state=absent</code> and no profile was deleted.</div>
-                    <br/>
-                        <div style="font-size: smaller"><b>Sample:</b></div>
-                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">C:\Users\ansible</div>
-                </td>
+                                                                        <div>The full path to the profile for the account. This will be null if <code>state=absent</code> and no profile was deleted.</div>
+                                                                <br/>
+                                            <div style="font-size: smaller"><b>Sample:</b></div>
+                                                <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">C:\Users\ansible</div>
+                                    </td>
             </tr>
-    </table>
+                        </table>
     <br/><br/>
 
 
