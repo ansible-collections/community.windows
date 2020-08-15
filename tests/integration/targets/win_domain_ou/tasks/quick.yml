@@ -1,0 +1,245 @@
+---
+- name: Ensure OU is present
+  community.windows.win_domain_ou:
+    name: End User Computing
+    path: "{{ win_domain_ou_root_path }}"
+  register: test1
+  failed_when: test1 is not changed
+
+- name: Ensure OU is present (idempotence check)
+  community.windows.win_domain_ou:
+    name: End User Computing
+    path: "{{ win_domain_ou_root_path }}"
+  register: test1a
+  failed_when: test1a is changed
+
+- name: Ensure OU has updated properties
+  community.windows.win_domain_ou:
+    name: End User Computing
+    protected: true
+    path: "{{ win_domain_ou_root_path }}"
+    properties:
+      city: Sandy Springs
+      state: Georgia
+      street_address: 1155 Perimeter Center West
+      country: US
+      description: EUC Business Unit
+      postal_code: 30189
+  register: test2
+  failed_when: test2 is not changed
+
+- name: Ensure OU has updated properties (idempotence check)
+  community.windows.win_domain_ou:
+    name: End User Computing
+    protected: true
+    path: "{{ win_domain_ou_root_path }}"
+    properties:
+      city: Sandy Springs
+      state: Georgia
+      street_address: 1155 Perimeter Center West
+      country: US
+      description: EUC Business Unit
+      postal_code: 30189
+  register: test2a
+  failed_when: test2a is changed
+
+- name: Ensure OU structure is present
+  community.windows.win_domain_ou:
+    name: "{{ item.name }}"
+    protected: false
+    path: "{{ item.path }}"
+  loop: "{{ win_domain_ou_structure }}"
+  register: test3
+  failed_when: test3 is not changed
+
+- name: Ensure OU structure is present (idempotence check)
+  community.windows.win_domain_ou:
+    name: "{{ item.name }}"
+    protected: false
+    path: "{{ item.path }}"
+  loop: "{{ win_domain_ou_structure }}"
+  register: test3a
+  failed_when: test3a is changed
+
+- name: Ensure OU structure is absent, recursive
+  community.windows.win_domain_ou:
+    name: VMware
+    path: "{{ win_domain_ou_root_path }}"
+    state: absent
+    recursive: true
+  register: test4
+  failed_when: test4 is not changed
+
+- name: Ensure OU structure is absent, recursive (idempotence check)
+  community.windows.win_domain_ou:
+    name: VMware
+    path: "{{ win_domain_ou_root_path }}"
+    state: absent
+    recursive: true
+  register: test4a
+  failed_when: test4a is changed
+
+- name: Ensure OU is present with specific properties
+  community.windows.win_domain_ou:
+    name: VMW Atlanta
+    path: "{{ win_domain_ou_root_path }}"
+    properties:
+      city: Sandy Springs
+      state: Georgia
+      street_address: 1155 Perimeter Center West
+  register: test5
+  failed_when: test5 is not changed
+
+- name: Ensure OU is present with specific properties (idempotence check)
+  community.windows.win_domain_ou:
+    name: VMW Atlanta
+    path: "{{ win_domain_ou_root_path }}"
+    properties:
+      city: Sandy Springs
+      state: Georgia
+      street_address: 1155 Perimeter Center West
+  register: test5a
+  failed_when: test5a is changed
+
+- name: Ensure OU is present with specific properties added
+  community.windows.win_domain_ou:
+    name: VMW Atlanta
+    path: "{{ win_domain_ou_root_path }}"
+    properties:
+      country: US
+      description: EUC Business Unit
+      postal_code: 30189
+  register: test6
+  failed_when: test6 is not changed
+
+- name: Ensure OU is present with specific properties added (idempotence check)
+  community.windows.win_domain_ou:
+    name: VMW Atlanta
+    path: "{{ win_domain_ou_root_path }}"
+    properties:
+      country: US
+      description: EUC Business Unit
+      postal_code: 30189
+  register: test6a
+  failed_when: test6a is changed
+
+- name: Ensure OU is absent
+  community.windows.win_domain_ou:
+    name: End User Computing
+    path: "{{ win_domain_ou_root_path }}"
+    state: absent
+  register: test7
+  failed_when: test7 is not changed
+
+- name: Ensure OU is absent (idempotence check)
+  community.windows.win_domain_ou:
+    name: End User Computing
+    path: "{{ win_domain_ou_root_path }}"
+    state: absent
+  register: test7a
+  failed_when: test7a is changed
+
+- name: Ensure OU is absent
+  community.windows.win_domain_ou:
+    name: VMW Atlanta
+    path: "{{ win_domain_ou_root_path }}"
+    state: absent
+  register: test8
+  failed_when: test8 is not changed
+
+- name: Ensure OU is absent (idempotence check)
+  community.windows.win_domain_ou:
+    name: VMW Atlanta
+    path: "{{ win_domain_ou_root_path }}"
+    state: absent
+  register: test8a
+  failed_when: test8a is changed
+
+- name: Assertions
+  assert:
+    that:
+      - test1a.ou.name == "End User Computing"
+      - test2a.ou.properties.street_address == "1155 Perimeter Center West"
+      - test6a.ou.properties.country == "US"
+      - test5a.ou.properties.city == "Sandy Springs"
+
+- name: Run Check Mode Tests
+  block:
+    - name: Ensure OU is present
+      community.windows.win_domain_ou:
+        name: End User Computing
+        path: "{{ win_domain_ou_root_path }}"
+      register: test1c
+      failed_when: test1c is changed
+
+    - name: Ensure OU has updated properties
+      community.windows.win_domain_ou:
+        name: End User Computing
+        protected: true
+        path: "{{ win_domain_ou_root_path }}"
+        properties:
+          city: Sandy Springs
+          state: Georgia
+          street_address: 1155 Perimeter Center West
+          country: US
+          description: EUC Business Unit
+          postal_code: 30189
+      register: test2c
+      failed_when: test2c is changed
+
+    - name: Ensure OU structure is present
+      community.windows.win_domain_ou:
+        name: "{{ item.name }}"
+        protected: false
+        path: "{{ item.path }}"
+      loop: "{{ win_domain_ou_structure }}"
+      register: test3c
+      failed_when: test3c is changed
+
+    - name: Ensure OU structure is absent, recursive
+      community.windows.win_domain_ou:
+        name: VMware
+        path: "{{ win_domain_ou_root_path }}"
+        state: absent
+        recursive: true
+      register: test4c
+      failed_when: test4c is changed
+
+    - name: Ensure OU is present with specific properties
+      community.windows.win_domain_ou:
+        name: VMW Atlanta
+        path: "{{ win_domain_ou_root_path }}"
+        properties:
+          city: Sandy Springs
+          state: Georgia
+          street_address: 1155 Perimeter Center West
+      register: test5c
+      failed_when: test5c is changed
+
+    - name: Ensure OU is present with specific properties added
+      community.windows.win_domain_ou:
+        name: VMW Atlanta
+        path: "{{ win_domain_ou_root_path }}"
+        properties:
+          country: US
+          description: EUC Business Unit
+          postal_code: 30189
+      register: test6c
+      failed_when: test6c is changed
+
+    - name: Ensure OU is absent
+      community.windows.win_domain_ou:
+        name: End User Computing
+        path: "{{ win_domain_ou_root_path }}"
+        state: absent
+      register: test7c
+      failed_when: test7c is changed
+
+    - name: Ensure OU is absent
+      community.windows.win_domain_ou:
+        name: VMW Atlanta
+        path: "{{ win_domain_ou_root_path }}"
+        state: absent
+      register: test8c
+      failed_when: test8c is changed
+  check_mode: true

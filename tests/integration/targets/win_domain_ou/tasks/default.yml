@@ -1,0 +1,21 @@
+---
+- name: Ensure AD is installed
+  ansible.windows.win_feature:
+    name:
+      - AD-Domain-Services
+    include_management_tools: true
+    include_sub_features: true
+    state: present
+
+- name: Ensure domain is present
+  ansible.windows.win_domain:
+    dns_domain_name: ansible.test
+    safe_mode_password: password123!
+  register: ensure_domain
+
+- name: Reboot if required
+  ansible.windows.win_reboot:
+  when: ensure_domain.reboot_required
+
+- name: Run Tests
+  include_tasks: quick.yml
