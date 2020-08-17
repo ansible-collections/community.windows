@@ -9,8 +9,8 @@
 
 DOCUMENTATION = r'''
 ---
-module: win_ipv6
-short_description: Enable or disable ms_tcpip6 of a certain network adapter or all the network adapters
+module: win_net_adapter_feature
+short_description: Enable or disable certain network adapters.
 description:
      - Enable or disable ms_tcpip6 of a certain network adapter or all the network adapters.
 options:
@@ -27,6 +27,22 @@ options:
       - enable
       - disable
     required: yes
+  componentID:
+    description:
+      - Specify the below componentID of network adapters.
+      - componentID : DisplayName
+      - ms_implat : Microsoft Network Adapter Multiplexor Protocol
+      - ms_lltdio : Link-Layer Topology Discovery Mapper I/O Driver
+      - ms_tcpip6 : Internet Protocol Version 6 (TCP/IPv6)
+      - ms_tcpip : Internet Protocol Version 4 (TCP/IPv4)
+      - ms_lldp : Microsoft LLDP Protocol Driver
+      - ms_rspndr : Link-Layer Topology Discovery Responder
+      - ms_msclient : Client for Microsoft Networks
+      - ms_pacer : QoS Packet Scheduler
+      - If you'd like to set custom adapters like 'Juniper Network Service',
+      - confirm the componentID by 'Get-NetAdapterBinding' cmdlet.
+    type: str
+    required: yes
 
 author:
   - ライトウェルの人 (@jirolin)
@@ -34,14 +50,21 @@ author:
 
 
 EXAMPLES = r'''
-- name: Disable ms_tcpip6 of Interface "Ethernet0"
-  win_ipv6:
-    interface: 'Ethernet0'
-    status: disable
+- name: enable multiple interfaces of multiple interfaces
+  win_net_adapter_feature:
+    interface: 
+    - 'Ethernet0'
+    - 'Ethernet1'
+    state: enable
+    componentID: 
+    - ms_tcpip6
+    - ms_server
 
 - name: Enable ms_tcpip6 of all the Interface
-  win_ipv6:
+  win_net_adapter_feature:
     interface: '*'
-    status: enable
+    state: enable
+    componentID: 
+    - ms_tcpip6
 
 '''

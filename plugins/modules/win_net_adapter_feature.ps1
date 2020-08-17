@@ -29,7 +29,7 @@ $componentID_name = [string[]]
 $params = Parse-Args $args -supports_check_mode $true
 #$Interface_name = Get-AnsibleParam -obj $params -name "Interface" -type "str"
 $Interface_name = Get-AnsibleParam -obj $params -name "Interface"
-$status = Get-AnsibleParam -obj $params -name status -type "str"
+$state = Get-AnsibleParam -obj $params -name state -type "str"
 #$componentID_name = Get-AnsibleParam -obj $params -name "componentID" -type "str"
 $componentID_name = Get-AnsibleParam -obj $params -name "componentID"
 $check_mode = Get-AnsibleParam -obj $params -name "_ansible_check_mode" -type "bool" -default $false
@@ -39,15 +39,15 @@ $result = @{
 }
 
 If(!$Interface_name) { Fail-Json -message "Absolute Interface is not specified for Interface" }
-If(!$status) { Fail-Json -message "Absolute status is not specified for status" }
+If(!$state) { Fail-Json -message "Absolute state is not specified for state" }
 If(!$componentID_name) { Fail-Json -message "Absolute componentID is not specified for componentID" }
 
-If ($status -eq 'enable'){
-    $status = $true
-}ElseIf ($status -eq 'disable') {
-    $status = $false
+If ($state -eq 'enable'){
+    $state = $true
+}ElseIf ($state -eq 'disable') {
+    $state = $false
 }Else {
-    Fail-Json -message "Specify the status as 'enable' or 'disable'"
+    Fail-Json -message "Specify the state as 'enable' or 'disable'"
 }
 
 If($Interface_name -is [string]) {
@@ -94,20 +94,20 @@ Try {
 
     ForEach($componentID_name in $componentIDs) {
         ForEach($Interface_name in $Interfaces) {
-            $current_status = (Get-NetAdapterBinding | where-object {$_.Name -match $Interface_name} | where-object {$_.ComponentID -match $componentID_name}).Enabled
+            $current_state = (Get-NetAdapterBinding | where-object {$_.Name -match $Interface_name} | where-object {$_.ComponentID -match $componentID_name}).Enabled
             $check_Idempotency = $true
-            If ($current_status -eq ""){
-                If ($current_status -eq $status){
+            If ($current_state -eq ""){
+                If ($current_state -eq $state){
                     $check_Idempotency = $false
                 }
-            } ElseIf ($current_status -eq $status){
+            } ElseIf ($current_state -eq $state){
                 $check_Idempotency = $false
             }
 
             $result.changed = $result.changed -or $check_Idempotency
 
             If($result.changed) {
-                If ($status -eq $true){
+                If ($state -eq $true){
                     Enable-NetAdapterBinding -Name $Interface_name -ComponentID $componentID_name -WhatIf:$check_mode
                 }Else {
                     Disable-NetAdapterBinding -Name $Interface_name -ComponentID $componentID_name -WhatIf:$check_mode

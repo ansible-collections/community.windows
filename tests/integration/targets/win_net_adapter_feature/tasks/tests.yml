@@ -2,11 +2,11 @@
 ---
 - name: fail when interface isn't set
   win_net_adapter_feature:
-    status: enable
+    state: enable
     componentID: ms_tcpip6
   ignore_errors: yes
 
-- name: fail when status isn't set
+- name: fail when state isn't set
   win_net_adapter_feature:
     interface: 'Ethernet0'
     componentID: ms_tcpip6
@@ -15,52 +15,52 @@
 - name: fail when componentID isn't set
   win_net_adapter_feature:
     interface: 'Ethernet0'
-    status: enable
+    state: enable
   ignore_errors: yes
 
 - name: fail when interface doesn't exist
   win_net_adapter_feature:
     interface: 'Ethernet10'
-    status: enable
+    state: enable
     componentID: ms_tcpip6
   ignore_errors: yes
 
-- name: fail when status is inapppropriate
+- name: fail when state is inapppropriate
   win_net_adapter_feature:
     interface: 'Ethernet0'
-    status: disable_inappropriate
+    state: disable_inappropriate
     componentID: ms_tcpip6
   ignore_errors: yes
 
 - name: fail when componentID is inapppropriate
   win_net_adapter_feature:
     interface: 'Ethernet0'
-    status: disable
+    state: disable
     componentID: inappropriate_component
   ignore_errors: yes
 
 - name: enable an interface of ms_tcpip6
   win_net_adapter_feature:
     interface: 'Ethernet0'
-    status: enable
+    state: enable
     componentID: ms_tcpip6
 
 - name: disable an interface of ms_tcpip6
   win_net_adapter_feature:
     interface: 'Ethernet0'
-    status: disable
+    state: disable
     componentID: ms_tcpip6
 
 - name: enable all the interfaces of ms_tcpip6
   win_net_adapter_feature:
     interface: '*'
-    status: enable
+    state: enable
     componentID: ms_tcpip6
 
 - name: disable all the interfaces of ms_tcpip6
   win_net_adapter_feature:
     interface: '*'
-    status: disable
+    state: disable
     componentID: ms_tcpip6
 
 - name: enable single componentID of multiple interface
@@ -68,14 +68,14 @@
     interface: 
     - 'Ethernet0'
     - 'Ethernet1'
-    status: enable
+    state: enable
     componentID: ms_tcpip6
 
 - name: disable multiple componentID of an interface 
   win_net_adapter_feature:
     interface: 
     - 'Ethernet0'
-    status: disable
+    state: disable
     componentID: 
     - ms_tcpip6
     - ms_server
@@ -86,17 +86,7 @@
     interface: 
     - 'Ethernet0'
     - 'Ethernet1'
-    status: enable
-    componentID: 
-    - ms_tcpip6
-    - ms_server
-
-- name: enable multiple interfaces of multiple interfaces
-  win_net_adapter_feature:
-    interface: 
-    - 'Ethernet0'
-    - 'Ethernet1'
-    status: enable
+    state: enable
     componentID: 
     - ms_tcpip6
     - ms_server
