@@ -30,15 +30,15 @@ options:
   componentID:
     description:
       - Specify the below componentID of network adapters.
-      - componentID : DisplayName
-      - ms_implat : Microsoft Network Adapter Multiplexor Protocol
-      - ms_lltdio : Link-Layer Topology Discovery Mapper I/O Driver
-      - ms_tcpip6 : Internet Protocol Version 6 (TCP/IPv6)
-      - ms_tcpip : Internet Protocol Version 4 (TCP/IPv4)
-      - ms_lldp : Microsoft LLDP Protocol Driver
-      - ms_rspndr : Link-Layer Topology Discovery Responder
-      - ms_msclient : Client for Microsoft Networks
-      - ms_pacer : QoS Packet Scheduler
+      - componentID (DisplayName)
+      - ms_implat (Microsoft Network Adapter Multiplexor Protocol)
+      - ms_lltdio (Link-Layer Topology Discovery Mapper I/O Driver)
+      - ms_tcpip6 (Internet Protocol Version 6 (TCP/IPv6))
+      - ms_tcpip (Internet Protocol Version 4 (TCP/IPv4))
+      - ms_lldp (Microsoft LLDP Protocol Driver)
+      - ms_rspndr (Link-Layer Topology Discovery Responder)
+      - ms_msclient (Client for Microsoft Networks)
+      - ms_pacer (QoS Packet Scheduler)
       - If you'd like to set custom adapters like 'Juniper Network Service',
       - confirm the componentID by 'Get-NetAdapterBinding' cmdlet.
     type: str
@@ -52,11 +52,11 @@ author:
 EXAMPLES = r'''
 - name: enable multiple interfaces of multiple interfaces
   win_net_adapter_feature:
-    interface: 
+    interface:
     - 'Ethernet0'
     - 'Ethernet1'
     state: enable
-    componentID: 
+    componentID:
     - ms_tcpip6
     - ms_server
 
@@ -64,7 +64,7 @@ EXAMPLES = r'''
   win_net_adapter_feature:
     interface: '*'
     state: enable
-    componentID: 
+    componentID:
     - ms_tcpip6
 
 '''
