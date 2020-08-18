@@ -185,7 +185,7 @@
       - cmd_result_actual.stdout == 'absent\r\n'
 
 - name: 'TYPE=NS - creation with multiple values (check mode)'
-  win_dns_record: {zone: '{{ win_dns_record_zone }}', name: z, value: [ansible-mirror.example.com , ansible-altmirror.example.com , ansiblull-mirror.example.com], type: NS}
+  win_dns_record: {zone: '{{ win_dns_record_zone }}', name: z, value: [ansible-mirror.example.com,ansible-altmirror.example.com,ansiblull-mirror.example.com], type: NS}
   register: cmd_result
   check_mode: yes
 
@@ -201,7 +201,7 @@
       - cmd_result_actual.stdout == 'absent\r\n'
 
 - name: 'TYPE=NS - creation with multiple values'
-  win_dns_record: {zone: '{{ win_dns_record_zone }}', name: z, value: [ansible-mirror.example.com , ansible-altmirror.example.com , ansiblull-mirror.example.com], type: NS}
+  win_dns_record: {zone: '{{ win_dns_record_zone }}', name: z, value: [ansible-mirror.example.com,ansible-altmirror.example.com,ansiblull-mirror.example.com], type: NS}
   register: cmd_result
 
 - name: 'TYPE=NS - creation get results'
@@ -216,7 +216,7 @@
       - cmd_result_actual.stdout == 'ansible-mirror.example.com.\r\nansible-altmirror.example.com.\r\nansiblull-mirror.example.com.\r\n'
 
 - name: 'TYPE=NS - creation with multiple values (idempotent)'
-  win_dns_record: {zone: '{{ win_dns_record_zone }}', name: z, value: [ansible-mirror.example.com , ansible-altmirror.example.com , ansiblull-mirror.example.com] , type: NS}
+  win_dns_record: {zone: '{{ win_dns_record_zone }}', name: z, value: [ansible-mirror.example.com,ansible-altmirror.example.com,ansiblull-mirror.example.com] , type: NS}
   register: cmd_result
 
 - name: 'TYPE=NS - creation get results (idempotent)'
