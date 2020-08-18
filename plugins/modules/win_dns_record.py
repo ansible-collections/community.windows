@@ -52,13 +52,14 @@ options:
     description:
     - The type of DNS record to manage.
     - C(SRV) was added in the 1.0.0 release of this collection.
-    choices: [ A, AAAA, CNAME, PTR, SRV ]
+    choices: [ A, AAAA, CNAME, NS, PTR, SRV ]
     required: yes
     type: str
   value:
     description:
     - The value(s) to specify. Required when C(state=present).
     - When C(type=PTR) only the partial part of the IP should be given.
+    - Multiple values can be passed when C(type=NS)
     aliases: [ values ]
     type: list
     elements: str
@@ -151,7 +152,21 @@ EXAMPLES = r'''
     state: present
     type: "SRV"
     weight: 2
-    values: "amer.example.com"
+    value: "amer.example.com"
+    zone: "example.com"
+
+# Demonstrate creating a NS record with multiple values
+
+- name: Creating NS record
+  community.windows.win_dns_record:
+    name: "ansible.prog"
+    state: present
+    type: "NS"
+    values:
+      - 10.0.0.1
+      - 10.0.0.2
+      - 10.0.0.3
+      - 10.0.0.4
     zone: "example.com"
 '''
 
