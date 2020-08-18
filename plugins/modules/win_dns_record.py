@@ -142,7 +142,7 @@ EXAMPLES = r'''
       - 10.0.42.12  # this new value was added
     zone: "example.com"
 
-# Demonstate creating a SRV record
+# Demonstrate creating a SRV record
 
 - name: Creating a SRV record with port number and priority
   community.windows.win_dns_record:
