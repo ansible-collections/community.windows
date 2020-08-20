@@ -57,6 +57,11 @@ options:
       - I(force) has no effect when I(state=absent). See notes for additional context.
     type: bool
     default: False
+  proxy:
+    description:
+      - Proxy to use for repository.
+    type: str
+    required: no
 requirements:
   - PowerShell Module L(PowerShellGet >= 1.6.0,https://www.powershellgallery.com/packages/PowerShellGet/)
   - PowerShell Module L(PackageManagement >= 1.1.7,https://www.powershellgallery.com/packages/PackageManagement/)
