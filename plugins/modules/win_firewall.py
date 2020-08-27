@@ -24,6 +24,18 @@ options:
     - Set state of firewall for given profile.
     type: str
     choices: [ disabled, enabled ]
+  inbound:
+    description:
+    - Allow or block inbound connection in the profile.
+    type: str
+    choices: [ allow, block ]
+    default: "block"
+  outbound:
+    description:
+    - Allow or block outbound connection in the profile.
+    type: str
+    choices: [ allow, block ]
+    default: "allow"
 seealso:
 - module: community.windows.win_firewall_rule
 author:
@@ -46,6 +58,12 @@ EXAMPLES = r'''
     profiles:
     - Domain
   tags: disable_firewall
+- name: Enable firewall for Domain profile and block outbound connections
+  win_firewall:
+    profiles: Domain
+    state: enabled
+    outbound: block
+  tags: block_connection
 '''
 
 RETURN = r'''
@@ -64,4 +82,14 @@ state:
     returned: always
     type: list
     sample: enabled
+inbound:
+    description: Desired state of inbound connection
+    returned: always
+    type: str
+    sample: block
+outbound:
+    description: Desired state of outbound connection
+    returned: always
+    type: str
+    sample: allow
 '''
