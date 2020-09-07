@@ -1,8 +1,7 @@
 ---
 - name: Wait for ADWS
-  win_wait_for_process:
-    process_name_exact: Microsoft.ActiveDirectory.WebServices.exe
-    state: present
+  community.windows.win_wait_for_process:
+    process_name_exact: Microsoft.ActiveDirectory.WebServices
     timeout: 120
     sleep: 5
     process_min_count: 1
