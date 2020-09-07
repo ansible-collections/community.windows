@@ -1,8 +1,9 @@
 ---
-- name: Ensure AD is installed
+- name: Ensure AD/DNS roles are installed
   ansible.windows.win_feature:
     name:
       - AD-Domain-Services
+      - DNS
     include_management_tools: true
     include_sub_features: true
     state: present
@@ -15,7 +16,14 @@
 
 - name: Reboot if required
   ansible.windows.win_reboot:
-  when: ensure_domain.reboot_required
+
+- name: Ensure loopback address is set to DNS
+  ansible.windows.win_dns_client:
+    adapter_names: '*'
+    ipv4_addresses: 127.0.0.1
+
+- name: Reboot Again to Avoid DNS Bug
+  ansible.windows.win_reboot:
 
 - name: Run Tests
   include_tasks: quick.yml
