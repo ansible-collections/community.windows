@@ -21,6 +21,7 @@ options:
     description:
       - The name of the Organizational Unit
     type: str
+    required: true
   protected:
     description:
       - Indicates whether to prevent the object from being deleted. When this
@@ -33,6 +34,7 @@ options:
       - Specifies the X.500 path of the OU or container where the new object is
         created.
     type: str
+    required: true
   state:
     description:
       - Specifies the desired state of the OU.

@@ -1,4 +1,12 @@
 ---
+- name: Wait for ADWS
+  win_wait_for_process:
+    process_name_exact: Microsoft.ActiveDirectory.WebServices.exe
+    state: present
+    timeout: 120
+    sleep: 5
+    process_min_count: 1
+
 - name: Ensure OU is present
   community.windows.win_domain_ou:
     name: End User Computing
