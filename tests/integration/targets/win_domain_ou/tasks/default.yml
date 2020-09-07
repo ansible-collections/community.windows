@@ -14,16 +14,17 @@
     safe_mode_password: password123!
   register: ensure_domain
 
-- name: Reboot if required
+- name: Reboot
   ansible.windows.win_reboot:
 
-- name: Ensure loopback address is set to DNS
-  ansible.windows.win_dns_client:
-    adapter_names: '*'
-    ipv4_addresses: 127.0.0.1
+- name: Try Import-Module
+  ansible.windows.win_shell: Import-Module ActiveDirectory
+  ignore_errors: true
+  register: import_test
 
-- name: Reboot Again to Avoid DNS Bug
+- name: Reboot Again
   ansible.windows.win_reboot:
+  when: import_test is failed
 
 - name: Run Tests
   include_tasks: quick.yml
