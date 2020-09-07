@@ -52,6 +52,7 @@ options:
     description:
     - The type of DNS record to manage.
     - C(SRV) was added in the 1.0.0 release of this collection.
+    - C(NS) was added in the 1.1.0 release of this collection.
     choices: [ A, AAAA, CNAME, NS, PTR, SRV ]
     required: yes
     type: str
