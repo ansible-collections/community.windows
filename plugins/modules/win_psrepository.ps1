@@ -23,6 +23,7 @@ $script_publish_location = Get-AnsibleParam -obj $params -name "script_publish_l
 $state = Get-AnsibleParam -obj $params -name "state" -type "str" -default "present" -validateset "present", "absent"
 $installation_policy = Get-AnsibleParam -obj $params -name "installation_policy" -type "str" -validateset "trusted", "untrusted"
 $force = Get-AnsibleParam -obj $params -name "force" -type "bool" -default $false
+$proxy = Get-AnsibleParam -obj $params -name "proxy" -type "str" -failifempty $false
 
 $result = @{"changed" = $false}
 
@@ -48,6 +49,10 @@ $Repo = Get-PSRepository @repository_params -ErrorAction SilentlyContinue
 
 if ($installation_policy) {
     $repository_params.InstallationPolicy = $installation_policy
+}
+
+if ($proxy) {
+    $repository_params.Proxy = $Proxy
 }
 
 function Resolve-LocationParameter {
