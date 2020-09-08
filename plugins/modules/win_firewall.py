@@ -24,13 +24,13 @@ options:
     - Set state of firewall for given profile.
     type: str
     choices: [ disabled, enabled ]
-  inbound:
+  inbound_action:
     description:
     - Allow or block inbound connection in the profile.
     type: str
     choices: [ allow, block ]
     default: "block"
-  outbound:
+  outbound_action:
     description:
     - Allow or block outbound connection in the profile.
     type: str
@@ -62,7 +62,7 @@ EXAMPLES = r'''
   win_firewall:
     profiles: Domain
     state: enabled
-    outbound: block
+    outbound_action: block
   tags: block_connection
 '''
 
@@ -82,12 +82,12 @@ state:
     returned: always
     type: list
     sample: enabled
-inbound:
+inbound_action:
     description: Desired state of inbound connection
     returned: always
     type: str
     sample: block
-outbound:
+outbound_action:
     description: Desired state of outbound connection
     returned: always
     type: str

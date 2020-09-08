@@ -123,7 +123,7 @@
   win_firewall:
     profiles: Domain
     state: enabled
-    inbound: block
+    inbound_action: block
   register: firewall_domain_on
 
 - name: Test firewall_domain_on (normal mode)
@@ -144,7 +144,7 @@
   win_firewall:
     profiles: [ Domain ]
     state: enabled
-    inbound: block
+    inbound_action: block
   register: firewall_domain_on_again
 
 - name: Test firewall_domain_on_again (normal mode)
@@ -165,7 +165,7 @@
   win_firewall:
     profiles: Domain
     state: enabled
-    outbound: allow
+    outbound_action: allow
   register: firewall_domain_on
 
 - name: Test firewall_domain_on (normal mode)
@@ -186,7 +186,7 @@
   win_firewall:
     profiles: [ Domain ]
     state: enabled
-    outbound: allow
+    outbound_action: allow
   register: firewall_domain_on_again
 
 - name: Test firewall_domain_on_again (normal mode)

@@ -13,15 +13,15 @@ $check_mode = Get-AnsibleParam -obj $params -name "_ansible_check_mode" -type "b
 
 $profiles = Get-AnsibleParam -obj $params -name "profiles" -type "list" -default @("Domain", "Private", "Public")
 $state = Get-AnsibleParam -obj $params -name "state" -type "str" -failifempty $true -validateset 'disabled','enabled'
-$inbound = Get-AnsibleParam -obj $params -name "inbound" -type "str" -default "Block"
-$outbound = Get-AnsibleParam -obj $params -name "outbound" -type "str" -default "Allow"
+$inbound_action = Get-AnsibleParam -obj $params -name "inbound_action" -type "str" -default "block" -validateset 'allow','block'
+$outbound_action = Get-AnsibleParam -obj $params -name "outbound_action" -type "str" -default "allow" -validateset 'allow','block'
 
 $result = @{
     changed = $false
     profiles = $profiles
     state = $state
-    inbound = $inbound
-    outbound = $outbound
+    inbound_action = $inbound_action
+    outbound_action = $outbound_action
 }
 
 try {
@@ -36,9 +36,10 @@ Try {
 
     ForEach ($profile in $firewall_profiles) {
 
-        $currentstate = (Get-NetFirewallProfile -Name $profile).Enabled
-        $current_inboundaction = (Get-NetFirewallProfile -Name $profile).DefaultInboundAction
-        $current_outboundaction = (Get-NetFirewallProfile -Name $profile).DefaultOutboundAction
+        $current_profile = Get-NetFirewallProfile -Name $profile
+        $currentstate = $current_profile.Enabled
+        $current_inboundaction = $current_profile.DefaultInboundAction
+        $current_outboundaction = $current_profile.DefaultOutboundAction
         $result.$profile = @{
             enabled = ($currentstate -eq 1)
             considered = ($profiles -contains $profile)
@@ -56,14 +57,14 @@ Try {
                 $result.changed = $true
                 $result.$profile.enabled = $true
             }
-            if ($inbound -ne $current_inboundaction) {
-                Set-NetFirewallProfile -name $profile -DefaultInboundAction $inbound
-                $result.inbound = $inbound
+            if ($inbound_action -ne $current_inboundaction) {
+                Set-NetFirewallProfile -name $profile -DefaultInboundAction $inbound_action -WhatIf:$check_mode
+                $result.inbound_action = $inbound_action
                 $result.changed = $true
             }
-            if ($outbound -ne $current_outboundaction) {
-                Set-NetFirewallProfile -name $profile -DefaultOutboundAction $outbound
-                $result.outbound = $outbound
+            if ($outbound_action -ne $current_outboundaction) {
+                Set-NetFirewallProfile -name $profile -DefaultOutboundAction $outbound_action -WhatIf:$check_mode
+                $result.outbound_action = $outbound_action
                 $result.changed = $true
             }
 
