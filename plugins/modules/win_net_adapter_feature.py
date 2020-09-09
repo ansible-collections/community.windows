@@ -48,7 +48,7 @@ author:
 
 EXAMPLES = r'''
 - name: enable multiple interfaces of multiple interfaces
-  win_net_adapter_feature:
+  community.windows.win_net_adapter_feature:
     interface:
     - 'Ethernet0'
     - 'Ethernet1'
