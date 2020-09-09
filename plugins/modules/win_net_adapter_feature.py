@@ -25,7 +25,7 @@ options:
       - enable
       - disable
     required: yes
-  componentID:
+  component_id:
     description:
       - Specify the below componentID of network adapters.
       - componentID (DisplayName)
