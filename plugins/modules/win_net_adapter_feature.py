@@ -58,7 +58,7 @@ EXAMPLES = r'''
     - ms_server
 
 - name: Enable ms_tcpip6 of all the Interface
-  win_net_adapter_feature:
+  community.windows.win_net_adapter_feature:
     interface: '*'
     state: enable
     componentID:
