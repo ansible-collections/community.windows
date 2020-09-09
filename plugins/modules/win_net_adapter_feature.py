@@ -4,8 +4,6 @@
 # Copyright: (c) 2020, ライトウェルの人 <jiro.higuchi@shi-g.com>
 # GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 
-# this is a windows documentation stub.  actual code lives in the .ps1
-# file of the same name
 
 DOCUMENTATION = r'''
 ---
