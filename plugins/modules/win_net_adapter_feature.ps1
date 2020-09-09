@@ -3,62 +3,20 @@
 # Copyright: (c) 2020, ライトウェルの人 <jiro.higuchi@shi-g.com>
 # GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 
-# WANT_JSON
-# POWERSHELL_COMMON
-# temporarily disable strictmode, for this module only
-#Requires -Module Ansible.ModuleUtils.Legacy
-
-$ErrorActionPreference = "Stop"
-
-$Interface_name = [string[]]
-$componentID_name = [string[]]
-$params = Parse-Args $args -supports_check_mode $true
-#$Interface_name = Get-AnsibleParam -obj $params -name "Interface" -type "str"
-$Interface_name = Get-AnsibleParam -obj $params -name "Interface"
-$state = Get-AnsibleParam -obj $params -name state -type "str"
-#$componentID_name = Get-AnsibleParam -obj $params -name "componentID" -type "str"
-$componentID_name = Get-AnsibleParam -obj $params -name "componentID"
-$check_mode = Get-AnsibleParam -obj $params -name "_ansible_check_mode" -type "bool" -default $false
-
-$result = @{
-    changed = $false
-}
-
-If(!$Interface_name) { Fail-Json -message "Absolute Interface is not specified for Interface" }
-If(!$state) { Fail-Json -message "Absolute state is not specified for state" }
-If(!$componentID_name) { Fail-Json -message "Absolute componentID is not specified for componentID" }
-
-If ($state -eq 'enable'){
-    $state = $true
-}ElseIf ($state -eq 'disable') {
-    $state = $false
-}Else {
-    Fail-Json -message "Specify the state as 'enable' or 'disable'"
-}
-
-If($Interface_name -is [string]) {
-    If($Interface_name.Length -gt 0) {
-        $Interfaces = @($Interface_name)
+$spec = @{
+    options = @{
+        interface = @{ type = 'list'; elements = 'str'; required = $true }
+        state = @{ type = 'str'; choices = 'disabled', 'enabled'; default = 'enabled' }
+        component_id = @{ type = 'list'; elements = 'str'; required = $true }
     }
-    Else {
-        $Interfaces = @()
-    }
+    supports_check_mode = $true
 }
-Else {
-        $Interfaces = $Interface_name
-}
+$module = [Ansible.Basic.AnsibleModule]::Create($args, $spec)
 
-If($componentID_name -is [string]) {
-    If($componentID_name.Length -gt 0) {
-        $componentIDs = @($componentID_name)
-    }
-    Else {
-        $componentIDs = @()
-    }
-}
-Else {
-    $componentIDs = $componentID_name
-}
+$interface = $module.Params.interface
+$state = $module.Params.state
+$component_id = $module.Params.component_id
+$check_mode = $module.CheckMode
 
 Try {
     If($Interface_name -eq "*") {
