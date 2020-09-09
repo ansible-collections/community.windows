@@ -39,8 +39,7 @@ options:
       - ms_rspndr (Link-Layer Topology Discovery Responder)
       - ms_msclient (Client for Microsoft Networks)
       - ms_pacer (QoS Packet Scheduler)
-      - If you'd like to set custom adapters like 'Juniper Network Service',
-      - confirm the componentID by 'Get-NetAdapterBinding' cmdlet.
+      - If you'd like to set custom adapters like 'Juniper Network Service', get the I(component_id) by running the C(Get-NetAdapterBinding) cmdlet.
     type: str
     required: yes
 
