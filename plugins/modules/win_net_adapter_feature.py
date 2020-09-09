@@ -16,7 +16,7 @@ description:
 options:
   interface:
     description:
-      - Name of Network Adapter Interface. For example, 'Ethernet0' or '*'.
+      - Name of Network Adapter Interface. For example, C(Ethernet0) or C(*).
     type: str
     required: yes
   state:
