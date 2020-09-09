@@ -29,7 +29,7 @@ options:
     description:
       - Specify the below componentID of network adapters.
       - componentID (DisplayName)
-      - ms_implat (Microsoft Network Adapter Multiplexor Protocol)
+      - C(ms_implat) (Microsoft Network Adapter Multiplexor Protocol)
       - ms_lltdio (Link-Layer Topology Discovery Mapper I/O Driver)
       - ms_tcpip6 (Internet Protocol Version 6 (TCP/IPv6))
       - ms_tcpip (Internet Protocol Version 4 (TCP/IPv4))
