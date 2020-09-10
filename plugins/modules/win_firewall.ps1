@@ -13,15 +13,13 @@ $check_mode = Get-AnsibleParam -obj $params -name "_ansible_check_mode" -type "b
 
 $profiles = Get-AnsibleParam -obj $params -name "profiles" -type "list" -default @("Domain", "Private", "Public")
 $state = Get-AnsibleParam -obj $params -name "state" -type "str" -failifempty $true -validateset 'disabled','enabled'
-$inbound_action = Get-AnsibleParam -obj $params -name "inbound_action" -type "str" -default "block" -validateset 'allow','block'
-$outbound_action = Get-AnsibleParam -obj $params -name "outbound_action" -type "str" -default "allow" -validateset 'allow','block'
+$inbound_action = Get-AnsibleParam -obj $params -name "inbound_action" -type "str" -validateset 'allow','block', 'not_configured'
+$outbound_action = Get-AnsibleParam -obj $params -name "outbound_action" -type "str" -validateset 'allow','block', 'not_configured'
 
 $result = @{
     changed = $false
     profiles = $profiles
     state = $state
-    inbound_action = $inbound_action
-    outbound_action = $outbound_action
 }
 
 try {
@@ -57,17 +55,22 @@ Try {
                 $result.changed = $true
                 $result.$profile.enabled = $true
             }
-            if ($inbound_action -ne $current_inboundaction) {
-                Set-NetFirewallProfile -name $profile -DefaultInboundAction $inbound_action -WhatIf:$check_mode
-                $result.inbound_action = $inbound_action
-                $result.changed = $true
+            if($null -ne $inbound_action) {
+                $inbound_action = (Get-Culture).TextInfo.ToTitleCase(($inbound_action.ToLower() -replace "_", " ")) -replace " ", ""
+                if ($inbound_action -ne $current_inboundaction) {
+                  Set-NetFirewallProfile -name $profile -DefaultInboundAction $inbound_action -WhatIf:$check_mode
+                  $result.inbound_action = $inbound_action
+                  $result.changed = $true
+                }
             }
-            if ($outbound_action -ne $current_outboundaction) {
-                Set-NetFirewallProfile -name $profile -DefaultOutboundAction $outbound_action -WhatIf:$check_mode
-                $result.outbound_action = $outbound_action
-                $result.changed = $true
+            if($null -ne $outbound_action) {
+                $outbound_action = (Get-Culture).TextInfo.ToTitleCase(($outbound_action.ToLower() -replace "_", " ")) -replace " ", ""
+                if ($null -ne $outbound_action -and $outbound_action -ne $current_outboundaction) {
+                  Set-NetFirewallProfile -name $profile -DefaultOutboundAction $outbound_action -WhatIf:$check_mode
+                  $result.outbound_action = $outbound_action
+                  $result.changed = $true
+                }  
             }
-
         } else {
 
             if ($currentstate -eq $true) {

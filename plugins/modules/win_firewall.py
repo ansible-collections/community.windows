@@ -26,16 +26,16 @@ options:
     choices: [ disabled, enabled ]
   inbound_action:
     description:
-    - Allow or block inbound connection in the profile.
+    - Allow or block inbound network traffic in the profile.
+    - NotConfigured is valid when configuring a GPO.
     type: str
-    choices: [ allow, block ]
-    default: "block"
+    choices: [ allow, block, not_configured ]
   outbound_action:
     description:
-    - Allow or block outbound connection in the profile.
+    - Allow or block inbound network traffic in the profile.
+    - NotConfigured is valid when configuring a GPO.
     type: str
-    choices: [ allow, block ]
-    default: "allow"
+    choices: [ allow, block, not_configured ]
 seealso:
 - module: community.windows.win_firewall_rule
 author:
@@ -59,7 +59,7 @@ EXAMPLES = r'''
     - Domain
   tags: disable_firewall
 - name: Enable firewall for Domain profile and block outbound connections
-  win_firewall:
+  community.windows.win_firewall:
     profiles: Domain
     state: enabled
     outbound_action: block
@@ -82,14 +82,4 @@ state:
     returned: always
     type: list
     sample: enabled
-inbound_action:
-    description: Desired state of inbound connection
-    returned: always
-    type: str
-    sample: block
-outbound_action:
-    description: Desired state of outbound connection
-    returned: always
-    type: str
-    sample: allow
 '''

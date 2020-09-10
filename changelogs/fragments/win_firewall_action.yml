@@ -1,3 +1,2 @@
 minor_changes:
-- win_firewall - Support inbound, outbound connection in windows firewall.
-- win_firewall - By default inbound connections are block and outbound connections are allow.
+- win_firewall - Support defining the default inbound and outbound action of traffic in Windows firewall
