@@ -13,8 +13,8 @@ $check_mode = Get-AnsibleParam -obj $params -name "_ansible_check_mode" -type "b
 
 $profiles = Get-AnsibleParam -obj $params -name "profiles" -type "list" -default @("Domain", "Private", "Public")
 $state = Get-AnsibleParam -obj $params -name "state" -type "str" -failifempty $true -validateset 'disabled','enabled'
-$inbound_action = Get-AnsibleParam -obj $params -name "inbound_action" -type "str" -validateset 'allow','block', 'not_configured'
-$outbound_action = Get-AnsibleParam -obj $params -name "outbound_action" -type "str" -validateset 'allow','block', 'not_configured'
+$inbound_action = Get-AnsibleParam -obj $params -name "inbound_action" -type "str" -validateset 'allow','block','not_configured'
+$outbound_action = Get-AnsibleParam -obj $params -name "outbound_action" -type "str" -validateset 'allow','block','not_configured'
 
 $result = @{
     changed = $false
@@ -59,7 +59,6 @@ Try {
                 $inbound_action = (Get-Culture).TextInfo.ToTitleCase(($inbound_action.ToLower() -replace "_", " ")) -replace " ", ""
                 if ($inbound_action -ne $current_inboundaction) {
                   Set-NetFirewallProfile -name $profile -DefaultInboundAction $inbound_action -WhatIf:$check_mode
-                  $result.inbound_action = $inbound_action
                   $result.changed = $true
                 }
             }
@@ -67,9 +66,8 @@ Try {
                 $outbound_action = (Get-Culture).TextInfo.ToTitleCase(($outbound_action.ToLower() -replace "_", " ")) -replace " ", ""
                 if ($null -ne $outbound_action -and $outbound_action -ne $current_outboundaction) {
                   Set-NetFirewallProfile -name $profile -DefaultOutboundAction $outbound_action -WhatIf:$check_mode
-                  $result.outbound_action = $outbound_action
                   $result.changed = $true
-                }  
+                }
             }
         } else {
 
