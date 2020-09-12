@@ -161,17 +161,17 @@
     - firewall_domain_on.Domain.enabled
   when: in_check_mode
 
-- name: Turn on Windows Firewall on Domain with allow outbound connection
+- name: Turn on Windows Firewall on Domain with block outbound connection
   win_firewall:
     profiles: Domain
     state: enabled
-    outbound_action: allow
+    outbound_action: block
   register: firewall_domain_on
 
 - name: Test firewall_domain_on (normal mode)
   assert:
     that:
-    - firewall_domain_on is not changed
+    - firewall_domain_on is changed
     - firewall_domain_on.Domain.enabled
   when: not in_check_mode
 
@@ -182,11 +182,11 @@
     - firewall_domain_on.Domain.enabled
   when: in_check_mode
 
-- name: Turn on Windows Firewall on Domain again with allow outbound
+- name: Turn on Windows Firewall on Domain again with block outbound connection
   win_firewall:
     profiles: [ Domain ]
     state: enabled
-    outbound_action: allow
+    outbound_action: block
   register: firewall_domain_on_again
 
 - name: Test firewall_domain_on_again (normal mode)
