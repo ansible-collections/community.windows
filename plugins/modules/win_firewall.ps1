@@ -56,15 +56,15 @@ Try {
                 $result.$profile.enabled = $true
             }
             if($null -ne $inbound_action) {
-                $inbound_action = (Get-Culture).TextInfo.ToTitleCase(($inbound_action.ToLower() -replace "_", " ")) -replace " ", ""
+                $inbound_action = [Globalization.CultureInfo]::InvariantCulture.TextInfo.ToTitleCase($inbound_action.ToLower()) -replace '_', ''
                 if ($inbound_action -ne $current_inboundaction) {
                   Set-NetFirewallProfile -name $profile -DefaultInboundAction $inbound_action -WhatIf:$check_mode
                   $result.changed = $true
                 }
             }
             if($null -ne $outbound_action) {
-                $outbound_action = (Get-Culture).TextInfo.ToTitleCase(($outbound_action.ToLower() -replace "_", " ")) -replace " ", ""
-                if ($null -ne $outbound_action -and $outbound_action -ne $current_outboundaction) {
+                $outbound_action = [Globalization.CultureInfo]::InvariantCulture.TextInfo.ToTitleCase($outbound_action.ToLower()) -replace '_', ''
+                if ($outbound_action -ne $current_outboundaction) {
                   Set-NetFirewallProfile -name $profile -DefaultOutboundAction $outbound_action -WhatIf:$check_mode
                   $result.changed = $true
                 }

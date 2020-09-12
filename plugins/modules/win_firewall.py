@@ -26,16 +26,18 @@ options:
     choices: [ disabled, enabled ]
   inbound_action:
     description:
-    - Allow or block inbound network traffic in the profile.
-    - NotConfigured is valid when configuring a GPO.
+    - Set to C(allow) or C(block) inbound network traffic in the profile.
+    - C(not_configured) is valid when configuring a GPO.
     type: str
     choices: [ allow, block, not_configured ]
+    version_added: 1.1.0
   outbound_action:
     description:
-    - Allow or block inbound network traffic in the profile.
-    - NotConfigured is valid when configuring a GPO.
+    - Set to C(allow) or C(block) inbound network traffic in the profile.
+    - C(not_configured) is valid when configuring a GPO.
     type: str
     choices: [ allow, block, not_configured ]
+    version_added: 1.1.0
 seealso:
 - module: community.windows.win_firewall_rule
 author:
@@ -58,6 +60,7 @@ EXAMPLES = r'''
     profiles:
     - Domain
   tags: disable_firewall
+
 - name: Enable firewall for Domain profile and block outbound connections
   community.windows.win_firewall:
     profiles: Domain
