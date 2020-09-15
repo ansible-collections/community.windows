@@ -119,17 +119,17 @@
     - firewall_on.Private.enabled
     - firewall_on.Public.enabled
 
-- name: Turn on Windows Firewall on Domain with block inbound connection
+- name: Turn on Windows Firewall on Domain with allow inbound connection
   win_firewall:
     profiles: Domain
     state: enabled
-    inbound_action: block
+    inbound_action: allow
   register: firewall_domain_on
 
 - name: Test firewall_domain_on (normal mode)
   assert:
     that:
-    - firewall_domain_on is not changed
+    - firewall_domain_on is changed
     - firewall_domain_on.Domain.enabled
   when: not in_check_mode
 
@@ -140,11 +140,11 @@
     - firewall_domain_on.Domain.enabled
   when: in_check_mode
 
-- name: Turn on Windows Firewall on Domain again with block inbound
+- name: Turn on Windows Firewall on Domain again with allow inbound
   win_firewall:
     profiles: [ Domain ]
     state: enabled
-    inbound_action: block
+    inbound_action: allow
   register: firewall_domain_on_again
 
 - name: Test firewall_domain_on_again (normal mode)
