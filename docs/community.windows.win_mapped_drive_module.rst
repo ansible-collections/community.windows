@@ -31,99 +31,100 @@ Parameters
         <tr>
             <th colspan="1">Parameter</th>
             <th>Choices/<font color="blue">Defaults</font></th>
-                        <th width="100%">Comments</th>
+            <th width="100%">Comments</th>
         </tr>
-                    <tr>
-                                                                <td colspan="1">
+            <tr>
+                <td colspan="1">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>letter</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
                         <span style="color: purple">string</span>
-                                                 / <span style="color: red">required</span>                    </div>
-                                    </td>
-                                <td>
-                                                                                                                                                            </td>
-                                                                <td>
-                                            <div>The letter of the network path to map to.</div>
-                                            <div>This letter must not already be in use with Windows.</div>
-                                                        </td>
+                         / <span style="color: red">required</span>
+                    </div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>The letter of the network path to map to.</div>
+                        <div>This letter must not already be in use with Windows.</div>
+                </td>
             </tr>
-                                <tr>
-                                                                <td colspan="1">
+            <tr>
+                <td colspan="1">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>password</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
                         <span style="color: purple">string</span>
-                                                                    </div>
-                                    </td>
-                                <td>
-                                                                                                                                                            </td>
-                                                                <td>
-                                            <div>The password for <code>username</code> that is used when testing the initial connection.</div>
-                                            <div>This is never saved with a mapped drive, use the <span class='module'>community.windows.win_credential</span> module to persist a username and password for a host.</div>
-                                                        </td>
+                    </div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>The password for <code>username</code> that is used when testing the initial connection.</div>
+                        <div>This is never saved with a mapped drive, use the <span class='module'>community.windows.win_credential</span> module to persist a username and password for a host.</div>
+                </td>
             </tr>
-                                <tr>
-                                                                <td colspan="1">
+            <tr>
+                <td colspan="1">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>path</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
                         <span style="color: purple">path</span>
-                                                                    </div>
-                                    </td>
-                                <td>
-                                                                                                                                                            </td>
-                                                                <td>
-                                            <div>The UNC path to map the drive to.</div>
-                                            <div>If pointing to a WebDAV location this must still be in a UNC path in the format <code>\\hostname\path</code> and not a URL, see examples for more details.</div>
-                                            <div>To specify a <code>https</code> WebDAV path, add <code>@SSL</code> after the hostname. To specify a custom WebDAV port add <code>@&lt;port num&gt;</code> after the <code>@SSL</code> or hostname portion of the UNC path, e.g. <code>\\server@SSL@1234</code> or <code>\\server@1234</code>.</div>
-                                            <div>This is required if <code>state=present</code>.</div>
-                                            <div>If <code>state=absent</code> and <em>path</em> is not set, the module will delete the mapped drive regardless of the target.</div>
-                                            <div>If <code>state=absent</code> and the <em>path</em> is set, the module will throw an error if path does not match the target of the mapped drive.</div>
-                                                        </td>
+                    </div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>The UNC path to map the drive to.</div>
+                        <div>If pointing to a WebDAV location this must still be in a UNC path in the format <code>\\hostname\path</code> and not a URL, see examples for more details.</div>
+                        <div>To specify a <code>https</code> WebDAV path, add <code>@SSL</code> after the hostname. To specify a custom WebDAV port add <code>@&lt;port num&gt;</code> after the <code>@SSL</code> or hostname portion of the UNC path, e.g. <code>\\server@SSL@1234</code> or <code>\\server@1234</code>.</div>
+                        <div>This is required if <code>state=present</code>.</div>
+                        <div>If <code>state=absent</code> and <em>path</em> is not set, the module will delete the mapped drive regardless of the target.</div>
+                        <div>If <code>state=absent</code> and the <em>path</em> is set, the module will throw an error if path does not match the target of the mapped drive.</div>
+                </td>
             </tr>
-                                <tr>
-                                                                <td colspan="1">
+            <tr>
+                <td colspan="1">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>state</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
                         <span style="color: purple">string</span>
-                                                                    </div>
-                                    </td>
-                                <td>
-                                                                                                                            <ul style="margin: 0; padding: 0"><b>Choices:</b>
-                                                                                                                                                                <li>absent</li>
-                                                                                                                                                                                                <li><div style="color: blue"><b>present</b>&nbsp;&larr;</div></li>
-                                                                                    </ul>
-                                                                            </td>
-                                                                <td>
-                                            <div>If <code>present</code> will ensure the mapped drive exists.</div>
-                                            <div>If <code>absent</code> will ensure the mapped drive does not exist.</div>
-                                                        </td>
+                    </div>
+                </td>
+                <td>
+                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                    <li>absent</li>
+                                    <li><div style="color: blue"><b>present</b>&nbsp;&larr;</div></li>
+                        </ul>
+                </td>
+                <td>
+                        <div>If <code>present</code> will ensure the mapped drive exists.</div>
+                        <div>If <code>absent</code> will ensure the mapped drive does not exist.</div>
+                </td>
             </tr>
-                                <tr>
-                                                                <td colspan="1">
+            <tr>
+                <td colspan="1">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>username</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
                         <span style="color: purple">string</span>
-                                                                    </div>
-                                    </td>
-                                <td>
-                                                                                                                                                            </td>
-                                                                <td>
-                                            <div>The username that is used when testing the initial connection.</div>
-                                            <div>This is never saved with a mapped drive, the <span class='module'>community.windows.win_credential</span> module to persist a username and password for a host.</div>
-                                            <div>This is required if the mapped drive requires authentication with custom credentials and become, or CredSSP cannot be used.</div>
-                                            <div>If become or CredSSP is used, any credentials saved with <span class='module'>community.windows.win_credential</span> will automatically be used instead.</div>
-                                                        </td>
+                    </div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>The username that is used when testing the initial connection.</div>
+                        <div>This is never saved with a mapped drive, the <span class='module'>community.windows.win_credential</span> module to persist a username and password for a host.</div>
+                        <div>This is required if the mapped drive requires authentication with custom credentials and become, or CredSSP cannot be used.</div>
+                        <div>If become or CredSSP is used, any credentials saved with <span class='module'>community.windows.win_credential</span> will automatically be used instead.</div>
+                </td>
             </tr>
-                        </table>
+    </table>
     <br/>
 
 

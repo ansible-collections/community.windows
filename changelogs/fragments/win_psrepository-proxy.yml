@@ -1,2 +1,0 @@
-minor_changes:
-- win_psrepository - Added the ``proxy`` option that defines the proxy to use for the repository being managed

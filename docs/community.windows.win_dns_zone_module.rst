@@ -38,149 +38,151 @@ Parameters
         <tr>
             <th colspan="1">Parameter</th>
             <th>Choices/<font color="blue">Defaults</font></th>
-                        <th width="100%">Comments</th>
+            <th width="100%">Comments</th>
         </tr>
-                    <tr>
-                                                                <td colspan="1">
+            <tr>
+                <td colspan="1">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>dns_servers</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
                         <span style="color: purple">list</span>
-                         / <span style="color: purple">elements=string</span>                                            </div>
-                                    </td>
-                                <td>
-                                                                                                                                                            </td>
-                                                                <td>
-                                            <div>Specifies an list of IP addresses of the primary servers of the zone.</div>
-                                            <div>DNS queries for a forwarded zone are sent to primary servers.</div>
-                                            <div>Required if l(type=secondary), l(type=forwarder) or l(type=stub), otherwise ignored.</div>
-                                            <div>At least one server is required.</div>
-                                                        </td>
+                         / <span style="color: purple">elements=string</span>
+                    </div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>Specifies an list of IP addresses of the primary servers of the zone.</div>
+                        <div>DNS queries for a forwarded zone are sent to primary servers.</div>
+                        <div>Required if l(type=secondary), l(type=forwarder) or l(type=stub), otherwise ignored.</div>
+                        <div>At least one server is required.</div>
+                </td>
             </tr>
-                                <tr>
-                                                                <td colspan="1">
+            <tr>
+                <td colspan="1">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>dynamic_update</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
                         <span style="color: purple">string</span>
-                                                                    </div>
-                                    </td>
-                                <td>
-                                                                                                                            <ul style="margin: 0; padding: 0"><b>Choices:</b>
-                                                                                                                                                                <li>secure</li>
-                                                                                                                                                                                                <li>none</li>
-                                                                                                                                                                                                <li>nonsecureandsecure</li>
-                                                                                    </ul>
-                                                                            </td>
-                                                                <td>
-                                            <div>Specifies how a zone handles dynamic updates.</div>
-                                            <div>Secure DNS updates are available only for Active Directory-integrated zones.</div>
-                                            <div>When not specified during new zone creation, Windows will default this to l(none).</div>
-                                                        </td>
+                    </div>
+                </td>
+                <td>
+                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                    <li>secure</li>
+                                    <li>none</li>
+                                    <li>nonsecureandsecure</li>
+                        </ul>
+                </td>
+                <td>
+                        <div>Specifies how a zone handles dynamic updates.</div>
+                        <div>Secure DNS updates are available only for Active Directory-integrated zones.</div>
+                        <div>When not specified during new zone creation, Windows will default this to l(none).</div>
+                </td>
             </tr>
-                                <tr>
-                                                                <td colspan="1">
+            <tr>
+                <td colspan="1">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>forwarder_timeout</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
                         <span style="color: purple">integer</span>
-                                                                    </div>
-                                    </td>
-                                <td>
-                                                                                                                                                            </td>
-                                                                <td>
-                                            <div>Specifies a length of time, in seconds, that a DNS server waits for a remote DNS server to resolve a query.</div>
-                                            <div>Accepts integer values between 0 and 15.</div>
-                                            <div>If the provided value is not valid, it will be omitted and a warning will be issued.</div>
-                                                        </td>
+                    </div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>Specifies a length of time, in seconds, that a DNS server waits for a remote DNS server to resolve a query.</div>
+                        <div>Accepts integer values between 0 and 15.</div>
+                        <div>If the provided value is not valid, it will be omitted and a warning will be issued.</div>
+                </td>
             </tr>
-                                <tr>
-                                                                <td colspan="1">
+            <tr>
+                <td colspan="1">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>name</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
                         <span style="color: purple">string</span>
-                                                 / <span style="color: red">required</span>                    </div>
-                                    </td>
-                                <td>
-                                                                                                                                                            </td>
-                                                                <td>
-                                            <div>Fully qualified name of the DNS zone.</div>
-                                                        </td>
+                         / <span style="color: red">required</span>
+                    </div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>Fully qualified name of the DNS zone.</div>
+                </td>
             </tr>
-                                <tr>
-                                                                <td colspan="1">
+            <tr>
+                <td colspan="1">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>replication</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
                         <span style="color: purple">string</span>
-                                                                    </div>
-                                    </td>
-                                <td>
-                                                                                                                            <ul style="margin: 0; padding: 0"><b>Choices:</b>
-                                                                                                                                                                <li>forest</li>
-                                                                                                                                                                                                <li>domain</li>
-                                                                                                                                                                                                <li>legacy</li>
-                                                                                                                                                                                                <li>none</li>
-                                                                                    </ul>
-                                                                            </td>
-                                                                <td>
-                                            <div>Specifies the replication scope for the DNS zone.</div>
-                                            <div>l(replication=forest) will replicate the DNS zone to all domain controllers in the Active Directory forest.</div>
-                                            <div>l(replication=domain) will replicate the DNS zone to all domain controllers in the Active Directory domain.</div>
-                                            <div>l(replication=none) disables Active Directory integration and creates a local file with the name of the zone.</div>
-                                            <div>This is the equivalent of selecting l(store the zone in Active Directory) in the GUI.</div>
-                                                        </td>
+                    </div>
+                </td>
+                <td>
+                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                    <li>forest</li>
+                                    <li>domain</li>
+                                    <li>legacy</li>
+                                    <li>none</li>
+                        </ul>
+                </td>
+                <td>
+                        <div>Specifies the replication scope for the DNS zone.</div>
+                        <div>l(replication=forest) will replicate the DNS zone to all domain controllers in the Active Directory forest.</div>
+                        <div>l(replication=domain) will replicate the DNS zone to all domain controllers in the Active Directory domain.</div>
+                        <div>l(replication=none) disables Active Directory integration and creates a local file with the name of the zone.</div>
+                        <div>This is the equivalent of selecting l(store the zone in Active Directory) in the GUI.</div>
+                </td>
             </tr>
-                                <tr>
-                                                                <td colspan="1">
+            <tr>
+                <td colspan="1">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>state</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
                         <span style="color: purple">string</span>
-                                                                    </div>
-                                    </td>
-                                <td>
-                                                                                                                            <ul style="margin: 0; padding: 0"><b>Choices:</b>
-                                                                                                                                                                <li><div style="color: blue"><b>present</b>&nbsp;&larr;</div></li>
-                                                                                                                                                                                                <li>absent</li>
-                                                                                    </ul>
-                                                                            </td>
-                                                                <td>
-                                            <div>Specifies the desired state of the DNS zone.</div>
-                                            <div>When l(state=present) the module will attempt to create the specified DNS zone if it does not already exist.</div>
-                                            <div>When l(state=absent), the module will remove the specified DNS zone and all subsequent DNS records.</div>
-                                                        </td>
+                    </div>
+                </td>
+                <td>
+                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                    <li><div style="color: blue"><b>present</b>&nbsp;&larr;</div></li>
+                                    <li>absent</li>
+                        </ul>
+                </td>
+                <td>
+                        <div>Specifies the desired state of the DNS zone.</div>
+                        <div>When l(state=present) the module will attempt to create the specified DNS zone if it does not already exist.</div>
+                        <div>When l(state=absent), the module will remove the specified DNS zone and all subsequent DNS records.</div>
+                </td>
             </tr>
-                                <tr>
-                                                                <td colspan="1">
+            <tr>
+                <td colspan="1">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>type</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
                         <span style="color: purple">string</span>
-                                                                    </div>
-                                    </td>
-                                <td>
-                                                                                                                            <ul style="margin: 0; padding: 0"><b>Choices:</b>
-                                                                                                                                                                <li>primary</li>
-                                                                                                                                                                                                <li>secondary</li>
-                                                                                                                                                                                                <li>stub</li>
-                                                                                                                                                                                                <li>forwarder</li>
-                                                                                    </ul>
-                                                                            </td>
-                                                                <td>
-                                            <div>Specifies the type of DNS zone.</div>
-                                            <div>When l(type=secondary), the DNS server will immediately attempt to perform a zone transfer from the servers in this list. If this initial transfer fails, then the zone will be left in an unworkable state. This module does not verify the initial transfer.</div>
-                                                        </td>
+                    </div>
+                </td>
+                <td>
+                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                    <li>primary</li>
+                                    <li>secondary</li>
+                                    <li>stub</li>
+                                    <li>forwarder</li>
+                        </ul>
+                </td>
+                <td>
+                        <div>Specifies the type of DNS zone.</div>
+                        <div>When l(type=secondary), the DNS server will immediately attempt to perform a zone transfer from the servers in this list. If this initial transfer fails, then the zone will be left in an unworkable state. This module does not verify the initial transfer.</div>
+                </td>
             </tr>
-                        </table>
+    </table>
     <br/>
 
 
@@ -284,24 +286,24 @@ Common return values are documented `here <https://docs.ansible.com/ansible/late
             <th>Returned</th>
             <th width="100%">Description</th>
         </tr>
-                    <tr>
-                                <td colspan="1">
+            <tr>
+                <td colspan="1">
                     <div class="ansibleOptionAnchor" id="return-"></div>
                     <b>zone</b>
                     <a class="ansibleOptionLink" href="#return-" title="Permalink to this return value"></a>
                     <div style="font-size: small">
                       <span style="color: purple">dictionary</span>
-                                          </div>
-                                    </td>
+                    </div>
+                </td>
                 <td>When l(state=present)</td>
                 <td>
-                                                                        <div>New/Updated DNS zone parameters</div>
-                                                                <br/>
-                                            <div style="font-size: smaller"><b>Sample:</b></div>
-                                                <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">{&#x27;name&#x27;: None, &#x27;type&#x27;: None, &#x27;dynamic_update&#x27;: None, &#x27;reverse_lookup&#x27;: None, &#x27;forwarder_timeout&#x27;: None, &#x27;paused&#x27;: None, &#x27;shutdown&#x27;: None, &#x27;zone_file&#x27;: None, &#x27;replication&#x27;: None, &#x27;dns_servers&#x27;: None}</div>
-                                    </td>
+                            <div>New/Updated DNS zone parameters</div>
+                    <br/>
+                        <div style="font-size: smaller"><b>Sample:</b></div>
+                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">{&#x27;name&#x27;: None, &#x27;type&#x27;: None, &#x27;dynamic_update&#x27;: None, &#x27;reverse_lookup&#x27;: None, &#x27;forwarder_timeout&#x27;: None, &#x27;paused&#x27;: None, &#x27;shutdown&#x27;: None, &#x27;zone_file&#x27;: None, &#x27;replication&#x27;: None, &#x27;dns_servers&#x27;: None}</div>
+                </td>
             </tr>
-                        </table>
+    </table>
     <br/><br/>
 
 

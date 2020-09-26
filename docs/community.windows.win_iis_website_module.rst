@@ -30,172 +30,173 @@ Parameters
         <tr>
             <th colspan="1">Parameter</th>
             <th>Choices/<font color="blue">Defaults</font></th>
-                        <th width="100%">Comments</th>
+            <th width="100%">Comments</th>
         </tr>
-                    <tr>
-                                                                <td colspan="1">
+            <tr>
+                <td colspan="1">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>application_pool</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
                         <span style="color: purple">string</span>
-                                                                    </div>
-                                    </td>
-                                <td>
-                                                                                                                                                            </td>
-                                                                <td>
-                                            <div>The application pool in which the new site executes.</div>
-                                                        </td>
+                    </div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>The application pool in which the new site executes.</div>
+                </td>
             </tr>
-                                <tr>
-                                                                <td colspan="1">
+            <tr>
+                <td colspan="1">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>hostname</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
                         <span style="color: purple">string</span>
-                                                                    </div>
-                                    </td>
-                                <td>
-                                                                                                                                                            </td>
-                                                                <td>
-                                            <div>The host header to bind to / use for the new site.</div>
-                                                        </td>
+                    </div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>The host header to bind to / use for the new site.</div>
+                </td>
             </tr>
-                                <tr>
-                                                                <td colspan="1">
+            <tr>
+                <td colspan="1">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>ip</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
                         <span style="color: purple">string</span>
-                                                                    </div>
-                                    </td>
-                                <td>
-                                                                                                                                                            </td>
-                                                                <td>
-                                            <div>The IP address to bind to / use for the new site.</div>
-                                                        </td>
+                    </div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>The IP address to bind to / use for the new site.</div>
+                </td>
             </tr>
-                                <tr>
-                                                                <td colspan="1">
+            <tr>
+                <td colspan="1">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>name</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
                         <span style="color: purple">string</span>
-                                                 / <span style="color: red">required</span>                    </div>
-                                    </td>
-                                <td>
-                                                                                                                                                            </td>
-                                                                <td>
-                                            <div>Names of web site.</div>
-                                                        </td>
+                         / <span style="color: red">required</span>
+                    </div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>Names of web site.</div>
+                </td>
             </tr>
-                                <tr>
-                                                                <td colspan="1">
+            <tr>
+                <td colspan="1">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>parameters</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
                         <span style="color: purple">string</span>
-                                                                    </div>
-                                    </td>
-                                <td>
-                                                                                                                                                            </td>
-                                                                <td>
-                                            <div>Custom site Parameters from string where properties are separated by a pipe and property name/values by colon Ex. &quot;foo:1|bar:2&quot;</div>
-                                            <div>Some custom parameters that you can use are listed below, this isn&#x27;t a definitive list but some common parameters.</div>
-                                            <div><code>logfile.directory</code> - Physical path to store Logs, e.g. <code>D:\IIS-LOGs\</code>.</div>
-                                            <div><code>logfile.period</code> - Log file rollover scheduled accepting these values, how frequently the log file should be rolled-over, e.g. <code>Hourly, Daily, Weekly, Monthly</code>.</div>
-                                            <div><code>logfile.LogFormat</code> - Log file format, by default IIS uses <code>W3C</code>.</div>
-                                            <div><code>logfile.truncateSize</code> - The size at which the log file contents will be trunsted, expressed in bytes.</div>
-                                                        </td>
+                    </div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>Custom site Parameters from string where properties are separated by a pipe and property name/values by colon Ex. &quot;foo:1|bar:2&quot;</div>
+                        <div>Some custom parameters that you can use are listed below, this isn&#x27;t a definitive list but some common parameters.</div>
+                        <div><code>logfile.directory</code> - Physical path to store Logs, e.g. <code>D:\IIS-LOGs\</code>.</div>
+                        <div><code>logfile.period</code> - Log file rollover scheduled accepting these values, how frequently the log file should be rolled-over, e.g. <code>Hourly, Daily, Weekly, Monthly</code>.</div>
+                        <div><code>logfile.LogFormat</code> - Log file format, by default IIS uses <code>W3C</code>.</div>
+                        <div><code>logfile.truncateSize</code> - The size at which the log file contents will be trunsted, expressed in bytes.</div>
+                </td>
             </tr>
-                                <tr>
-                                                                <td colspan="1">
+            <tr>
+                <td colspan="1">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>physical_path</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
                         <span style="color: purple">string</span>
-                                                                    </div>
-                                    </td>
-                                <td>
-                                                                                                                                                            </td>
-                                                                <td>
-                                            <div>The physical path on the remote host to use for the new site.</div>
-                                            <div>The specified folder must already exist.</div>
-                                                        </td>
+                    </div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>The physical path on the remote host to use for the new site.</div>
+                        <div>The specified folder must already exist.</div>
+                </td>
             </tr>
-                                <tr>
-                                                                <td colspan="1">
+            <tr>
+                <td colspan="1">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>port</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
                         <span style="color: purple">integer</span>
-                                                                    </div>
-                                    </td>
-                                <td>
-                                                                                                                                                            </td>
-                                                                <td>
-                                            <div>The port to bind to / use for the new site.</div>
-                                                        </td>
+                    </div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>The port to bind to / use for the new site.</div>
+                </td>
             </tr>
-                                <tr>
-                                                                <td colspan="1">
+            <tr>
+                <td colspan="1">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>site_id</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
                         <span style="color: purple">string</span>
-                                                                    </div>
-                                    </td>
-                                <td>
-                                                                                                                                                            </td>
-                                                                <td>
-                                            <div>Explicitly set the IIS numeric ID for a site.</div>
-                                            <div>Note that this value cannot be changed after the website has been created.</div>
-                                                        </td>
+                    </div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>Explicitly set the IIS numeric ID for a site.</div>
+                        <div>Note that this value cannot be changed after the website has been created.</div>
+                </td>
             </tr>
-                                <tr>
-                                                                <td colspan="1">
+            <tr>
+                <td colspan="1">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>ssl</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
                         <span style="color: purple">string</span>
-                                                                    </div>
-                                    </td>
-                                <td>
-                                                                                                                                                            </td>
-                                                                <td>
-                                            <div>Enables HTTPS binding on the site..</div>
-                                                        </td>
+                    </div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>Enables HTTPS binding on the site..</div>
+                </td>
             </tr>
-                                <tr>
-                                                                <td colspan="1">
+            <tr>
+                <td colspan="1">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>state</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
                         <span style="color: purple">string</span>
-                                                                    </div>
-                                    </td>
-                                <td>
-                                                                                                                            <ul style="margin: 0; padding: 0"><b>Choices:</b>
-                                                                                                                                                                <li>absent</li>
-                                                                                                                                                                                                <li>started</li>
-                                                                                                                                                                                                <li>stopped</li>
-                                                                                                                                                                                                <li>restarted</li>
-                                                                                    </ul>
-                                                                            </td>
-                                                                <td>
-                                            <div>State of the web site</div>
-                                                        </td>
+                    </div>
+                </td>
+                <td>
+                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                    <li>absent</li>
+                                    <li>started</li>
+                                    <li>stopped</li>
+                                    <li>restarted</li>
+                        </ul>
+                </td>
+                <td>
+                        <div>State of the web site</div>
+                </td>
             </tr>
-                        </table>
+    </table>
     <br/>
 
 

@@ -1,2 +1,0 @@
-minor_changes:
-- win_firewall - Support defining the default inbound and outbound action of traffic in Windows firewall.

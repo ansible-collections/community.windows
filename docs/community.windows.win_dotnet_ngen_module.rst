@@ -58,135 +58,135 @@ Common return values are documented `here <https://docs.ansible.com/ansible/late
             <th>Returned</th>
             <th width="100%">Description</th>
         </tr>
-                    <tr>
-                                <td colspan="1">
+            <tr>
+                <td colspan="1">
                     <div class="ansibleOptionAnchor" id="return-"></div>
                     <b>dotnet_ngen64_eqi_exit_code</b>
                     <a class="ansibleOptionLink" href="#return-" title="Permalink to this return value"></a>
                     <div style="font-size: small">
                       <span style="color: purple">integer</span>
-                                          </div>
-                                    </td>
+                    </div>
+                </td>
                 <td>64-bit ngen executable exists</td>
                 <td>
-                                                                        <div>The exit code after running the 64-bit ngen.exe executeQueuedItems command.</div>
-                                                                <br/>
-                                    </td>
+                            <div>The exit code after running the 64-bit ngen.exe executeQueuedItems command.</div>
+                    <br/>
+                </td>
             </tr>
-                                <tr>
-                                <td colspan="1">
+            <tr>
+                <td colspan="1">
                     <div class="ansibleOptionAnchor" id="return-"></div>
                     <b>dotnet_ngen64_eqi_output</b>
                     <a class="ansibleOptionLink" href="#return-" title="Permalink to this return value"></a>
                     <div style="font-size: small">
                       <span style="color: purple">string</span>
-                                          </div>
-                                    </td>
+                    </div>
+                </td>
                 <td>64-bit ngen executable exists</td>
                 <td>
-                                                                        <div>The stdout after running the 64-bit ngen.exe executeQueuedItems command.</div>
-                                                                <br/>
-                                            <div style="font-size: smaller"><b>Sample:</b></div>
-                                                <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">sample output</div>
-                                    </td>
+                            <div>The stdout after running the 64-bit ngen.exe executeQueuedItems command.</div>
+                    <br/>
+                        <div style="font-size: smaller"><b>Sample:</b></div>
+                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">sample output</div>
+                </td>
             </tr>
-                                <tr>
-                                <td colspan="1">
+            <tr>
+                <td colspan="1">
                     <div class="ansibleOptionAnchor" id="return-"></div>
                     <b>dotnet_ngen64_update_exit_code</b>
                     <a class="ansibleOptionLink" href="#return-" title="Permalink to this return value"></a>
                     <div style="font-size: small">
                       <span style="color: purple">integer</span>
-                                          </div>
-                                    </td>
+                    </div>
+                </td>
                 <td>64-bit ngen executable exists</td>
                 <td>
-                                                                        <div>The exit code after running the 64-bit ngen.exe update /force command.</div>
-                                                                <br/>
-                                    </td>
+                            <div>The exit code after running the 64-bit ngen.exe update /force command.</div>
+                    <br/>
+                </td>
             </tr>
-                                <tr>
-                                <td colspan="1">
+            <tr>
+                <td colspan="1">
                     <div class="ansibleOptionAnchor" id="return-"></div>
                     <b>dotnet_ngen64_update_output</b>
                     <a class="ansibleOptionLink" href="#return-" title="Permalink to this return value"></a>
                     <div style="font-size: small">
                       <span style="color: purple">string</span>
-                                          </div>
-                                    </td>
+                    </div>
+                </td>
                 <td>64-bit ngen executable exists</td>
                 <td>
-                                                                        <div>The stdout after running the 64-bit ngen.exe update /force command.</div>
-                                                                <br/>
-                                            <div style="font-size: smaller"><b>Sample:</b></div>
-                                                <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">sample output</div>
-                                    </td>
+                            <div>The stdout after running the 64-bit ngen.exe update /force command.</div>
+                    <br/>
+                        <div style="font-size: smaller"><b>Sample:</b></div>
+                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">sample output</div>
+                </td>
             </tr>
-                                <tr>
-                                <td colspan="1">
+            <tr>
+                <td colspan="1">
                     <div class="ansibleOptionAnchor" id="return-"></div>
                     <b>dotnet_ngen_eqi_exit_code</b>
                     <a class="ansibleOptionLink" href="#return-" title="Permalink to this return value"></a>
                     <div style="font-size: small">
                       <span style="color: purple">integer</span>
-                                          </div>
-                                    </td>
+                    </div>
+                </td>
                 <td>32-bit ngen executable exists</td>
                 <td>
-                                                                        <div>The exit code after running the 32-bit ngen.exe executeQueuedItems command.</div>
-                                                                <br/>
-                                    </td>
+                            <div>The exit code after running the 32-bit ngen.exe executeQueuedItems command.</div>
+                    <br/>
+                </td>
             </tr>
-                                <tr>
-                                <td colspan="1">
+            <tr>
+                <td colspan="1">
                     <div class="ansibleOptionAnchor" id="return-"></div>
                     <b>dotnet_ngen_eqi_output</b>
                     <a class="ansibleOptionLink" href="#return-" title="Permalink to this return value"></a>
                     <div style="font-size: small">
                       <span style="color: purple">string</span>
-                                          </div>
-                                    </td>
+                    </div>
+                </td>
                 <td>32-bit ngen executable exists</td>
                 <td>
-                                                                        <div>The stdout after running the 32-bit ngen.exe executeQueuedItems command.</div>
-                                                                <br/>
-                                            <div style="font-size: smaller"><b>Sample:</b></div>
-                                                <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">sample output</div>
-                                    </td>
+                            <div>The stdout after running the 32-bit ngen.exe executeQueuedItems command.</div>
+                    <br/>
+                        <div style="font-size: smaller"><b>Sample:</b></div>
+                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">sample output</div>
+                </td>
             </tr>
-                                <tr>
-                                <td colspan="1">
+            <tr>
+                <td colspan="1">
                     <div class="ansibleOptionAnchor" id="return-"></div>
                     <b>dotnet_ngen_update_exit_code</b>
                     <a class="ansibleOptionLink" href="#return-" title="Permalink to this return value"></a>
                     <div style="font-size: small">
                       <span style="color: purple">integer</span>
-                                          </div>
-                                    </td>
+                    </div>
+                </td>
                 <td>32-bit ngen executable exists</td>
                 <td>
-                                                                        <div>The exit code after running the 32-bit ngen.exe update /force command.</div>
-                                                                <br/>
-                                    </td>
+                            <div>The exit code after running the 32-bit ngen.exe update /force command.</div>
+                    <br/>
+                </td>
             </tr>
-                                <tr>
-                                <td colspan="1">
+            <tr>
+                <td colspan="1">
                     <div class="ansibleOptionAnchor" id="return-"></div>
                     <b>dotnet_ngen_update_output</b>
                     <a class="ansibleOptionLink" href="#return-" title="Permalink to this return value"></a>
                     <div style="font-size: small">
                       <span style="color: purple">string</span>
-                                          </div>
-                                    </td>
+                    </div>
+                </td>
                 <td>32-bit ngen executable exists</td>
                 <td>
-                                                                        <div>The stdout after running the 32-bit ngen.exe update /force command.</div>
-                                                                <br/>
-                                            <div style="font-size: smaller"><b>Sample:</b></div>
-                                                <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">sample output</div>
-                                    </td>
+                            <div>The stdout after running the 32-bit ngen.exe update /force command.</div>
+                    <br/>
+                        <div style="font-size: smaller"><b>Sample:</b></div>
+                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">sample output</div>
+                </td>
             </tr>
-                        </table>
+    </table>
     <br/><br/>
 
 

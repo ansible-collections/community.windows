@@ -31,69 +31,70 @@ Parameters
         <tr>
             <th colspan="1">Parameter</th>
             <th>Choices/<font color="blue">Defaults</font></th>
-                        <th width="100%">Comments</th>
+            <th width="100%">Comments</th>
         </tr>
-                    <tr>
-                                                                <td colspan="1">
+            <tr>
+                <td colspan="1">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>bypass</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
                         <span style="color: purple">list</span>
-                         / <span style="color: purple">elements=string</span>                                            </div>
-                                    </td>
-                                <td>
-                                                                                                                                                            </td>
-                                                                <td>
-                                            <div>A list of hosts that will bypass the set proxy when being accessed.</div>
-                                            <div>Use <code>&lt;local&gt;</code> to match hostnames that are not fully qualified domain names. This is useful when needing to connect to intranet sites using just the hostname.</div>
-                                            <div>Omit, set to null or an empty string/list to remove the bypass list.</div>
-                                            <div>If this is set then <em>proxy</em> must also be set.</div>
-                                                        </td>
+                         / <span style="color: purple">elements=string</span>
+                    </div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>A list of hosts that will bypass the set proxy when being accessed.</div>
+                        <div>Use <code>&lt;local&gt;</code> to match hostnames that are not fully qualified domain names. This is useful when needing to connect to intranet sites using just the hostname.</div>
+                        <div>Omit, set to null or an empty string/list to remove the bypass list.</div>
+                        <div>If this is set then <em>proxy</em> must also be set.</div>
+                </td>
             </tr>
-                                <tr>
-                                                                <td colspan="1">
+            <tr>
+                <td colspan="1">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>proxy</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
                         <span style="color: purple">raw</span>
-                                                                    </div>
-                                    </td>
-                                <td>
-                                                                                                                                                            </td>
-                                                                <td>
-                                            <div>A string or dict that specifies the proxy to be set.</div>
-                                            <div>If setting a string, should be in the form <code>hostname</code>, <code>hostname:port</code>, or <code>protocol=hostname:port</code>.</div>
-                                            <div>If the port is undefined, the default port for the protocol in use is used.</div>
-                                            <div>If setting a dict, the keys should be the protocol and the values should be the hostname and/or port for that protocol.</div>
-                                            <div>Valid protocols are <code>http</code>, <code>https</code>, <code>ftp</code>, and <code>socks</code>.</div>
-                                            <div>Omit, set to null or an empty string to remove the proxy settings.</div>
-                                                        </td>
+                    </div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>A string or dict that specifies the proxy to be set.</div>
+                        <div>If setting a string, should be in the form <code>hostname</code>, <code>hostname:port</code>, or <code>protocol=hostname:port</code>.</div>
+                        <div>If the port is undefined, the default port for the protocol in use is used.</div>
+                        <div>If setting a dict, the keys should be the protocol and the values should be the hostname and/or port for that protocol.</div>
+                        <div>Valid protocols are <code>http</code>, <code>https</code>, <code>ftp</code>, and <code>socks</code>.</div>
+                        <div>Omit, set to null or an empty string to remove the proxy settings.</div>
+                </td>
             </tr>
-                                <tr>
-                                                                <td colspan="1">
+            <tr>
+                <td colspan="1">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>source</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
                         <span style="color: purple">string</span>
-                                                                    </div>
-                                    </td>
-                                <td>
-                                                                                                                            <ul style="margin: 0; padding: 0"><b>Choices:</b>
-                                                                                                                                                                <li>ie</li>
-                                                                                    </ul>
-                                                                            </td>
-                                                                <td>
-                                            <div>Instead of manually specifying the <em>proxy</em> and/or <em>bypass</em>, set this to import the proxy from a set source like Internet Explorer.</div>
-                                            <div>Using <code>ie</code> will import the Internet Explorer proxy settings for the current active network connection of the current user.</div>
-                                            <div>Only IE&#x27;s proxy URL and bypass list will be imported into WinHTTP.</div>
-                                            <div>This is like running <code>netsh winhttp import proxy source=ie</code>.</div>
-                                            <div>The value is imported when the module runs and will not automatically be updated if the IE configuration changes in the future. The module will have to be run again to sync the latest changes.</div>
-                                                        </td>
+                    </div>
+                </td>
+                <td>
+                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                    <li>ie</li>
+                        </ul>
+                </td>
+                <td>
+                        <div>Instead of manually specifying the <em>proxy</em> and/or <em>bypass</em>, set this to import the proxy from a set source like Internet Explorer.</div>
+                        <div>Using <code>ie</code> will import the Internet Explorer proxy settings for the current active network connection of the current user.</div>
+                        <div>Only IE&#x27;s proxy URL and bypass list will be imported into WinHTTP.</div>
+                        <div>This is like running <code>netsh winhttp import proxy source=ie</code>.</div>
+                        <div>The value is imported when the module runs and will not automatically be updated if the IE configuration changes in the future. The module will have to be run again to sync the latest changes.</div>
+                </td>
             </tr>
-                        </table>
+    </table>
     <br/>
 
 

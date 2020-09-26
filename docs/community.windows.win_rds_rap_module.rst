@@ -38,135 +38,136 @@ Parameters
         <tr>
             <th colspan="1">Parameter</th>
             <th>Choices/<font color="blue">Defaults</font></th>
-                        <th width="100%">Comments</th>
+            <th width="100%">Comments</th>
         </tr>
-                    <tr>
-                                                                <td colspan="1">
+            <tr>
+                <td colspan="1">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>allowed_ports</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
                         <span style="color: purple">list</span>
-                                                                    </div>
-                                    </td>
-                                <td>
-                                                                                                                                                            </td>
-                                                                <td>
-                                            <div>List of port numbers through which connections are allowed for this policy.</div>
-                                            <div>To allow connections through any port, specify &#x27;any&#x27;.</div>
-                                                        </td>
+                    </div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>List of port numbers through which connections are allowed for this policy.</div>
+                        <div>To allow connections through any port, specify &#x27;any&#x27;.</div>
+                </td>
             </tr>
-                                <tr>
-                                                                <td colspan="1">
+            <tr>
+                <td colspan="1">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>computer_group</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
                         <span style="color: purple">string</span>
-                                                                    </div>
-                                    </td>
-                                <td>
-                                                                                                                                                            </td>
-                                                                <td>
-                                            <div>The computer group name that is associated with this resource authorization policy (RAP).</div>
-                                            <div>This is required when <em>computer_group_type</em> is <code>rdg_group</code> or <code>ad_network_resource_group</code>.</div>
-                                                        </td>
+                    </div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>The computer group name that is associated with this resource authorization policy (RAP).</div>
+                        <div>This is required when <em>computer_group_type</em> is <code>rdg_group</code> or <code>ad_network_resource_group</code>.</div>
+                </td>
             </tr>
-                                <tr>
-                                                                <td colspan="1">
+            <tr>
+                <td colspan="1">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>computer_group_type</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
                         <span style="color: purple">string</span>
-                                                                    </div>
-                                    </td>
-                                <td>
-                                                                                                                            <ul style="margin: 0; padding: 0"><b>Choices:</b>
-                                                                                                                                                                <li>rdg_group</li>
-                                                                                                                                                                                                <li>ad_network_resource_group</li>
-                                                                                                                                                                                                <li>allow_any</li>
-                                                                                    </ul>
-                                                                            </td>
-                                                                <td>
-                                            <div>The computer group type:</div>
-                                            <div><code>rdg_group</code>: RD Gateway-managed group</div>
-                                            <div><code>ad_network_resource_group</code>: Active Directory Domain Services network resource group</div>
-                                            <div><code>allow_any</code>: Allow users to connect to any network resource.</div>
-                                                        </td>
+                    </div>
+                </td>
+                <td>
+                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                    <li>rdg_group</li>
+                                    <li>ad_network_resource_group</li>
+                                    <li>allow_any</li>
+                        </ul>
+                </td>
+                <td>
+                        <div>The computer group type:</div>
+                        <div><code>rdg_group</code>: RD Gateway-managed group</div>
+                        <div><code>ad_network_resource_group</code>: Active Directory Domain Services network resource group</div>
+                        <div><code>allow_any</code>: Allow users to connect to any network resource.</div>
+                </td>
             </tr>
-                                <tr>
-                                                                <td colspan="1">
+            <tr>
+                <td colspan="1">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>description</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
                         <span style="color: purple">string</span>
-                                                                    </div>
-                                    </td>
-                                <td>
-                                                                                                                                                            </td>
-                                                                <td>
-                                            <div>Optional description of the resource authorization policy.</div>
-                                                        </td>
+                    </div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>Optional description of the resource authorization policy.</div>
+                </td>
             </tr>
-                                <tr>
-                                                                <td colspan="1">
+            <tr>
+                <td colspan="1">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>name</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
                         <span style="color: purple">-</span>
-                                                 / <span style="color: red">required</span>                    </div>
-                                    </td>
-                                <td>
-                                                                                                                                                            </td>
-                                                                <td>
-                                            <div>Name of the resource authorization policy.</div>
-                                                        </td>
+                         / <span style="color: red">required</span>
+                    </div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>Name of the resource authorization policy.</div>
+                </td>
             </tr>
-                                <tr>
-                                                                <td colspan="1">
+            <tr>
+                <td colspan="1">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>state</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
                         <span style="color: purple">string</span>
-                                                                    </div>
-                                    </td>
-                                <td>
-                                                                                                                            <ul style="margin: 0; padding: 0"><b>Choices:</b>
-                                                                                                                                                                <li>absent</li>
-                                                                                                                                                                                                <li>disabled</li>
-                                                                                                                                                                                                <li>enabled</li>
-                                                                                                                                                                                                <li><div style="color: blue"><b>present</b>&nbsp;&larr;</div></li>
-                                                                                    </ul>
-                                                                            </td>
-                                                                <td>
-                                            <div>The state of resource authorization policy.</div>
-                                            <div>If <code>absent</code> will ensure the policy is removed.</div>
-                                            <div>If <code>present</code> will ensure the policy is configured and exists.</div>
-                                            <div>If <code>enabled</code> will ensure the policy is configured, exists and enabled.</div>
-                                            <div>If <code>disabled</code> will ensure the policy is configured, exists, but disabled.</div>
-                                                        </td>
+                    </div>
+                </td>
+                <td>
+                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                    <li>absent</li>
+                                    <li>disabled</li>
+                                    <li>enabled</li>
+                                    <li><div style="color: blue"><b>present</b>&nbsp;&larr;</div></li>
+                        </ul>
+                </td>
+                <td>
+                        <div>The state of resource authorization policy.</div>
+                        <div>If <code>absent</code> will ensure the policy is removed.</div>
+                        <div>If <code>present</code> will ensure the policy is configured and exists.</div>
+                        <div>If <code>enabled</code> will ensure the policy is configured, exists and enabled.</div>
+                        <div>If <code>disabled</code> will ensure the policy is configured, exists, but disabled.</div>
+                </td>
             </tr>
-                                <tr>
-                                                                <td colspan="1">
+            <tr>
+                <td colspan="1">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>user_groups</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
                         <span style="color: purple">list</span>
-                                                                    </div>
-                                    </td>
-                                <td>
-                                                                                                                                                            </td>
-                                                                <td>
-                                            <div>List of user groups that are associated with this resource authorization policy (RAP). A user must belong to one of these groups to access the RD Gateway server.</div>
-                                            <div>Required when a new RAP is created.</div>
-                                                        </td>
+                    </div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>List of user groups that are associated with this resource authorization policy (RAP). A user must belong to one of these groups to access the RD Gateway server.</div>
+                        <div>Required when a new RAP is created.</div>
+                </td>
             </tr>
-                        </table>
+    </table>
     <br/>
 
 
