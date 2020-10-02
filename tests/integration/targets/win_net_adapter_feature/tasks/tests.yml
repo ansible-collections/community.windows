@@ -2,81 +2,81 @@
 ---
 - name: fail when interface isn't set
   ansible.windows.win_net_adapter_feature:
-    state: enable
-    componentID: ms_tcpip6
+    state: enabled
+    component_id: ms_tcpip6
   ignore_errors: yes
 
 - name: fail when state isn't set
   ansible.windows.win_net_adapter_feature:
     interface: 'Ethernet0'
-    componentID: ms_tcpip6
+    component_id: ms_tcpip6
   ignore_errors: yes
 
-- name: fail when componentID isn't set
+- name: fail when component_id isn't set
   ansible.windows.win_net_adapter_feature:
     interface: 'Ethernet0'
-    state: enable
+    state: enabled
   ignore_errors: yes
 
 - name: fail when interface doesn't exist
   ansible.windows.win_net_adapter_feature:
     interface: 'Ethernet10'
-    state: enable
-    componentID: ms_tcpip6
+    state: enabled
+    component_id: ms_tcpip6
   ignore_errors: yes
 
 - name: fail when state is inapppropriate
   ansible.windows.win_net_adapter_feature:
     interface: 'Ethernet0'
-    state: disable_inappropriate
-    componentID: ms_tcpip6
+    state: disabled_inappropriate
+    component_id: ms_tcpip6
   ignore_errors: yes
 
-- name: fail when componentID is inapppropriate
+- name: fail when component_id is inapppropriate
   ansible.windows.win_net_adapter_feature:
     interface: 'Ethernet0'
-    state: disable
-    componentID: inappropriate_component
+    state: disabled
+    component_id: inappropriate_component
   ignore_errors: yes
 
 - name: enable an interface of ms_tcpip6
   ansible.windows.win_net_adapter_feature:
     interface: 'Ethernet0'
-    state: enable
-    componentID: ms_tcpip6
+    state: enabled
+    component_id: ms_tcpip6
 
 - name: disable an interface of ms_tcpip6
   ansible.windows.win_net_adapter_feature:
     interface: 'Ethernet0'
-    state: disable
-    componentID: ms_tcpip6
+    state: disabled
+    component_id: ms_tcpip6
 
 - name: enable all the interfaces of ms_tcpip6
   ansible.windows.win_net_adapter_feature:
     interface: '*'
-    state: enable
-    componentID: ms_tcpip6
+    state: enabled
+    component_id: ms_tcpip6
 
 - name: disable all the interfaces of ms_tcpip6
   ansible.windows.win_net_adapter_feature:
     interface: '*'
-    state: disable
-    componentID: ms_tcpip6
+    state: disabled
+    component_id: ms_tcpip6
 
-- name: enable single componentID of multiple interface
+- name: enable single component_id of multiple interface
   ansible.windows.win_net_adapter_feature:
     interface: 
     - 'Ethernet0'
     - 'Ethernet1'
-    state: enable
-    componentID: ms_tcpip6
+    state: enabled
+    component_id: ms_tcpip6
 
-- name: disable multiple componentID of an interface 
+- name: disable multiple component_id of an interface 
   ansible.windows.win_net_adapter_feature:
     interface: 
     - 'Ethernet0'
-    state: disable
-    componentID: 
+    state: disabled
+    component_id: 
     - ms_tcpip6
     - ms_server
 
@@ -85,8 +85,8 @@
     interface: 
     - 'Ethernet0'
     - 'Ethernet1'
-    state: enable
-    componentID: 
+    state: enabled
+    component_id: 
     - ms_tcpip6
     - ms_server
 
@@ -95,8 +95,8 @@
     interface: 
     - 'Ethernet0'
     - 'Ethernet1'
-    state: disable
-    componentID: 
+    state: disabled
+    component_id: 
     - ms_tcpip6
     - ms_server
   check_mode: yes

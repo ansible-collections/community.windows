@@ -10,7 +10,7 @@ DOCUMENTATION = r'''
 module: win_net_adapter_feature
 short_description: Enable or disable certain network adapters.
 description:
-     - Enable or disable ms_tcpip6 of a certain network adapter or all the network adapters.
+     - Enable or disable some nrtwork components of a certain network adapter or all the network adapters.
 options:
   interface:
     description:
@@ -22,21 +22,21 @@ options:
       - Specify the state of ms_tcpip6 of interfaces.
     type: str
     choices:
-      - enable
-      - disable
+      - enabled
+      - disabled
     required: yes
   component_id:
     description:
-      - Specify the below componentID of network adapters.
-      - componentID (DisplayName)
+      - Specify the below component_id of network adapters.
+      - component_id (DisplayName)
       - C(ms_implat) (Microsoft Network Adapter Multiplexor Protocol)
-      - ms_lltdio (Link-Layer Topology Discovery Mapper I/O Driver)
-      - ms_tcpip6 (Internet Protocol Version 6 (TCP/IPv6))
-      - ms_tcpip (Internet Protocol Version 4 (TCP/IPv4))
-      - ms_lldp (Microsoft LLDP Protocol Driver)
-      - ms_rspndr (Link-Layer Topology Discovery Responder)
-      - ms_msclient (Client for Microsoft Networks)
-      - ms_pacer (QoS Packet Scheduler)
+      - C(ms_lltdio) (Link-Layer Topology Discovery Mapper I/O Driver)
+      - C(ms_tcpip6) (Internet Protocol Version 6 (TCP/IPv6))
+      - C(ms_tcpip) (Internet Protocol Version 4 (TCP/IPv4))
+      - C(ms_lldp) (Microsoft LLDP Protocol Driver)
+      - C(ms_rspndr) (Link-Layer Topology Discovery Responder)
+      - C(ms_msclient) (Client for Microsoft Networks)
+      - C(ms_pacer) (QoS Packet Scheduler)
       - If you'd like to set custom adapters like 'Juniper Network Service', get the I(component_id) by running the C(Get-NetAdapterBinding) cmdlet.
     type: str
     required: yes
@@ -52,16 +52,16 @@ EXAMPLES = r'''
     interface:
     - 'Ethernet0'
     - 'Ethernet1'
-    state: enable
-    componentID:
+    state: enabled
+    component_id:
     - ms_tcpip6
     - ms_server
 
 - name: Enable ms_tcpip6 of all the Interface
   community.windows.win_net_adapter_feature:
     interface: '*'
-    state: enable
-    componentID:
+    state: enabled
+    component_id:
     - ms_tcpip6
 
 '''

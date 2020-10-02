@@ -3,6 +3,8 @@
 # Copyright: (c) 2020, ライトウェルの人 <jiro.higuchi@shi-g.com>
 # GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 
+#AnsibleRequires -CSharpUtil Ansible.Basic
+
 $spec = @{
     options = @{
         interface = @{ type = 'list'; elements = 'str'; required = $true }
@@ -19,25 +21,25 @@ $component_id = $module.Params.component_id
 $check_mode = $module.CheckMode
 
 Try {
-    If($Interface_name -eq "*") {
-        $Interfaces = Get-NetAdapter | Select-Object -ExpandProperty Name
+    If($interface -eq "*") {
+        $interfaces = Get-NetAdapter | Select-Object -ExpandProperty Name
     }
     else {
-        ForEach($Interface_name in $Interfaces) {
+        ForEach($Interface_name in $interface) {
         	If(@(Get-NetAdapter | Where-Object Name -eq $Interface_name).Count -eq 0){
-                Fail-Json -message "Invalid network adapter name: $Interface_name"
+                $module.FailJson("Invalid network adapter name: $Interface_name")
             }
         }
     }
 
-    ForEach($componentID_name in $componentIDs) {
+    ForEach($componentID_name in $component_id) {
 	    If(@(Get-NetAdapterBinding | Where-Object ComponentID -eq $componentID_name).Count -eq 0) {
-	        Fail-Json -message "Invalid componentID: $componentID_name"
+	        $module.FailJson("Invalid componentID: $componentID_name")
         }
     }
 
-    ForEach($componentID_name in $componentIDs) {
-        ForEach($Interface_name in $Interfaces) {
+    ForEach($componentID_name in $component_id) {
+        ForEach($Interface_name in $interfaces) {
             $current_state = (Get-NetAdapterBinding | where-object {$_.Name -match $Interface_name} | where-object {$_.ComponentID -match $componentID_name}).Enabled
             $check_Idempotency = $true
             If ($current_state -eq ""){
@@ -48,9 +50,9 @@ Try {
                 $check_Idempotency = $false
             }
 
-            $result.changed = $result.changed -or $check_Idempotency
+            $module.Result.changed = $module.Result.changed -or $check_Idempotency
 
-            If($result.changed) {
+            If($module.Result.changed) {
                 If ($state -eq $true){
                     Enable-NetAdapterBinding -Name $Interface_name -ComponentID $componentID_name -WhatIf:$check_mode
                 }Else {
@@ -59,12 +61,12 @@ Try {
             }
         }
     }
-    Exit-Json $result
+    $module.ExitJson($result)
 }
 Catch {
     $excep = $_
 
-    Fail-Json -message "Exception: $($excep | out-string)"
+    $module.FailJson("Exception: $($excep | out-string)")
 
     Throw
 }
