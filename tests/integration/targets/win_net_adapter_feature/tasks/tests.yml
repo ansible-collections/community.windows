@@ -80,7 +80,6 @@
     - ms_tcpip6
     - ms_server
 
-
 - name: enable multiple interfaces of multiple interfaces
   ansible.windows.win_net_adapter_feature:
     interface: 
@@ -90,3 +89,14 @@
     componentID: 
     - ms_tcpip6
     - ms_server
+
+- name: check mode(disable multiple interfaces of multiple interfaces)
+  ansible.windows.win_net_adapter_feature:
+    interface: 
+    - 'Ethernet0'
+    - 'Ethernet1'
+    state: disable
+    componentID: 
+    - ms_tcpip6
+    - ms_server
+  check_mode: yes
