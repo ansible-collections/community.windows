@@ -61,7 +61,7 @@ Try {
             }
         }
     }
-    $module.ExitJson($result)
+    $module.ExitJson()
 }
 Catch {
     $excep = $_
