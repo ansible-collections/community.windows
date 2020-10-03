@@ -624,8 +624,8 @@ Function Compare-Triggers($task_definition) {
             optional = @('enabled', 'end_boundary', 'execution_time_limit', 'random_delay', 'weeks_interval', 'repetition')
         }
         [TASK_TRIGGER_TYPE2]::TASK_TRIGGER_SESSION_STATE_CHANGE = @{
-            mandatory = @('days_of_week', 'start_boundary')
-            optional = @('delay', 'enabled', 'end_boundary', 'execution_time_limit', 'state_change', 'user_id', 'repetition')
+            mandatory = @()
+            optional = @('delay', 'enabled', 'end_boundary', 'execution_time_limit', 'repetition', 'start_boundary', 'state_change', 'user_id' )
         }
     }
     $changes = Compare-PropertyList -collection $task_triggers -property_name "trigger" -new $triggers -existing $existing_triggers -map $map -enum TASK_TRIGGER_TYPE2
