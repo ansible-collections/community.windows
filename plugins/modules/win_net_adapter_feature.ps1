@@ -32,9 +32,9 @@ Try {
     }
 
     If($state -eq "enabled"){
-        $state = "True"
+        $state = $true
     }Else {
-        $state = "False"
+        $state = $false
     }
 
     ForEach($componentID_name in $component_id) {
