@@ -43,17 +43,22 @@ Try {
         }
     }
 
+    $module.Result.changed = $false
+
     ForEach($componentID_name in $component_id) {
         ForEach($Interface_name in $interface) {
             $current_state = (Get-NetAdapterBinding | where-object {$_.Name -eq $Interface_name} | where-object {$_.ComponentID -eq $componentID_name}).Enabled
+            #Initialize the check_Idempotency flag for each interface, and for each component_id.
             $check_Idempotency = $true
+            
             If ($current_state -eq $state){
-                    $check_Idempotency = $false
+                $check_Idempotency = $false
             }
 
-            $module.Result.changed = $module.Result.changed -or $check_Idempotency
+            #Even Once $check_Idempotency remains $true, $module.Result.changed turns $true.
+            $module.Result.changed = $module.Result.changed -Or $check_Idempotency
 
-            If($module.Result.changed) {
+            If($check_Idempotency) {
                 If ($state -eq "True"){
                     Enable-NetAdapterBinding -Name $Interface_name -ComponentID $componentID_name -WhatIf:$check_mode
                 }Else {
