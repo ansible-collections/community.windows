@@ -21,11 +21,9 @@ options:
     description:
       - Specify the state of ms_tcpip6 of interfaces.
     type: str
-    choices:
-      default: enabled
-      - enabled
-      - disabled
-    required: yes
+    choices: [ enabled, disabled ]
+    default: enabled
+    required: no
   component_id:
     description:
       - Specify the below component_id of network adapters.
