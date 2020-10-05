@@ -50,7 +50,7 @@ Try {
             $current_state = (Get-NetAdapterBinding | where-object {$_.Name -eq $Interface_name} | where-object {$_.ComponentID -eq $componentID_name}).Enabled
             #Initialize the check_Idempotency flag for each interface, and for each component_id.
             $check_Idempotency = $true
-            
+
             If ($current_state -eq $state){
                 $check_Idempotency = $false
             }
