@@ -32,6 +32,17 @@ Try {
         }
     }
 
+    If(!(($state -eq "enabled") -Or ($state -eq "disabled"))) {
+        $module.FailJson("Invalid state: $state")
+    }
+    else {
+        If($state -eq "enabled"){
+            $state = "True"
+        }Else {
+            $state = "False"
+        }
+    }
+
     ForEach($componentID_name in $component_id) {
 	    If(@(Get-NetAdapterBinding | Where-Object ComponentID -eq $componentID_name).Count -eq 0) {
 	        $module.FailJson("Invalid componentID: $componentID_name")
@@ -42,18 +53,14 @@ Try {
         ForEach($Interface_name in $interfaces) {
             $current_state = (Get-NetAdapterBinding | where-object {$_.Name -eq $Interface_name} | where-object {$_.ComponentID -eq $componentID_name}).Enabled
             $check_Idempotency = $true
-            If ($current_state -eq "False"){
-                If ($current_state -eq $state){
+            If ($current_state -eq $state){
                     $check_Idempotency = $false
-                }
-            } ElseIf ($current_state -eq $state){
-                $check_Idempotency = $false
             }
 
             $module.Result.changed = $module.Result.changed -or $check_Idempotency
 
             If($module.Result.changed) {
-                If ($state -eq $true){
+                If ($state -eq "True"){
                     Enable-NetAdapterBinding -Name $Interface_name -ComponentID $componentID_name -WhatIf:$check_mode
                 }Else {
                     Disable-NetAdapterBinding -Name $Interface_name -ComponentID $componentID_name -WhatIf:$check_mode
