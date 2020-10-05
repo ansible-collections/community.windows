@@ -22,10 +22,10 @@ $check_mode = $module.CheckMode
 
 Try {
     If($interface -eq "*") {
-        $interfaces = Get-NetAdapter | Select-Object -ExpandProperty Name
+        $interface = Get-NetAdapter | Select-Object -ExpandProperty Name
     }Else {
         ForEach($Interface_name in $interface) {
-        	If(@(Get-NetAdapter | Where-Object Name -eq $Interface_name).Count -eq 0){
+            If(@(Get-NetAdapter | Where-Object Name -eq $Interface_name).Count -eq 0){
                 $module.FailJson("Invalid network adapter name: $Interface_name")
             }
         }
@@ -44,7 +44,7 @@ Try {
     }
 
     ForEach($componentID_name in $component_id) {
-        ForEach($Interface_name in $interfaces) {
+        ForEach($Interface_name in $interface) {
             $current_state = (Get-NetAdapterBinding | where-object {$_.Name -eq $Interface_name} | where-object {$_.ComponentID -eq $componentID_name}).Enabled
             $check_Idempotency = $true
             If ($current_state -eq $state){
