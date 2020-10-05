@@ -23,8 +23,7 @@ $check_mode = $module.CheckMode
 Try {
     If($interface -eq "*") {
         $interfaces = Get-NetAdapter | Select-Object -ExpandProperty Name
-    }
-    else {
+    }Else {
         ForEach($Interface_name in $interface) {
         	If(@(Get-NetAdapter | Where-Object Name -eq $Interface_name).Count -eq 0){
                 $module.FailJson("Invalid network adapter name: $Interface_name")
@@ -32,15 +31,10 @@ Try {
         }
     }
 
-    If(!(($state -eq "enabled") -Or ($state -eq "disabled"))) {
-        $module.FailJson("Invalid state: $state")
-    }
-    else {
-        If($state -eq "enabled"){
-            $state = "True"
-        }Else {
-            $state = "False"
-        }
+    If($state -eq "enabled"){
+        $state = "True"
+    }Else {
+        $state = "False"
     }
 
     ForEach($componentID_name in $component_id) {
