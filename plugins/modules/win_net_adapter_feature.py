@@ -10,7 +10,7 @@ DOCUMENTATION = r'''
 module: win_net_adapter_feature
 short_description: Enable or disable certain network adapters.
 description:
-     - Enable or disable some nrtwork components of a certain network adapter or all the network adapters.
+  - Enable or disable some network components of a certain network adapter or all the network adapters.
 options:
   interface:
     description:
@@ -22,6 +22,7 @@ options:
       - Specify the state of ms_tcpip6 of interfaces.
     type: str
     choices:
+      default: enabled
       - enabled
       - disabled
     required: yes

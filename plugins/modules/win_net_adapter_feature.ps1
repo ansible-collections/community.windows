@@ -40,9 +40,9 @@ Try {
 
     ForEach($componentID_name in $component_id) {
         ForEach($Interface_name in $interfaces) {
-            $current_state = (Get-NetAdapterBinding | where-object {$_.Name -match $Interface_name} | where-object {$_.ComponentID -match $componentID_name}).Enabled
+            $current_state = (Get-NetAdapterBinding | where-object {$_.Name -eq $Interface_name} | where-object {$_.ComponentID -eq $componentID_name}).Enabled
             $check_Idempotency = $true
-            If ($current_state -eq ""){
+            If ($current_state -eq "False"){
                 If ($current_state -eq $state){
                     $check_Idempotency = $false
                 }
