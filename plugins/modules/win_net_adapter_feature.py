@@ -16,6 +16,7 @@ options:
     description:
       - Name of Network Adapter Interface. For example, C(Ethernet0) or C(*).
     type: list
+    elements: str
     required: yes
   state:
     description:
@@ -38,6 +39,7 @@ options:
       - C(ms_pacer) (QoS Packet Scheduler)
       - If you'd like to set custom adapters like 'Juniper Network Service', get the I(component_id) by running the C(Get-NetAdapterBinding) cmdlet.
     type: list
+    elements: str
     required: yes
 
 author:
