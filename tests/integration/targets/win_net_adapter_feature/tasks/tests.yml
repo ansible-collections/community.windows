@@ -327,4 +327,3 @@
       - "{{ check_mode_test1_Ethernet0_ms_server_status.stdout_lines[0] == 'True' }}"
       - "{{ check_mode_test1_Ethernet1_ms_tcpip6_status.stdout_lines[0] == 'True' }}"
       - "{{ check_mode_test1_Ethernet1_ms_server_status.stdout_lines[0] == 'True' }}"
-
