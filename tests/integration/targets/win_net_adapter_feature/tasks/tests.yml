@@ -40,17 +40,17 @@
 ############################################
 ### Normal tests ###
 ############################################
-- name: Before execution of normal tests, disable ms_tcpip6 of Ethernet0.
+- name: disable ms_tcpip6 of Ethernet0 before execution of normal tests.
   win_shell: 'Disable-NetAdapterBinding -Name Ethernet0 -ComponentID ms_tcpip6'
 
-- name: Before execution of normal tests, disable ms_tcpip6 of Ethernet0.
+- name: get the status of ms_tcpip6 of Ethernet0 before execution of normal tests.
   win_shell: (Get-NetAdapterBinding -Name Ethernet0 -ComponentID ms_tcpip6).Enabled
   register: before_normal_tests
 
-- name: assert that before_normal_tests is false
+- name: assert that the status of ms_tcpip6 is 'disabled' before execution of normal tests.
   assert:
     that:
-      - before_normal_tests.stdout_lines[0] is 'False'
+      - "{{ before_normal_tests.stdout_lines[0] == 'False' }}"
 
 ############################################
 ### Normal tests1 ###
@@ -60,17 +60,17 @@
   ansible.windows.win_net_adapter_feature:
     interface: 'Ethernet0'
     component_id: ms_tcpip6
-    register: normal_test1
+  register: normal_test1
 
-- name: Get the status of ms_tcpip6 of Ethernet0 after executing normal_test1.
+- name: get the status of ms_tcpip6 of Ethernet0 after executing normal_test1.
   win_shell: (Get-NetAdapterBinding -Name Ethernet0 -ComponentID ms_tcpip6).Enabled
   register: normal_test1_status
 
-- name: assert that changed is true
+- name: assert that changed is true and the status turns 'enabled'.
   assert:
     that:
       - normal_test1 is changed
-      - normal_test1_status.stdout_lines[0] is 'True'
+      - "{{ normal_test1_status.stdout_lines[0] == 'True' }}"
 
 ############################################
 ### Normal tests2 (checking idempotency) ###
@@ -80,17 +80,17 @@
     interface: 'Ethernet0'
     state: enabled
     component_id: ms_tcpip6
-    register: normal_test2
+  register: normal_test2
 
-- name: Get the status of ms_tcpip6 of Ethernet0 after executing normal_test2.
+- name: get the status of ms_tcpip6 of Ethernet0 after executing normal_test2.
   win_shell: (Get-NetAdapterBinding -Name Ethernet0 -ComponentID ms_tcpip6).Enabled
   register: normal_test2_status
 
-- name: assert that changed is false
+- name: assert that changed is false and the status is still remained 'enabled'.
   assert:
     that:
-      - normal_test2 is changed
-      - normal_test2_status.stdout_lines[0] is 'True'
+      - normal_test2 is not changed
+      - "{{ normal_test2_status.stdout_lines[0] == 'True' }}"
 
 ############################################
 ### Normal tests3 ###
@@ -100,17 +100,17 @@
     interface: 'Ethernet0'
     state: disabled
     component_id: ms_tcpip6
-    register: normal_test3
+  register: normal_test3
 
-- name: Get the status of ms_tcpip6 of Ethernet0 after executing normal_test3.
+- name: get the status of ms_tcpip6 of Ethernet0 after executing normal_test3.
   win_shell: (Get-NetAdapterBinding -Name Ethernet0 -ComponentID ms_tcpip6).Enabled
   register: normal_test3_status
 
-- name: assert that changed is false
+- name: assert that changed is true and the status turns 'disabled'.
   assert:
     that:
       - normal_test3 is changed
-      - normal_test3_status.stdout_lines[0] is 'False'
+      - "{{ normal_test3_status.stdout_lines[0] == 'False' }}"
 
 ############################################
 ### Normal tests4 ###
@@ -120,18 +120,18 @@
     interface: '*'
     state: enabled
     component_id: ms_tcpip6
-    register: normal_test4
+  register: normal_test4
 
-- name: Get the status of ms_tcpip6 of Ethernet0 after executing normal_test4.
+- name: get the status of ms_tcpip6 of Ethernet0 after executing normal_test4.
   win_shell: (Get-NetAdapterBinding -Name * -ComponentID ms_tcpip6).Enabled
   register: normal_test4_status
 
-- name: assert that changed is true
+- name: assert that changed is true and each status turns 'enabled'.
   assert:
     that:
       - normal_test4 is changed
-      - normal_test4_status.stdout_lines[0] is 'True'
-      - normal_test4_status.stdout_lines[1] is 'True'
+      - "{{ normal_test4_status.stdout_lines[0] == 'True' }}"
+      - "{{ normal_test4_status.stdout_lines[1] == 'True' }}"
 
 ############################################
 ### Normal tests5 ###
@@ -141,18 +141,18 @@
     interface: '*'
     state: disabled
     component_id: ms_tcpip6
-    register: normal_test5
+  register: normal_test5
 
-- name: Get the status of ms_tcpip6 of Ethernet0 after executing normal_test5.
+- name: get the status of ms_tcpip6 of Ethernet0 after executing normal_test5.
   win_shell: (Get-NetAdapterBinding -Name * -ComponentID ms_tcpip6).Enabled
   register: normal_test5_status
 
-- name: assert that changed is true
+- name: assert that changed is true and each status turns 'disabled'.
   assert:
     that:
       - normal_test5 is changed
-      - normal_test5_status.stdout_lines[0] is 'False'
-      - normal_test5_status.stdout_lines[1] is 'False'
+      - "{{ normal_test5_status.stdout_lines[0] == 'False' }}"
+      - "{{ normal_test5_status.stdout_lines[1] == 'False' }}"
 
 ############################################
 ### Normal tests6 ###
@@ -164,22 +164,22 @@
     - 'Ethernet1'
     state: enabled
     component_id: ms_tcpip6
-    register: normal_test6
+  register: normal_test6
 
-- name: Get the status of ms_tcpip6 of Ethernet0 after executing normal_test6.
+- name: get the status of ms_tcpip6 of Ethernet0 after executing normal_test6.
   win_shell: (Get-NetAdapterBinding -Name Ethernet0 -ComponentID ms_tcpip6).Enabled
   register: normal_test6_Ethernet0_status
 
-- name: Get the status of ms_tcpip6 of Ethernet1 after executing normal_test6.
+- name: get the status of ms_tcpip6 of Ethernet1 after executing normal_test6.
   win_shell: (Get-NetAdapterBinding -Name Ethernet1 -ComponentID ms_tcpip6).Enabled
   register: normal_test6_Ethernet1_status
 
-- name: assert that changed is true
+- name: assert that changed is true and each status turns 'enabled'.
   assert:
     that:
       - normal_test6 is changed
-      - normal_test6_Ethernet0_status.stdout_lines[0] is 'True'
-      - normal_test6_Ethernet1_status.stdout_lines[0] is 'True'
+      - "{{ normal_test6_Ethernet0_status.stdout_lines[0] == 'True' }}"
+      - "{{ normal_test6_Ethernet1_status.stdout_lines[0] == 'True' }}"
 
 ############################################
 ### Normal tests7 ###
@@ -192,22 +192,22 @@
     component_id:
     - ms_tcpip6
     - ms_server
-    register: normal_test7
+  register: normal_test7
 
-- name: Get the status of ms_tcpip6 of Ethernet0 after executing normal_test7.
+- name: get the status of ms_tcpip6 of Ethernet0 after executing normal_test7.
   win_shell: (Get-NetAdapterBinding -Name Ethernet0 -ComponentID ms_tcpip6).Enabled
   register: normal_test7_ms_tcpip6_status
 
-- name: Get the status of ms_server of Ethernet0 after executing normal_test7.
+- name: get the status of ms_server of Ethernet0 after executing normal_test7.
   win_shell: (Get-NetAdapterBinding -Name Ethernet0 -ComponentID ms_server).Enabled
   register: normal_test7_ms_server_status
 
-- name: assert that changed is true
+- name: assert that changed is true and each status turns 'disabled'.
   assert:
     that:
       - normal_test7 is changed
-      - normal_test7_ms_tcpip6_status.stdout_lines[0] is 'False'
-      - normal_test7_ms_server_status.stdout_lines[0] is 'False'
+      - "{{ normal_test7_ms_tcpip6_status.stdout_lines[0] == 'False' }}"
+      - "{{ normal_test7_ms_server_status.stdout_lines[0] == 'False' }}"
 
 ############################################
 ### Normal tests8 ###
@@ -221,32 +221,32 @@
     component_id:
     - ms_tcpip6
     - ms_server
-    register: normal_test8
+  register: normal_test8
 
-- name: Get the status of ms_tcpip6 of Ethernet0 after executing normal_test8.
+- name: get the status of ms_tcpip6 of Ethernet0 after executing normal_test8.
   win_shell: (Get-NetAdapterBinding -Name Ethernet0 -ComponentID ms_tcpip6).Enabled
   register: normal_test8_Ethernet0_ms_tcpip6_status
 
-- name: Get the status of ms_server of Ethernet0 after executing normal_test8.
+- name: get the status of ms_server of Ethernet0 after executing normal_test8.
   win_shell: (Get-NetAdapterBinding -Name Ethernet0 -ComponentID ms_server).Enabled
   register: normal_test8_Ethernet0_ms_server_status
 
-- name: Get the status of ms_tcpip6 of Ethernet1 after executing normal_test8.
+- name: get the status of ms_tcpip6 of Ethernet1 after executing normal_test8.
   win_shell: (Get-NetAdapterBinding -Name Ethernet1 -ComponentID ms_tcpip6).Enabled
   register: normal_test8_Ethernet1_ms_tcpip6_status
 
-- name: Get the status of ms_server of Ethernet1 after executing normal_test8.
+- name: get the status of ms_server of Ethernet1 after executing normal_test8.
   win_shell: (Get-NetAdapterBinding -Name Ethernet1 -ComponentID ms_server).Enabled
   register: normal_test8_Ethernet1_ms_server_status
 
-- name: assert that changed is true
+- name: assert that changed is true and each status turns 'enabled'.
   assert:
     that:
       - normal_test8 is changed
-      - normal_test8_Ethernet0_ms_tcpip6_status.stdout_lines[0] is 'True'
-      - normal_test8_Ethernet0_ms_server_status.stdout_lines[0] is 'True'
-      - normal_test8_Ethernet1_ms_tcpip6_status.stdout_lines[0] is 'True'
-      - normal_test8_Ethernet1_ms_server_status.stdout_lines[0] is 'True'
+      - "{{ normal_test8_Ethernet0_ms_tcpip6_status.stdout_lines[0] == 'True' }}"
+      - "{{ normal_test8_Ethernet0_ms_server_status.stdout_lines[0] == 'True' }}"
+      - "{{ normal_test8_Ethernet1_ms_tcpip6_status.stdout_lines[0] == 'True' }}"
+      - "{{ normal_test8_Ethernet1_ms_server_status.stdout_lines[0] == 'True' }}"
 
 ############################################
 ### Normal tests9 (checking idempotency) ###
@@ -261,32 +261,32 @@
     component_id:
     - ms_tcpip6
     - ms_server
-    register: normal_test9
+  register: normal_test9
 
-- name: Get the status of ms_tcpip6 of Ethernet0 after executing normal_test9.
+- name: get the status of ms_tcpip6 of Ethernet0 after executing normal_test9.
   win_shell: (Get-NetAdapterBinding -Name Ethernet0 -ComponentID ms_tcpip6).Enabled
   register: normal_test9_Ethernet0_ms_tcpip6_status
 
-- name: Get the status of ms_server of Ethernet0 after executing normal_test9.
+- name: get the status of ms_server of Ethernet0 after executing normal_test9.
   win_shell: (Get-NetAdapterBinding -Name Ethernet0 -ComponentID ms_server).Enabled
   register: normal_test9_Ethernet0_ms_server_status
 
-- name: Get the status of ms_tcpip6 of Ethernet1 after executing normal_test9.
+- name: get the status of ms_tcpip6 of Ethernet1 after executing normal_test9.
   win_shell: (Get-NetAdapterBinding -Name Ethernet1 -ComponentID ms_tcpip6).Enabled
   register: normal_test9_Ethernet1_ms_tcpip6_status
 
-- name: Get the status of ms_server of Ethernet1 after executing normal_test9.
+- name: get the status of ms_server of Ethernet1 after executing normal_test9.
   win_shell: (Get-NetAdapterBinding -Name Ethernet1 -ComponentID ms_server).Enabled
   register: normal_test9_Ethernet1_ms_server_status
 
-- name: assert that changed is false
+- name: assert that changed is false and each status is still remained 'enabled'.
   assert:
     that:
-      - normal_test9 is changed
-      - normal_test9_Ethernet0_ms_tcpip6_status.stdout_lines[0] is 'True'
-      - normal_test9_Ethernet0_ms_server_status.stdout_lines[0] is 'True'
-      - normal_test9_Ethernet1_ms_tcpip6_status.stdout_lines[0] is 'True'
-      - normal_test9_Ethernet1_ms_server_status.stdout_lines[0] is 'True'
+      - normal_test9 is not changed
+      - "{{ normal_test9_Ethernet0_ms_tcpip6_status.stdout_lines[0] == 'True' }}"
+      - "{{ normal_test9_Ethernet0_ms_server_status.stdout_lines[0] == 'True' }}"
+      - "{{ normal_test9_Ethernet1_ms_tcpip6_status.stdout_lines[0] == 'True' }}"
+      - "{{ normal_test9_Ethernet1_ms_server_status.stdout_lines[0] == 'True' }}"
 
 ############################################
 ### Check mode tests ###
@@ -303,28 +303,28 @@
   check_mode: yes
   register: check_mode_test1
 
-- name: Get the status of ms_tcpip6 of Ethernet0 after executing check_mode_test1.
+- name: get the status of ms_tcpip6 of Ethernet0 after executing check_mode_test1.
   win_shell: (Get-NetAdapterBinding -Name Ethernet0 -ComponentID ms_tcpip6).Enabled
   register: check_mode_test1_Ethernet0_ms_tcpip6_status
 
-- name: Get the status of ms_server of Ethernet0 after executing check_mode_test1.
+- name: get the status of ms_server of Ethernet0 after executing check_mode_test1.
   win_shell: (Get-NetAdapterBinding -Name Ethernet0 -ComponentID ms_server).Enabled
   register: check_mode_test1_Ethernet0_ms_server_status
 
-- name: Get the status of ms_tcpip6 of Ethernet1 after executing check_mode_test1.
+- name: get the status of ms_tcpip6 of Ethernet1 after executing check_mode_test1.
   win_shell: (Get-NetAdapterBinding -Name Ethernet1 -ComponentID ms_tcpip6).Enabled
   register: check_mode_test1_Ethernet1_ms_tcpip6_status
 
-- name: Get the status of ms_server of Ethernet1 after executing check_mode_test1.
+- name: get the status of ms_server of Ethernet1 after executing check_mode_test1.
   win_shell: (Get-NetAdapterBinding -Name Ethernet1 -ComponentID ms_server).Enabled
   register: check_mode_test1_Ethernet1_ms_server_status
 
-- name: assert that changed is true and each status is still remained 'True'.
+- name: assert that changed is true and each status is still remained 'enabled'.
   assert:
     that:
       - check_mode_test1 is changed
-      - check_mode_test1_Ethernet0_ms_tcpip6_status.stdout_lines[0] is 'True'
-      - check_mode_test1_Ethernet0_ms_server_status.stdout_lines[0] is 'True'
-      - check_mode_test1_Ethernet1_ms_tcpip6_status.stdout_lines[0] is 'True'
-      - check_mode_test1_Ethernet1_ms_server_status.stdout_lines[0] is 'True'
+      - "{{ check_mode_test1_Ethernet0_ms_tcpip6_status.stdout_lines[0] == 'True' }}"
+      - "{{ check_mode_test1_Ethernet0_ms_server_status.stdout_lines[0] == 'True' }}"
+      - "{{ check_mode_test1_Ethernet1_ms_tcpip6_status.stdout_lines[0] == 'True' }}"
+      - "{{ check_mode_test1_Ethernet1_ms_server_status.stdout_lines[0] == 'True' }}"
 
