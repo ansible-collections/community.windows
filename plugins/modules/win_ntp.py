@@ -13,7 +13,7 @@ requirements:
   - This module requires Windows Server 2012R2 or Newer
 description:
   - Manage Windows NTP Client
-  - Adds, Removes and Modifies NTP Server in windows machine. 
+  - Adds, Removes and Modifies NTP Server in windows machine.
 options:
   peerlist:
     description:
@@ -50,7 +50,7 @@ options:
   sync_clock:
     description:
       - It resynchronize its clock as soon as possible.
-      - To update the ntp server with new peerlist. 
+      - To update the ntp server with new peerlist.
     elements: str
     type: list
     default: time.windows.com,0x9
@@ -69,8 +69,8 @@ EXAMPLES = r'''
     enabled: false
     type: NTP
 
-- name: Ensure forwarder has specific DNS servers
-  community.windows.win_dns_zone:
+- name: Enable npt service with multiple peers to get sync from
+  community.windows.win_ntp:
     enabled: true
     peerlist:
       - time.google.com
