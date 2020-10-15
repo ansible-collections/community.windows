@@ -1,0 +1,23 @@
+- name: ensure w32time service is installed
+  ansible.windows.win_service:
+    name: W32Time
+    state: started
+  register: service_info
+
+- name: ntp default settings in the beginning
+  ansible.windows.win_shell: |
+                     net stop w32time
+                     w32tm /unregister
+                     w32tm /register
+                     net start w32time
+                       
+- name: run basic operations
+  import_tasks: test.yml
+
+- name: ntp default settings at the end
+  ansible.windows.win_shell: |
+                     net stop w32time
+                     w32tm /unregister
+                     w32tm /register
+                     net start w32time
+

@@ -1,0 +1,79 @@
+- name: Enable ntp service in check mode
+  ansible.windows.win_ntp:
+    enabled: true
+    type: NTP
+  check_mode: yes
+  register: enable_check
+
+- name: assert enable check mode
+  assert:
+    that:
+      - enable_check is changed
+
+- name: enable ntp service locally
+  ansible.windows.win_ntp:
+    enabled: true
+    type: NTP
+  register: enable_locally
+
+- name: assert enable locally
+  assert:
+    that:
+      - assert_locally is changed
+
+- name: enable ntp service locally (idempotent)
+  ansible.windows.win_ntp:
+    enabled: true
+    type: NTP
+  register: enable_idempotent
+
+- name: assert enable ntp locally (itempotent)
+  assert:
+    that:
+      - not enable_idempotent is changed
+
+- name: enable ntp service with peerlist check_mode
+  ansible.windows.win_ntp:
+    peerlist:
+      - time.windows.com 
+      - time.google.com
+      - time.apple.com
+    type: NTP
+    enabled: true
+  check_mode: yes
+  register: peerlist_check
+
+- name: assert peerlist check_mode
+  assert:
+    that:
+      - peerlist_check is changed
+
+- name: enable ntp service with peerlist 
+  ansible.windows.win_ntp:
+    peerlist:
+      - time.windows.com 
+      - time.google.com
+      - time.apple.com
+    type: NTP
+    enabled: true
+  register: peerlist_local
+
+- name: assert ntp peerlist locally
+  assert:
+    that:
+      - peerlist_local is changed
+
+- name: enable ntp service with peerlist (idempotent)
+  ansible.windows.win_ntp:
+    peerlist:
+      - time.windows.com 
+      - time.google.com
+      - time.apple.com
+    type: NTP
+    enabled: true
+  register: peerlist_local
+
+- name: assert ntp peerlist locally
+  assert:
+    that:
+      - not peerlist_local is changed
