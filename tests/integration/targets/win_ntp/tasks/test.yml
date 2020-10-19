@@ -1,5 +1,5 @@
 - name: Enable ntp service in check mode
-  ansible.windows.win_ntp:
+  win_ntp:
     enabled: true
     type: NTP
   check_mode: yes
@@ -8,10 +8,10 @@
 - name: assert enable check mode
   assert:
     that:
-      - enable_check is changed
+    - enable_check.changed == true
 
 - name: enable ntp service locally
-  ansible.windows.win_ntp:
+  win_ntp:
     enabled: true
     type: NTP
   register: enable_locally
@@ -19,10 +19,10 @@
 - name: assert enable locally
   assert:
     that:
-      - assert_locally is changed
+      - enable_locally.changed == true
 
 - name: enable ntp service locally (idempotent)
-  ansible.windows.win_ntp:
+  win_ntp:
     enabled: true
     type: NTP
   register: enable_idempotent
@@ -30,10 +30,10 @@
 - name: assert enable ntp locally (itempotent)
   assert:
     that:
-      - not enable_idempotent is changed
+    - enable_idempotent.changed == false
 
 - name: enable ntp service with peerlist check_mode
-  ansible.windows.win_ntp:
+  win_ntp:
     peerlist:
       - time.windows.com 
       - time.google.com
@@ -46,10 +46,10 @@
 - name: assert peerlist check_mode
   assert:
     that:
-      - peerlist_check is changed
+    - peerlist_check.changed == true
 
 - name: enable ntp service with peerlist 
-  ansible.windows.win_ntp:
+  win_ntp:
     peerlist:
       - time.windows.com 
       - time.google.com
@@ -61,10 +61,10 @@
 - name: assert ntp peerlist locally
   assert:
     that:
-      - peerlist_local is changed
+    - peerlist_local.changed == true
 
 - name: enable ntp service with peerlist (idempotent)
-  ansible.windows.win_ntp:
+  win_ntp:
     peerlist:
       - time.windows.com 
       - time.google.com
@@ -76,4 +76,35 @@
 - name: assert ntp peerlist locally
   assert:
     that:
-      - not peerlist_local is changed
+    - peerlist_local.changed == false
+
+- name: enable default factory settings in check_mode
+  win_ntp:
+    factory_default: true
+  check_mode: yes
+  register: default_checkmode
+
+- name: assert default settings
+  assert:
+    that:
+    - default_checkmode.changed == true
+
+- name: enable default factory settings locally
+  win_ntp:
+    factory_default: true
+  register: default_locally
+
+- name: assert default factory settings
+  assert:
+    that:
+    - default_locally.changed == true
+
+- name: enable default factory settings locally(Idempotent)
+  win_ntp:
+    factory_default: true
+  register: default_locally
+
+- name: assert default factory settings (Idempotent)
+  assert:
+    that:
+    - default_locally.changed == false

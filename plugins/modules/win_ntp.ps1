@@ -83,7 +83,7 @@ if( $outputItem.ConfiguredNTPServerName -notcontains $outputItem.SourceName ) {
 }
 
 try {
-    $ntpServerName = Get-ItemProperty -Path $parametersRegPath -Name 'NtpServer' -ErrorAction SilentlyContinue | Select-Object -ExpandProperty NtpServer
+    $ntpServerName = Get-ItemProperty -LiteralPath $parametersRegPath -Name 'NtpServer' -ErrorAction SilentlyContinue | Select-Object -ExpandProperty NtpServer
     if($type -ne 'NT5DS' -and $null -ne $peerlist -and $peerlist.Count -gt 0) {
       $peerlist =$peerlist | ForEach-Object{
           if ($_ -Like "*,0x9") {$_} else {"$_,0x9"}
@@ -92,7 +92,7 @@ try {
           if(-Not $ntpServerName.Contains($peer)){
             $ntpServerName+= " "+ $peer
             Set-Service -Name "W32Time" -Status "Stopped" -WhatIf:$check_mode
-            Set-ItemProperty -Path $parametersRegPath -Name 'NtpServer' -Value $ntpServerName -WhatIf:$check_mode
+            Set-ItemProperty -LiteralPath $parametersRegPath -Name 'NtpServer' -Value $ntpServerName -WhatIf:$check_mode
             Set-Service -Name "W32Time" -Status "Running" -WhatIf:$check_mode
             $result.changed = $true
           }
@@ -128,9 +128,9 @@ else {
 
 if ($type -eq "NT5DS" -and $null -ne $cross_site_sync_flags) {
   try {
-    $current_cross_site_flag = Get-ItemProperty -Path $ntpclientRegPath -Name 'CrossSiteSyncFlags' -ErrorAction SilentlyContinue | Select-Object -ExpandProperty CrossSiteSyncFlags
+    $current_cross_site_flag = Get-ItemProperty -LiteralPath $ntpclientRegPath -Name 'CrossSiteSyncFlags' -ErrorAction SilentlyContinue | Select-Object -ExpandProperty CrossSiteSyncFlags
     if($current_cross_site_flag -ne $cross_site_sync_flags) {
-      Set-ItemProperty -Path $ntpclientRegPath -Name "CrossSiteSyncFlags" -Value $cross_site_sync_flags -WhatIf:$check_mode
+      Set-ItemProperty -LiteralPath $ntpclientRegPath -Name "CrossSiteSyncFlags" -Value $cross_site_sync_flags -WhatIf:$check_mode
       $result.changed = $true
     }
   }
@@ -139,9 +139,9 @@ if ($type -eq "NT5DS" -and $null -ne $cross_site_sync_flags) {
   }
 }
 try {
-    $currentNtpType = (Get-ItemProperty -Path $parametersRegPath -Name 'Type').Type
+    $currentNtpType = (Get-ItemProperty -LiteralPath $parametersRegPath -Name 'Type').Type
     if ($null -ne $type -and $type -ne $currentNtpType) {
-      Set-ItemProperty -Path $parametersRegPath -Name 'Type' -Value $type -WhatIf:$check_mode
+      Set-ItemProperty -LiteralPath $parametersRegPath -Name 'Type' -Value $type -WhatIf:$check_mode
       $result.changed = $true
     }
 }
@@ -149,9 +149,9 @@ catch {
     Fail-Json $result "Type is invalid and must be one of 'NoSync','AllSync','NTP','NT5DS'."
 }
 
-[bool]$isEnable = (Get-ItemProperty -Path $ntpclientRegPath -Name 'Enabled').Enabled
+[bool]$isEnable = (Get-ItemProperty -LiteralPath $ntpclientRegPath -Name 'Enabled').Enabled
     if ($enabled -ne $isEnable) {
-        Set-ItemProperty -Path $ntpclientRegPath -Name "Enabled" -Value $enabled -WhatIf:$check_mode
+        Set-ItemProperty -LiteralPath $ntpclientRegPath -Name "Enabled" -Value $enabled -WhatIf:$check_mode
         $result.changed = $true
     }
 
