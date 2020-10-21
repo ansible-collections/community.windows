@@ -8,7 +8,7 @@
 - name: assert enable check mode
   assert:
     that:
-    - enable_check.changed == true
+    - enable_check.changed == false
 
 - name: enable ntp service locally
   win_ntp:
@@ -19,7 +19,7 @@
 - name: assert enable locally
   assert:
     that:
-      - enable_locally.changed == true
+      - enable_locally.changed == false
 
 - name: enable ntp service locally (idempotent)
   win_ntp:
@@ -78,6 +78,30 @@
     that:
     - peerlist_local.changed == false
 
+- name: sync the time from latest peerlist checkmode
+  win_ntp:
+    sync_clock: true
+  check_mode: yes
+  register: sync_checkmode
+
+- name: assert sync clock in check mode
+  assert:
+    that:
+    - sync_checkmode.changed == true
+    - sync_checkmode.synced == true
+
+- name: sync the time from latest peerlist not in checkmode
+  win_ntp:
+    sync_clock: true
+  check_mode: no
+  register: sync_checkmode
+
+- name: assert sync clock not in check mode
+  assert:
+    that:
+    - sync_checkmode.changed == true
+    - sync_checkmode.synced == true
+
 - name: enable default factory settings in check_mode
   win_ntp:
     factory_default: true
@@ -97,7 +121,8 @@
 - name: assert default factory settings
   assert:
     that:
-    - default_locally.changed == true
+    - default_locally.changed == false
+    - default_locally.source_name == "Local CMOS Clock"
 
 - name: enable default factory settings locally(Idempotent)
   win_ntp:

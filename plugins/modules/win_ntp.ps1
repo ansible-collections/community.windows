@@ -47,11 +47,11 @@ if ($null -ne $time_zone -and $current_time_zone -ne $time_zone) {
 try {
     $service = Get-Service -Name "W32Time"
     if ($service.Status -eq "Stopped") {
-      Set-Service -Name "W32Time" -Status "Running" -WhatIf:$check_mode
+      Set-Service -Name "W32Time" -Status "Running"
     }
 }
 catch {
-    Fail.Json $result "The service has not been started."
+    Fail-Json $result "The service has not been started."
 }
 
 try {
@@ -69,7 +69,7 @@ try {
     $result.source_name = $outputItem.SourceName
 }
 catch {
-    Fail.Json $result "Cannot fetch the current DomainName or Source."
+    Fail-Json $result "Cannot fetch the current DomainName or Source."
 }
 
 $parametersRegPath = "HKLM:\System\CurrentControlSet\Services\W32Time\Parameters"
@@ -118,7 +118,7 @@ else {
     $outputItem.LastTimeSyncElapsedSeconds = [int]((Get-Date)-$outputItem.LastTimeSynchronizationDateTime).TotalSeconds
     $outputItem.StatusDateTime =$true
 }
-if ($outputItem.LastTimeSyncElapsedSeconds -eq $null -or $outputItem.LastTimeSyncElapsedSeconds -lt 0 -or $outputItem.LastTimeSyncElapsedSeconds -gt 7800) {
+if ($null -eq $outputItem.LastTimeSyncElapsedSeconds -or $outputItem.LastTimeSyncElapsedSeconds -lt 0 -or $outputItem.LastTimeSyncElapsedSeconds -gt 7800) {
     $outputItem.StatusLastTimeSynchronization = $false
 }
 else {
@@ -169,10 +169,10 @@ catch {
 
 if ($factory_default -eq "true" -and $outputItem.SourceNameRaw  -ne 'Local CMOS Clock') {
     try {
-      Set-Service -Name "W32Time" -Status "Stopped" -WhatIf:$check_mode
+      Set-Service -Name "W32Time" -Status "Stopped"
       $w32tm_unregister = & 'w32tm' '/unregister'
       $w32tm_register = & 'w32tm' '/register'
-      Set-Service -Name "W32Time" -Status "Running" -WhatIf:$check_mode
+      Set-Service -Name "W32Time" -Status "Running"
       $result.changed = $true
     }
     catch {
