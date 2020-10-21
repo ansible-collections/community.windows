@@ -111,7 +111,7 @@
 - name: assert default settings
   assert:
     that:
-    - default_checkmode.changed == true
+    - default_checkmode.changed == false
 
 - name: enable default factory settings locally
   win_ntp:

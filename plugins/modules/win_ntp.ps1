@@ -158,7 +158,7 @@ catch {
 try {
     $result.synced = $false
     if($sync_clock -eq $true) {
-      $resync = & 'w32tm' '/resync'
+      & 'w32tm' '/resync'
       $result.synced = $true
       $result.changed = $true
     }
@@ -170,8 +170,8 @@ catch {
 if ($factory_default -eq "true" -and $outputItem.SourceNameRaw  -ne 'Local CMOS Clock') {
     try {
       Set-Service -Name "W32Time" -Status "Stopped"
-      $w32tm_unregister = & 'w32tm' '/unregister'
-      $w32tm_register = & 'w32tm' '/register'
+      & 'w32tm' '/unregister'
+      & 'w32tm' '/register'
       Set-Service -Name "W32Time" -Status "Running"
       $result.changed = $true
     }
