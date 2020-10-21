@@ -126,7 +126,7 @@ if ($null -ne $domain_server) {
 Function Get-PrincipalGroups {
     Param ($identity, $args_extra)
     try{
-        $groups = Get-ADPrincipalGroupMembership -Identity $identity @args_extra -ErrorAction Stop
+        $groups = Get-ADPrincipalGroupMembership -Identity $identity @args_extra -Server $domain_server -ErrorAction Stop
     } catch {
         Add-Warning -obj $result -message "Failed to enumerate user groups but continuing on.: $($_.Exception.Message)"
         return @()
