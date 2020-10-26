@@ -80,6 +80,13 @@ options:
       - At least one server is required.
     elements: str
     type: list
+  computer_name:
+    description:
+      - Specifies a DNS server.
+      - You can specify an IP address or any value that resolves to an IP
+        address, such as a fully qualified domain name (FQDN), host name, or
+        NETBIOS name.
+    type: str
 '''
 
 EXAMPLES = r'''
