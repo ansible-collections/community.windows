@@ -8,6 +8,7 @@
 DOCUMENTATION = r'''
 ---
 module: win_net_adapter_feature
+version_added: 1.2.0
 short_description: Enable or disable certain network adapters.
 description:
   - Enable or disable some network components of a certain network adapter or all the network adapters.
