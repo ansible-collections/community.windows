@@ -1,0 +1,3 @@
+minor_changes:
+    - win_dns_record - Added ``server`` to specify the DNS server to connect to when managing the zone object. This replaces the ``computer_name`` option.
+    - win_dns_zone - Added ``server`` to specify the DNS server to connect to when managing the zone object
