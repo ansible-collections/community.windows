@@ -1,0 +1,284 @@
+- name: fail when interface isn't set
+  win_net_adapter_feature:
+    state: enabled
+    component_id: ms_tcpip6
+  register: failed_task
+  failed_when: not failed_task is failed
+
+- name: fail when component_id isn't set
+  win_net_adapter_feature:
+    interface: '{{ network_adapter_name }}'
+    state: enabled
+  register: failed_task
+  failed_when: not failed_task is failed
+
+- name: fail when interface doesn't exist
+  win_net_adapter_feature:
+    interface: Ethernet10
+    state: enabled
+    component_id: ms_tcpip6
+  register: failed_task
+  failed_when: not failed_task is failed
+
+- name: fail when state is inapppropriate
+  win_net_adapter_feature:
+    interface: '{{ network_adapter_name }}'
+    state: disabled_inappropriate
+    component_id: ms_tcpip6
+  register: failed_task
+  failed_when: not failed_task is failed
+
+- name: fail when component_id is inapppropriate
+  win_net_adapter_feature:
+    interface: '{{ network_adapter_name }}'
+    state: disabled
+    component_id: inappropriate_component
+  register: failed_task
+  failed_when: not failed_task is failed
+
+- name: disable ms_tcpip6 before execution of normal tests.
+  ansible.windows.win_shell: Disable-NetAdapterBinding -Name '{{ network_adapter_name }}' -ComponentID ms_tcpip6
+
+- name: get the status of ms_tcpip6 before execution of normal tests.
+  ansible.windows.win_shell: (Get-NetAdapterBinding -Name '{{ network_adapter_name }}' -ComponentID ms_tcpip6).Enabled
+  register: before_normal_tests
+
+- name: assert that the status of ms_tcpip6 is 'disabled' before execution of normal tests.
+  assert:
+    that:
+      - before_normal_tests.stdout_lines[0] == 'False'
+
+- name: enable an interface of ms_tpip6 when state isn't set (because the default state is 'enabled')
+  win_net_adapter_feature:
+    interface: '{{ network_adapter_name }}'
+    component_id: ms_tcpip6
+  register: enable_single
+
+- name: get the status of enable an interface of ms_tpip6
+  ansible.windows.win_shell: (Get-NetAdapterBinding -Name '{{ network_adapter_name }}' -ComponentID ms_tcpip6).Enabled
+  register: enable_single_actual
+
+- name: assert that changed is true and the status turns 'enabled'.
+  assert:
+    that:
+      - enable_single is changed
+      - enable_single_actual.stdout_lines[0] == 'True'
+
+- name: enable an interface of ms_tcpip6
+  win_net_adapter_feature:
+    interface: '{{ network_adapter_name }}'
+    state: enabled
+    component_id: ms_tcpip6
+  register: enable_single_again
+
+- name: get the status of enable an interface of ms_tcpip6
+  ansible.windows.win_shell: (Get-NetAdapterBinding -Name '{{ network_adapter_name }}' -ComponentID ms_tcpip6).Enabled
+  register: enable_single_again_actual
+
+- name: assert that changed is false and the status is still remained 'enabled'.
+  assert:
+    that:
+      - enable_single_again is not changed
+      - enable_single_again_actual.stdout_lines[0] == 'True'
+
+- name: disable an interface of ms_tcpip6
+  win_net_adapter_feature:
+    interface: '{{ network_adapter_name }}'
+    state: disabled
+    component_id: ms_tcpip6
+  register: disable_single
+
+- name: get the status of disable an interface of ms_tcpip6
+  ansible.windows.win_shell: (Get-NetAdapterBinding -Name '{{ network_adapter_name }}' -ComponentID ms_tcpip6).Enabled
+  register: disable_single_actual
+
+- name: assert that changed is true and the status turns 'disabled'.
+  assert:
+    that:
+      - disable_single is changed
+      - disable_single_actual.stdout_lines[0] == 'False'
+
+- name: enable single component_id of multiple interface
+  win_net_adapter_feature:
+    interface:
+    - '{{ network_adapter_name }}'
+    - '{{ network_adapter_name2 }}'
+    state: enabled
+    component_id: ms_tcpip6
+  register: enable_multiple
+
+- name: get the status of disable multiple interfaces of multiple interfaces - check mode
+  ansible.windows.win_shell: |
+    $info = Get-NetAdapterBinding -Name '{{ network_adapter_name }}', '{{ network_adapter_name2 }}'
+    @{
+        '{{ network_adapter_name }}' = @{
+            ms_tcpip6 = ($info | Where-Object { $_.Name -eq '{{ network_adapter_name }}' -and $_.ComponentID -eq 'ms_tcpip6'}).Enabled
+        }
+        '{{ network_adapter_name2 }}' = @{
+            ms_tcpip6 = ($info | Where-Object { $_.Name -eq '{{ network_adapter_name2 }}' -and $_.ComponentID -eq 'ms_tcpip6'}).Enabled
+        }
+    } | ConvertTo-Json
+  register: enable_multiple_actual
+
+- name: assert that changed is true and each status turns 'enabled'.
+  assert:
+    that:
+      - enable_multiple is changed
+      - (enable_multiple_actual.stdout | from_json)[network_adapter_name]['ms_tcpip6'] == True
+      - (enable_multiple_actual.stdout | from_json)[network_adapter_name2]['ms_tcpip6'] == True
+
+- name: disable multiple component_id of multiple interfaces
+  win_net_adapter_feature:
+    interface:
+    - '{{ network_adapter_name }}'
+    - '{{ network_adapter_name2 }}'
+    state: disabled
+    component_id:
+    - ms_tcpip6
+    - ms_server
+  register: mutliple_multiple_disable
+
+- name: get the status of disable multiple component_id of multiple interfaces
+  ansible.windows.win_shell: |
+    $info = Get-NetAdapterBinding -Name '{{ network_adapter_name }}', '{{ network_adapter_name2 }}'
+    @{
+        '{{ network_adapter_name }}' = @{
+            ms_tcpip6 = ($info | Where-Object { $_.Name -eq '{{ network_adapter_name }}' -and $_.ComponentID -eq 'ms_tcpip6'}).Enabled
+            ms_server = ($info | Where-Object { $_.Name -eq '{{ network_adapter_name }}' -and $_.ComponentID -eq 'ms_server'}).Enabled
+        }
+        '{{ network_adapter_name2 }}' = @{
+            ms_tcpip6 = ($info | Where-Object { $_.Name -eq '{{ network_adapter_name2 }}' -and $_.ComponentID -eq 'ms_tcpip6'}).Enabled
+            ms_server = ($info | Where-Object { $_.Name -eq '{{ network_adapter_name2 }}' -and $_.ComponentID -eq 'ms_server'}).Enabled
+        }
+    } | ConvertTo-Json
+  register: mutliple_multiple_disable_actual
+
+- name: assert that changed is true and each status turns 'disabled'.
+  assert:
+    that:
+      - mutliple_multiple_disable is changed
+      - (mutliple_multiple_disable_actual.stdout | from_json)[network_adapter_name]['ms_tcpip6'] == False
+      - (mutliple_multiple_disable_actual.stdout | from_json)[network_adapter_name]['ms_server'] == False
+      - (mutliple_multiple_disable_actual.stdout | from_json)[network_adapter_name2]['ms_tcpip6'] == False
+      - (mutliple_multiple_disable_actual.stdout | from_json)[network_adapter_name2]['ms_server'] == False
+
+- name: enable multiple interfaces of multiple interfaces
+  win_net_adapter_feature:
+    interface:
+    - '{{ network_adapter_name }}'
+    - '{{ network_adapter_name2 }}'
+    state: enabled
+    component_id:
+    - ms_tcpip6
+    - ms_server
+  register: multiple_multiple_enable
+
+- name: get the status of disable multiple component_id of multiple interfaces
+  ansible.windows.win_shell: |
+    $info = Get-NetAdapterBinding -Name '{{ network_adapter_name }}', '{{ network_adapter_name2 }}'
+    @{
+        '{{ network_adapter_name }}' = @{
+            ms_tcpip6 = ($info | Where-Object { $_.Name -eq '{{ network_adapter_name }}' -and $_.ComponentID -eq 'ms_tcpip6'}).Enabled
+            ms_server = ($info | Where-Object { $_.Name -eq '{{ network_adapter_name }}' -and $_.ComponentID -eq 'ms_server'}).Enabled
+        }
+        '{{ network_adapter_name2 }}' = @{
+            ms_tcpip6 = ($info | Where-Object { $_.Name -eq '{{ network_adapter_name2 }}' -and $_.ComponentID -eq 'ms_tcpip6'}).Enabled
+            ms_server = ($info | Where-Object { $_.Name -eq '{{ network_adapter_name2 }}' -and $_.ComponentID -eq 'ms_server'}).Enabled
+        }
+    } | ConvertTo-Json
+  register: multiple_multiple_enable_actual
+
+- name: assert that changed is true and each status turns 'enabled'.
+  assert:
+    that:
+      - multiple_multiple_enable is changed
+      - (multiple_multiple_enable_actual.stdout | from_json)[network_adapter_name]['ms_tcpip6'] == True
+      - (multiple_multiple_enable_actual.stdout | from_json)[network_adapter_name]['ms_server'] == True
+      - (multiple_multiple_enable_actual.stdout | from_json)[network_adapter_name2]['ms_tcpip6'] == True
+      - (multiple_multiple_enable_actual.stdout | from_json)[network_adapter_name2]['ms_server'] == True
+
+- name: enable multiple interfaces of multiple interfaces - idempotent
+  win_net_adapter_feature:
+    interface:
+    - '{{ network_adapter_name }}'
+    - '{{ network_adapter_name2 }}'
+    state: enabled
+    component_id:
+    - ms_tcpip6
+    - ms_server
+  register: multiple_multiple_enable_again
+
+- name: assert that changed is true and each status turns 'enabled'.
+  assert:
+    that:
+      - multiple_multiple_enable_again is not changed
+
+- name: disable multiple interfaces of multiple interfaces - check mode
+  win_net_adapter_feature:
+    interface:
+    - '{{ network_adapter_name }}'
+    - '{{ network_adapter_name2 }}'
+    state: disabled
+    component_id:
+    - ms_tcpip6
+    - ms_server
+  check_mode: yes
+  register: mutliple_multiple_disable_check
+
+- name: get the status of disable multiple interfaces of multiple interfaces - check mode
+  ansible.windows.win_shell: |
+    $info = Get-NetAdapterBinding -Name '{{ network_adapter_name }}', '{{ network_adapter_name2 }}'
+    @{
+        '{{ network_adapter_name }}' = @{
+            ms_tcpip6 = ($info | Where-Object { $_.Name -eq '{{ network_adapter_name }}' -and $_.ComponentID -eq 'ms_tcpip6'}).Enabled
+            ms_server = ($info | Where-Object { $_.Name -eq '{{ network_adapter_name }}' -and $_.ComponentID -eq 'ms_server'}).Enabled
+        }
+        '{{ network_adapter_name2 }}' = @{
+            ms_tcpip6 = ($info | Where-Object { $_.Name -eq '{{ network_adapter_name2 }}' -and $_.ComponentID -eq 'ms_tcpip6'}).Enabled
+            ms_server = ($info | Where-Object { $_.Name -eq '{{ network_adapter_name2 }}' -and $_.ComponentID -eq 'ms_server'}).Enabled
+        }
+    } | ConvertTo-Json
+  register: mutliple_multiple_disable_check_actual
+
+- name: assert disable multiple interfaces of multiple interfaces - check mode
+  assert:
+    that:
+      - mutliple_multiple_disable_check is changed
+      - (mutliple_multiple_disable_check_actual.stdout | from_json)[network_adapter_name]['ms_tcpip6'] == True
+      - (mutliple_multiple_disable_check_actual.stdout | from_json)[network_adapter_name]['ms_server'] == True
+      - (mutliple_multiple_disable_check_actual.stdout | from_json)[network_adapter_name2]['ms_tcpip6'] == True
+      - (mutliple_multiple_disable_check_actual.stdout | from_json)[network_adapter_name2]['ms_server'] == True
+
+- name: disable all the interfaces of ms_tcpip6
+  win_net_adapter_feature:
+    interface: '*'
+    state: disabled
+    component_id: ms_tcpip6
+  register: disable_all
+
+- name: get the status of disable all the interfaces of ms_tcpip6
+  ansible.windows.win_shell: (Get-NetAdapterBinding -Name * -ComponentID ms_tcpip6).Enabled -eq $true
+  register: disable_all_actual
+
+- name: assert that changed is true and each status turns 'enabled'.
+  assert:
+    that:
+      - disable_all is changed
+      - disable_all_actual.stdout_lines == []
+
+- name: enable all the interfaces of ms_tcpip6
+  win_net_adapter_feature:
+    interface: '*'
+    state: enabled
+    component_id: ms_tcpip6
+  register: enable_all
+
+- name: get the status of enable all the interfaces of ms_tcpip6
+  ansible.windows.win_shell: (Get-NetAdapterBinding -Name * -ComponentID ms_tcpip6).Enabled -eq $false
+  register: enable_all_actual
+
+- name: assert that changed is true and each status turns 'enabled'.
+  assert:
+    that:
+      - enable_all is changed
+      - enable_all_actual.stdout_lines == []

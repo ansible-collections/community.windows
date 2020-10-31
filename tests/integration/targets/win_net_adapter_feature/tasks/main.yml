@@ -1,0 +1,27 @@
+# We create the first adapter by depending on setup_win_device but we need a 2nd one for our tests
+- name: create 2nd dummy network adapter device
+  win_device:
+    path: '%WinDir%\Inf\netloop.inf'
+    hardware_id: '*msloop'
+    state: present
+  register: network_device_name_raw2
+
+- block:
+  - set_fact:
+      network_device_name2: '{{ network_device_name_raw2.name }}'
+
+  - name: get name of the dummy network adapter
+    ansible.windows.win_shell: (Get-CimInstance -Class Win32_NetworkAdapter -Filter "Name='{{ network_device_name2 }}'").NetConnectionID
+    changed_when: False
+    register: network_adapter_name_raw2
+
+  - set_fact:
+      network_adapter_name2: '{{ network_adapter_name_raw2.stdout | trim }}'
+
+  - include_tasks: tests.yml
+
+  always:
+  - name: remove 2nd dummy network adapter device
+    win_device:
+      name: '{{ network_device_name_raw2.name }}'
+      state: absent
