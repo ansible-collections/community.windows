@@ -15,7 +15,7 @@ $spec = @{
         state = @{ type = "str"; choices = "absent", "present"; default = "present" }
         forwarder_timeout = @{ type = "int" }
         dns_servers = @{ type = "list"; elements = "str" }
-        computer_name = @{ type = "str" }
+        server = @{ type = "str" }
     }
     supports_check_mode = $true
 }
@@ -30,12 +30,12 @@ $dynamic_update = $module.Params.dynamic_update
 $state = $module.Params.state
 $dns_servers = $module.Params.dns_servers
 $forwarder_timeout = $module.Params.forwarder_timeout
-$dns_computer_name = $module.Params.computer_name
+$server = $module.Params.server
 
 
 $extra_args = @{}
-if ($null -ne $dns_computer_name) {
-    $extra_args.ComputerName = $dns_computer_name
+if ($null -ne $server) {
+    $extra_args.ComputerName = $server
 }
 
 $parms = @{ name = $name }

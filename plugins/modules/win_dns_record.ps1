@@ -16,7 +16,7 @@ $spec = @{
         value = @{ type = "list"; elements = "str"; default = @() ; aliases=@( 'values' )}
         weight = @{ type = "int"}
         zone = @{ type = "str"; required = $true }
-        computer_name = @{ type = "str" }
+        server = @{ type = "str" }
     }
     required_if = @(,@("type", "SRV", @("port", "priority", "weight")))
     supports_check_mode = $true
@@ -33,12 +33,12 @@ $type = $module.Params.type
 $values = $module.Params.value
 $weight = $module.Params.weight
 $zone = $module.Params.zone
-$dns_computer_name = $module.Params.computer_name
+$server = $module.Params.server
 
 
 $extra_args = @{}
-if ($null -ne $dns_computer_name) {
-    $extra_args.ComputerName = $dns_computer_name
+if ($null -ne $server) {
+    $extra_args.ComputerName = $server
 }
 
 if ($state -eq 'present') {
