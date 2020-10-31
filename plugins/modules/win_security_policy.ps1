@@ -51,7 +51,13 @@ Function Invoke-SecEdit($arguments) {
 }
 
 Function Export-SecEdit() {
+    # GetTempFileName() will create a file but it doesn't have any content. This is problematic as secedit uses the
+    # encoding of the file at /cfg if it exists and because there is no BOM it will export using the "ANSI" encoding.
+    # By making sure the file exists and has a UTF-16-LE BOM we can be sure our parser reads the bytes as a string
+    # correctly.
     $secedit_ini_path = [IO.Path]::GetTempFileName()
+    Set-Content -LiteralPath $secedit_ini_path -Value '' -Encoding Unicode
+
     # while this will technically make a change to the system in check mode by
     # creating a new file, we need these values to be able to do anything
     # substantial in check mode
@@ -114,14 +120,8 @@ Function ConvertTo-Ini($ini) {
 }
 
 Function ConvertFrom-Ini($file_path) {
-    # Get-Content doesn't handle encoding in a common way, for when we finally support PowerShell Core we need to use
-    # a common way to read files using the "ANSI" encoding. We can't just use switch with -File as that clobbers the
-    # encoding when reading the file, tries to read as UTF-8.
-    $iniBytes = [IO.File]::ReadAllBytes($file_path)
-    $iniText = [Text.Encoding]::GetEncoding([CultureInfo]::CurrentCulture.TextInfo.ANSICodePage).GetString($iniBytes)
-
     $ini = @{}
-    switch -Regex ($iniText -split '\r?\n') {
+    switch -Regex -File $file_path {
         "^\[(.+)\]" {
             $section = $matches[1]
             $ini.$section = @{}
