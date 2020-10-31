@@ -1,0 +1,2 @@
+bugfixes:
+- win_security_policy - read config file with correct encoding to avoid breaking non-ASCII chars

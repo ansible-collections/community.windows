@@ -76,7 +76,10 @@ Function Import-SecEdit($ini) {
     Remove-Item -LiteralPath $secedit_db_path -Force # needs to be deleted for SecEdit.exe /import to work
 
     $ini_contents = ConvertTo-Ini -ini $ini
-    Set-Content -LiteralPath $secedit_ini_path -Value $ini_contents
+
+    # Use Unicode (UTF-16-LE) as that is the same across all PowerShell versions and we don't have to worry about
+    # changing ANSI encodings.
+    Set-Content -LiteralPath $secedit_ini_path -Value $ini_contents -Encoding Unicode
     $result.changed = $true
 
     $import_result = Invoke-SecEdit -arguments @("/configure", "/db", $secedit_db_path, "/cfg", $secedit_ini_path, "/quiet")
@@ -111,8 +114,14 @@ Function ConvertTo-Ini($ini) {
 }
 
 Function ConvertFrom-Ini($file_path) {
+    # Get-Content doesn't handle encoding in a common way, for when we finally support PowerShell Core we need to use
+    # a common way to read files using the "ANSI" encoding. We can't just use switch with -File as that clobbers the
+    # encoding when reading the file, tries to read as UTF-8.
+    $iniBytes = [IO.File]::ReadAllBytes($file_path)
+    $iniText = [Text.Encoding]::GetEncoding([CultureInfo]::CurrentCulture.TextInfo.ANSICodePage).GetString($iniBytes)
+
     $ini = @{}
-    switch -Regex -File $file_path {
+    switch -Regex ($iniText -split '\r?\n') {
         "^\[(.+)\]" {
             $section = $matches[1]
             $ini.$section = @{}
