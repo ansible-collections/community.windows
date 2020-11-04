@@ -52,9 +52,8 @@ options:
     description:
       - It resynchronize its clock as soon as possible.
       - To update the ntp server with new peerlist.
-    elements: str
-    type: list
-    default: time.windows.com,0x09
+    type: bool
+    default: false
 '''
 
 EXAMPLES = r'''
