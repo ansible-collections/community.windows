@@ -18,6 +18,7 @@ options:
   peerlist:
     description:
       - Fully qualified domain name or IP address from which computer obtain timestamp.
+    elements: str
     type: list
   type:
     description:
@@ -44,8 +45,8 @@ options:
   cross_site_sync_flags:
     description:
       - Determines whether the service chooses synchronization partners outside the domain of the computer.
-      - Thsi value is ignored if l(type=NT5DS) is not set.
-    type: int
+      - This value is ignored if C(type=NT5DS) is not set.
+    type: str
     choices: [ 0, 1, 2 ]
   sync_clock:
     description:
@@ -53,7 +54,7 @@ options:
       - To update the ntp server with new peerlist.
     elements: str
     type: list
-    default: time.windows.com,0x9
+    default: time.windows.com,0x09
 '''
 
 EXAMPLES = r'''
