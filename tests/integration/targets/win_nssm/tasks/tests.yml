@@ -252,6 +252,248 @@
     # Expected value: -v -Dtest.str=value "C:\with space\\" (backslashes doubled for jinja)
     - (str_params_again_actual.stdout|from_json).Parameters.AppParameters == '-v -Dtest.str=value "C:\\with space\\\\"'
 
+- name: install service with extra environment vars (check mode)
+  win_nssm:
+    name: '{{ test_service_name }}'
+    application: C:\Windows\System32\cmd.exe
+    start_mode: manual
+    state: present
+    app_environment:
+      foo: bar
+      baz: 2
+  register: install_service_appenv_check
+  check_mode: yes
+
+- name: get result of install service with extra environment vars (check mode)
+  ansible.windows.win_shell: nssm.exe get '{{ test_service_name }}' AppEnvironmentExtra
+  register: install_service_appenv_check_actual
+
+  ## note: this could fail (in theory) when the service is not yet 
+  ##   installed (diff mode), but because of side effects of earlier 
+  ##   tests this will actually not fail in practice, however, it is 
+  ##   not a real issue in any case
+  failed_when: false
+
+- name: assert results of install service with extra environment vars (check mode)
+  assert:
+    that:
+    - install_service_appenv_check.changed == true
+    - install_service_appenv_check_actual.stdout == '\r\n' or install_service_appenv_check_actual.stdout == ''
+
+- name: install service with extra environment vars
+  win_nssm:
+    name: '{{ test_service_name }}'
+    application: C:\Windows\System32\cmd.exe
+    start_mode: manual
+    state: present
+    app_environment:
+      foo: bar
+      baz: 2
+  register: install_service_appenv
+
+- name: get result of install service with extra environment vars
+  ansible.windows.win_shell: nssm.exe get '{{ test_service_name }}' AppEnvironmentExtra
+  register: install_service_appenv_actual
+
+- name: assert results of install service with extra environment vars
+  assert:
+    that:
+    - install_service_appenv.changed == true
+    - (install_service_appenv_actual.stdout_lines|length) == 3
+    - (install_service_appenv_actual.stdout_lines[0]) == 'baz=2'
+    - (install_service_appenv_actual.stdout_lines[2]) == 'foo=bar'
+
+- name: install service with extra environment vars (idempotent)
+  win_nssm:
+    name: '{{ test_service_name }}'
+    application: C:\Windows\System32\cmd.exe
+    start_mode: manual
+    state: present
+    app_environment:
+      foo: bar
+      baz: 2
+  register: install_service_appenv_idem
+
+- name: get result of install service with extra environment vars (idempotent)
+  ansible.windows.win_shell: nssm.exe get '{{ test_service_name }}' AppEnvironmentExtra
+  register: install_service_appenv_idem_actual
+
+- name: assert results of install service with extra environment vars (idempotent)
+  assert:
+    that:
+    - install_service_appenv_idem.changed == false
+    - (install_service_appenv_idem_actual.stdout_lines|length) == 3
+    - (install_service_appenv_idem_actual.stdout_lines[0]) == 'baz=2'
+    - (install_service_appenv_idem_actual.stdout_lines[2]) == 'foo=bar'
+
+- name: install service resetting env vars
+  win_nssm:
+    name: '{{ test_service_name }}'
+    application: C:\Windows\System32\cmd.exe
+    start_mode: manual
+    state: present
+  register: install_service_reset_appenv
+
+- name: get result of install service resetting env vars
+  ansible.windows.win_shell: nssm.exe get '{{ test_service_name }}' AppEnvironmentExtra
+  register: install_service_reset_appenv_actual
+
+- name: assert results of install service resetting env vars
+  assert:
+    that:
+    - install_service_reset_appenv.changed == true
+    - install_service_reset_appenv_actual.stdout == '\r\n'
+
+- name: install service with custom path var (replace == true, check mode)
+  win_nssm:
+    name: '{{ test_service_name }}'
+    application: C:\Windows\System32\cmd.exe
+    start_mode: manual
+    state: present
+    custom_pathvar:
+      prepend:
+        - C:\foo
+        - C:\bar\baz
+      append:
+        - D:\foo2
+        - D:\bar3\baz
+      replace: true
+    app_environment:
+      foo: bar
+      baz: 2
+  register: install_service_custompath_check
+  check_mode: yes
+
+- name: get result of install service with custom path var (replace == true, check mode)
+  ansible.windows.win_shell: nssm.exe get '{{ test_service_name }}' AppEnvironmentExtra
+  register: install_service_custompath_check_actual
+
+  ## note: this could fail (in theory) when the service is not yet 
+  ##   installed (diff mode), but because of side effects of earlier 
+  ##   tests this will actually not fail in practice, however, it is 
+  ##   not a real issue in any case
+  failed_when: false
+
+- name: assert results of install service with custom path var (replace == true, check mode)
+  assert:
+    that:
+    - install_service_custompath_check.changed == true
+    - install_service_appenv_check_actual.stdout == '\r\n' or install_service_appenv_check_actual.stdout == ''
+
+- name: install service with custom path var (replace == true)
+  win_nssm:
+    name: '{{ test_service_name }}'
+    application: C:\Windows\System32\cmd.exe
+    start_mode: manual
+    state: present
+    custom_pathvar:
+      prepend:
+        - C:\foo
+        - C:\bar\baz
+      append:
+        - D:\foo2
+        - D:\bar3\baz
+      replace: true
+    app_environment:
+      foo: bar
+      baz: 2
+  register: install_service_custompath
+
+- name: get result of install service with custom path var (replace == true)
+  ansible.windows.win_shell: nssm.exe get '{{ test_service_name }}' AppEnvironmentExtra
+  register: install_service_custompath_actual
+
+- name: assert results of install service with custom path var (replace == true)
+  assert:
+    that:
+    - install_service_custompath.changed == true
+    - (install_service_custompath_actual.stdout_lines|length) == 5
+    - (install_service_custompath_actual.stdout_lines[0]) == 'baz=2'
+    - (install_service_custompath_actual.stdout_lines[2]) == 'PATH=C:\\foo;C:\\bar\\baz;D:\\foo2;D:\\bar3\\baz'
+    - (install_service_custompath_actual.stdout_lines[4]) == 'foo=bar'
+
+- name: install service with custom path var (replace == true, idempotent)
+  win_nssm:
+    name: '{{ test_service_name }}'
+    application: C:\Windows\System32\cmd.exe
+    start_mode: manual
+    state: present
+    custom_pathvar:
+      prepend:
+        - C:\foo
+        - C:\bar\baz
+      append:
+        - D:\foo2
+        - D:\bar3\baz
+      replace: true
+    app_environment:
+      foo: bar
+      baz: 2
+  register: install_service_custompath_idem
+
+- name: get result of install service with custom path var (replace == true, idempotent)
+  ansible.windows.win_shell: nssm.exe get '{{ test_service_name }}' AppEnvironmentExtra
+  register: install_service_custompath_idem_actual
+
+- name: assert results of install service with custom path var (replace == true, idempotent)
+  assert:
+    that:
+    - install_service_custompath_idem.changed == false
+    - (install_service_custompath_idem_actual.stdout_lines|length) == 5
+    - (install_service_custompath_idem_actual.stdout_lines[0]) == 'baz=2'
+    - (install_service_custompath_actual.stdout_lines[2]) == 'PATH=C:\\foo;C:\\bar\\baz;D:\\foo2;D:\\bar3\\baz'
+    - (install_service_custompath_actual.stdout_lines[4]) == 'foo=bar'
+
+- name: install service resetting env vars
+  win_nssm:
+    name: '{{ test_service_name }}'
+    application: C:\Windows\System32\cmd.exe
+    start_mode: manual
+
+    ## note: setting explicitly but empty should be the same as not setting it
+    app_environment:
+    state: present
+
+- name: get result of install service resetting env vars
+  ansible.windows.win_shell: nssm.exe get '{{ test_service_name }}' AppEnvironmentExtra
+  register: install_service_reset_appenv_actual
+
+- name: assert results of install service resetting env vars
+  assert:
+    that:
+    - install_service_reset_appenv.changed == true
+    - install_service_reset_appenv_actual.stdout == '\r\n'
+
+- name: install service with custom path var (replace = false)
+  win_nssm:
+    name: '{{ test_service_name }}'
+    application: C:\Windows\System32\cmd.exe
+    start_mode: manual
+    state: present
+    custom_pathvar:
+      prepend:
+        - C:\foo
+        - C:\bar\baz
+      append:
+        - D:\foo2
+        - D:\bar3\baz
+  register: install_service_custompath_norepl
+
+- name: get result of install service with custom path var (replace = false)
+  ansible.windows.win_shell: nssm.exe get '{{ test_service_name }}' AppEnvironmentExtra
+  register: install_service_custompath_norepl_actual
+
+- name: get system path var to compare for install service with custom path var (replace = false)
+  ansible.windows.win_shell: (Get-Childitem env:path).value
+  register: install_service_custompath_norepl_envpath
+
+- name: assert results of install service with custom path var (replace = false)
+  assert:
+    that:
+    - install_service_custompath_norepl.changed == true
+    - (install_service_custompath_norepl_actual.stdout_lines|length) == 1
+    - (install_service_custompath_norepl_actual.stdout_lines[0]) == 'PATH=C:\\foo;C:\\bar\\baz;' ~ install_service_custompath_norepl_envpath.stdout_lines[0] ~ ';D:\\foo2;D:\\bar3\\baz'
+
 # deprecated in 2.12
 - name: install service with dict-as-string parameters
   win_nssm:
