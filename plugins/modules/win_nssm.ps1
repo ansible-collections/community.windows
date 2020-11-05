@@ -515,7 +515,7 @@ if ($state -eq 'absent') {
         }
 
         # note: convert app_env dictionary to list of strings in the form key=value and pass that a long as value
-        $tmp = $( $app_env.GetEnumerator() | foreach { "$($_.Name)=$($_.Value)" } )
+        $tmp = $( $app_env.GetEnumerator() | ForEach-Object { "$($_.Name)=$($_.Value)" } )
 
         # note: this is important here to make an empty envvar set working properly (in the sense that appenv is reset)
         if ($null -eq $tmp) {
