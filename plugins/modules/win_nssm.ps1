@@ -38,6 +38,14 @@ $stderrFile = Get-AnsibleParam -obj $params -name "stderr_file" -type "path"
 
 $executable = Get-AnsibleParam -obj $params -name "executable" -type "path" -default "nssm.exe"
 
+$app_env = Get-AnsibleParam -obj $params -name "app_environment" -type "dict" -default @{}
+
+if ($null -eq $app_env) {
+  $app_env = @{}
+}
+
+$custom_pathvar = Get-AnsibleParam -obj $params -name "custom_pathvar" -type "dict"
+
 $app_rotate_bytes = Get-AnsibleParam -obj $params -name "app_rotate_bytes" -type "int" -default 104858
 $app_rotate_online = Get-AnsibleParam -obj $params -name "app_rotate_online" -type "int" -default 0 -validateset 0,1
 $app_stop_method_console = Get-AnsibleParam -obj $params -name "app_stop_method_console" -type "int"
@@ -319,6 +327,13 @@ if (($null -ne $appParameters) -and ($null -ne $appArguments)) {
     Fail-Json $result "'app_parameters' and 'arguments' are mutually exclusive but have both been set."
 }
 
+if ($null -ne $custom_pathvar) {
+    # validate and normalize
+    if (!$custom_pathvar.ContainsKey('replace')) {
+        $custom_pathvar['replace'] = $false
+    }
+}
+
 # Backward compatibility for old parameters style. Remove the block bellow in 2.12
 if ($null -ne $appParameters) {
     $dep = @{
@@ -476,6 +491,38 @@ if ($state -eq 'absent') {
 
         Update-NssmServiceParameter -parameter "AppStdout" -value $stdoutFile @common_params
         Update-NssmServiceParameter -parameter "AppStderr" -value $stderrFile @common_params
+
+        if ($null -ne $custom_pathvar) {
+          # build custom path var and add it to env
+          $pathvar = @()
+
+          $tmp = $custom_pathvar['prepend']
+          if ($null -ne $tmp) {
+            $pathvar = $pathvar + $tmp 
+          }
+
+          if (!$custom_pathvar['replace']) {
+             # determine current path and use it too
+             $pathvar = $pathvar + $( (Get-Childitem env:path).value.split(';') ) 
+          }
+
+          $tmp = $custom_pathvar['append']
+          if ($null -ne $tmp) {
+            $pathvar = $pathvar + $tmp 
+          }
+
+          $app_env['PATH'] = $($pathvar -join ';')
+        }
+
+        # note: convert app_env dictionary to list of strings in the form key=value and pass that a long as value
+        $tmp = $( $app_env.GetEnumerator().ForEach({ "$($_.Name)=$($_.Value)" }) )
+
+        # note: this is important here to make an empty envvar set working properly (in the sense that appenv is reset)
+        if ($null -eq $tmp) {
+          $tmp = ''
+        }
+
+        Update-NssmServiceParameter -parameter "AppEnvironmentExtra" -value $tmp @common_params
 
         ###
         # Setup file rotation so we don't accidentally consume too much disk
