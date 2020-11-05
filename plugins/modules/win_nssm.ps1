@@ -498,24 +498,24 @@ if ($state -eq 'absent') {
 
           $tmp = $custom_pathvar['prepend']
           if ($null -ne $tmp) {
-            $pathvar = $pathvar + $tmp 
+            $pathvar = $pathvar + $tmp
           }
 
           if (!$custom_pathvar['replace']) {
              # determine current path and use it too
-             $pathvar = $pathvar + $( (Get-Childitem env:path).value.split(';') ) 
+             $pathvar = $pathvar + $( (Get-Childitem -LiteralPath env:path).value.split(';') )
           }
 
           $tmp = $custom_pathvar['append']
           if ($null -ne $tmp) {
-            $pathvar = $pathvar + $tmp 
+            $pathvar = $pathvar + $tmp
           }
 
           $app_env['PATH'] = $($pathvar -join ';')
         }
 
         # note: convert app_env dictionary to list of strings in the form key=value and pass that a long as value
-        $tmp = $( $app_env.GetEnumerator().ForEach({ "$($_.Name)=$($_.Value)" }) )
+        $tmp = $( $app_env.GetEnumerator() | % { "$($_.Name)=$($_.Value)" } )
 
         # note: this is important here to make an empty envvar set working properly (in the sense that appenv is reset)
         if ($null -eq $tmp) {

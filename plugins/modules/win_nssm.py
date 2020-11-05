@@ -107,10 +107,10 @@ options:
   custom_pathvar:
     description:
       - Allows manipulation of the $PATH environment variable for service application.
-      - Supports three subkeys: append, prepend and replace.
-      - append: list of paths appended to default $PATH
-      - prepend: list of paths prepended to default $PATH
-      - replace (bool, defaults to false): if set, default $PATH is not used for service application, only paths explicitly added to append or prepend
+      - "Supports three subkeys: append, prepend and replace."
+      - "append: list of paths appended to default $PATH."
+      - "prepend: list of paths prepended to default $PATH."
+      - "replace (bool, defaults to false): if set, default $PATH is not used for service application, only paths explicitly added to append or prepend."
     type: dict
   app_rotate_bytes:
     description:
