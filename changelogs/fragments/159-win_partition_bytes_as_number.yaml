@@ -1,0 +1,2 @@
+bugfixes:
+  - win_partition - fix size comparison errors when size specified in bytes
