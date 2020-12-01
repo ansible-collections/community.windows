@@ -1,0 +1,37 @@
+# This file is part of Ansible
+
+# Copyright: (c) 2020, Brian Scholer <@briantist>
+# GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
+---
+- name: Reset
+  import_tasks: reset.yml
+
+- name: Main block
+  module_defaults:
+    community.windows.win_psrepository_copy:
+      source: '{{ remote_tmp_dir }}\SampleRepositories.xml'
+  block:
+    # avoiding the use of win_psrepository / Register-PSRepository due to its strict target checking
+    # in the end, this module always looks at the XML file, so we'll just put a pre-baked one in place
+    - name: Put our source file in place
+      ansible.windows.win_copy:
+        src: SampleRepositories.xml
+        dest: "{{ remote_tmp_dir }}"
+        force: yes
+
+    - name: Copy repos with module defaults
+      community.windows.win_psrepository_copy:
+      register: status
+      check_mode: yes
+
+    - assert:
+        that: status is changed
+
+  always:
+    - name: Reset
+      import_tasks: reset.yml
+
+    - name: Remove sample file
+      ansible.windows.win_file:
+        path: '{{ remote_tmp_dir }}\SampleRepositories.xml'
+        state: absent
