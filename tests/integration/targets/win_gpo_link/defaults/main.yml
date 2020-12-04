@@ -1,0 +1,3 @@
+---
+gpo_name: fancy-gpo-name
+gpo_path: "OU=Switzerland,OU=Lab Accounts,DC=intern,DC=ansible,DC=com"
