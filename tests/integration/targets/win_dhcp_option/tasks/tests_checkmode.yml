@@ -1,0 +1,42 @@
+---
+- name: Check DHCP Service/Role Install State
+  ansible.windows.win_feature:
+    name: DHCP
+    state: present
+    include_management_tools: yes
+  register: dhcp_role
+  check_mode: true
+
+- name: Reboot if Necessary
+  ansible.windows.win_reboot:
+  when: dhcp_role.reboot_required
+  check_mode: true
+
+- name: ADD | DHCP Option | IPv4 | Reservation - Changed should equal false
+  win_dhcp_option:
+     state: present
+     version: "IPv4"
+     type: "reservation"
+     optionid: "{{ dhcp_option_id_reservation4 }}"
+     value: "{{ dhcp_option_value_reservation }}"
+     reservedip: "{{ dhcp_leased_ip }}"
+  check_mode: true
+
+- name: ADD | DHCP Option | IPv4 | SCOPE - Changed should equal false
+  win_dhcp_option:
+     state: present
+     version: "IPv4"
+     type: "scope"
+     optionid: "{{ dhcp_option_id_scope4 }}"
+     value: "{{ dhcp_option_value_scope }}"
+     scope: "{{ dhcp_scope4_id }}"
+  check_mode: true
+    
+- name: ADD | DHCP Option | IPv4 | SERVER
+  win_dhcp_option:
+    state: present
+    version: "IPv4"
+    type: "server"
+    optionid: "{{ dhcp_option_id_server4 }}"
+    value: "{{ dhcp_option_value_server }}"
+  check_mode: true
