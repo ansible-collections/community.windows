@@ -1,0 +1,4 @@
+---
+gpo_name: fancy-GPOName
+win_gpo_srcfolder: C:\GPO
+win_gpo_dstfolder: C:\GPOEXP
