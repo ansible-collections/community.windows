@@ -1,0 +1,1 @@
+test_win_domain_ou_path: OU=ou1,DC=ansible,DC=local
