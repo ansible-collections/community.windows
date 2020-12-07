@@ -97,6 +97,19 @@ Function Import-SecEdit($ini) {
         $result.stderr = $import_result.stderr
         Fail-Json $result "Failed to import secedit.ini file from $($secedit_ini_path)"
     }
+
+    # https://github.com/ansible-collections/community.windows/issues/153
+    # The LegalNoticeText entry is stored in the ini with type 7 (REG_MULTI_SZ) where each comma entry is read as a
+    # newline. When secedit imports the value it sets LegalNoticeText in the registry to be a REG_SZ type with the
+    # newlines but it also adds the extra null char at the end that REG_MULTI_SZ uses to denote the end of an entry.
+    # We manually trim off that extra null char so the legal text does not contain the unknown character symbol.
+    $legalPath = 'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System'
+    $legalName = 'LegalNoticeText'
+    $prop = Get-ItemProperty -Path $legalPath
+    if ($legalName -in $prop.PSObject.Properties.Name) {
+        $existingText = $prop.LegalNoticeText.TrimEnd("`0")
+        Set-ItemProperty -Path $legalPath -Name $legalName -Value $existingText
+    }
 }
 
 Function ConvertTo-Ini($ini) {
