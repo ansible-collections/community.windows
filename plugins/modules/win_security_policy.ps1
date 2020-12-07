@@ -105,10 +105,10 @@ Function Import-SecEdit($ini) {
     # We manually trim off that extra null char so the legal text does not contain the unknown character symbol.
     $legalPath = 'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System'
     $legalName = 'LegalNoticeText'
-    $prop = Get-ItemProperty -Path $legalPath
+    $prop = Get-ItemProperty -LiteralPath $legalPath
     if ($legalName -in $prop.PSObject.Properties.Name) {
         $existingText = $prop.LegalNoticeText.TrimEnd("`0")
-        Set-ItemProperty -Path $legalPath -Name $legalName -Value $existingText
+        Set-ItemProperty -LiteralPath $legalPath -Name $legalName -Value $existingText
     }
 }
 
