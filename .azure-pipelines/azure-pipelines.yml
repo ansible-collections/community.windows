@@ -54,7 +54,7 @@ stages:
               test: sanity
             - name: Units
               test: units
-  - stage: Ansible_2.10
+  - stage: Ansible_2_10
     displayName: Ansible 2.10
     dependsOn: []
     jobs:
@@ -89,8 +89,8 @@ stages:
   - stage: Summary
     condition: succeededOrFailed()
     dependsOn:
-      - Sanity
-      - Units
+      - Ansible_devel
+      - Ansible_2_10
       - Windows
     jobs:
       - template: templates/coverage.yml
