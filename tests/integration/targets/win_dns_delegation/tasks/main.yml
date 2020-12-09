@@ -1,0 +1,27 @@
+---
+- name: Ensure AD/DNS roles are installed
+  ansible.windows.win_feature:
+    name:
+      - DNS
+    include_management_tools: true
+    include_sub_features: true
+    state: present
+  register: ensure_addns_roles
+
+- name: Reboot
+  ansible.windows.win_reboot:
+  when: ensure_addns_roles.reboot_required
+
+- name: ADD | DNS Zone Delegation
+  win_dns_delegation:
+    state: present
+    zone: "example.com"
+    name: "testlab"
+    NameServer: "ns.example.com"
+    IPAddress: 192.168.111.1
+
+- name: Remove | DNS Zone Delegation
+  win_dns_delegation:
+    state: absent
+    zone: "example.com"
+    name: "testlab2"
