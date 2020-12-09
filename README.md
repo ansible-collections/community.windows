@@ -1,6 +1,6 @@
 # Ansible Collection: community.windows
 
-[![Run Status](https://api.shippable.com/projects/5e6068ebe4b17a000756145d/badge?branch=main)](https://app.shippable.com/github/ansible-collections/community.windows/dashboard/jobs)
+[![Build Status](https://dev.azure.com/ansible/community.windows/_apis/build/status/CI?branchName=refs%2Fpull%2F175%2Fmerge)](https://dev.azure.com/ansible/community.windows/_build/latest?definitionId=23&branchName=refs%2Fpull%2F175%2Fmerge)
 [![codecov](https://codecov.io/gh/ansible-collections/community.windows/branch/main/graph/badge.svg)](https://codecov.io/gh/ansible-collections/community.windows)
 
 
