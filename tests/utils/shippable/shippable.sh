@@ -72,6 +72,8 @@ fi
 
 # TODO: put this in a requirements file
 # Install the depss of this collection
+export PATH="~/.local/bin:$PATH"
+sudo chown $(whoami) "${PWD}/../../"
 retry ansible-galaxy collection install 'ansible.windows' 'chocolatey.chocolatey'
 
 export PYTHONIOENCODING='utf-8'

@@ -50,7 +50,7 @@ stages:
           testFormat: '{0}/sanity'
           targets:
             - test: devel
-            - test: 2.10
+            - test: '2.10'
   - stage: Units
     displayName: Units
     dependsOn: []
@@ -61,7 +61,7 @@ stages:
           testFormat: '{0}/units'
           targets:
             - test: devel
-            - test: 2.10
+            - test: '2.10'
   - stage: Windows
     displayName: Windows
     dependsOn: []
