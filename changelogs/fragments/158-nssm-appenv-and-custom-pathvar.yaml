@@ -1,0 +1,4 @@
+
+minor_changes:
+  - win_nssm - added new parameter 'app_environment' for managing service environment.
+
