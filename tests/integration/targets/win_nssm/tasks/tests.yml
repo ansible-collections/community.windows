@@ -326,12 +326,33 @@
     - (install_service_appenv_idem_actual.stdout_lines[0]) == 'baz=2'
     - (install_service_appenv_idem_actual.stdout_lines[2]) == 'foo=bar'
 
+- name: install service dont change app_env if not explicitly requested
+  win_nssm:
+    name: '{{ test_service_name }}'
+    application: C:\Windows\System32\cmd.exe
+    start_mode: manual
+    state: present
+  register: install_service_appenv_implicit
+
+- name: get result of install service dont change app_env if not explicitly requested
+  ansible.windows.win_shell: nssm.exe get '{{ test_service_name }}' AppEnvironmentExtra
+  register: install_service_appenv_implicit_actual
+
+- name: assert results of install service dont change app_env if not explicitly requested
+  assert:
+    that:
+    - install_service_appenv_implicit.changed == false
+    - (install_service_appenv_implicit_actual.stdout_lines|length) == 3
+    - (install_service_appenv_implicit_actual.stdout_lines[0]) == 'baz=2'
+    - (install_service_appenv_implicit_actual.stdout_lines[2]) == 'foo=bar'
+
 - name: install service resetting env vars
   win_nssm:
     name: '{{ test_service_name }}'
     application: C:\Windows\System32\cmd.exe
     start_mode: manual
     state: present
+    app_environment: {}
   register: install_service_reset_appenv
 
 - name: get result of install service resetting env vars

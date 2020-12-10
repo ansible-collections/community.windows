@@ -104,6 +104,7 @@ options:
     description:
       - Key/Value pairs which will be added to the environment of the service application.
     type: dict
+    version_added: 1.2.0
   app_rotate_bytes:
     description:
       - NSSM will not rotate any file which is smaller than the configured number of bytes.
