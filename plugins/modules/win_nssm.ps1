@@ -479,14 +479,14 @@ if ($state -eq 'absent') {
         Update-NssmServiceParameter -parameter "AppStdout" -value $stdoutFile @common_params
         Update-NssmServiceParameter -parameter "AppStderr" -value $stderrFile @common_params
 
-        # set app environment, only do this for now when explicitly requested by caller to 
+        # set app environment, only do this for now when explicitly requested by caller to
         # avoid breaking playbooks which use another / custom scheme for configuring app_env
-        if ($app_env -ne $null) {
+        if ($null -ne $app_env) {
           # note: convert app_env dictionary to list of strings in the form key=value and pass that a long as value
           $app_env_str = $app_env.GetEnumerator() | ForEach-Object { "$($_.Name)=$($_.Value)" }
 
           # note: this is important here to make an empty envvar set working properly (in the sense that appenv is reset)
-          if ($app_env_str -eq $null) {
+          if ($null -eq $app_env_str) {
             $app_env_str = ''
           }
 
