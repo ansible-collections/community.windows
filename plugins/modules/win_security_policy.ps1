@@ -51,7 +51,13 @@ Function Invoke-SecEdit($arguments) {
 }
 
 Function Export-SecEdit() {
+    # GetTempFileName() will create a file but it doesn't have any content. This is problematic as secedit uses the
+    # encoding of the file at /cfg if it exists and because there is no BOM it will export using the "ANSI" encoding.
+    # By making sure the file exists and has a UTF-16-LE BOM we can be sure our parser reads the bytes as a string
+    # correctly.
     $secedit_ini_path = [IO.Path]::GetTempFileName()
+    Set-Content -LiteralPath $secedit_ini_path -Value '' -Encoding Unicode
+
     # while this will technically make a change to the system in check mode by
     # creating a new file, we need these values to be able to do anything
     # substantial in check mode
@@ -76,7 +82,10 @@ Function Import-SecEdit($ini) {
     Remove-Item -LiteralPath $secedit_db_path -Force # needs to be deleted for SecEdit.exe /import to work
 
     $ini_contents = ConvertTo-Ini -ini $ini
-    Set-Content -LiteralPath $secedit_ini_path -Value $ini_contents
+
+    # Use Unicode (UTF-16-LE) as that is the same across all PowerShell versions and we don't have to worry about
+    # changing ANSI encodings.
+    Set-Content -LiteralPath $secedit_ini_path -Value $ini_contents -Encoding Unicode
     $result.changed = $true
 
     $import_result = Invoke-SecEdit -arguments @("/configure", "/db", $secedit_db_path, "/cfg", $secedit_ini_path, "/quiet")
@@ -87,6 +96,19 @@ Function Import-SecEdit($ini) {
         $result.stdout = $import_result.stdout
         $result.stderr = $import_result.stderr
         Fail-Json $result "Failed to import secedit.ini file from $($secedit_ini_path)"
+    }
+
+    # https://github.com/ansible-collections/community.windows/issues/153
+    # The LegalNoticeText entry is stored in the ini with type 7 (REG_MULTI_SZ) where each comma entry is read as a
+    # newline. When secedit imports the value it sets LegalNoticeText in the registry to be a REG_SZ type with the
+    # newlines but it also adds the extra null char at the end that REG_MULTI_SZ uses to denote the end of an entry.
+    # We manually trim off that extra null char so the legal text does not contain the unknown character symbol.
+    $legalPath = 'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System'
+    $legalName = 'LegalNoticeText'
+    $prop = Get-ItemProperty -LiteralPath $legalPath
+    if ($legalName -in $prop.PSObject.Properties.Name) {
+        $existingText = $prop.LegalNoticeText.TrimEnd("`0")
+        Set-ItemProperty -LiteralPath $legalPath -Name $legalName -Value $existingText
     }
 }
 
