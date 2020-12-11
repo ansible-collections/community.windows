@@ -1,6 +1,6 @@
 # Ansible Collection: community.windows
 
-[![Build Status](https://dev.azure.com/ansible/community.windows/_apis/build/status/CI?branchName=refs%2Fpull%2F175%2Fmerge)](https://dev.azure.com/ansible/community.windows/_build/latest?definitionId=23&branchName=refs%2Fpull%2F175%2Fmerge)
+[![Build Status](https://dev.azure.com/ansible/community.windows/_apis/build/status/CI?branchName=main)](https://dev.azure.com/ansible/community.windows/_build/latest?definitionId=23&branchName=main)
 [![codecov](https://codecov.io/gh/ansible-collections/community.windows/branch/main/graph/badge.svg)](https://codecov.io/gh/ansible-collections/community.windows)
 
 
