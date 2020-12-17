@@ -286,7 +286,7 @@ See Also
 Examples
 --------
 
-.. code-block:: yaml+jinja
+.. code-block:: yaml
 
     - name: Add linux computer to Active Directory OU using a windows machine
         community.windows.win_domain_computer:

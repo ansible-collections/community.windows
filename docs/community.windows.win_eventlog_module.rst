@@ -205,7 +205,7 @@ See Also
 Examples
 --------
 
-.. code-block:: yaml+jinja
+.. code-block:: yaml
 
     - name: Add a new event log with two custom sources
       community.windows.win_eventlog:

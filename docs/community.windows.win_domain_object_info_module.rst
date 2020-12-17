@@ -227,7 +227,7 @@ Notes
 Examples
 --------
 
-.. code-block:: yaml+jinja
+.. code-block:: yaml
 
     - name: Get all properties for the specified account using its DistinguishedName
       community.windows.win_domain_object_info:

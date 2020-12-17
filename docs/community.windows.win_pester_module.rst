@@ -145,7 +145,7 @@ Parameters
 Examples
 --------
 
-.. code-block:: yaml+jinja
+.. code-block:: yaml
 
     - name: Get facts
       ansible.windows.setup:

@@ -1,2 +1,0 @@
-minor_changes:
-  - win_scheduled_task - validate task name against invalid characters (https://github.com/ansible-collections/community.windows/pull/168)

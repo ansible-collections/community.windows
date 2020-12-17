@@ -230,7 +230,7 @@ Parameters
 Examples
 --------
 
-.. code-block:: yaml+jinja
+.. code-block:: yaml
 
     - name: Ensure DHCP reservation exists
       community.windows.win_dhcp_lease:

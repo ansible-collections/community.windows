@@ -227,7 +227,7 @@ See Also
 Examples
 --------
 
-.. code-block:: yaml+jinja
+.. code-block:: yaml
 
     ---
     - name: Ensure the required NuGet package provider version is installed

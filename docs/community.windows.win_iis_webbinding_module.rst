@@ -204,7 +204,7 @@ See Also
 Examples
 --------
 
-.. code-block:: yaml+jinja
+.. code-block:: yaml
 
     - name: Add a HTTP binding on port 9090
       community.windows.win_iis_webbinding:

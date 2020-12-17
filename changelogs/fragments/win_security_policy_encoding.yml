@@ -1,3 +1,0 @@
-bugfixes:
-- win_security_policy - read config file with correct encoding to avoid breaking non-ASCII chars
-- win_security_policy - strip of null char added by secedit for ``LegalNoticeText`` so the existing value is preserved

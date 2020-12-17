@@ -354,7 +354,7 @@ See Also
 Examples
 --------
 
-.. code-block:: yaml+jinja
+.. code-block:: yaml
 
     - name: Test the PsExec connection to the local system (target node) with your user
       community.windows.win_psexec:

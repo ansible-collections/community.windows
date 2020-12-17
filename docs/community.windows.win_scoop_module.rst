@@ -209,7 +209,7 @@ See Also
 Examples
 --------
 
-.. code-block:: yaml+jinja
+.. code-block:: yaml
 
     - name: Install jq.
       community.windows.win_scoop:

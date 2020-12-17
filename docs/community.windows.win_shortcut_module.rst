@@ -230,7 +230,7 @@ See Also
 Examples
 --------
 
-.. code-block:: yaml+jinja
+.. code-block:: yaml
 
     - name: Create an application shortcut on the desktop
       community.windows.win_shortcut:

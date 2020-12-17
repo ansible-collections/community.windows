@@ -72,7 +72,7 @@ See Also
 Examples
 --------
 
-.. code-block:: yaml+jinja
+.. code-block:: yaml
 
     - name: Get acm instance version
       community.windows.win_file_version:

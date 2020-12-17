@@ -102,7 +102,7 @@ See Also
 Examples
 --------
 
-.. code-block:: yaml+jinja
+.. code-block:: yaml
 
     - name: Obtain information about a particular certificate in the computer's personal store
       community.windows.win_certificate_info:

@@ -112,7 +112,7 @@ Parameters
 Examples
 --------
 
-.. code-block:: yaml+jinja
+.. code-block:: yaml
 
     - name: Enables the rabbitmq_management plugin
       community.windows.win_rabbitmq_plugin:

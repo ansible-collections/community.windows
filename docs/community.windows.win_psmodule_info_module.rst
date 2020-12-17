@@ -94,7 +94,7 @@ See Also
 Examples
 --------
 
-.. code-block:: yaml+jinja
+.. code-block:: yaml
 
     - name: Get info about all modules on the system
       community.windows.win_psmodule_info:

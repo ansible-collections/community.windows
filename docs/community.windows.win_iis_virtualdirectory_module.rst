@@ -138,7 +138,7 @@ See Also
 Examples
 --------
 
-.. code-block:: yaml+jinja
+.. code-block:: yaml
 
     - name: Create a virtual directory if it does not exist
       community.windows.win_iis_virtualdirectory:

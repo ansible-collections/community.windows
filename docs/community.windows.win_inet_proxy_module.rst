@@ -157,7 +157,7 @@ See Also
 Examples
 --------
 
-.. code-block:: yaml+jinja
+.. code-block:: yaml
 
     # This should be set before running the win_inet_proxy module
     - name: Configure IE proxy settings to apply to all users

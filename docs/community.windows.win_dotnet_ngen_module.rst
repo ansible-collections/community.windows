@@ -39,7 +39,7 @@ Notes
 Examples
 --------
 
-.. code-block:: yaml+jinja
+.. code-block:: yaml
 
     - name: Run ngen tasks
       community.windows.win_dotnet_ngen:

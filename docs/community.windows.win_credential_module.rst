@@ -328,7 +328,7 @@ See Also
 Examples
 --------
 
-.. code-block:: yaml+jinja
+.. code-block:: yaml
 
     - name: Create a local only credential
       community.windows.win_credential:

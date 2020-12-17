@@ -86,7 +86,7 @@ Parameters
 Examples
 --------
 
-.. code-block:: yaml+jinja
+.. code-block:: yaml
 
     - name: Set Windows description, owner and organization
       community.windows.win_computer_description:

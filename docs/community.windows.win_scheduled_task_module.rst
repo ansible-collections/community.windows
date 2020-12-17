@@ -1124,7 +1124,7 @@ See Also
 Examples
 --------
 
-.. code-block:: yaml+jinja
+.. code-block:: yaml
 
     - name: Create a task to open 2 command prompts as SYSTEM
       community.windows.win_scheduled_task:

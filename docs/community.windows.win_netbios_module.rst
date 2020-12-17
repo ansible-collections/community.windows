@@ -88,7 +88,7 @@ Notes
 Examples
 --------
 
-.. code-block:: yaml+jinja
+.. code-block:: yaml
 
     - name: Disable NetBIOS system wide
       community.windows.win_netbios:

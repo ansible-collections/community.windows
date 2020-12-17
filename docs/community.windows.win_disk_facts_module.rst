@@ -39,7 +39,7 @@ Notes
 Examples
 --------
 
-.. code-block:: yaml+jinja
+.. code-block:: yaml
 
     - name: Get disk facts
       community.windows.win_disk_facts:

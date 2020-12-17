@@ -119,7 +119,7 @@ See Also
 Examples
 --------
 
-.. code-block:: yaml+jinja
+.. code-block:: yaml
 
     - name: Set the region format to English United States
       community.windows.win_region:

@@ -106,7 +106,7 @@ See Also
 Examples
 --------
 
-.. code-block:: yaml+jinja
+.. code-block:: yaml
 
     - name: Send a magic Wake-on-LAN packet to 00:00:5E:00:53:66
       community.windows.win_wakeonlan:

@@ -438,7 +438,7 @@ See Also
 Examples
 --------
 
-.. code-block:: yaml+jinja
+.. code-block:: yaml
 
     - name: Run a cmd.exe command
       community.windows.psexec:
