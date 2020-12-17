@@ -173,7 +173,7 @@ See Also
 Examples
 --------
 
-.. code-block:: yaml+jinja
+.. code-block:: yaml
 
     - name: Write an entry to a Windows event log
       community.windows.win_eventlog_entry:

@@ -93,7 +93,7 @@ See Also
 Examples
 --------
 
-.. code-block:: yaml+jinja
+.. code-block:: yaml
 
     - name: Get info about all script on the system
       community.windows.win_psscript_info:

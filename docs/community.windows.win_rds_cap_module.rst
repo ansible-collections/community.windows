@@ -340,7 +340,7 @@ See Also
 Examples
 --------
 
-.. code-block:: yaml+jinja
+.. code-block:: yaml
 
     - name: Create a new RDS CAP with a 30 minutes timeout and clipboard redirection enabled
       community.windows.win_rds_cap:

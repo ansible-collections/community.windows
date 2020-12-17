@@ -138,7 +138,7 @@ Parameters
 Examples
 --------
 
-.. code-block:: yaml+jinja
+.. code-block:: yaml
 
     - name: Defragment all local volumes (in parallel)
       community.windows.win_defrag:

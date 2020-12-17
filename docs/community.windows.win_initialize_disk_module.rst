@@ -58,7 +58,7 @@ Parameters
                 </td>
                 <td>
                         <ul style="margin: 0; padding: 0"><b>Choices:</b>
-                                    <li>no</li>
+                                    <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
                                     <li>yes</li>
                         </ul>
                 </td>
@@ -163,7 +163,7 @@ See Also
 Examples
 --------
 
-.. code-block:: yaml+jinja
+.. code-block:: yaml
 
     - name: Initialize a disk
       community.windows.win_initialize_disk:

@@ -273,7 +273,7 @@ See Also
 Examples
 --------
 
-.. code-block:: yaml+jinja
+.. code-block:: yaml
 
     - name: Insert path without converting \r\n
       community.windows.win_lineinfile:

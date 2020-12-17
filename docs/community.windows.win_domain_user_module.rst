@@ -554,7 +554,7 @@ See Also
 Examples
 --------
 
-.. code-block:: yaml+jinja
+.. code-block:: yaml
 
     - name: Ensure user bob is present with address information
       community.windows.win_domain_user:

@@ -160,7 +160,7 @@ See Also
 Examples
 --------
 
-.. code-block:: yaml+jinja
+.. code-block:: yaml
 
     - name: Warn logged in users of impending upgrade (note use of async to stop the module from waiting until notification expires).
       community.windows.win_toast:

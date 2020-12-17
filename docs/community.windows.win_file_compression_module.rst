@@ -130,7 +130,7 @@ Notes
 Examples
 --------
 
-.. code-block:: yaml+jinja
+.. code-block:: yaml
 
     - name: Compress log files directory
       community.windows.win_file_compression:

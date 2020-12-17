@@ -189,7 +189,7 @@ See Also
 Examples
 --------
 
-.. code-block:: yaml+jinja
+.. code-block:: yaml
 
     - name: Add filesystem audit rule for a folder
       community.windows.win_audit_rule:

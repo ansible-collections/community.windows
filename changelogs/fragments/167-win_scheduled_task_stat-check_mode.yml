@@ -1,2 +1,0 @@
-minor_changes:
-  - win_scheduled_task_stat - add check mode support (https://github.com/ansible-collections/community.windows/pull/167)

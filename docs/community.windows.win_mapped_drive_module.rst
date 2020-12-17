@@ -151,7 +151,7 @@ See Also
 Examples
 --------
 
-.. code-block:: yaml+jinja
+.. code-block:: yaml
 
     - name: Create a mapped drive under Z
       community.windows.win_mapped_drive:

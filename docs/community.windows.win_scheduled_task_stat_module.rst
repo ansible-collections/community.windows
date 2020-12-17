@@ -83,7 +83,7 @@ See Also
 Examples
 --------
 
-.. code-block:: yaml+jinja
+.. code-block:: yaml
 
     - name: Get information about a folder
       community.windows.win_scheduled_task_stat:

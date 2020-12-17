@@ -112,7 +112,7 @@ Parameters
 Examples
 --------
 
-.. code-block:: yaml+jinja
+.. code-block:: yaml
 
     - name: Set autologon for user1
       community.windows.win_auto_logon:

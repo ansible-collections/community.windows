@@ -128,7 +128,7 @@ See Also
 Examples
 --------
 
-.. code-block:: yaml+jinja
+.. code-block:: yaml
 
     - name: Warn logged in users of impending upgrade
       community.windows.win_msg:

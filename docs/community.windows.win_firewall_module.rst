@@ -139,7 +139,7 @@ See Also
 Examples
 --------
 
-.. code-block:: yaml+jinja
+.. code-block:: yaml
 
     - name: Enable firewall for Domain, Public and Private profiles
       community.windows.win_firewall:

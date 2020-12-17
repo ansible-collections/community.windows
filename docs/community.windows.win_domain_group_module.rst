@@ -315,7 +315,7 @@ See Also
 Examples
 --------
 
-.. code-block:: yaml+jinja
+.. code-block:: yaml
 
     - name: Ensure the group Cow exists using sAMAccountName
       community.windows.win_domain_group:

@@ -73,7 +73,7 @@ See Also
 Examples
 --------
 
-.. code-block:: yaml+jinja
+.. code-block:: yaml
 
     - name: Get info for a single repository
       community.windows.win_psrepository_info:

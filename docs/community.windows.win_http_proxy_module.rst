@@ -118,7 +118,7 @@ See Also
 Examples
 --------
 
-.. code-block:: yaml+jinja
+.. code-block:: yaml
 
     - name: Set a proxy to use for all protocols
       community.windows.win_http_proxy:

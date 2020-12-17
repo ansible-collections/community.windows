@@ -95,7 +95,7 @@ See Also
 Examples
 --------
 
-.. code-block:: yaml+jinja
+.. code-block:: yaml
 
     - name: Merge in a registry file without comparing to current registry
       community.windows.win_regmerge:

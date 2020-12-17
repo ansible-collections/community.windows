@@ -42,6 +42,22 @@ Parameters
             <tr>
                 <td colspan="1">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>app_environment</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">dictionary</span>
+                    </div>
+                    <div style="font-style: italic; font-size: small; color: darkgreen">added in 1.2.0</div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>Key/Value pairs which will be added to the environment of the service application.</div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>app_parameters</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
@@ -404,7 +420,7 @@ See Also
 Examples
 --------
 
-.. code-block:: yaml+jinja
+.. code-block:: yaml
 
     - name: Install the foo service
       community.windows.win_nssm:
@@ -444,6 +460,18 @@ Examples
         password: secret
         start_mode: manual
         state: started
+
+    - name: Install a script based service and define custom environment variables
+      community.windows.win_nssm:
+        name: <ServiceName>
+        application: C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe
+        arguments:
+          - <path-to-script>
+          - <script arg>
+        app_environment:
+          AUTH_TOKEN: <token value>
+          SERVER_URL: https://example.com
+          PATH: "<path-prepends>;{{ ansible_env.PATH }};<path-appends>"
 
     - name: Remove the foo service
       community.windows.win_nssm:

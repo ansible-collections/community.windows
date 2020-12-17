@@ -60,7 +60,7 @@ Parameters
 Examples
 --------
 
-.. code-block:: yaml+jinja
+.. code-block:: yaml
 
     - name: Change power plan to high performance
       community.windows.win_power_plan:

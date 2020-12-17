@@ -111,7 +111,7 @@ See Also
 Examples
 --------
 
-.. code-block:: yaml+jinja
+.. code-block:: yaml
 
     - name: Enable failure auditing for the subcategory "File System"
       community.windows.win_audit_policy_system:

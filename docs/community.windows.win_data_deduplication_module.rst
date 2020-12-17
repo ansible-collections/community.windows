@@ -190,7 +190,7 @@ Parameters
 Examples
 --------
 
-.. code-block:: yaml+jinja
+.. code-block:: yaml
 
     - name: Enable Data Deduplication on D
       community.windows.win_data_deduplication:

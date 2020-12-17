@@ -885,7 +885,7 @@ See Also
 Examples
 --------
 
-.. code-block:: yaml+jinja
+.. code-block:: yaml
 
     - name: Register a session configuration that loads modules automatically
       community.windows.win_pssession_configuration:

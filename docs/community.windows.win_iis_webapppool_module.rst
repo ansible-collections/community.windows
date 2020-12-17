@@ -120,7 +120,7 @@ See Also
 Examples
 --------
 
-.. code-block:: yaml+jinja
+.. code-block:: yaml
 
     - name: Return information about an existing application pool
       community.windows.win_iis_webapppool:

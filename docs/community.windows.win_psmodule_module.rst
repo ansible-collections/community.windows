@@ -231,7 +231,7 @@ See Also
 Examples
 --------
 
-.. code-block:: yaml+jinja
+.. code-block:: yaml
 
     ---
     - name: Add a PowerShell module

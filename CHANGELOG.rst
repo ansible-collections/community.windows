@@ -5,13 +5,35 @@ Community Windows Release Notes
 .. contents:: Topics
 
 
-v1.1.0
+v1.2.0
 ======
 
 Release Summary
 ---------------
 
-- Feature release for ``community.windows``
+- Release summary for v1.2.0
+
+Minor Changes
+-------------
+
+- win_nssm - added new parameter 'app_environment' for managing service environment.
+- win_scheduled_task - validate task name against invalid characters (https://github.com/ansible-collections/community.windows/pull/168)
+- win_scheduled_task_stat - add check mode support (https://github.com/ansible-collections/community.windows/pull/167)
+
+Bugfixes
+--------
+
+- win_partition - fix size comparison errors when size specified in bytes (https://github.com/ansible-collections/community.windows/pull/159)
+- win_security_policy - read config file with correct encoding to avoid breaking non-ASCII chars
+- win_security_policy - strip of null char added by secedit for ``LegalNoticeText`` so the existing value is preserved
+
+New Modules
+-----------
+
+- win_net_adapter_feature - Enable or disable certain network adapters.
+
+v1.1.0
+======
 
 Minor Changes
 -------------
