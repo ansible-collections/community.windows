@@ -68,12 +68,72 @@ notes:
     for those accounts respectively."
 seealso:
   - module: community.windows.win_psrepository
-  - module: community.windiws.win_psrepository_info
+  - module: community.windows.win_psrepository_info
 author:
   - Brian Scholer (@briantist)
 '''
 
 EXAMPLES = r'''
+- name: Copy the current user's PSRepositories to all non-service account profiles and Default profile
+  community.windows.win_psrepository_copy:
+
+- name: Copy the current user's PSRepositories to all profiles and Default profile
+  community.windows.win_psrepository_copy:
+    exclude_profiles: []
+
+- name: Copy the current user's PSRepositories to all profiles beginning with A, B, or C
+  community.windows.win_psrepository_copy:
+    profiles:
+      - 'A*'
+      - 'B*'
+      - 'C*'
+
+- name: Copy the current user's PSRepositories to all profiles beginning B except Brian and Brianna
+  community.windows.win_psrepository_copy:
+    profiles: 'B*'
+    exclude_profiles:
+      - Brian
+      - Brianna
+
+- name: Copy a specific set of repositories to profiles beginning with 'svc' with exceptions
+  community.windows.win_psrepository_copy:
+    name:
+      - CompanyRepo1
+      - CompanyRepo2
+      - PSGallery
+    profiles: 'svc*'
+    exclude_profiles: 'svc-restricted'
+
+- name: Copy repos matching a pattern with exceptions
+  community.windows.win_psrepository_copy:
+    name: 'CompanyRepo*'
+    exclude: 'CompanyRepo*-Beta'
+
+- name: Copy repositories from a custom XML file on the target host
+  community.windows.win_psrepository_copy:
+    source: 'C:\data\CustomRepostories.xml
+
+### A sample workflow of seeding a system with a custom repository
+
+# A playbook that does initial host setup or builds system images
+
+- name: Register custom respository
+  community.windows.win_psrepository:
+    name: PrivateRepo
+    source_location: https://example.com/nuget/feed/etc
+    installation_policy: trusted
+
+- name: Ensure all current and new users have this repository registered
+  community.windows.win_psrepository_copy:
+    name: PrivateRepo
+
+# In another playbook, run by other users (who may have been created later)
+
+- name: Install a module
+  community.windows.win_psmodule:
+    name: CompanyModule
+    repository: PrivateRepo
+    state: present
 '''
 
 RETURN = r'''
