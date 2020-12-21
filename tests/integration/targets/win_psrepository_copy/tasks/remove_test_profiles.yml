@@ -9,7 +9,7 @@
 # and then deletes the directory; if that was succesful, it deletes the registry key too.
 #
 # As a result this should also clean up after any old runs that left behind profiles, so an interrupted run
-# that didn't runt he rescue block will still get cleaned up by the next when this runs again.
+# that didn't run the rescue block will still get cleaned up by the next when this runs again.
 
 - name: Remove all the test user profiles from the system
   become: yes

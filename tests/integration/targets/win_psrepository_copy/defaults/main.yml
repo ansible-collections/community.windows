@@ -1,5 +1,4 @@
 ---
-pwdfile_stem: /tmp/win_psrepository_copy/
 user_password: 'gEYB#f74MslYcz&*1!*2WDM65!i&4*H'
 test_users:
   - name: repo_copy1
