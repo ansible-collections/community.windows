@@ -111,7 +111,7 @@ EXAMPLES = r'''
 
 - name: Copy repositories from a custom XML file on the target host
   community.windows.win_psrepository_copy:
-    source: 'C:\data\CustomRepostories.xml
+    source: 'C:\data\CustomRepostories.xml'
 
 ### A sample workflow of seeding a system with a custom repository
 
