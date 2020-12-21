@@ -1,4 +1,3 @@
 dependencies:
   - setup_remote_tmp_dir
-  # - setup_http_tests
-  # - setup_win_psget
+  - setup_win_psget

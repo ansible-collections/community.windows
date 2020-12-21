@@ -86,6 +86,9 @@
         state: absent
       loop: "{{ test_users }}"
 
+    - name: Remove test profiles
+      import_tasks: remove_test_profiles.yml
+
     - name: Remove sample file
       ansible.windows.win_file:
         path: '{{ remote_tmp_dir }}\SampleRepositories.xml'
