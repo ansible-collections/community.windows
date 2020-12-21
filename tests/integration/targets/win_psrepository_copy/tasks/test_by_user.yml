@@ -1,0 +1,32 @@
+# This file is part of Ansible
+
+# Copyright: (c) 2020, Brian Scholer <@briantist>
+# GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
+---
+- name: Get repository info
+  become: yes
+  become_user: "{{ user }}"
+  become_method: runas
+  community.windows.win_psrepository_info:
+  register: repos
+
+- name: Ensure expected repositories are present
+  assert:
+    that: repo in (repos.repositories | map(attribute='name') | list)
+    success_msg: "expected repository '{{ repo }}' was found for user '{{ user }}'"
+    fail_msg: "expected repository '{{ repo }}' was not found for user '{{ user }}'"
+  loop: "{{ expected_repos }}"
+  loop_control:
+    loop_var: repo
+
+- name: Ensure present repositories are expected
+  assert:
+    that: repo in expected_repos or repo == 'PSGallery'
+    # although not completely consistent depending on OS and/or PowerShellGet versions
+    # often calling Get-PSRepository will register PSGallery if it's missing, so we
+    # must be prepared for it to show up here "unexpectedly" by way of us querying :(
+    success_msg: "found expected repository '{{ repo }}' for user '{{ user }}'"
+    fail_msg: "found unexpected repository '{{ repo }}' for user '{{ user }}'"
+  loop: "{{ repos.repositories | map(attribute='name') | list }}"
+  loop_control:
+    loop_var: repo

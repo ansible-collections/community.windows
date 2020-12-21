@@ -1,0 +1,59 @@
+# This file is part of Ansible
+
+# Copyright: (c) 2020, Brian Scholer <@briantist>
+# GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
+---
+#####################################
+## Begin filter profile (inclusive) tests
+
+- name: Reset
+  import_tasks: reset.yml
+
+- name: Copy repos with filtered profiles - check
+  community.windows.win_psrepository_copy:
+    profiles: 'repo*'
+  register: status
+  check_mode: yes
+
+- assert:
+    that: status is changed
+
+- name: Copy repos with filtered profiles
+  community.windows.win_psrepository_copy:
+    profiles: 'repo*'
+  register: status
+
+- assert:
+    that: status is changed
+
+- name: Copy repos with filtered profiles - again
+  community.windows.win_psrepository_copy:
+    profiles: 'repo*'
+  register: status
+
+- assert:
+    that: status is not changed
+
+- name: Test filtered profiles (included)
+  include_tasks:
+    file: test_by_user.yml
+    apply:
+      vars:
+        user: "{{ item }}"
+        expected_repos: "{{ test_repos }}"
+  loop:
+    - repo_copy1
+    - repo_copy2
+
+- name: Test filtered profiles (not included)
+  include_tasks:
+    file: test_by_user.yml
+    apply:
+      vars:
+        user: "{{ item }}"
+        expected_repos: []
+  loop:
+    - copy_repo3
+
+## End filter profile (inclusive) tests
+#####################################

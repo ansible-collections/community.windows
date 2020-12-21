@@ -60,7 +60,7 @@ notes:
   - If setting service account profiles, you may need C(become=yes). See examples.
   - "When PowerShellGet first sets up a repositories file, it always adds C(PSGallery), however if this module creates a new repos file and your selected
     repositories don't include C(PSGallery), it won't be in your destination."
-  - "The values searched in I(profiles) (and I(exclude_profiles)) are profile names, not necessarily user names. This can happen when the profile is
+  - "The values searched in I(profiles) (and I(exclude_profiles)) are profile names, not necessarily user names. This can happen when the profile path is
     deliberately changed or when domain user names conflict with users from the local computer or another domain. In this case the second+ user may have the
     domain name or local computer name appended, like C(JoeUser.Contoso) vs. C(JoeUser).
     If you intend to filter user profiles, ensure your filters catch the right names."
