@@ -78,7 +78,7 @@ Else {
 if ($null -ne $managed_by) {
   $computer = Get-ADComputer `
     -Identity $sam_account_name `
-    -Properties ManagedBy 
+    -Properties ManagedBy
 
   if ($null -eq $computer.ManagedBy) {
     $extra_args.ManagedBy = $managed_by
@@ -102,7 +102,7 @@ if ($null -ne $managed_by) {
     }
   }
 }
-        
+
 # ------------------------------------------------------------------------------
 Function Get-InitialState($desired_state) {
   # Test computer exists
