@@ -34,6 +34,7 @@ $domain_username = Get-AnsibleParam -obj $params -name "domain_username" -type "
 $domain_password = Get-AnsibleParam -obj $params -name "domain_password" -type "str" -failifempty ($null -ne $domain_username)
 $domain_server = Get-AnsibleParam -obj $params -name "domain_server" -type "str"
 $state = Get-AnsibleParam -obj $params -name "state" -ValidateSet "present","absent" -default "present"
+$managed_by = Get-AnsibleParam -obj $params -name "managed_by" -type "str"
 
 $odj_action = Get-AnsibleParam -obj $params -name "offline_domain_join" -type "str" -ValidateSet "none","output","path" -default "none"
 $_default_blob_path = Join-Path -Path $temp -ChildPath ([System.IO.Path]::GetRandomFileName())
@@ -63,12 +64,44 @@ If ($state -eq "present") {
     description = $description
     enabled = $enabled
     state = $state
+    managed_by = $managed_by
   }
 } Else {
   $desired_state = [ordered]@{
     name = $name
     sam_account_name = $sam_account_name
     state = $state
+  }
+}
+
+if ($null -ne $managed_by) {
+   $computer = Try { Get-ADComputer `
+    -Identity $sam_account_name `
+    -Properties ManagedBy
+  } Catch { $null }
+
+  If ($computer) {
+    if ($null -eq $computer.ManagedBy) {
+      $extra_args.ManagedBy = $managed_by
+    }
+    else {
+      try {
+        $managed_by_object = Get-ADGroup -Identity $managed_by @extra_args
+      }
+      catch [Microsoft.ActiveDirectory.Management.ADIdentityNotFoundException] {
+        try {
+          $managed_by_object = Get-ADUser -Identity $managed_by @extra_args
+        }
+        catch [Microsoft.ActiveDirectory.Management.ADIdentityNotFoundException] {
+          Fail-Json $result "failed to find managed_by user or group $managed_by to be used for comparison"
+        }
+      }
+
+      if ($computer.ManagedBy -ne $managed_by_object.DistinguishedName) {
+        $extra_args.ManagedBy = $managed_by
+        $diff_text += "-ManagedBy = $($group.ManagedBy)`n+ManagedBy = $($managed_by_object.DistinguishedName)`n"
+      }
+    }
   }
 }
 
@@ -94,6 +127,7 @@ Function Get-InitialState($desired_state) {
         description = $computer.Description
         enabled = $computer.Enabled
         state = "present"
+        managed_by = $managed_by
       }
   } Else {
     $initial_state = [ordered]@{
