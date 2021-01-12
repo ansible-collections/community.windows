@@ -33,21 +33,20 @@ $description = Get-AnsibleParam -obj $params -name "description" -default $null
 $domain_username = Get-AnsibleParam -obj $params -name "domain_username" -type "str"
 $domain_password = Get-AnsibleParam -obj $params -name "domain_password" -type "str" -failifempty ($null -ne $domain_username)
 $domain_server = Get-AnsibleParam -obj $params -name "domain_server" -type "str"
-$state = Get-AnsibleParam -obj $params -name "state" -ValidateSet "present", "absent" -default "present"
-$managed_by = Get-AnsibleParam -obj $params -name "managed_by" -type "str"
+$state = Get-AnsibleParam -obj $params -name "state" -ValidateSet "present","absent" -default "present"
 
-$odj_action = Get-AnsibleParam -obj $params -name "offline_domain_join" -type "str" -ValidateSet "none", "output", "path" -default "none"
+$odj_action = Get-AnsibleParam -obj $params -name "offline_domain_join" -type "str" -ValidateSet "none","output","path" -default "none"
 $_default_blob_path = Join-Path -Path $temp -ChildPath ([System.IO.Path]::GetRandomFileName())
 $odj_blob_path = Get-AnsibleParam -obj $params -name "odj_blob_path" -type "str" -default $_default_blob_path
 
 $extra_args = @{}
 if ($null -ne $domain_username) {
-  $domain_password = ConvertTo-SecureString $domain_password -AsPlainText -Force
-  $credential = New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList $domain_username, $domain_password
-  $extra_args.Credential = $credential
+    $domain_password = ConvertTo-SecureString $domain_password -AsPlainText -Force
+    $credential = New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList $domain_username, $domain_password
+    $extra_args.Credential = $credential
 }
 if ($null -ne $domain_server) {
-  $extra_args.Server = $domain_server
+    $extra_args.Server = $domain_server
 }
 
 If ($state -eq "present") {
@@ -56,50 +55,20 @@ If ($state -eq "present") {
   $distinguished_name = "CN=$name,$ou"
 
   $desired_state = [ordered]@{
-    name               = $name
-    sam_account_name   = $sam_account_name
-    dns_hostname       = $dns_hostname
-    ou                 = $ou
-    distinguished_name = $distinguished_name
-    description        = $description
-    enabled            = $enabled
-    state              = $state
-    managed_by         = $managed_by
-  }
-}
-Else {
-  $desired_state = [ordered]@{
-    name             = $name
+    name = $name
     sam_account_name = $sam_account_name
-    state            = $state
+    dns_hostname = $dns_hostname
+    ou = $ou
+    distinguished_name = $distinguished_name
+    description = $description
+    enabled = $enabled
+    state = $state
   }
-}
-
-if ($null -ne $managed_by) {
-  $computer = Get-ADComputer `
-    -Identity $sam_account_name `
-    -Properties ManagedBy
-
-  if ($null -eq $computer.ManagedBy) {
-    $extra_args.ManagedBy = $managed_by
-  }
-  else {
-    try {
-      $managed_by_object = Get-ADGroup -Identity $managed_by @extra_args
-    }
-    catch [Microsoft.ActiveDirectory.Management.ADIdentityNotFoundException] {
-      try {
-        $managed_by_object = Get-ADUser -Identity $managed_by @extra_args
-      }
-      catch [Microsoft.ActiveDirectory.Management.ADIdentityNotFoundException] {
-        Fail-Json $result "failed to find managed_by user or group $managed_by to be used for comparison"
-      }
-    }
-
-    if ($computer.ManagedBy -ne $managed_by_object.DistinguishedName) {
-      $extra_args.ManagedBy = $managed_by
-      $diff_text += "-ManagedBy = $($group.ManagedBy)`n+ManagedBy = $($managed_by_object.DistinguishedName)`n"
-    }
+} Else {
+  $desired_state = [ordered]@{
+    name = $name
+    sam_account_name = $sam_account_name
+    state = $state
   }
 }
 
@@ -109,32 +78,28 @@ Function Get-InitialState($desired_state) {
   $computer = Try {
     Get-ADComputer `
       -Identity $desired_state.sam_account_name `
-      -Properties DistinguishedName, DNSHostName, Enabled, Name, SamAccountName, Description, ObjectClass `
+      -Properties DistinguishedName,DNSHostName,Enabled,Name,SamAccountName,Description,ObjectClass `
       @extra_args
-  }
-  Catch { $null }
+  } Catch { $null }
   If ($computer) {
-    $null, $current_ou = $computer.DistinguishedName -split '(?<=[^\\](?:\\\\)*),'
-    $current_ou = $current_ou -join ','
+      $null,$current_ou = $computer.DistinguishedName -split '(?<=[^\\](?:\\\\)*),'
+      $current_ou = $current_ou -join ','
 
+      $initial_state = [ordered]@{
+        name = $computer.Name
+        sam_account_name = $computer.SamAccountName
+        dns_hostname = $computer.DNSHostName
+        ou = $current_ou
+        distinguished_name = $computer.DistinguishedName
+        description = $computer.Description
+        enabled = $computer.Enabled
+        state = "present"
+      }
+  } Else {
     $initial_state = [ordered]@{
-      name               = $computer.Name
-      sam_account_name   = $computer.SamAccountName
-      dns_hostname       = $computer.DNSHostName
-      ou                 = $current_ou
-      distinguished_name = $computer.DistinguishedName
-      description        = $computer.Description
-      enabled            = $computer.Enabled
-      state              = "present"
-      managed_by         = $managed_by
-
-    }
-  }
-  Else {
-    $initial_state = [ordered]@{
-      name             = $desired_state.name
+      name = $desired_state.name
       sam_account_name = $desired_state.sam_account_name
-      state            = "absent"
+      state = "absent"
     }
   }
 
@@ -152,8 +117,7 @@ Function Set-ConstructedState($initial_state, $desired_state) {
       -Description $desired_state.description `
       -WhatIf:$check_mode `
       @extra_args
-  }
-  Catch {
+  } Catch {
     Fail-Json -obj $result -message "Failed to set the AD object $($desired_state.name): $($_.Exception.Message)"
   }
 
@@ -161,13 +125,12 @@ Function Set-ConstructedState($initial_state, $desired_state) {
     # Move computer to OU
     Try {
       Get-ADComputer -Identity $desired_state.sam_account_name @extra_args |
-      Move-ADObject `
-        -TargetPath $desired_state.ou `
-        -Confirm:$False `
-        -WhatIf:$check_mode `
-        @extra_args
-    }
-    Catch {
+          Move-ADObject `
+            -TargetPath $desired_state.ou `
+            -Confirm:$False `
+            -WhatIf:$check_mode `
+            @extra_args
+    } Catch {
       Fail-Json -obj $result -message "Failed to move the AD object $($initial_state.distinguished_name) to $($desired_state.distinguished_name): $($_.Exception.Message)"
     }
   }
@@ -186,23 +149,22 @@ Function Add-ConstructedState($desired_state) {
       -Description $desired_state.description `
       -WhatIf:$check_mode `
       @extra_args
-  }
-  Catch {
-    Fail-Json -obj $result -message "Failed to create the AD object $($desired_state.name): $($_.Exception.Message)"
-  }
+    } Catch {
+      Fail-Json -obj $result -message "Failed to create the AD object $($desired_state.name): $($_.Exception.Message)"
+    }
 
   $result.changed = $true
 }
 
 Function Invoke-OfflineDomainJoin {
-  [CmdletBinding(SupportsShouldProcess = $true)]
+  [CmdletBinding(SupportsShouldProcess=$true)]
   param(
-    [Parameter(Mandatory = $true)]
+    [Parameter(Mandatory=$true)]
     [System.Collections.IDictionary]
     $desired_state ,
 
-    [Parameter(Mandatory = $true)]
-    [ValidateSet('none', 'output', 'path')]
+    [Parameter(Mandatory=$true)]
+    [ValidateSet('none','output','path')]
     [String]
     $Action ,
 
@@ -278,13 +240,12 @@ Function Invoke-OfflineDomainJoin {
 Function Remove-ConstructedState($initial_state) {
   Try {
     Get-ADComputer -Identity $initial_state.sam_account_name @extra_args |
-    Remove-ADObject `
-      -Recursive `
-      -Confirm:$False `
-      -WhatIf:$check_mode `
-      @extra_args
-  }
-  Catch {
+      Remove-ADObject `
+        -Recursive `
+        -Confirm:$False `
+        -WhatIf:$check_mode `
+        @extra_args
+  } Catch {
     Fail-Json -obj $result -message "Failed to remove the AD object $($desired_state.name): $($_.Exception.Message)"
   }
 
@@ -295,14 +256,14 @@ Function Remove-ConstructedState($initial_state) {
 Function Test-HashtableEquality($x, $y) {
   # Compare not nested HashTables
   Foreach ($key in $x.Keys) {
-    If (($y.Keys -notcontains $key) -or ($x[$key] -cne $y[$key])) {
-      Return $false
-    }
+      If (($y.Keys -notcontains $key) -or ($x[$key] -cne $y[$key])) {
+          Return $false
+      }
   }
   foreach ($key in $y.Keys) {
-    if (($x.Keys -notcontains $key) -or ($x[$key] -cne $y[$key])) {
-      Return $false
-    }
+      if (($x.Keys -notcontains $key) -or ($x[$key] -cne $y[$key])) {
+          Return $false
+      }
   }
   Return $true
 }
@@ -311,30 +272,26 @@ Function Test-HashtableEquality($x, $y) {
 $initial_state = Get-InitialState($desired_state)
 
 If ($desired_state.state -eq "present") {
-  If ($initial_state.state -eq "present") {
-    $in_desired_state = Test-HashtableEquality -X $initial_state -Y $desired_state
+    If ($initial_state.state -eq "present") {
+      $in_desired_state = Test-HashtableEquality -X $initial_state -Y $desired_state
 
-    If (-not $in_desired_state) {
-      Set-ConstructedState -initial_state $initial_state -desired_state $desired_state
+      If (-not $in_desired_state) {
+        Set-ConstructedState -initial_state $initial_state -desired_state $desired_state
+      }
+    } Else { # $desired_state.state = "Present" & $initial_state.state = "Absent"
+      Add-ConstructedState -desired_state $desired_state
+      Invoke-OfflineDomainJoin -desired_state $desired_state -Action $odj_action -BlobPath $odj_blob_path -WhatIf:$check_mode
+    }
+  } Else { # $desired_state.state = "Absent"
+    If ($initial_state.state -eq "present") {
+      Remove-ConstructedState -initial_state $initial_state
     }
   }
-  Else {
-    # $desired_state.state = "Present" & $initial_state.state = "Absent"
-    Add-ConstructedState -desired_state $desired_state
-    Invoke-OfflineDomainJoin -desired_state $desired_state -Action $odj_action -BlobPath $odj_blob_path -WhatIf:$check_mode
-  }
-}
-Else {
-  # $desired_state.state = "Absent"
-  If ($initial_state.state -eq "present") {
-    Remove-ConstructedState -initial_state $initial_state
-  }
-}
 
 If ($diff_support) {
   $diff = @{
     before = $initial_state
-    after  = $desired_state
+    after = $desired_state
   }
   $result.diff = $diff
 }
