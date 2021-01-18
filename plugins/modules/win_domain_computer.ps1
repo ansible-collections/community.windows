@@ -74,44 +74,13 @@ If ($state -eq "present") {
   }
 }
 
-if ($null -ne $managed_by) {
-   $computer = Try { Get-ADComputer `
-    -Identity $sam_account_name `
-    -Properties ManagedBy
-  } Catch { $null }
-
-  If ($computer) {
-    if ($null -eq $computer.ManagedBy) {
-      $extra_args.ManagedBy = $managed_by
-    }
-    else {
-      try {
-        $managed_by_object = Get-ADGroup -Identity $managed_by @extra_args
-      }
-      catch [Microsoft.ActiveDirectory.Management.ADIdentityNotFoundException] {
-        try {
-          $managed_by_object = Get-ADUser -Identity $managed_by @extra_args
-        }
-        catch [Microsoft.ActiveDirectory.Management.ADIdentityNotFoundException] {
-          Fail-Json $result "failed to find managed_by user or group $managed_by to be used for comparison"
-        }
-      }
-
-      if ($computer.ManagedBy -ne $managed_by_object.DistinguishedName) {
-        $extra_args.ManagedBy = $managed_by
-        $diff_text += "-ManagedBy = $($group.ManagedBy)`n+ManagedBy = $($managed_by_object.DistinguishedName)`n"
-      }
-    }
-  }
-}
-
 # ------------------------------------------------------------------------------
 Function Get-InitialState($desired_state) {
   # Test computer exists
   $computer = Try {
     Get-ADComputer `
       -Identity $desired_state.sam_account_name `
-      -Properties DistinguishedName,DNSHostName,Enabled,Name,SamAccountName,Description,ObjectClass `
+      -Properties DistinguishedName,DNSHostName,Enabled,Name,SamAccountName,Description,ObjectClass,ManagedBy `
       @extra_args
   } Catch { $null }
   If ($computer) {
@@ -127,7 +96,7 @@ Function Get-InitialState($desired_state) {
         description = $computer.Description
         enabled = $computer.Enabled
         state = "present"
-        managed_by = $managed_by
+        managed_by = $computer.ManagedBy
       }
   } Else {
     $initial_state = [ordered]@{
@@ -149,6 +118,7 @@ Function Set-ConstructedState($initial_state, $desired_state) {
       -DNSHostName $desired_state.dns_hostname `
       -Enabled $desired_state.enabled `
       -Description $desired_state.description `
+      -ManagedBy $desired_state.managed_by `
       -WhatIf:$check_mode `
       @extra_args
   } Catch {
@@ -181,6 +151,7 @@ Function Add-ConstructedState($desired_state) {
       -Path $desired_state.ou `
       -Enabled $desired_state.enabled `
       -Description $desired_state.description `
+      -ManagedBy $desired_state.managed_by `
       -WhatIf:$check_mode `
       @extra_args
     } Catch {
