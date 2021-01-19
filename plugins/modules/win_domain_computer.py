@@ -92,6 +92,7 @@ options:
     - This value can be in the forms C(Distinguished Name), C(objectGUID),
       C(objectSid) or C(sAMAccountName), see examples for more details.
     type: str
+    version_added: '1.3.0'
   offline_domain_join:
     description:
       - Provisions a computer in the directory and provides a BLOB file that can be used on the target computer/image to join it to the domain while offline.
