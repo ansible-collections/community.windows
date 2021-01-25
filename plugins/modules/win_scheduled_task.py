@@ -507,7 +507,7 @@ EXAMPLES = r'''
         stop_at_duration_end: yes
 
 - name: Create task to run a PS script in Windows 10 compatibility on boot with a delay of 1min
-  win_scheduled_task:
+  community.windows.win_scheduled_task:
     name: TriggerTask
     path: \Custom
     actions:
