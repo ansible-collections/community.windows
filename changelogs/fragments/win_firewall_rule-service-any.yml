@@ -1,0 +1,2 @@
+bugfixes:
+- 'win_firewall_rule - Ensure ``service: any`` is set to match any service instead of the literal service called ``any`` as per the docs'
