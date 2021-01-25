@@ -35,6 +35,9 @@ $state = $module.Params.state
 $module.Result.rc = 0
 
 function Install-Scoop {
+  [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidUsingInvokeExpression', '', Justification='This is one use case where we want to use iex')]
+  [CmdletBinding()]
+  param ()
 
   # Scoop doesn't have refreshenv like Chocolatey
   # Let's try to update PATH first
