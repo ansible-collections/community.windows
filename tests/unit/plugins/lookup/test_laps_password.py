@@ -116,21 +116,6 @@ def test_missing_ldap(laps_password):
     assert str(err.value).endswith(". Import Error: no import for you!")
 
 
-def test_invalid_cert_mapping():
-    with pytest.raises(AnsibleLookupError) as err:
-        lookup_loader.get('community.windows.laps_password').run(["host"], domain="test", validate_certs="incorrect")
-
-    assert str(err.value) == "Invalid validate_certs value 'incorrect': valid values are 'allow', 'demand', " \
-                             "'never', 'try'"
-
-
-def test_invalid_auth():
-    with pytest.raises(AnsibleLookupError) as err:
-        lookup_loader.get('community.windows.laps_password').run(["host"], domain="test", auth="fail")
-
-    assert str(err.value) == "Invalid auth value 'fail': expecting either 'gssapi', or 'simple'"
-
-
 def test_gssapi_without_sasl(monkeypatch, ):
     monkeypatch.setattr("ldap.SASL_AVAIL", 0)
 
