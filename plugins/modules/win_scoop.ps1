@@ -61,10 +61,6 @@ function Install-Scoop {
       $enc_command = [Convert]::ToBase64String([Text.Encoding]::Unicode.GetBytes($install_script.ToString()))
       $cmd = "powershell.exe -NoProfile -NoLogo -EncodedCommand $enc_command"
       $res = Run-Command -Command $cmd -environment $environment
-      $module.Result.rc = $res.rc
-      $module.Result.stdout = $res.stdout
-      $module.Result.stderr = $res.stderr
-
       if ($res.rc -ne 0) {
         $module.Result.rc = $res.rc
         $module.Result.stdout = $res.stdout

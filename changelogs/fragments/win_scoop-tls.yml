@@ -1,0 +1,2 @@
+bugfixes:
+- win_scoop - Make sure we enable TLS 1.2 when installing scoop
