@@ -188,7 +188,7 @@ catch [System.IO.FileNotFoundException] {
     $module.FailJson("The source file '$src' was not found.", $_)
 }
 catch {
-    $module.FailJson("There was an error loading the source file '$src'.", $_)
+    $module.FailJson("There was an error loading the source file '$src': $($_.Exception.Message).", $_)
 }
 
 $profiles = Get-ProfileDirectory -Include $module.Params.profiles -Exclude $module.Params.exclude_profiles
