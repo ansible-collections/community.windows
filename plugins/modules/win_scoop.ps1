@@ -63,6 +63,10 @@ function Install-Scoop {
 
     if (-not $module.CheckMode) {
       $res = Run-Command -Command "powershell.exe -" -stdin $install_script -environment $environment
+      $module.Result.rc = $res.rc
+      $module.Result.stdout = $res.stdout
+      $module.Result.stderr = $res.stderr
+
       if ($res.rc -ne 0) {
         $module.Result.rc = $res.rc
         $module.Result.stdout = $res.stdout
