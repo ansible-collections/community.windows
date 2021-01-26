@@ -8,6 +8,7 @@ DOCUMENTATION = r'''
 ---
 module: win_psrepository_copy
 short_description: Copies registered PSRepositories to other user profiles
+version_added: '1.3.0'
 description:
   - Copies specified registered PSRepositories to other user profiles on the system.
   - Can include the C(Default) profile so that new users start with the selected repositories.
