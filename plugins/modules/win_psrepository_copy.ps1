@@ -44,8 +44,8 @@ $spec = @{
 
 $module = [Ansible.Basic.AnsibleModule]::Create($args, $spec)
 
-$module.Diff.changed = @{}
-$module.Diff.unchanged = @{}
+$module.Diff.before = @{}
+$module.Diff.after = @{}
 
 function Select-Wildcard {
     <#
@@ -218,16 +218,15 @@ foreach ($user in $profiles) {
             $Script:new_repos[$_] = $Script:src_repos[$_]
         }
 
+    $module.Diff.before[$username] = $cur_repos
+    $module.Diff.after[$username] = $new_repos
+
     if ($updated -and -not (Compare-Hashtable -ReferenceObject $cur_repos -DifferenceObject $new_repos)) {
         if (-not $module.CheckMode) {
             $null = New-Item -Path $repo_dir -ItemType Directory -Force -ErrorAction SilentlyContinue
             $new_repos | Export-Clixml -LiteralPath $repo_path -Force
         }
-        $module.Diff.changed[$username] = $new_repos
         $module.Result.changed = $true
-    }
-    else {
-        $module.Diff.unchanged[$username] = $cur_repos
     }
 }
 
