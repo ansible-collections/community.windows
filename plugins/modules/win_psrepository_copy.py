@@ -66,6 +66,8 @@ notes:
     If you intend to filter user profiles, ensure your filters catch the right names."
   - "In the case of the service accounts, the specific profiles are C(systemprofile) (for the C(SYSTEM) user), and C(LocalService) or C(NetworkService)
     for those accounts respectively."
+  - "Repositories with credentials (requiring authentication) or proxy information will copy, but the credentials and proxy details will not as that
+    information is not stored with repository."
 seealso:
   - module: community.windows.win_psrepository
   - module: community.windows.win_psrepository_info
