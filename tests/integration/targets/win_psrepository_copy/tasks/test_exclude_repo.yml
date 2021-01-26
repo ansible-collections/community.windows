@@ -1,0 +1,49 @@
+# This file is part of Ansible
+
+# Copyright: (c) 2020, Brian Scholer <@briantist>
+# GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
+---
+#####################################
+## Begin filter repo (exclusive) tests
+
+- name: Reset
+  import_tasks: reset.yml
+
+- name: Copy filtered repos by exclusion - check
+  community.windows.win_psrepository_copy:
+    exclude: '*Server'
+  register: status
+  check_mode: yes
+
+- assert:
+    that: status is changed
+
+- name: Copy filtered repos by exclusion
+  community.windows.win_psrepository_copy:
+    exclude: '*Server'
+  register: status
+
+- assert:
+    that: status is changed
+
+- name: Copy filtered repos by exclusion - again
+  community.windows.win_psrepository_copy:
+    exclude: '*Server'
+  register: status
+
+- assert:
+    that: status is not changed
+
+- name: Test filtered repos (included)
+  include_tasks:
+    file: test_by_user.yml
+    apply:
+      vars:
+        user: "{{ item }}"
+        expected_repos:
+          - PSGallery
+          - FakeGet
+  loop: "{{ test_users | map(attribute='name') | list }}"
+
+## End filter repo (exclusive) tests
+#####################################

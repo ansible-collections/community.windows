@@ -1,0 +1,68 @@
+# This file is part of Ansible
+
+# Copyright: (c) 2020, Brian Scholer <@briantist>
+# GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
+---
+#####################################
+## Begin system user tests
+
+- name: Reset
+  import_tasks: reset.yml
+
+- name: Copy repos only to special system users - check
+  community.windows.win_psrepository_copy:
+    profiles:
+      - '*Service'
+      - 'systemprofile'
+    exclude_profiles: []
+  register: status
+  check_mode: yes
+
+- assert:
+    that: status is changed
+
+- name: Copy repos only to special system users
+  community.windows.win_psrepository_copy:
+    profiles:
+      - '*Service'
+      - 'systemprofile'
+    exclude_profiles: []
+  register: status
+
+- assert:
+    that: status is changed
+
+- name: Copy repos only to special system users - again
+  community.windows.win_psrepository_copy:
+    profiles:
+      - '*Service'
+      - 'systemprofile'
+    exclude_profiles: []
+  register: status
+
+- assert:
+    that: status is not changed
+
+- name: Test system users
+  include_tasks:
+    file: test_by_user.yml
+    apply:
+      vars:
+        user: "{{ 'SYSTEM' if item == 'systemprofile' else item }}"
+        expected_repos: "{{ test_repos }}"
+  loop:
+    - systemprofile
+    - LocalService
+    - NetworkService
+
+- name: Test other users
+  include_tasks:
+    file: test_by_user.yml
+    apply:
+      vars:
+        user: "{{ item }}"
+        expected_repos: []
+  loop: "{{ test_users | map(attribute='name') | list }}"
+
+## End system user tests
+#####################################

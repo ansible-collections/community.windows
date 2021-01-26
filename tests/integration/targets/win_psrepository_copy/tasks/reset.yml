@@ -1,0 +1,22 @@
+# This file is part of Ansible
+
+# Copyright: (c) 2020, Brian Scholer <@briantist>
+# GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
+---
+- name: Remove the psrepositories for all profiles on the system
+  become: yes
+  become_user: SYSTEM
+  become_method: runas
+  ansible.windows.win_shell: |
+    $regPL = 'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\ProfileList'
+    $default = Get-ItemProperty -LiteralPath $regPL | Select-Object -ExpandProperty Default
+    $profiles = (
+        @($default) +
+        (Get-ChildItem -LiteralPath $regPL | Get-ItemProperty | Select-Object -ExpandProperty ProfileImagePath)
+    ) -as [System.IO.DirectoryInfo[]]
+    $profiles |
+        Where-Object -Property Exists -EQ $true |
+        ForEach-Object -Process {
+            $p = [System.IO.Path]::Combine($_.FullName, 'AppData\Local\Microsoft\Windows\PowerShell\PowerShellGet\PSRepositories.xml')
+            Remove-Item -LiteralPath $p -Force -ErrorAction SilentlyContinue
+        }
