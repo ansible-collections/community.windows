@@ -80,6 +80,7 @@ Name | Description
 [community.windows.win_psmodule](https://github.com/ansible-collections/community.windows/blob/main/docs/community.windows.win_psmodule_module.rst)|Adds or removes a Windows PowerShell module
 [community.windows.win_psmodule_info](https://github.com/ansible-collections/community.windows/blob/main/docs/community.windows.win_psmodule_info_module.rst)|Gather information about PowerShell Modules
 [community.windows.win_psrepository](https://github.com/ansible-collections/community.windows/blob/main/docs/community.windows.win_psrepository_module.rst)|Adds, removes or updates a Windows PowerShell repository.
+[community.windows.win_psrepository_copy](https://github.com/ansible-collections/community.windows/blob/main/docs/community.windows.win_psrepository_copy_module.rst)|Copies registered PSRepositories to other user profiles
 [community.windows.win_psrepository_info](https://github.com/ansible-collections/community.windows/blob/main/docs/community.windows.win_psrepository_info_module.rst)|Gather information about PSRepositories
 [community.windows.win_psscript](https://github.com/ansible-collections/community.windows/blob/main/docs/community.windows.win_psscript_module.rst)|Install and manage PowerShell scripts from a PSRepository
 [community.windows.win_psscript_info](https://github.com/ansible-collections/community.windows/blob/main/docs/community.windows.win_psscript_info_module.rst)|Gather information about installed PowerShell Scripts

@@ -5,13 +5,33 @@ Community Windows Release Notes
 .. contents:: Topics
 
 
-v1.2.0
+v1.3.0
 ======
 
 Release Summary
 ---------------
 
-- Release summary for v1.2.0
+- Release summary for v1.3.0
+
+Minor Changes
+-------------
+
+- Extend win_domain_computer adding managedBy parameter.
+
+Bugfixes
+--------
+
+- win_firewall_rule - Ensure ``service: any`` is set to match any service instead of the literal service called ``any`` as per the docs
+- win_scoop - Make sure we enable TLS 1.2 when installing scoop
+- win_xml - Fix ``PropertyNotFound`` exception when creating a new attribute - https://github.com/ansible-collections/community.windows/issues/166
+
+New Modules
+-----------
+
+- win_psrepository_copy - Copies registered PSRepositories to other user profiles
+
+v1.2.0
+======
 
 Minor Changes
 -------------

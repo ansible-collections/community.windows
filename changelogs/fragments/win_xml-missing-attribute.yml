@@ -1,2 +1,0 @@
-bugfixes:
-- win_xml - Fix ``PropertyNotFound`` exception when creating a new attribute - https://github.com/ansible-collections/community.windows/issues/166
