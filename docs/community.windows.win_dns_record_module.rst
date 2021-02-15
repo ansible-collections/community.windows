@@ -233,7 +233,7 @@ Parameters
 Examples
 --------
 
-.. code-block:: yaml+jinja
+.. code-block:: yaml
 
     # Demonstrate creating a matching A and PTR record.
 

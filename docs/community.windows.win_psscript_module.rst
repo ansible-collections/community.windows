@@ -240,7 +240,7 @@ See Also
 Examples
 --------
 
-.. code-block:: yaml+jinja
+.. code-block:: yaml
 
     - name: Install a script from PSGallery
       community.windows.win_psscript:

@@ -112,7 +112,7 @@ See Also
 Examples
 --------
 
-.. code-block:: yaml+jinja
+.. code-block:: yaml
 
     - name: Add the extras bucket
       community.windows.win_scoop_bucket:

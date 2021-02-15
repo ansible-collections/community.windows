@@ -134,7 +134,7 @@ See Also
 Examples
 --------
 
-.. code-block:: yaml+jinja
+.. code-block:: yaml
 
     - name: Configure the Remote Desktop Gateway
       community.windows.win_rds_settings:

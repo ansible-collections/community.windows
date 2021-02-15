@@ -219,7 +219,7 @@ See Also
 Examples
 --------
 
-.. code-block:: yaml+jinja
+.. code-block:: yaml
 
     # Start a website
 

@@ -191,7 +191,7 @@ See Also
 Examples
 --------
 
-.. code-block:: yaml+jinja
+.. code-block:: yaml
 
     - name: Add ACME webapplication on IIS.
       community.windows.win_iis_webapplication:

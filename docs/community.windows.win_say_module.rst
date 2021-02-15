@@ -165,7 +165,7 @@ See Also
 Examples
 --------
 
-.. code-block:: yaml+jinja
+.. code-block:: yaml
 
     - name: Warn of impending deployment
       community.windows.win_say:

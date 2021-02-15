@@ -35,6 +35,9 @@ $state = $module.Params.state
 $module.Result.rc = 0
 
 function Install-Scoop {
+  [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidUsingInvokeExpression', '', Justification='This is one use case where we want to use iex')]
+  [CmdletBinding()]
+  param ()
 
   # Scoop doesn't have refreshenv like Chocolatey
   # Let's try to update PATH first
@@ -43,26 +46,24 @@ function Install-Scoop {
   $scoop_app = Get-Command -Name scoop.ps1 -Type ExternalScript -ErrorAction SilentlyContinue
   if ($null -eq $scoop_app) {
     # We need to install scoop
-    # Enable TLS1.2 if it's available but disabled (eg. .NET 4.5)
-    $security_protocols = [Net.ServicePointManager]::SecurityProtocol -bor [Net.SecurityProtocolType]::SystemDefault
-    if ([Net.SecurityProtocolType].GetMember("Tls12").Count -gt 0) {
-      $security_protocols = $security_protcols -bor [Net.SecurityProtocolType]::Tls12
-    }
-    [Net.ServicePointManager]::SecurityProtocol = $security_protocols
+    # We run this in a separate process to make it easier to get the result in a failure and capture any output that
+    # might be sent to the host. We also need to enable TLS 1.2 in that process and not here so it can download the
+    # install script and other components.
+    $install_script = {
+      # Enable TLS1.2 if it's available but disabled (eg. .NET 4.5)
+      $security_protocols = [Net.ServicePointManager]::SecurityProtocol -bor [Net.SecurityProtocolType]::SystemDefault
+      if ([Net.SecurityProtocolType].GetMember("Tls12").Count -gt 0) {
+        $security_protocols = $security_protcols -bor [Net.SecurityProtocolType]::Tls12
+      }
+      [Net.ServicePointManager]::SecurityProtocol = $security_protocols
 
-    $client = New-Object -TypeName System.Net.WebClient
-
-    $script_url = "https://get.scoop.sh"
-
-    try {
-      $install_script = $client.DownloadString($script_url)
-    }
-    catch {
-      $module.FailJson("Failed to download Scoop script from '$script_url'; $($_.Exception.Message)", $_)
+      Invoke-Expression (New-Object System.Net.WebClient).DownloadString('https://get.scoop.sh')
     }
 
     if (-not $module.CheckMode) {
-      $res = Run-Command -Command "powershell.exe -" -stdin $install_script -environment $environment
+      $enc_command = [Convert]::ToBase64String([Text.Encoding]::Unicode.GetBytes($install_script.ToString()))
+      $cmd = "powershell.exe -NoProfile -NoLogo -EncodedCommand $enc_command"
+      $res = Run-Command -Command $cmd -environment $environment
       if ($res.rc -ne 0) {
         $module.Result.rc = $res.rc
         $module.Result.stdout = $res.stdout

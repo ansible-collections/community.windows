@@ -168,13 +168,17 @@ Parameters
                                     <li>0</li>
                                     <li>1</li>
                                     <li>2</li>
+                                    <li>3</li>
+                                    <li>4</li>
                         </ul>
                 </td>
                 <td>
                         <div>The integer value with indicates which version of Task Scheduler a task is compatible with.</div>
                         <div><code>0</code> means the task is compatible with the AT command.</div>
-                        <div><code>1</code> means the task is compatible with Task Scheduler 1.0.</div>
-                        <div><code>2</code> means the task is compatible with Task Scheduler 2.0.</div>
+                        <div><code>1</code> means the task is compatible with Task Scheduler 1.0(Windows Vista, Windows Server 2008 and older).</div>
+                        <div><code>2</code> means the task is compatible with Task Scheduler 2.0(Windows 7, Windows Server 2008 R2).</div>
+                        <div><code>3</code> means the task is compatible with Task Scheduler 2.0(Windows 7, Windows Server 2008 R2).</div>
+                        <div><code>4</code> means the task is compatible with Task Scheduler 2.0(Windows 10, Windows Server 2019).</div>
                 </td>
             </tr>
             <tr>
@@ -1124,7 +1128,7 @@ See Also
 Examples
 --------
 
-.. code-block:: yaml+jinja
+.. code-block:: yaml
 
     - name: Create a task to open 2 command prompts as SYSTEM
       community.windows.win_scheduled_task:
@@ -1221,6 +1225,19 @@ Examples
             interval: PT1M
             duration: PT5M
             stop_at_duration_end: yes
+
+    - name: Create task to run a PS script in Windows 10 compatibility on boot with a delay of 1min
+      community.windows.win_scheduled_task:
+        name: TriggerTask
+        path: \Custom
+        actions:
+        - path: C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe
+          arguments: -ExecutionPolicy Unrestricted -NonInteractive -File C:\TestDir\Test.ps1
+        triggers:
+        - type: boot
+          delay: PT1M
+        username: SYSTEM
+        compatibility: 4
 
 
 

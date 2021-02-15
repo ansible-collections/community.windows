@@ -148,7 +148,7 @@ See Also
 Examples
 --------
 
-.. code-block:: yaml+jinja
+.. code-block:: yaml
 
     - name: Sync the contents of one directory to another
       community.windows.win_robocopy:

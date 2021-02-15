@@ -188,7 +188,7 @@ See Also
 Examples
 --------
 
-.. code-block:: yaml+jinja
+.. code-block:: yaml
 
     - name: Create a new RDS RAP
       community.windows.win_rds_rap:

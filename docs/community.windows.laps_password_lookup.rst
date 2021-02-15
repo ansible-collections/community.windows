@@ -317,7 +317,7 @@ Notes
 Examples
 --------
 
-.. code-block:: yaml+jinja
+.. code-block:: yaml
 
     # This isn't mandatory but it is a way to call kinit from within Ansible before calling the lookup
     - name: call kinit to retrieve Kerberos token

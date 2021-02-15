@@ -133,7 +133,7 @@ See Also
 Examples
 --------
 
-.. code-block:: yaml+jinja
+.. code-block:: yaml
 
     - name: Install Windows ADK with DISM for Server 2008 R2
       chocolatey.chocolatey.win_chocolatey:

@@ -109,6 +109,10 @@
   ansible.windows.win_get_url:
     url: https://ansible-ci-files.s3.amazonaws.com/test/integration/targets/win_psmodule/nuget.exe
     dest: '{{ remote_tmp_dir }}'
+  register: download_res
+  until: download_res is successful
+  retries: 3
+  delay: 5
 
 - name: create test PowerShell modules
   script: setup_modules.ps1 "{{ remote_tmp_dir }}"

@@ -204,7 +204,7 @@ See Also
 Examples
 --------
 
-.. code-block:: yaml+jinja
+.. code-block:: yaml
 
     - name: Apply our filter to Tomcat web.xml
       community.windows.win_xml:

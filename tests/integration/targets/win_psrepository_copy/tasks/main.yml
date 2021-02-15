@@ -1,0 +1,95 @@
+# This file is part of Ansible
+
+# Copyright: (c) 2020, Brian Scholer <@briantist>
+# GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
+---
+- name: Reset
+  import_tasks: reset.yml
+
+- name: Main block
+  module_defaults:
+    community.windows.win_psrepository_copy:
+      source: '{{ remote_tmp_dir }}\SampleRepositories.xml'
+  block:
+    # avoiding the use of win_psrepository / Register-PSRepository due to its strict target checking.
+    # in the end, this module always looks at the XML file, so we'll just put a pre-baked one in place.
+    - name: Put our source file in place
+      ansible.windows.win_copy:
+        src: SampleRepositories.xml
+        dest: "{{ remote_tmp_dir }}"
+        force: yes
+
+    - name: Copy repos with module defaults - check
+      community.windows.win_psrepository_copy:
+      register: status
+      check_mode: yes
+
+    - assert:
+        that: status is changed
+
+    - name: Copy repos with module defaults
+      community.windows.win_psrepository_copy:
+      register: status
+
+    - assert:
+        that: status is changed
+
+    - name: Copy repos with module defaults - again
+      community.windows.win_psrepository_copy:
+      register: status
+
+    - assert:
+        that: status is not changed
+
+    # these users should inherit the repositories via the Default profile
+    - name: Create test users
+      ansible.windows.win_user:
+        name: "{{ item.name }}"
+        profile: "{{ item.profile | default(omit) }}"
+        password: "{{ user_password }}"
+        groups:
+          - Administrators
+      loop: "{{ test_users }}"
+
+    #####################################
+    ## Begin inherited tests
+
+    - name: Test inherited repos via Default profile
+      include_tasks:
+        file: test_by_user.yml
+        apply:
+          vars:
+            user: "{{ item }}"
+            expected_repos: "{{ test_repos }}"
+      loop: "{{ test_users | map(attribute='name') | list }}"
+
+    ## End inherited tests
+    #####################################
+
+    - import_tasks: test_system_users.yml
+
+    - import_tasks: test_exclude_profile.yml
+
+    - import_tasks: test_include_profile.yml
+
+    - import_tasks: test_exclude_repo.yml
+
+    - import_tasks: test_include_repo.yml
+
+  always:
+    - name: Reset
+      import_tasks: reset.yml
+
+    - name: Remove test users
+      ansible.windows.win_user:
+        name: "{{ item.name }}"
+        state: absent
+      loop: "{{ test_users }}"
+
+    - name: Remove test profiles
+      import_tasks: remove_test_profiles.yml
+
+    - name: Remove sample file
+      ansible.windows.win_file:
+        path: '{{ remote_tmp_dir }}\SampleRepositories.xml'
+        state: absent

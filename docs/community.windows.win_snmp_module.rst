@@ -93,7 +93,7 @@ Parameters
 Examples
 --------
 
-.. code-block:: yaml+jinja
+.. code-block:: yaml
 
     - name: Replace SNMP communities and managers
       community.windows.win_snmp:

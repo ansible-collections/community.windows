@@ -27,7 +27,7 @@ Synopsis
 Examples
 --------
 
-.. code-block:: yaml+jinja
+.. code-block:: yaml
 
     - name: Get product id and product key
       community.windows.win_product_facts:

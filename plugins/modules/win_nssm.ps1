@@ -38,6 +38,8 @@ $stderrFile = Get-AnsibleParam -obj $params -name "stderr_file" -type "path"
 
 $executable = Get-AnsibleParam -obj $params -name "executable" -type "path" -default "nssm.exe"
 
+$app_env = Get-AnsibleParam -obj $params -name "app_environment" -type "dict"
+
 $app_rotate_bytes = Get-AnsibleParam -obj $params -name "app_rotate_bytes" -type "int" -default 104858
 $app_rotate_online = Get-AnsibleParam -obj $params -name "app_rotate_online" -type "int" -default 0 -validateset 0,1
 $app_stop_method_console = Get-AnsibleParam -obj $params -name "app_stop_method_console" -type "int"
@@ -476,6 +478,20 @@ if ($state -eq 'absent') {
 
         Update-NssmServiceParameter -parameter "AppStdout" -value $stdoutFile @common_params
         Update-NssmServiceParameter -parameter "AppStderr" -value $stderrFile @common_params
+
+        # set app environment, only do this for now when explicitly requested by caller to
+        # avoid breaking playbooks which use another / custom scheme for configuring app_env
+        if ($null -ne $app_env) {
+          # note: convert app_env dictionary to list of strings in the form key=value and pass that a long as value
+          $app_env_str = $app_env.GetEnumerator() | ForEach-Object { "$($_.Name)=$($_.Value)" }
+
+          # note: this is important here to make an empty envvar set working properly (in the sense that appenv is reset)
+          if ($null -eq $app_env_str) {
+            $app_env_str = ''
+          }
+
+          Update-NssmServiceParameter -parameter "AppEnvironmentExtra" -value $app_env_str @common_params
+        }
 
         ###
         # Setup file rotation so we don't accidentally consume too much disk

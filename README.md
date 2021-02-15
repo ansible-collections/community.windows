@@ -1,6 +1,6 @@
 # Ansible Collection: community.windows
 
-[![Run Status](https://api.shippable.com/projects/5e6068ebe4b17a000756145d/badge?branch=main)](https://app.shippable.com/github/ansible-collections/community.windows/dashboard/jobs)
+[![Build Status](https://dev.azure.com/ansible/community.windows/_apis/build/status/CI?branchName=main)](https://dev.azure.com/ansible/community.windows/_build/latest?definitionId=23&branchName=main)
 [![codecov](https://codecov.io/gh/ansible-collections/community.windows/branch/main/graph/badge.svg)](https://codecov.io/gh/ansible-collections/community.windows)
 
 
@@ -68,6 +68,7 @@ Name | Description
 [community.windows.win_lineinfile](https://github.com/ansible-collections/community.windows/blob/main/docs/community.windows.win_lineinfile_module.rst)|Ensure a particular line is in a file, or replace an existing line using a back-referenced regular expression
 [community.windows.win_mapped_drive](https://github.com/ansible-collections/community.windows/blob/main/docs/community.windows.win_mapped_drive_module.rst)|Map network drives for users
 [community.windows.win_msg](https://github.com/ansible-collections/community.windows/blob/main/docs/community.windows.win_msg_module.rst)|Sends a message to logged in users on Windows hosts
+[community.windows.win_net_adapter_feature](https://github.com/ansible-collections/community.windows/blob/main/docs/community.windows.win_net_adapter_feature_module.rst)|Enable or disable certain network adapters.
 [community.windows.win_netbios](https://github.com/ansible-collections/community.windows/blob/main/docs/community.windows.win_netbios_module.rst)|Manage NetBIOS over TCP/IP settings on Windows.
 [community.windows.win_nssm](https://github.com/ansible-collections/community.windows/blob/main/docs/community.windows.win_nssm_module.rst)|Install a service using NSSM
 [community.windows.win_pagefile](https://github.com/ansible-collections/community.windows/blob/main/docs/community.windows.win_pagefile_module.rst)|Query or change pagefile configuration
@@ -79,6 +80,7 @@ Name | Description
 [community.windows.win_psmodule](https://github.com/ansible-collections/community.windows/blob/main/docs/community.windows.win_psmodule_module.rst)|Adds or removes a Windows PowerShell module
 [community.windows.win_psmodule_info](https://github.com/ansible-collections/community.windows/blob/main/docs/community.windows.win_psmodule_info_module.rst)|Gather information about PowerShell Modules
 [community.windows.win_psrepository](https://github.com/ansible-collections/community.windows/blob/main/docs/community.windows.win_psrepository_module.rst)|Adds, removes or updates a Windows PowerShell repository.
+[community.windows.win_psrepository_copy](https://github.com/ansible-collections/community.windows/blob/main/docs/community.windows.win_psrepository_copy_module.rst)|Copies registered PSRepositories to other user profiles
 [community.windows.win_psrepository_info](https://github.com/ansible-collections/community.windows/blob/main/docs/community.windows.win_psrepository_info_module.rst)|Gather information about PSRepositories
 [community.windows.win_psscript](https://github.com/ansible-collections/community.windows/blob/main/docs/community.windows.win_psscript_module.rst)|Install and manage PowerShell scripts from a PSRepository
 [community.windows.win_psscript_info](https://github.com/ansible-collections/community.windows/blob/main/docs/community.windows.win_psscript_info_module.rst)|Gather information about installed PowerShell Scripts
@@ -181,7 +183,8 @@ The current process for publishing new versions of the Windows Community Collect
 * Rebuild the plugin docs:
     ```bash
     git clone https://github.com/ansible-network/collection_prep.git /tmp/collection_prep
-    python /tmp/collection_prep/add_docs.py --path ./ --branch-name main
+    pip install /tmp/collection_prep
+    collection_prep_add_docs --path ./ --branch-name main
     rm -rf /tmp/collection_prep
     ```
 * Update the `CHANGELOG`:

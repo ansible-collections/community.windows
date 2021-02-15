@@ -77,7 +77,7 @@ Parameters
 Examples
 --------
 
-.. code-block:: yaml+jinja
+.. code-block:: yaml
 
     # Run installer from mounted ISO, then unmount
     - name: Ensure an ISO is mounted

@@ -1,0 +1,96 @@
+trigger:
+  batch: true
+  branches:
+    include:
+      - main
+      - stable-*
+
+pr:
+  autoCancel: true
+  branches:
+    include:
+      - main
+      - stable-*
+
+schedules:
+  - cron: 0 9 * * *
+    displayName: Nightly
+    always: true
+    branches:
+      include:
+        - main
+        - stable-*
+
+variables:
+  - name: checkoutPath
+    value: ansible_collections/community/windows
+  - name: coverageBranches
+    value: main
+  - name: pipelinesCoverage
+    value: coverage-powershell
+  - name: entryPoint
+    value: tests/utils/shippable/shippable.sh
+  - name: fetchDepth
+    value: 0
+
+resources:
+  containers:
+    - container: default
+      image: quay.io/ansible/azure-pipelines-test-container:1.7.1
+
+pool: Standard
+
+stages:
+  - stage: Ansible_devel
+    displayName: Ansible devel
+    dependsOn: []
+    jobs:
+      - template: templates/matrix.yml
+        parameters:
+          nameFormat: '{0}'
+          testFormat: 'devel/{0}'
+          targets:
+            - name: Sanity
+              test: sanity
+            - name: Units
+              test: units
+  - stage: Ansible_2_10
+    displayName: Ansible 2.10
+    dependsOn: []
+    jobs:
+      - template: templates/matrix.yml
+        parameters:
+          nameFormat: '{0}'
+          testFormat: '2.10/{0}'
+          targets:
+            - name: Sanity
+              test: sanity
+            - name: Units
+              test: units
+  - stage: Windows
+    displayName: Windows
+    dependsOn: []
+    jobs:
+      - template: templates/matrix.yml
+        parameters:
+          nameFormat: Server {0}
+          testFormat: devel/windows/{0}
+          targets:
+            - test: 2012
+            - test: 2012-R2
+            - test: 2016
+            - test: 2019
+          groups:
+            - 1
+            - 2
+            - 3
+            - 4
+            - 5
+  - stage: Summary
+    condition: succeededOrFailed()
+    dependsOn:
+      - Ansible_devel
+      - Ansible_2_10
+      - Windows
+    jobs:
+      - template: templates/coverage.yml

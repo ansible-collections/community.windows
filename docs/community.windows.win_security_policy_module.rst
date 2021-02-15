@@ -111,7 +111,7 @@ See Also
 Examples
 --------
 
-.. code-block:: yaml+jinja
+.. code-block:: yaml
 
     - name: Change the guest account name
       community.windows.win_security_policy:

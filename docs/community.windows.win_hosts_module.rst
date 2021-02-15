@@ -158,7 +158,7 @@ See Also
 Examples
 --------
 
-.. code-block:: yaml+jinja
+.. code-block:: yaml
 
     - name: Add 127.0.0.1 as an A record for localhost
       community.windows.win_hosts:

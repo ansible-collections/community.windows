@@ -100,6 +100,11 @@ options:
     type: str
     choices: [ auto, delayed, disabled, manual ]
     default: auto
+  app_environment:
+    description:
+      - Key/Value pairs which will be added to the environment of the service application.
+    type: dict
+    version_added: 1.2.0
   app_rotate_bytes:
     description:
       - NSSM will not rotate any file which is smaller than the configured number of bytes.
@@ -195,6 +200,18 @@ EXAMPLES = r'''
     password: secret
     start_mode: manual
     state: started
+
+- name: Install a script based service and define custom environment variables
+  community.windows.win_nssm:
+    name: <ServiceName>
+    application: C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe
+    arguments:
+      - <path-to-script>
+      - <script arg>
+    app_environment:
+      AUTH_TOKEN: <token value>
+      SERVER_URL: https://example.com
+      PATH: "<path-prepends>;{{ ansible_env.PATH }};<path-appends>"
 
 - name: Remove the foo service
   community.windows.win_nssm:

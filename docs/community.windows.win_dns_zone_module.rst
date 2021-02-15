@@ -191,7 +191,7 @@ Parameters
 Examples
 --------
 
-.. code-block:: yaml+jinja
+.. code-block:: yaml
 
     - name: Ensure primary zone is present
       community.windows.win_dns_zone:

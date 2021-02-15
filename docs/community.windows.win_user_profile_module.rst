@@ -132,7 +132,7 @@ See Also
 Examples
 --------
 
-.. code-block:: yaml+jinja
+.. code-block:: yaml
 
     - name: Create a profile for an account
       community.windows.win_user_profile:

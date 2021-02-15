@@ -339,7 +339,7 @@ See Also
 Examples
 --------
 
-.. code-block:: yaml+jinja
+.. code-block:: yaml
 
     - name: Firewall rule to allow SMTP on TCP port 25
       community.windows.win_firewall_rule:

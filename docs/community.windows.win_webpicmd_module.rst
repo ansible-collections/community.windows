@@ -73,7 +73,7 @@ See Also
 Examples
 --------
 
-.. code-block:: yaml+jinja
+.. code-block:: yaml
 
     - name: Install URLRewrite2.
       community.windows.win_webpicmd:

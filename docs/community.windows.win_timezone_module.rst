@@ -75,7 +75,7 @@ See Also
 Examples
 --------
 
-.. code-block:: yaml+jinja
+.. code-block:: yaml
 
     - name: Set timezone to 'Romance Standard Time' (GMT+01:00)
       community.windows.win_timezone:
