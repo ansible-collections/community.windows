@@ -13,34 +13,35 @@ description:
 - The C(win_gpo_force) module can force GroupPolicy Updates on a specific Organizational Unit(ou).
 - Update the sysvol Folder
 options:
-mode:
+  mode:
     description:
-    - Specify Mode for update
+      - Specify Mode for update
     type:str
     choices: [ forceupdate, sysvolonly ]
     required: yes
     default: sysvolonly
-ou:
+  ou:
     description:
-    - Required if l(mode=forceupdate)
-    - used by module when ou a GroupPolicy
+     - Required if l(mode=forceupdate)
+     - used by module when ou a GroupPolicy
+    elements: str
     type:list
-log_path:
-    description:
-    - Specify log file for debug purposes
+    aliases:
+      - organizational_unit 
 notes:
-- This must be run on a host that has the GroupPolicy PowerShell module installed.
+  - This must be run on a host that has the GroupPolicy PowerShell module installed.
 '''
 
 EXAMPLES = r'''
-
 - name: Update sysvol folder on all server
-    win_gpo_force:
+  win_gpo_force:
       mode: forceupdate
-      ou: "OU=Clients,OU=switzerland,DC=intern,DC=systemuser,DC=de"
-
+      ou: "OU=Clients,OU=switzerland,DC=intern,DC=foo,DC=de"
 - name: Update sysvol folder on all server
-    win_gpo_force:
+  win_gpo_force:
       mode: sysvolonly
+'''
 
+RETURN = r'''
+#
 '''

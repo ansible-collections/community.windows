@@ -6,35 +6,18 @@
 
 $spec = @{
     options = @{
-        ou = @{ type = "str" }
-        $log_path = @{ type = "str" }
-        mode = @{ type = "str"; choices = "sysvolonly", "forceupdate"; default = "forceupdate" }
+        ou = @{ type = "str"; aliases = @("organizational_unit") }
+        mode = @{ type = "str"; choices = "sysvolonly", "forceupdate"; default = "sysvolonly" }
     }
     supports_check_mode = $false
 }
 $module = [Ansible.Basic.AnsibleModule]::Create($args, $spec)
 $mode = $module.Params.mode
 $ou = $module.Params.ou
-$log_path = $module.Params.log_path
 try {
     Import-Module GroupPolicy
 } catch {
     $module.FailJson("win_gpo_force requires the GroupPolicy PS module to be installed")
-}
-Function Write-DebugLog {
-    Param(
-        [string]$msg
-    )
-
-    $DebugPreference = "Continue"
-    $ErrorActionPreference = "Continue"
-    $date_str = Get-Date -Format u
-    $msg = "$date_str $msg"
-
-    Write-Debug $msg
-    if($log_path) {
-        Add-Content $log_path $msg
-    }
 }
 function Invoke-forcedgpo {
     param(
@@ -86,7 +69,6 @@ function Invoke-forcedgpo {
             $result.changed = $true
             }
 }
-$global:log_path = $log_path
 if($mode -eq "forceupdate"){
     if ($ou) {
         try {
