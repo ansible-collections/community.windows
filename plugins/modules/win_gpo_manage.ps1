@@ -1,20 +1,18 @@
 #!powershell
-# Copyright: (c) 2020 Sebastian Gruber ,dacoso GmbH All Rights Reserved.
+# Copyright: (c) 2021 Sebastian Gruber ,dacoso GmbH All Rights Reserved.
 # SPDX-License-Identifier: GPL-3.0-only
 # GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
-# AnsibleRequires -CSharpUtil Ansible.Basic
+#AnsibleRequires -CSharpUtil Ansible.Basic
 
-$ErrorActionPreference = 'Stop'#Error Action
 $spec = @{
     options             = @{
         name     = @{ type = "list" }
         folder   = @{ type = "path"; default = "C:\GPO" }
         mode     = @{ type = "str"; choices = "import", "query", "remove", "export"; default = "import" }
         override = @{ type = "bool"; default = $false }# Skip if import gpo
-        log_path = @{ type = "str" }
     }
-    required_if         = @(, 
-        @("mode", "import", @("folder")), 
+    required_if         = @(,
+        @("mode", "import", @("folder")),
         @("mode", "export", @("folder")),
         @("mode", "remove", @("name"))
         )
@@ -25,25 +23,10 @@ $check_mode = $module.CheckMode
 $gpomode = $module.Params.mode
 $removedgpo = $module.Params.name
 $folderpath = $module.Params.folder
-$log_path = $module.Params.log_path
 try {
     Import-Module GroupPolicy
 } catch {
     $module.FailJson("win_grouppolicy requires the GroupPolicy PS module to be installed")
-}
-Function Write-DebugLog {
-    Param(
-        [string]$msg
-    )
-    $DebugPreference = "Continue"
-    $ErrorActionPreference = "Continue"
-    $date_str = Get-Date -Format u
-    $msg = "$date_str $msg"
-
-    Write-Debug $msg
-    if($log_path) {
-        Add-Content $log_path $msg
-    }
 }
 function Import-GPOs {
     param (
@@ -60,7 +43,6 @@ function Import-GPOs {
                 $module.FailJson("GroupPolicy exists already")
             } else {
                 #GPO does not exist or override is §true
-                Write-DebugLog "Import GPO $name"
                 $Path = $Importfolder + "\" + $entry.Name
                  (get-item $Path+'\manifest.xml').Attributes += 'Hidden' #make manifest hidden
                 $ID = Get-ChildItem -Path $Path
@@ -87,7 +69,6 @@ function Export-GPOs {
         $module.FailJson("folder $folderpath exists already")
     }
     $gpo = Get-GPO -All
-    Write-DebugLog "Exporting to $ExportFolder"
     foreach ($Entry in $gpo) {
         $Path = $ExportFolder + "\" + $entry.Displayname
         if((Test-Path -Path $Path) -and !($override)) {
@@ -98,7 +79,6 @@ function Export-GPOs {
                 New-Item -ItemType directory -Path $Path -WhatIf:$check_mode
             }
             if((Test-Path -Path $Path) -and ($override)) {
-                Write-DebugLog "GPO Folder exist , PolicyFolder will be recreated"
                 Remove-Item -ItemType directory -Path $Path -WhatIf:$check_mode
                 New-Item -ItemType directory -Path $Path -WhatIf:$check_mode
             }
@@ -107,14 +87,6 @@ function Export-GPOs {
         }
     }
 }
-<# deprecated needed for debugging purpose
-$result = @{
-    changed  = $false
-    imported = [System.Collections.Generic.List`1[String]]@()
-    removed  = [System.Collections.Generic.List`1[String]]@()
-    exported = [System.Collections.Generic.List`1[String]]@()
-}
-#>
 if ($diff_mode) {
     $module.result.diff = @{}
 }
@@ -127,7 +99,6 @@ if ($gpomode -eq "remove") {
             if($gpos -contains $removedgpo) {
                 #check if GPO exist
                 try {
-                    Write-DebugLog "Remove GPO $gporemove"
                     Remove-GPO -Name $gporemove -WhatIf:$check_mode
                     $module.result.removed.Add($gporemove)
                     $module.result.changed = $true

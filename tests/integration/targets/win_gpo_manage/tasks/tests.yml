@@ -1,9 +1,10 @@
 ---
-- name: Import GPOs from default Folder
-  win_gpo_manage:
-   folder: "{{ win_gpo_srcfolder }}"
-   mode: import
-   override: yes
+# Import nopt possible ( no )
+#- name: Import GPOs from default Folder
+#  win_gpo_manage:
+#   folder: "{{ win_gpo_srcfolder }}"
+#   mode: import
+#   override: yes
 
 - name: Export GroupPolicy
   win_gpo_manage:

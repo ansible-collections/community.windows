@@ -3,19 +3,9 @@
     ansible.windows.win_shell: |
       Import-Module -Name GroupPolicy
 
-  - name: Import activedirectory Module
+  - name: Add GPO
     ansible.windows.win_shell: |
-      Import-Module -Name activedirectory
-
-  - name: ADD GPO
-    ansible.windows.win_shell: |
-      Remove-GPO -Name {{ gpo_name }} -Force
-
-# Need to copy Test Files to Source
+      New-GPO -Name {{ gpo_name }} -Force
 
   - name: Run tests without check mode
     include_tasks: tests.yml
-
-  - name: Remove GPO
-    ansible.windows.win_shell: |
-      Remove-GPO -Name {{ gpo_name }} -Force
