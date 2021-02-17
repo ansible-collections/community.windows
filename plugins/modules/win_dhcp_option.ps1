@@ -59,7 +59,7 @@ if(($type -eq "scope") -and ($version -eq "IPv6") ) {
     $extra_param.Prefix = $scope_id
     $get_param.Prefix = $scope_id
 }
- 
+
 if($type -eq "reservation") {
     $get_param.ReservedIP = $reservedip
     $extra_param.ReservedIP = $reservedip
