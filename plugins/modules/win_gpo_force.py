@@ -9,9 +9,8 @@ DOCUMENTATION = r'''
 module: win_gpo_force
 short_description: Force GroupPolicy Updates on a specific Organizational Unit(ou)
 description:
-- The C(win_gpo_force) module can force GroupPolicy Updates on a specific Organizational Unit(ou).
-- Update the sysvol Folder
-
+  - The C(win_gpo_force) module can force GroupPolicy Updates on a specific Organizational Unit(ou).
+  - Update the sysvol Folder
 author: Sebastian Gruber (@sgruber94)
 options:
   mode:
