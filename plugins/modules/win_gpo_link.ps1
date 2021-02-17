@@ -2,18 +2,7 @@
 # Copyright: (c) 2021 Sebastian Gruber ,dacoso GmbH All Rights Reserved.
 # SPDX-License-Identifier: GPL-3.0-only
 # GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
-# AnsibleRequires -CSharpUtil Ansible.Basic
-
-try {
-    Import-Module GroupPolicy
-} catch {
-    $module.FailJson("win_grouppolicy requires the GroupPolicy  PS module to be installed")
-}
-try {
-    Import-Module activedirectory
-} catch {
-    $module.FailJson("win_grouppolicy requires the activedirectory  PS module to be installed")
-}
+#AnsibleRequires -CSharpUtil Ansible.Basic
 
 function Get-Gplink {
 
@@ -181,7 +170,16 @@ $gposerver = $module.Params.server
 $enforcedbool = $module.Params.enforced
 $gpolinkenabledbool = $module.Params.linkenabled
 $ErrorActionPreference = 'Stop'#Error Action
-
+try {
+    Import-Module GroupPolicy
+} catch {
+    $module.FailJson("win_grouppolicy requires the GroupPolicy  PS module to be installed")
+}
+try {
+    Import-Module activedirectory
+} catch {
+    $module.FailJson("win_grouppolicy requires the activedirectory  PS module to be installed")
+}
 #Converting Needed Variables from bool into Strings :)
 #Microsoft specified that as string. Possible "No","yes","Unspecified" https://docs.microsoft.com/en-us/powershell/module/grouppolicy/set-gplink
 if ($gpolinkenabledbool) {
