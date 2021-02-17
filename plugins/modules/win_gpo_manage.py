@@ -30,7 +30,6 @@ options:
       - query
       - remove
     required: yes
-    default: import
   folder:
     description:
       - Required if l(type=import) or l(type=export)

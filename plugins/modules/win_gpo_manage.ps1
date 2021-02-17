@@ -8,7 +8,7 @@ $spec = @{
     options  = @{
         name     = @{ type = "list"; elements = "str" }
         folder   = @{ type = "path"; default = "C:\GPO" }
-        mode     = @{ type = "str"; choices = "import", "query", "remove", "export"; default = "import";required=$true }
+        mode     = @{ type = "str"; choices = "import", "query", "remove", "export";required=$true }
         override = @{ type = "bool"; default = $false }# Skip if import gpo
     }
     required_if = @(
