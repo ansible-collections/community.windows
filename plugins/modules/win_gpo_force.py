@@ -5,7 +5,6 @@
 # GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 
 DOCUMENTATION = r'''
----
 module: win_gpo_force
 short_description: Force GroupPolicy Updates on a specific Organizational Unit(ou)
 description:
@@ -28,7 +27,7 @@ options:
      - used by module when ou a GroupPolicy
     type: str
     aliases:
-      - organizational_unit 
+      - organizational_unit
 notes:
   - This Module requires PowerShell Module GroupPolicy & Windows Feature RSAT-DFS-Mgmt-Con
 '''
