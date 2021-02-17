@@ -19,7 +19,6 @@ options:
       - forceupdate
       - sysvolonly
     required: yes
-    default: sysvolonly
     type: str
   ou:
     description:

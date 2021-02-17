@@ -6,7 +6,7 @@
 
 $spec = @{
     options             = @{
-        mode = @{ type = "str"; choices = "sysvolonly", "forceupdate"; default = "sysvolonly"; required =$true}
+        mode = @{ type = "str"; choices = "sysvolonly", "forceupdate"; required =$true}
         ou   = @{ type = "str"; aliases = @("organizational_unit") }
     }
     supports_check_mode = $false
