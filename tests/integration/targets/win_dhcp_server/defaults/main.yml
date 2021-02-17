@@ -1,7 +1,7 @@
 ---
 dhcp_scope_preferredlifetime: 0.02:00:00
 dhcp_scope_validlifetime: 0.04:00:00
-dhcp_scope_prefix: 0.04:00:00
+dhcp_scope_prefix: "fd12:3456::"
 dhcp_scope: 172.16.98.0
 dhcp_scope_start: 172.16.98.1
 dhcp_scope_end: 172.16.98.254
