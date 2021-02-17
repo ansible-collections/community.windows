@@ -1,6 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
+# Copyright: (c) 2021, Nick Duijvelshoff <nick@duijvelshoff.com>
 # Copyright: (c) 2018, Wojciech Sciesinski <wojciech[at]sciesinski[dot]net>
 # Copyright: (c) 2017, Daniele Lazzari <lazzari@mailup.com>
 # GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
@@ -59,6 +60,12 @@ options:
     description:
       - Name of the custom repository to use.
     type: str
+  username:
+    description:
+      - Username to authenticate against private repository.
+  password:
+    description:
+      - Password to authenticate against private repository.
   url:
     description:
       - URL of the custom repository to register.
@@ -78,6 +85,7 @@ seealso:
 author:
 - Wojciech Sciesinski (@it-praktyk)
 - Daniele Lazzari (@dlazz)
+- Nick Duijvelshoff (@nduijvelshoff)
 '''
 
 EXAMPLES = r'''
@@ -114,6 +122,14 @@ EXAMPLES = r'''
   community.windows.win_psmodule:
     name: PowerShellModule
     repository: MyRepository
+    state: present
+
+- name: Add a PowerShell module from a specific repository with credentials
+  community.windows.win_psmodule:
+    name: PowerShellModule
+    repository: MyRepository
+    username: repo_username
+    password: repo_password
     state: present
 
 - name: Remove a PowerShell module
