@@ -5,6 +5,7 @@
 # GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 
 DOCUMENTATION = r'''
+---
 module: win_gpo_manage
 short_description: Imports,Export,Removes Group Policy on windows hosts
 author: Sebastian Gruber (@sgruber94)
@@ -17,13 +18,17 @@ seealso:
   - module: community.windows.win_gpo_link
 options:
   mode:
-   description:
-     -  When l(type=import), GroupPolicy will be imported from a specific Folder
-     -  When l(type=export), GroupPolicy will be exported from to a specific Folder
-     -  When l(type=query), GroupPolicy will be query
-     -  When l(type=remove), specific GroupPolicy will be removed
+    description:
+      - When l(type=import), GroupPolicy will be imported from a specific Folder
+      - When l(type=export), GroupPolicy will be exported from to a specific Folder
+      - When l(type=query), GroupPolicy will be query
+      - When l(type=remove), specific GroupPolicy will be removed
     type: str
-    choices: [ import, export, query, remove ]
+    choices:
+      - import
+      - export
+      - query
+      - remove
     required: yes
     default: import
   folder:

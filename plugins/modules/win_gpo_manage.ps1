@@ -5,7 +5,7 @@
 #AnsibleRequires -CSharpUtil Ansible.Basic
 
 $spec = @{
-    options             = @{
+    options  = @{
         name     = @{ type = "list" }
         folder   = @{ type = "path"; default = "C:\GPO" }
         mode     = @{ type = "str"; choices = "import", "query", "remove", "export"; default = "import" }
