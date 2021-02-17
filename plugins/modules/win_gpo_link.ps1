@@ -112,7 +112,7 @@ function Get-Gplink {
                 $domain = ($gpodomaindn[0].substring(3)).replace(",DC=", ".")
                 $checkdc = (get-addomaincontroller -domainname $domain -discover).name
                 #we test if the $gpoguid is a valid GUID in the domain if not we return a "Oprhaned GpLink or External GPO" in the $gponname
-                $mygpo = get-gpo -guid $gpoguid -domain $domain -server "$($checkdc)$($domain)2> $null"
+                $mygpo = get-gpo -guid $gpoguid -domain $domain -server "$($checkdc)$($domain)$null"
                 if ($null -ne $mygpo ) {
                     $gponame = $MyGPO.displayname
                     $gpodomain = $domain
@@ -149,13 +149,13 @@ function Get-Gplink {
     }
 }
 $spec = @{
-    options = @{
-        state = @{ type = "str"; choices = "query", "present", "absent"; default = "present" }
-        path = @{ type = "list"; elements = "str" }
-        gponame = @{ type = "str"; required = $true }
-        order = @{ type = "int" }
-        domain = @{ type = "str" }
-        enforced = @{ type = "bool"; default = $false }
+    options             = @{
+        state       = @{ type = "str"; choices = "query", "present", "absent"; default = "present" }
+        path        = @{ type = "list"; elements = "str" }
+        gponame     = @{ type = "str"; required = $true }
+        order       = @{ type = "int" }
+        domain      = @{ type = "str" }
+        enforced    = @{ type = "bool"; default = $false }
         linkenabled = @{  type = "bool"; default = $true }
     }
     supports_check_mode = $true
@@ -206,44 +206,44 @@ if ($state -eq "query") {
 if ($state -eq "present") {
     $gpos = Get-GPO -All
     if ($gpos.Displayname -contains $gponame) {
-            #handle each path
-            foreach ($pa in $path) {
-                [string]$path = $pa
-                if ($path) {
-                    #collect all Informations about GPO
-                    $gpodefault = @{
-                        Name = $gponame
-                        Target = $path
-                        Enforced = $enforced
-                    }
-                    #Settings for Settings like "order"
-                    $gposetparam = @{
-                        LinkEnabled = $gpolinkenabled
-                    }
-                    if ($gpoorder) { $gposetparam.order = $gpoorder }
-                    if ($gpodomain) { $gposetparam.Domain = $gpodomain }
-                    if ($gposerver) { $gposetparam.Server = $gposerver }
-                    if ($checkmode) { $gposetparam.WhatIf = $true }
-                    $gpoalllinks = get-gplink -path $path #get all links for specific path
-                    $gpoonpath = $gpoalllinks | Where-Object { $_.DisplayName -match $gponame } | Select-Object * #filter information for specific
-                    if ( $gpoalllinks.DisplayName -notcontains $gponame) {
-                        #gpo link not exists create link
-                        new-gplink -name $gponame -Target $path
-                        $module.result.changed = $true
-                    }
-                    if (($gpoonpath.Enforced -match $gposetparam.Enforced) -and ($gpoonpath.Enabled -match $gposetparam.LinkEnabled) -and (($null -eq $gposetparam.order) -or ($gpoonpath.Order -eq $gposetparam.order))) {
-                        # nogplink  update needed
-                        $module.result.changed = $false
-                    } else {
-                        #gplink needs update
-                        Set-GPLink @gpodefault @gposetparam
-                        $module.result.changed = $true
-                    }
-                } else {
-                    #Fail if Path is empty and Import doesnt recognized it
-                    $module.FailJson("GPO Target Path not set. Please specify that.")
+        #handle each path
+        foreach ($pa in $path) {
+            [string]$path = $pa
+            if ($path) {
+                #collect all Informations about GPO
+                $gpodefault = @{
+                    Name     = $gponame
+                    Target   = $path
+                    Enforced = $enforced
                 }
+                #Settings for Settings like "order"
+                $gposetparam = @{
+                    LinkEnabled = $gpolinkenabled
+                }
+                if ($gpoorder) { $gposetparam.order = $gpoorder }
+                if ($gpodomain) { $gposetparam.Domain = $gpodomain }
+                if ($gposerver) { $gposetparam.Server = $gposerver }
+                if ($checkmode) { $gposetparam.WhatIf = $true }
+                $gpoalllinks = get-gplink -path $path #get all links for specific path
+                $gpoonpath = $gpoalllinks | Where-Object { $_.DisplayName -match $gponame } | Select-Object * #filter information for specific
+                if ( $gpoalllinks.DisplayName -notcontains $gponame) {
+                    #gpo link not exists create link
+                    new-gplink -name $gponame -Target $path
+                    $module.result.changed = $true
+                }
+                if (($gpoonpath.Enforced -match $gposetparam.Enforced) -and ($gpoonpath.Enabled -match $gposetparam.LinkEnabled) -and (($null -eq $gposetparam.order) -or ($gpoonpath.Order -eq $gposetparam.order))) {
+                    # nogplink  update needed
+                    $module.result.changed = $false
+                } else {
+                    #gplink needs update
+                    Set-GPLink @gpodefault @gposetparam
+                    $module.result.changed = $true
+                }
+            } else {
+                #Fail if Path is empty and Import doesnt recognized it
+                $module.FailJson("GPO Target Path not set. Please specify that.")
             }
+        }
     } else {
         #No GPO exists in AD
         $module.FailJson("GPO not exist")

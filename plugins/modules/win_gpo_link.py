@@ -29,7 +29,8 @@ options:
   path:
     description:
       - Specifies OU for GPO Link
-    type: str
+    elements str
+    type: list
     required: yes
   gponame:
     description:
@@ -51,6 +52,10 @@ options:
   order:
     description:
       - Specify the order number of specific GPO
+    type: int
+  domain:
+    description:
+      - Specify the GPO domain
     type: int
 '''
 
