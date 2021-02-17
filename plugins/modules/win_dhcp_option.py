@@ -32,6 +32,7 @@ options:
     -  When l(type=reservation), Options will be applied to defined reservation
     type: str
     choices: [ server,scope,reservation ]
+    required: yes
   version:
     description:
      - Specify Version from the IP Protocol
@@ -43,7 +44,7 @@ options:
     - Required if l(type=scope), otherwise ignored.
     - Prefix will be used for IPv6
     type: str
-    alias: [prefix]
+    aliases: [prefix]
   reservedip:
     description:
     - Specifies the IPv4/IPv6 address of the reservation for which the option value are set.

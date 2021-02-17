@@ -15,7 +15,7 @@ $spec = @{
         value            = @{ type = "str" }
         VendorClass      = @{ type = "str" }
         computername     = @{ type = "str" }
-        dnsserver        = @{ type = "str" } 
+        dnsserver        = @{ type = "str" }
         dnsdomain        = @{ type = "str" } #ipv4 only
         router           = @{ type = "str" } #ipv4 only
         domainsearchlist = @{ type = "str" }
@@ -37,8 +37,8 @@ $state = $module.Params.state
 $reservedip = $module.Params.reservedip
 $computername = $module.Params.computername #optional to specifiy another computer
 $dnsserver = $module.Params.dnsserver #optional to specifiy dns server
-$dnsdomain = $module.Params.dnsdomain 
-$router = $module.Params.router 
+$dnsdomain = $module.Params.dnsdomain
+$router = $module.Params.router
 $force = $module.Params.force #optional for forcing Parameter
 Try {
     # Import DHCP Server PS Module
@@ -51,15 +51,15 @@ $extra_param = @{}
 $get_param = @{}
 if($computername) { $extra_param.ComputerName = $computername }
 if($computername) { $get_param.ComputerName = $computername }
-if(($type -eq "scope") -and ($version -eq "IPv4") ) { 
-    $extra_param.Scope = $scope_id 
-    $get_param.Scope = $scope_id 
+if(($type -eq "scope") -and ($version -eq "IPv4") ) {
+    $extra_param.Scope = $scope_id
+    $get_param.Scope = $scope_id
 }
-if(($type -eq "scope") -and ($version -eq "IPv6") ) { 
-    $extra_param.Prefix = $scope_id 
-    $get_param.Prefix = $scope_id 
+if(($type -eq "scope") -and ($version -eq "IPv6") ) {
+    $extra_param.Prefix = $scope_id
+    $get_param.Prefix = $scope_id
 }
-  
+ 
 if($type -eq "reservation") {
     $get_param.ReservedIP = $reservedip
     $extra_param.ReservedIP = $reservedip
@@ -71,7 +71,7 @@ if($state -eq "present") {
         $alldhcpoptions = Get-DhcpServerv4OptionValue @get_param
     } else {
         #ipv6
-        $alldhcpoptions = Get-DhcpServerv6OptionValue @get_param 
+        $alldhcpoptions = Get-DhcpServerv6OptionValue @get_param
     }
     $current_release = $alldhcpoptions | Where-Object { $_.OptionId -eq $optionid } | Select-Object *
     if(((($current_release.value -eq $value) -and ($current_release.OptionId -eq $optionid)) -or (($current_release.VendorClass -eq $VendorClass) -and ($null -ne $current_release.VendorClass) ))) {
@@ -110,7 +110,7 @@ if ($state -eq "absent") {
         $alldhcpoptions = Get-DhcpServerv4OptionValue @extra_param
     } else {
         #ipv6
-        $alldhcpoptions = Get-DhcpServerv6OptionValue @extra_param 
+        $alldhcpoptions = Get-DhcpServerv6OptionValue @extra_param
     }
     $current_release = $alldhcpoptions | Where-Object { $_.OptionId -eq $optionid } | Select-Object *
     if(((($current_release.value -eq $value) -and ($current_release.OptionId -eq $optionid)) -or (($current_release.VendorClass -eq $VendorClass) -and ($null -ne $current_release.VendorClass) ))){
