@@ -2,13 +2,13 @@
 # Copyright: (c) 2021 Sebastian Gruber (@sgruber94) ,dacoso GmbH All Rights Reserved.
 # SPDX-License-Identifier: GPL-3.0-only
 # GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
-# AnsibleRequires -CSharpUtil Ansible.Basic
+#AnsibleRequires -CSharpUtil Ansible.Basic
 $spec = @{
     options             = @{
         type              = @{ type = "str"; choices = "scope", "exclusion"; required =$true }
         version           = @{ type = "str"; choices = "IPv4", "IPv6"; default = "IPv4" }
         scope             = @{ type = "str"; aliases = "prefix" }
-        name              = @{ type = "str" }
+        name              = @{ type = "str"; required =$true  }
         validlifetime     = @{ type = "str" ; default = "0.04:00:00" }
         preferredlifetime = @{ type = "str" ; default = "0.02:00:00" }
         startrange        = @{ type = "str" }
