@@ -1,11 +1,11 @@
 #!powershell
-# Copyright: (c) 2020 Sebastian Gruber ,dacoso GmbH All Rights Reserved.
+# Copyright: (c) 2021 Sebastian Gruber (@sgruber94) ,dacoso GmbH All Rights Reserved.
 # SPDX-License-Identifier: GPL-3.0-only
 # GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 # AnsibleRequires -CSharpUtil Ansible.Basic
 $spec = @{
     options             = @{
-        type              = @{ type = "str"; choices = "scope", "exclusion" }
+        type              = @{ type = "str"; choices = "scope", "exclusion"; required =$true }
         version           = @{ type = "str"; choices = "IPv4", "IPv6"; default = "IPv4" }
         scope             = @{ type = "str"; aliases = "prefix" }
         name              = @{ type = "str" }
@@ -17,7 +17,7 @@ $spec = @{
         state             = @{ type = "str"; choices = "absent", "present"; default = "present" }
         computername      = @{ type = "str" }
         force             = @{ type = "bool"; default = $false }
-        scopestate        = @{ type = "str"; choices = "Active", "InActive"; default = "active" }
+        scopestate        = @{ type = "str"; choices = "Active", "InActive"; default = "Active" }
     }
     supports_check_mode = $true
 }
@@ -95,7 +95,7 @@ if ($state -eq "absent") {
                 } catch {
                     $module.Result.changed = $false
                     $module.FailJson("Unable to remove scope : $($_.Exception.Message)")
-                }   
+                }
             } else {
                 #IPv6
                 try {
@@ -110,7 +110,7 @@ if ($state -eq "absent") {
     } elseif($type -eq "exclusion") {
         $current_exclusion_exists = $false
         if($version -eq "IPv4") {
-            $current_exclusion = Get-DhcpServerv4ExclusionRange -ScopeId $scope_id 
+            $current_exclusion = Get-DhcpServerv4ExclusionRange -ScopeId $scope_id
             if (($current_exclusion.ScopeId -contains $scope_id) -and ($current_scope.StartRange -contains $startrange) -and ($current_scope.EndRange -contains $endrange)) {
                 $current_exclusion_exists = $true
             }
@@ -140,7 +140,7 @@ if ($state -eq "absent") {
                 } catch {
                     $module.Result.changed = $false
                     $module.FailJson("Unable to remove exclusion : $($_.Exception.Message)")
-                }   
+                }
             } else {
                 #IPv6
                 try {
@@ -175,7 +175,7 @@ if ($state -eq "present") {
             $current_scope_exists = $false
         }
         if ($current_scope_exists -eq $false) {
-            
+
             $extra_param.state = $scopestate
             if($name) { $extra_param.name = $name }
             if ($version -eq "IPv4") {
@@ -189,7 +189,7 @@ if ($state -eq "present") {
                 } catch {
                     $module.Result.changed = $false
                     $module.FailJson("Unable to add scope : $($_.Exception.Message)")
-                }   
+                }
             } else {
                 #IPv6
                 if($validlifetime) { $extra_param.validlifetime = $validlifetime }
@@ -213,7 +213,7 @@ if ($state -eq "present") {
     } elseif($type -eq "exclusion") {
         $current_exclusion_exists = $false
         if($version -eq "IPv4") {
-            $current_exclusion = Get-DhcpServerv4ExclusionRange -ScopeId $scope_id 
+            $current_exclusion = Get-DhcpServerv4ExclusionRange -ScopeId $scope_id
             if (($current_exclusion.ScopeId -contains $scope_id) -and ($current_scope.StartRange -contains $startrange) -and ($current_scope.EndRange -contains $endrange)) {
                 $current_exclusion_exists = $true
             }
@@ -237,7 +237,7 @@ if ($state -eq "present") {
                 } catch {
                     $module.Result.changed = $false
                     $module.FailJson("unable to add exclusion : $($_.Exception.Message)")
-                }   
+                }
             } else {
                 #IPv6
                 try {

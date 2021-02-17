@@ -1,20 +1,18 @@
 ---
-- block:
-  - name: Check DHCP Service/Role Install State
-    ansible.windows.win_feature:
-      name: DHCP
-      state: present
-      include_management_tools: yes
-    register: dhcp_role
+- name: Check DHCP Service/Role Install State
+  ansible.windows.win_feature:
+    name: DHCP
+    state: present
+    include_management_tools: yes
+  register: dhcp_role
 
-  - name: Reboot if Necessary
-    ansible.windows.win_reboot:
-    when: dhcp_role.reboot_required
+- name: Reboot if Necessary
+  ansible.windows.win_reboot:
+  when: dhcp_role.reboot_required
 
-  - name: Run tests without check mode
-    include_tasks: tests.yml
+- name: Run tests without check mode
+  include_tasks: tests.yml
 
-  always:
-  - name: Remove the DHCP scope
-    ansible.windows.win_shell: |
-      Remove-DhcpServerv4Scope -ScopeId {{ dhcp_scope_id }} -Force
+- name: Remove the DHCP scope
+  ansible.windows.win_shell: |
+    Remove-DhcpServerv4Scope -ScopeId {{ dhcp_scope }} -Force
