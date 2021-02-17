@@ -48,9 +48,3 @@
     prefix: "{{ dhcp_scope_prefix }}"
     validlifetime: "{{ dhcp_scope_validlifetime }}"
     preferredlifetime: "{{ dhcp_scope_preferredlifetime }}"
-
-- name: Validate the State
-  ansible.windows.win_shell: |
-    Get-DhcpServerv6Scope | Where-Object Prefix -eq {{ dhcp_scope_prefix }}
-  register: validate_state_ipv6_out
-  failed_when: validate_state_ipv6_out.stdout != ""
