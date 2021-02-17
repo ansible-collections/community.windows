@@ -6,7 +6,7 @@
 
 $spec = @{
     options             = @{
-        type             = @{ type = "str"; choices = "server", "scope", "reservation" }
+        type             = @{ type = "str"; choices = "server", "scope", "reservation"; required = $true }
         version          = @{ type = "str"; choices = "IPv4", "IPv6"; default = "IPv4" }
         state            = @{ type = "str"; choices = "absent", "present"; default = "present" }
         scope            = @{ type = "str"; aliases = "prefix" }

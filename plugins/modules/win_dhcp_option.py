@@ -1,6 +1,6 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-# Copyright: (c) 2020 Sebastian Gruber ,dacoso GmbH All Rights Reserved.
+# Copyright: (c) 2021 Sebastian Gruber ,dacoso GmbH All Rights Reserved.
 # SPDX-License-Identifier: GPL-3.0-only
 # GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 
@@ -15,6 +15,9 @@ description:
   - Manage Windows Server DHCP Options (IPv4/IPv6)
   - Adds, Removes and Modifies DHCP Options
   - Task should be delegated to a Windows DHCP Server
+notes:
+  - U(https://docs.microsoft.com/en-us/powershell/module/dhcpserver/set-dhcpserverv4optionvalue)
+  - U(https://docs.microsoft.com/en-us/powershell/module/dhcpserver/set-dhcpserverv6optionvalue)
 options:
   state:
     description:
@@ -29,14 +32,12 @@ options:
     -  When l(type=reservation), Options will be applied to defined reservation
     type: str
     choices: [ server,scope,reservation ]
-    required: true
   version:
     description:
      - Specify Version from the IP Protocol
     type: str
     default: IPv4
     choices: [ IPv4, IPv6 ]
-    required: true
   scope:
     descrition:
     - Required if l(type=scope), otherwise ignored.
@@ -78,6 +79,10 @@ options:
     descrition:
     - optional for specify another Computer
     type: str
+  domainsearchlist:
+    descrition:
+    - optional for specify another Computer
+    type: str
   force:
     descrition:
     - optional for forcing remove,set and add Commands
@@ -86,28 +91,30 @@ options:
 '''
 
 EXAMPLES = r'''
-
+    - name: Add IPv6 Server Option
       win_dhcp_option:
           state: present
           version: "IPv6"
           type: "server"
           optionid: 24
-          value: "server.ipv6.intern.systemuser.de"
+          value: "server.ipv6.intern.example.de"
 
+    - name: Add IPv6 Scope Option
       win_dhcp_option:
           state: present
           version: "IPv6"
           type: "scope"
           optionid: 24
-          value: "scope.ipv6.intern.systemuser.de"
+          value: "scope.ipv6.intern.example.de"
           prefix: "2001:5cc1::"
-    
+
+    - name: Add IPv4 Reservation Option
       win_dhcp_option:
           state: present
           version: "IPv4"
           type: "reservation"
           optionid: 15
-          value: "reserved.ipv4.intern.systemuser.de"
+          value: "reserved.ipv4.intern.example.de"
           reservedip: "192.168.222.222"
 '''
 
