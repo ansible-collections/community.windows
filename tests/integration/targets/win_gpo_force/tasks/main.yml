@@ -2,10 +2,10 @@
 # complete, this way we at least verify the script is parsable
 ---
 - name: Update sysvol folder on all server
-  ansible.windows.win_gpo_force:
+  win_gpo_force:
     mode: forceupdate
     ou: "{{ test_win_domain_ou_path }}"
 
 - name: Update sysvol folder on all server
-  ansible.windows.win_gpo_force:
+  win_gpo_force:
     mode: sysvolonly
