@@ -39,52 +39,52 @@ options:
     default: IPv4
     choices: [ IPv4, IPv6 ]
   scope:
-    descrition:
+    description:
     - Required if l(type=scope), otherwise ignored.
     - Prefix will be used for IPv6
     type: str
     alias: [prefix]
   reservedip:
-    descrition:
+    description:
     - Specifies the IPv4/IPv6 address of the reservation for which the option value are set.
     - Required if l(type=reservation), otherwise ignored.
     type: str
   optionid:
-    descrition:
+    description:
     - Specifies the numeric identifier (ID) of the option for which the value are set.
     - Required if l(type=reservation), otherwise ignored.
     type: int
   value:
-    descrition:
+    description:
     - Specifies one value to be set for the option.
     type: str
   dnsdomain:
-    descrition:
+    description:
     - Specifies one or more values for the domain search list option.
     type: str
   router:
-    descrition:
+    description:
     - IPv4 only
     - Specifies one or more values for the router or default gateway option, in IPv4 address format.
     type: str
   VendorClass:
-    descrition:
+    description:
     - Sets the option value for the specified vendor class
     type: str
   dnsserver:
-    descrition:
+    description:
     - optional for specify DNS Server
     type: str
   computername:
-    descrition:
+    description:
     - optional for specify another Computer
     type: str
   domainsearchlist:
-    descrition:
+    description:
     - optional for specify another Computer
     type: str
   force:
-    descrition:
+    description:
     - optional for forcing remove,set and add Commands
     type: bool
     default: no
