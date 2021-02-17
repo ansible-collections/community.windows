@@ -43,10 +43,10 @@ try {
 if ($state -eq "present") {
     $parms.NameServer = $NameServer
     $parms.IPAddress = $IPAddress
-    if($check_mode) { $parms.WhatIf = $check_mode }
+    if ($check_mode) { $parms.WhatIf = $check_mode }
     #check if exist
-    if($delegationzone) {
-        if($delegationzone[0].NameServer.RecordData.NameServer.trim(".") -notmatch $nameserver) {
+    if ($delegationzone) {
+        if ($delegationzone[0].NameServer.RecordData.NameServer.trim(".") -notmatch $nameserver) {
             try {
                 Add-DnsServerZoneDelegation @parms -PassThru -Confirm:$false
                 $module.Result.changed = $true
@@ -54,38 +54,37 @@ if ($state -eq "present") {
                 $module.FailJson("Failed to add dns delegation zone $($name): $($_.Exception.Message)", $_)
             }
 
-        }else {
-            #entry exist need to compare
-        $addressv4 = $delegationzone[0].IPAddress.RecordData.IPV4Address.IPAddressToString
-        $addressv6 = $delegationzone[0].IPAddress.RecordData.IPV6Address.IPAddressToString
-        if($addressv4) {
-            try {
-                $diffnsipv4 = Compare-Object -ReferenceObject $addressv4 -DifferenceObject $ipaddress
-            } catch {
-                $module.FailJson("Failed to compare delegation NameServer zone $($name): $($_.Exception.Message)", $_)
-            }
-        }
-        if($addressv6) {
-            try {
-                $diffnsipv6 = Compare-Object -ReferenceObject $addressv6 -DifferenceObject $ipaddress
-            } catch {
-                $module.FailJson("Failed to compare delegation NameServer zone $($name): $($_.Exception.Message)", $_)
-            }
-        }
-        if(($diffnsipv4.count -gt 0) -or ($diffnsipv6.count -gt 0 )) {
-            try {
-                #changing ip address
-                Set-DnsServerZoneDelegation @parms -Confirm:$false
-                $module.Result.changed = $true
-            } catch {
-                $module.FailJson("Failed to change dns Server zone $($name): $($_.Exception.Message)", $_)
-            }
         } else {
-            $module.Result.changed = $false
+            #entry exist need to compare
+            $addressv4 = $delegationzone[0].IPAddress.RecordData.IPV4Address.IPAddressToString
+            $addressv6 = $delegationzone[0].IPAddress.RecordData.IPV6Address.IPAddressToString
+            if ($addressv4) {
+                try {
+                    $diffnsipv4 = Compare-Object -ReferenceObject $addressv4 -DifferenceObject $ipaddress
+                } catch {
+                    $module.FailJson("Failed to compare delegation NameServer zone $($name): $($_.Exception.Message)", $_)
+                }
+            }
+            if ($addressv6) {
+                try {
+                    $diffnsipv6 = Compare-Object -ReferenceObject $addressv6 -DifferenceObject $ipaddress
+                } catch {
+                    $module.FailJson("Failed to compare delegation NameServer zone $($name): $($_.Exception.Message)", $_)
+                }
+            }
+            if (($diffnsipv4.count -gt 0) -or ($diffnsipv6.count -gt 0 )) {
+                try {
+                    #changing ip address
+                    Set-DnsServerZoneDelegation @parms -Confirm:$false
+                    $module.Result.changed = $true
+                } catch {
+                    $module.FailJson("Failed to change dns Server zone $($name): $($_.Exception.Message)", $_)
+                }
+            } else {
+                $module.Result.changed = $false
+            }
         }
-        }
-    }
- else {
+    } else {
         #create dns delegation
         try {
             Add-DnsServerZoneDelegation @parms -PassThru -Confirm:$false
@@ -97,8 +96,8 @@ if ($state -eq "present") {
 }
 
 if ($state -eq "absent") {
-    if($check_mode) { $parms.WhatIf = $check_mode }
-    if($delegationzone) {
+    if ($check_mode) { $parms.WhatIf = $check_mode }
+    if ($delegationzone) {
         #remove dns zone delegation
         try {
             Remove-DnsServerZoneDelegation @parms -PassThru -Confirm:$false
