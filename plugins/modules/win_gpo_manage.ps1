@@ -8,10 +8,10 @@ $spec = @{
     options  = @{
         name     = @{ type = "list" }
         folder   = @{ type = "path"; default = "C:\GPO" }
-        mode     = @{ type = "str"; choices = "import", "query", "remove", "export"; default = "import" }
+        mode     = @{ type = "str"; choices = "import", "query", "remove", "export"; default = "import";required=$true }
         override = @{ type = "bool"; default = $false }# Skip if import gpo
     }
-    required_if         = @(,
+    required_if = @(
         @("mode", "import", @("folder")),
         @("mode", "export", @("folder")),
         @("mode", "remove", @("name"))
@@ -33,7 +33,7 @@ function Import-GPOs {
         $importfolder,
         [bool]$override
     )
-    $Folder = Get-childItem -Path $Importfolder -Directory
+    $Folder = Get-childItem -LiteralPath  $Importfolder -Directory
     $gpos = Get-GPO -All
     if($folder.count -gt 0) {
         foreach ($Entry in $Folder) {
@@ -44,8 +44,8 @@ function Import-GPOs {
             } else {
                 #GPO does not exist or override is §true
                 $Path = $Importfolder + "\" + $entry.Name
-                 (get-item $Path+'\manifest.xml').Attributes += 'Hidden' #make manifest hidden
-                $ID = Get-ChildItem -Path $Path
+                 (get-item -LiteralPath  $Path+'\manifest.xml').Attributes += 'Hidden' #make manifest hidden
+                $ID = Get-ChildItem -LiteralPath  $Path
                 if(!($gpos -contains $Name)) {
                     #if no GPO exist
                     New-GPO -Name $Name -WhatIf:$check_mode
@@ -64,21 +64,21 @@ function Export-GPOs {
     param (
         $ExportFolder
     )
-    if((Test-Path -Path $folderpath) -and !($override)) {
+    if((Test-Path -LiteralPath $folderpath) -and !($override)) {
         #Folder Exist and override is false
         $module.FailJson("folder $folderpath exists already")
     }
     $gpo = Get-GPO -All
     foreach ($Entry in $gpo) {
         $Path = $ExportFolder + "\" + $entry.Displayname
-        if((Test-Path -Path $Path) -and !($override)) {
+        if((Test-Path -LiteralPath $Path) -and !($override)) {
             $module.FailJson("Folder already exists, Override is false ")
         } else {
-            if(!(Test-Path -Path $Path)) {
+            if(!(Test-Path -LiteralPath $Path)) {
                 #Folder doesnt exist
                 New-Item -ItemType directory -Path $Path -WhatIf:$check_mode
             }
-            if((Test-Path -Path $Path) -and ($override)) {
+            if((Test-Path -LiteralPath $Path) -and ($override)) {
                 Remove-Item -ItemType directory -Path $Path -WhatIf:$check_mode
                 New-Item -ItemType directory -Path $Path -WhatIf:$check_mode
             }

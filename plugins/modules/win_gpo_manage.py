@@ -22,7 +22,7 @@ options:
       - When l(type=import), GroupPolicy will be imported from a specific Folder
       - When l(type=export), GroupPolicy will be exported from to a specific Folder
       - When l(type=query), GroupPolicy will be query
-      - When l(type=remove), specific GroupPolicy will be removed
+      - When l(type=remove), is set then I(name) must also be set. Deletes GPO
     type: str
     choices:
       - import
@@ -39,8 +39,9 @@ options:
     default: C:\GPO
   name:
     description:
-      - Required if l(type=remove)
+      - Required if l(type=remove) is set.
       - Specify Name of GroupPolicies that should be deleted
+    elements: str
     type: list
   override:
     description:
@@ -62,9 +63,9 @@ EXAMPLES = r'''
     folder: C:\gpoexport
 
 - name: Delete specific GroupPolicy
-  win_gpo_manage:
+  community.windows.win_gpo_manage:
     mode: remove
-    name: "GPO-1","GPO-2"
+    name: '"GPO-1","GPO-2"'
 
 - name: Query specific GroupPolicy
   community.windows.win_gpo_manage:
@@ -76,5 +77,5 @@ RETURN = r'''
 query_result:
     description: Object of all GPOs in the system
     returned: always
-    type: object
+    type: dict
 '''
