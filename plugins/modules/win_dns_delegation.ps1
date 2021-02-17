@@ -1,8 +1,8 @@
 #!powershell
-# Copyright: (c) 2020 Sebastian Gruber ,dacoso GmbH All Rights Reserved.
+# Copyright: (c) 2021 Sebastian Gruber (@sgruber94) ,dacoso GmbH All Rights Reserved.
 # SPDX-License-Identifier: GPL-3.0-only
 # GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
-# AnsibleRequires -CSharpUtil Ansible.Basic
+#AnsibleRequires -CSharpUtil Ansible.Basic
 
 $spec = @{
     options             = @{
@@ -22,17 +22,23 @@ $state = $module.Params.state
 $NameServer = $module.Params.NameServer
 $IPAddress = $module.Params.IPAddress
 
-
-$parms = @{ 
+$parms = @{
     Name          = $zone
     ChildZoneName = $name
 }
-
-try {
-    $delegationzone = Get-DnsServerZoneDelegation @parms 
-} catch {
+Try {
+    # Import DNS Server PS Module
+    Import-Module DNSServer
+} Catch {
+    # Couldn't load the DNS Module
+    $module.FailJson("The DNSServer module failed to load properly: $($_.Exception.Message)", $_)
 }
 
+try {
+    $delegationzone = Get-DnsServerZoneDelegation @parms
+} catch {
+    $module.FailJson("Failed to get dns delegation zone. $($_.Exception.Message)", $_)
+}
 
 if ($state -eq "present") {
     $parms.NameServer = $NameServer
@@ -47,24 +53,24 @@ if ($state -eq "present") {
             } catch {
                 $module.FailJson("Failed to add dns delegation zone $($name): $($_.Exception.Message)", $_)
             }
-    
+
         }else {
             #entry exist need to compare
         $addressv4 = $delegationzone[0].IPAddress.RecordData.IPV4Address.IPAddressToString
         $addressv6 = $delegationzone[0].IPAddress.RecordData.IPV6Address.IPAddressToString
-        if($addressv4) {  
+        if($addressv4) {
             try {
                 $diffnsipv4 = Compare-Object -ReferenceObject $addressv4 -DifferenceObject $ipaddress
             } catch {
                 $module.FailJson("Failed to compare delegation NameServer zone $($name): $($_.Exception.Message)", $_)
-            }  
+            }
         }
-        if($addressv6) {  
+        if($addressv6) {
             try {
                 $diffnsipv6 = Compare-Object -ReferenceObject $addressv6 -DifferenceObject $ipaddress
             } catch {
                 $module.FailJson("Failed to compare delegation NameServer zone $($name): $($_.Exception.Message)", $_)
-            }  
+            }
         }
         if(($diffnsipv4.count -gt 0) -or ($diffnsipv6.count -gt 0 )) {
             try {
@@ -78,7 +84,7 @@ if ($state -eq "present") {
             $module.Result.changed = $false
         }
         }
-    } 
+    }
  else {
         #create dns delegation
         try {
