@@ -23,7 +23,7 @@ function Invoke-forcedgpo {
     param(
         [string]$oucomputer	# Push gpupdate after AD & SYSVOL Replication
     )
-    # Check for DFSR cmdd tools
+    # Check for DFSR cmd tools
     if ((Get-WindowsFeature -Name RSAT-DFS-Mgmt-Con).InstallState -ne "Installed") {
         Install-WindowsFeature -Name RSAT-DFS-Mgmt-Con
     }
