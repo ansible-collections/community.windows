@@ -1,7 +1,8 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-
+# Copyright: (c) 2020 Sebastian Gruber ,dacoso GmbH All Rights Reserved.
 # Copyright: (c) 2019, Hitachi ID Systems, Inc.
+# SPDX-License-Identifier: GPL-3.0-only
 # GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 
 DOCUMENTATION = r'''
@@ -10,7 +11,9 @@ module: win_dns_record
 short_description: Manage Windows Server DNS records
 description:
 - Manage DNS records within an existing Windows Server DNS zone.
-author: John Nelson (@johnboy2)
+author:
+ - Sebastian Gruber (@sgruber94)
+ - John Nelson (@johnboy2),
 requirements:
   - This module requires Windows 8, Server 2012, or newer.
 options:
@@ -53,7 +56,7 @@ options:
     - The type of DNS record to manage.
     - C(SRV) was added in the 1.0.0 release of this collection.
     - C(NS) was added in the 1.1.0 release of this collection.
-    choices: [ A, AAAA, CNAME, NS, PTR, SRV ]
+    choices: [ A, AAAA, CNAME, NS, PTR, SRV, TXT ]
     required: yes
     type: str
   value:
@@ -77,13 +80,15 @@ options:
     - The zone must already exist.
     required: yes
     type: str
-  computer_name:
+  server:
     description:
       - Specifies a DNS server.
       - You can specify an IP address or any value that resolves to an IP
         address, such as a fully qualified domain name (FQDN), host name, or
         NETBIOS name.
     type: str
+    aliases:
+      - computer_name
 '''
 
 EXAMPLES = r'''
@@ -168,6 +173,16 @@ EXAMPLES = r'''
       - 10.0.0.2
       - 10.0.0.3
       - 10.0.0.4
+    zone: "example.com"
+
+# Demonstrate creating a TXT record
+
+- name: Creating a TXT record with descriptive Text
+  community.windows.win_dns_record:
+    name: "test"
+    state: present
+    type: "TXT"
+    value: "justavalue"
     zone: "example.com"
 '''
 
