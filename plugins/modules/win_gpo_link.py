@@ -18,24 +18,27 @@ seealso:
   - module: community.windows.win_gpo_force
   - module: community.windows.win_gpo_manage
 notes:
-- This must be run on a host that has the GroupPolicy PowerShell module installed.
+  - This must be run on a host that has the GroupPolicy PowerShell module installed.
 options:
   state:
     description:
       - Specify State
     type: str
-    choices: [ present, absent, query ]
+    choices:
+      - present
+      - absent
+      - query
     default: present
   path:
     description:
       - Specifies OU for GPO Link
-    elements str
+    elements: str
     type: list
     required: yes
   gponame:
     description:
       - used by module when creating,quering or removing GPO Link
-      - Name of the  GPO
+      - Name of the GPO
     type: str
     required: yes
   enforced:
@@ -56,7 +59,7 @@ options:
   domain:
     description:
       - Specify the GPO domain
-    type: int
+    type: str
 '''
 
 EXAMPLES = r'''

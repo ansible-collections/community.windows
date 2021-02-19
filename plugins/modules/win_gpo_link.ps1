@@ -149,14 +149,14 @@ function Get-Gplink {
     }
 }
 $spec = @{
-    options             = @{
+    options = @{
         state       = @{ type = "str"; choices = "query", "present", "absent"; default = "present" }
-        path        = @{ type = "list"; elements = "str" }
+        path        = @{ type = "list"; elements = "str"; required = $true }
         gponame     = @{ type = "str"; required = $true }
         order       = @{ type = "int" }
         domain      = @{ type = "str" }
         enforced    = @{ type = "bool"; default = $false }
-        linkenabled = @{  type = "bool"; default = $true }
+        linkenabled = @{ type = "bool"; default = $true }
     }
     supports_check_mode = $true
 }
