@@ -50,7 +50,8 @@ if ($diff_mode) {
     $result.diff = @{}
 }
 
-$members_before = Get-AdGroupMember -Identity $ADGroup @extra_args
+$members_before = Get-AdGroup -Identity $ADGroup @extra_args -Properties Member | select-Object -Property 'Member' -ExpandProperty 'Member'
+$members_before = $members_before | %{Get-AdUser $_ @extra_args -Properties SamAccountName, sid | select-object -Property SamAccountName, sid}
 $pure_members = [System.Collections.Generic.List`1[String]]@()
 
 foreach ($member in $members) {
@@ -89,7 +90,9 @@ foreach ($member in $members) {
 
 if ($state -eq "pure") {
     # Perform removals for existing group members not defined in $members
-    $current_members = Get-AdGroupMember -Identity $ADGroup @extra_args
+    $current_members = Get-AdGroup -Identity $ADGroup @extra_args -Properties Member | select-Object -Property 'Member' -ExpandProperty 'Member'
+    $current_members = $current_members | %{Get-AdUser $_ @extra_args -Properties SamAccountName, sid | select-object -Property SamAccountName, sid}
+
 
     foreach ($current_member in $current_members) {
         $user_to_remove = $true
@@ -108,7 +111,8 @@ if ($state -eq "pure") {
     }
 }
 
-$final_members = Get-AdGroupMember -Identity $ADGroup @extra_args
+$final_members = Get-AdGroup -Identity $ADGroup @extra_args -Properties Member | select-Object -Property 'Member' -ExpandProperty 'Member'
+$final_members = $final_members | %{Get-AdUser $_ @extra_args -Properties SamAccountName | select-object -Property SamAccountName}
 
 if ($final_members) {
     $result.members = [Array]$final_members.SamAccountName
