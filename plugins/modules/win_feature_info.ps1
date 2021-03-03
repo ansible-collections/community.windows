@@ -37,7 +37,6 @@ $module.Result.features = @(foreach ($feature in ($features)) {
             server_component_descriptor    = $feature.ServerComponentDescriptor
             sub_features                   = $feature.SubFeatures
             system_service                 = $feature.SystemService
-            notification                   = $feature.Notification
             best_practices_model_id        = $feature.BestPracticesModelId
             event_query                    = $feature.EventQuery
             post_configuration_needed      = $feature.PostConfigurationNeeded
