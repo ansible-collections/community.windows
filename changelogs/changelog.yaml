@@ -97,10 +97,6 @@ releases:
       - win_dns_record - Added support for managing ``SRV`` records
       - win_firewall_rule - Support editing rules by the group it belongs to
       - win_firewall_rule - Support editing rules that have a duplicated name
-      release_summary:
-      - This is the first official release of ``community.windows`` to be included
-        in Ansible 2.10. While the version has a major change bump it is still backwards
-        compatible with `0.2.0`.
       removed_features:
       - win_psexec - removed the deprecated ``extra_opts`` option.
     fragments:
@@ -114,3 +110,64 @@ releases:
       name: win_scoop_bucket
       namespace: ''
     release_date: '2020-08-14'
+  1.1.0:
+    changes:
+      minor_changes:
+      - win_dns_record - Support NS record creation,modification and deletion
+      - win_firewall - Support defining the default inbound and outbound action of
+        traffic in Windows firewall.
+      - win_psrepository - Added the ``proxy`` option that defines the proxy to use
+        for the repository being managed
+    fragments:
+    - v1.1.0-summary.yml
+    - win_dns_ns_record.yml
+    - win_firewall_action.yml
+    - win_psrepository-proxy.yml
+    release_date: '2020-09-26'
+  1.2.0:
+    changes:
+      bugfixes:
+      - win_partition - fix size comparison errors when size specified in bytes (https://github.com/ansible-collections/community.windows/pull/159)
+      - win_security_policy - read config file with correct encoding to avoid breaking
+        non-ASCII chars
+      - win_security_policy - strip of null char added by secedit for ``LegalNoticeText``
+        so the existing value is preserved
+      minor_changes:
+      - win_nssm - added new parameter 'app_environment' for managing service environment.
+      - win_scheduled_task - validate task name against invalid characters (https://github.com/ansible-collections/community.windows/pull/168)
+      - win_scheduled_task_stat - add check mode support (https://github.com/ansible-collections/community.windows/pull/167)
+    fragments:
+    - 158-nssm-appenv-and-custom-pathvar.yaml
+    - 159-win_partition_bytes_as_number.yaml
+    - 167-win_scheduled_task_stat-check_mode.yml
+    - 168-win_scheduled_task-invalid-task-name.yml
+    - release_summary.yml
+    - win_security_policy_encoding.yml
+    modules:
+    - description: Enable or disable certain network adapters.
+      name: win_net_adapter_feature
+      namespace: ''
+    release_date: '2020-12-18'
+  1.3.0:
+    changes:
+      bugfixes:
+      - 'win_firewall_rule - Ensure ``service: any`` is set to match any service instead
+        of the literal service called ``any`` as per the docs'
+      - win_scoop - Make sure we enable TLS 1.2 when installing scoop
+      - win_xml - Fix ``PropertyNotFound`` exception when creating a new attribute
+        - https://github.com/ansible-collections/community.windows/issues/166
+      minor_changes:
+      - Extend win_domain_computer adding managedBy parameter.
+      release_summary:
+      - Release summary for v1.3.0
+    fragments:
+    - 185-add-managedBy-support.yml
+    - release_summary.yml
+    - win_firewall_rule-service-any.yml
+    - win_scoop-tls.yml
+    - win_xml-missing-attribute.yml
+    modules:
+    - description: Copies registered PSRepositories to other user profiles
+      name: win_psrepository_copy
+      namespace: ''
+    release_date: '2021-02-03'

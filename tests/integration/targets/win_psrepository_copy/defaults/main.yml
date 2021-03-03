@@ -1,0 +1,12 @@
+---
+user_password: 'gEYB#f74MslYcz&*1!*2WDM65!i&4*H'
+test_users:
+  - name: repo_copy1
+  - name: repo_copy2
+    profile: '{{ remote_tmp_dir }}\odd_dir'
+  - name: copy_repo3
+
+test_repos:
+  - PSGallery
+  - FakeGet
+  - FakeFileServer

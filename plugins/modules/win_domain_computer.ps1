@@ -34,6 +34,7 @@ $domain_username = Get-AnsibleParam -obj $params -name "domain_username" -type "
 $domain_password = Get-AnsibleParam -obj $params -name "domain_password" -type "str" -failifempty ($null -ne $domain_username)
 $domain_server = Get-AnsibleParam -obj $params -name "domain_server" -type "str"
 $state = Get-AnsibleParam -obj $params -name "state" -ValidateSet "present","absent" -default "present"
+$managed_by = Get-AnsibleParam -obj $params -name "managed_by" -type "str"
 
 $odj_action = Get-AnsibleParam -obj $params -name "offline_domain_join" -type "str" -ValidateSet "none","output","path" -default "none"
 $_default_blob_path = Join-Path -Path $temp -ChildPath ([System.IO.Path]::GetRandomFileName())
@@ -63,6 +64,7 @@ If ($state -eq "present") {
     description = $description
     enabled = $enabled
     state = $state
+    managed_by = $managed_by
   }
 } Else {
   $desired_state = [ordered]@{
@@ -78,7 +80,7 @@ Function Get-InitialState($desired_state) {
   $computer = Try {
     Get-ADComputer `
       -Identity $desired_state.sam_account_name `
-      -Properties DistinguishedName,DNSHostName,Enabled,Name,SamAccountName,Description,ObjectClass `
+      -Properties DistinguishedName,DNSHostName,Enabled,Name,SamAccountName,Description,ObjectClass,ManagedBy `
       @extra_args
   } Catch { $null }
   If ($computer) {
@@ -94,6 +96,7 @@ Function Get-InitialState($desired_state) {
         description = $computer.Description
         enabled = $computer.Enabled
         state = "present"
+        managed_by = $computer.ManagedBy
       }
   } Else {
     $initial_state = [ordered]@{
@@ -115,6 +118,7 @@ Function Set-ConstructedState($initial_state, $desired_state) {
       -DNSHostName $desired_state.dns_hostname `
       -Enabled $desired_state.enabled `
       -Description $desired_state.description `
+      -ManagedBy $desired_state.managed_by `
       -WhatIf:$check_mode `
       @extra_args
   } Catch {
@@ -147,6 +151,7 @@ Function Add-ConstructedState($desired_state) {
       -Path $desired_state.ou `
       -Enabled $desired_state.enabled `
       -Description $desired_state.description `
+      -ManagedBy $desired_state.managed_by `
       -WhatIf:$check_mode `
       @extra_args
     } Catch {

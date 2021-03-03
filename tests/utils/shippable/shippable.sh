@@ -5,15 +5,22 @@ set -o pipefail -eux
 declare -a args
 IFS='/:' read -ra args <<< "$1"
 
-script="${args[0]}"
+ansible_version="${args[0]}"
+script="${args[1]}"
 
-test="$1"
+function join {
+    local IFS="$1";
+    shift;
+    echo "$*";
+}
+
+test="$(join / "${args[@]:1}")"
 
 docker images ansible/ansible
 docker images quay.io/ansible/*
 docker ps
 
-for container in $(docker ps --format '{{.Image}} {{.ID}}' | grep -v '^drydock/' | sed 's/^.* //'); do
+for container in $(docker ps --format '{{.Image}} {{.ID}}' | grep -v -e '^drydock/' -e '^quay.io/ansible/azure-pipelines-test-container:' | sed 's/^.* //'); do
     docker rm -f "${container}" || true  # ignore errors
 done
 
@@ -26,30 +33,48 @@ fi
 command -v python
 python -V
 
+function retry
+{
+    # shellcheck disable=SC2034
+    for repetition in 1 2 3; do
+        set +e
+        "$@"
+        result=$?
+        set -e
+        if [ ${result} == 0 ]; then
+            return ${result}
+        fi
+        echo "@* -> ${result}"
+    done
+    echo "Command '@*' failed 3 times!"
+    exit -1
+}
+
 command -v pip
 pip --version
 pip list --disable-pip-version-check
-
-if [[ "${script}" =~ ^(sanity|units)$ ]]; then
-    ansible_branch="${args[1]}"
+if [ "${ansible_version}" == "devel" ]; then
+    retry pip install https://github.com/ansible/ansible/archive/devel.tar.gz --disable-pip-version-check
 else
-    ansible_branch="devel"
+    retry pip install "https://github.com/ansible/ansible/archive/stable-${ansible_version}.tar.gz" --disable-pip-version-check
 fi
 
-pip install "https://github.com/ansible/ansible/archive/${ansible_branch}.tar.gz" --disable-pip-version-check
-
-export ANSIBLE_COLLECTIONS_PATHS="${HOME}/.ansible"
-SHIPPABLE_RESULT_DIR="$(pwd)/shippable"
-TEST_DIR="${ANSIBLE_COLLECTIONS_PATHS}/ansible_collections/community/windows"
-mkdir -p "${TEST_DIR}"
-cp -aT "${SHIPPABLE_BUILD_DIR}" "${TEST_DIR}"
-cd "${TEST_DIR}"
+if [ "${SHIPPABLE_BUILD_ID:-}" ]; then
+    export ANSIBLE_COLLECTIONS_PATHS="${HOME}/.ansible"
+    SHIPPABLE_RESULT_DIR="$(pwd)/shippable"
+    TEST_DIR="${ANSIBLE_COLLECTIONS_PATHS}/ansible_collections/community/windows"
+    mkdir -p "${TEST_DIR}"
+    cp -aT "${SHIPPABLE_BUILD_DIR}" "${TEST_DIR}"
+    cd "${TEST_DIR}"
+else
+    export ANSIBLE_COLLECTIONS_PATHS="${PWD}/../../../"
+fi
 
 # TODO: put this in a requirements file
 # Install the depss of this collection
-ansible-galaxy collection install 'ansible.windows' 'chocolatey.chocolatey'
+sudo chown "$(whoami)" "${PWD}/../../"
+retry ansible-galaxy collection install 'ansible.windows' 'chocolatey.chocolatey'
 
-# export PATH="${PWD}/bin:${PATH}"
 export PYTHONIOENCODING='utf-8'
 
 if [ "${JOB_TRIGGERED_BY_NAME:-}" == "nightly-trigger" ]; then
@@ -165,7 +190,7 @@ function cleanup
     fi
 }
 
-trap cleanup EXIT
+if [ "${SHIPPABLE_BUILD_ID:-}" ]; then trap cleanup EXIT; fi
 
 if [[ "${COVERAGE:-}" == "--coverage" ]]; then
     timeout=60
@@ -175,5 +200,5 @@ fi
 
 ansible-test env --dump --show --timeout "${timeout}" --color -v
 
-"tests/utils/shippable/check_matrix.py"
+if [ "${SHIPPABLE_BUILD_ID:-}" ]; then "tests/utils/shippable/check_matrix.py"; fi
 "tests/utils/shippable/${script}.sh" "${test}"

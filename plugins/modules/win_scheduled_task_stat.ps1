@@ -7,7 +7,7 @@
 #Requires -Module Ansible.ModuleUtils.Legacy
 #Requires -Module Ansible.ModuleUtils.SID
 
-$params = Parse-Args -arguments $args
+$params = Parse-Args -arguments $args -supports_check_mode $true
 $_remote_tmp = Get-AnsibleParam $params "_ansible_remote_tmp" -type "path" -default $env:TMP
 
 $path = Get-AnsibleParam -obj $params -name "path" -type "str" -default "\"

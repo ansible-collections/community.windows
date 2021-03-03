@@ -1,0 +1,42 @@
+# This file is part of Ansible
+
+# Copyright: (c) 2020, Brian Scholer <@briantist>
+# GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
+---
+# removing a user doesn't remove their profile (which includes the filesystem directory and registry key).
+# without cleaning up, every CI run will create a new path and key and they will build up over time.
+# this finds all profiles on the system, via the registry, whose path basename starts with one of our test users
+# and then deletes the directory; if that was succesful, it deletes the registry key too.
+#
+# As a result this should also clean up after any old runs that left behind profiles, so an interrupted run
+# that didn't run the rescue block will still get cleaned up by the next when this runs again.
+
+- name: Remove all the test user profiles from the system
+  become: yes
+  become_user: SYSTEM
+  become_method: runas
+  ansible.windows.win_shell: |
+    $names = @'
+    {{ test_users | map(attribute='name') | list | to_json }}
+    '@ | ConvertFrom-Json
+    $regPL = 'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\ProfileList'
+    $profiles = Get-ChildItem -LiteralPath $regPL
+
+    $profiles | ForEach-Object -Process {
+        $path = ($_ | Get-ItemProperty | Select-Object -ExpandProperty ProfileImagePath) -as [System.IO.DirectoryInfo]
+        :search foreach ($target in $names) {
+            if ($path.Name  -match "^$target") {
+                $delReg=$true
+                if ($path.Exists) {
+                    & cmd.exe /c rd /s /q $path.FullName
+                    if (-not ($delReg=$?)) {
+                        Write-Warning -Message "Couldn't remove '$path'"
+                    }
+                }
+                if ($delReg) {
+                    $_ | Remove-Item -Force -ErrorAction SilentlyContinue
+                }
+                break search
+            }
+        }
+    }

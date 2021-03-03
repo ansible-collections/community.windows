@@ -1,1 +1,3 @@
 shippable/windows/group2
+skip/windows/2012  # Need pwsh 5+
+skip/windows/2012-R2  # Need pwsh 5+

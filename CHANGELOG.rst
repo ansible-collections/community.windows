@@ -5,13 +5,65 @@ Community Windows Release Notes
 .. contents:: Topics
 
 
-v1.0.0
+v1.3.0
 ======
 
 Release Summary
 ---------------
 
-- This is the first official release of ``community.windows`` to be included in Ansible 2.10. While the version has a major change bump it is still backwards compatible with `0.2.0`.
+- Release summary for v1.3.0
+
+Minor Changes
+-------------
+
+- Extend win_domain_computer adding managedBy parameter.
+
+Bugfixes
+--------
+
+- win_firewall_rule - Ensure ``service: any`` is set to match any service instead of the literal service called ``any`` as per the docs
+- win_scoop - Make sure we enable TLS 1.2 when installing scoop
+- win_xml - Fix ``PropertyNotFound`` exception when creating a new attribute - https://github.com/ansible-collections/community.windows/issues/166
+
+New Modules
+-----------
+
+- win_psrepository_copy - Copies registered PSRepositories to other user profiles
+
+v1.2.0
+======
+
+Minor Changes
+-------------
+
+- win_nssm - added new parameter 'app_environment' for managing service environment.
+- win_scheduled_task - validate task name against invalid characters (https://github.com/ansible-collections/community.windows/pull/168)
+- win_scheduled_task_stat - add check mode support (https://github.com/ansible-collections/community.windows/pull/167)
+
+Bugfixes
+--------
+
+- win_partition - fix size comparison errors when size specified in bytes (https://github.com/ansible-collections/community.windows/pull/159)
+- win_security_policy - read config file with correct encoding to avoid breaking non-ASCII chars
+- win_security_policy - strip of null char added by secedit for ``LegalNoticeText`` so the existing value is preserved
+
+New Modules
+-----------
+
+- win_net_adapter_feature - Enable or disable certain network adapters.
+
+v1.1.0
+======
+
+Minor Changes
+-------------
+
+- win_dns_record - Support NS record creation,modification and deletion
+- win_firewall - Support defining the default inbound and outbound action of traffic in Windows firewall.
+- win_psrepository - Added the ``proxy`` option that defines the proxy to use for the repository being managed
+
+v1.0.0
+======
 
 Minor Changes
 -------------

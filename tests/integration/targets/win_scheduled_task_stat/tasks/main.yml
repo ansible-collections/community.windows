@@ -14,6 +14,18 @@
     state: absent
 
 # folder stat tests
+
+# check_mode operation test
+- name: check_mode - get stat of a folder that is missing
+  win_scheduled_task_stat:
+    path: '{{test_scheduled_task_stat_path}}'
+  register: stat_folder_missing
+  check_mode: True
+
+- name: assert that check_mode works
+  assert:
+    that: stat_folder_missing is not skipped
+
 - name: get stat of a folder that is missing
   win_scheduled_task_stat:
     path: '{{test_scheduled_task_stat_path}}'

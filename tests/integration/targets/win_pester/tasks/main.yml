@@ -13,6 +13,10 @@
     # https://github.com/pester/Pester/releases 
     url: 'https://ansible-ci-files.s3.amazonaws.com/test/integration/roles/test_win_pester/Pester-4.3.1.zip'
     dest: '{{test_win_pester_path}}\Pester-4.3.1.zip'
+  register: download_res
+  until: download_res is successful
+  retries: 3
+  delay: 5
 
 - name: unzip Pester module
   win_unzip:

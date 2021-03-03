@@ -12,7 +12,7 @@ $spec = @{
         priority = @{ type = "int"}
         state = @{ type = "str"; choices = "absent", "present"; default = "present" }
         ttl = @{ type = "int"; default = "3600" }
-        type = @{ type = "str"; choices = "A","AAAA","CNAME","PTR","SRV"; required = $true }
+        type = @{ type = "str"; choices = "A","AAAA","CNAME","NS","PTR","SRV"; required = $true }
         value = @{ type = "list"; elements = "str"; default = @() ; aliases=@( 'values' )}
         weight = @{ type = "int"}
         zone = @{ type = "str"; required = $true }
@@ -59,7 +59,7 @@ if ($ttl -lt 1 -or $ttl -gt 31557600) {
 $ttl = New-TimeSpan -Seconds $ttl
 
 
-if (($type -eq 'CNAME' -or $type -eq 'PTR' -or $type -eq 'SRV') -and $null -ne $values -and $values.Count -gt 0 -and $zone[-1] -ne '.') {
+if (($type -eq 'CNAME' -or $type -eq 'NS' -or $type -eq 'PTR' -or $type -eq 'SRV') -and $null -ne $values -and $values.Count -gt 0 -and $zone[-1] -ne '.') {
     # CNAMEs and PTRs should be '.'-terminated, or record matching will fail
     $values = $values | ForEach-Object {
         if ($_ -Like "*.") { $_ } else { "$_." }
@@ -72,7 +72,7 @@ $record_argument_name = @{
     AAAA = "IPv6Address";
     CNAME = "HostNameAlias";
     # MX = "MailExchange";
-    # NS = "NameServer";
+    NS = "NameServer";
     PTR = "PtrDomainName";
     SRV = "DomainName";
     # TXT = "DescriptiveText"

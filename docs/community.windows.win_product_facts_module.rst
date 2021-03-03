@@ -27,7 +27,7 @@ Synopsis
 Examples
 --------
 
-.. code-block:: yaml+jinja
+.. code-block:: yaml
 
     - name: Get product id and product key
       community.windows.win_product_facts:
@@ -48,102 +48,102 @@ Facts returned by this module are added/updated in the ``hostvars`` host facts a
 .. raw:: html
 
     <table border=0 cellpadding=0 class="documentation-table">
-                                                                            <tr>
+                                                                    <tr>
             <th colspan="1">Fact</th>
             <th>Returned</th>
             <th width="100%">Description</th>
         </tr>
-                    <tr>
-                                <td colspan="1" colspan="1">
+            <tr>
+                <td colspan="1" colspan="1">
                     <div class="ansibleOptionAnchor" id="return-"></div>
                     <b>ansible_os_license_channel</b>
                     <a class="ansibleOptionLink" href="#return-" title="Permalink to this fact"></a>
                     <div style="font-size: small">
                       <span style="color: purple">string</span>
-                                          </div>
-                                    </td>
+                    </div>
+                </td>
                 <td>always</td>
                 <td>
-                                                                        <div>The Windows license channel.
+                            <div>The Windows license channel.
                             </div>
-                                                                <br/>
-                                            <div style="font-size: smaller"><b>Sample:</b></div>
-                                                <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">Volume:MAK</div>
-                                    </td>
+                    <br/>
+                        <div style="font-size: smaller"><b>Sample:</b></div>
+                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">Volume:MAK</div>
+                </td>
             </tr>
-                                <tr>
-                                <td colspan="1" colspan="1">
+            <tr>
+                <td colspan="1" colspan="1">
                     <div class="ansibleOptionAnchor" id="return-"></div>
                     <b>ansible_os_license_edition</b>
                     <a class="ansibleOptionLink" href="#return-" title="Permalink to this fact"></a>
                     <div style="font-size: small">
                       <span style="color: purple">string</span>
-                                          </div>
-                                    </td>
+                    </div>
+                </td>
                 <td>always</td>
                 <td>
-                                                                        <div>The Windows license edition.
+                            <div>The Windows license edition.
                             </div>
-                                                                <br/>
-                                            <div style="font-size: smaller"><b>Sample:</b></div>
-                                                <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">Windows(R) ServerStandard edition</div>
-                                    </td>
+                    <br/>
+                        <div style="font-size: smaller"><b>Sample:</b></div>
+                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">Windows(R) ServerStandard edition</div>
+                </td>
             </tr>
-                                <tr>
-                                <td colspan="1" colspan="1">
+            <tr>
+                <td colspan="1" colspan="1">
                     <div class="ansibleOptionAnchor" id="return-"></div>
                     <b>ansible_os_license_status</b>
                     <a class="ansibleOptionLink" href="#return-" title="Permalink to this fact"></a>
                     <div style="font-size: small">
                       <span style="color: purple">string</span>
-                                          </div>
-                                    </td>
+                    </div>
+                </td>
                 <td>always</td>
                 <td>
-                                                                        <div>The Windows license status.
+                            <div>The Windows license status.
                             </div>
-                                                                <br/>
-                                            <div style="font-size: smaller"><b>Sample:</b></div>
-                                                <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">Licensed</div>
-                                    </td>
+                    <br/>
+                        <div style="font-size: smaller"><b>Sample:</b></div>
+                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">Licensed</div>
+                </td>
             </tr>
-                                <tr>
-                                <td colspan="1" colspan="1">
+            <tr>
+                <td colspan="1" colspan="1">
                     <div class="ansibleOptionAnchor" id="return-"></div>
                     <b>ansible_os_product_id</b>
                     <a class="ansibleOptionLink" href="#return-" title="Permalink to this fact"></a>
                     <div style="font-size: small">
                       <span style="color: purple">string</span>
-                                          </div>
-                                    </td>
+                    </div>
+                </td>
                 <td>always</td>
                 <td>
-                                                                        <div>The Windows product ID.
+                            <div>The Windows product ID.
                             </div>
-                                                                <br/>
-                                            <div style="font-size: smaller"><b>Sample:</b></div>
-                                                <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">00326-10000-00000-AA698</div>
-                                    </td>
+                    <br/>
+                        <div style="font-size: smaller"><b>Sample:</b></div>
+                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">00326-10000-00000-AA698</div>
+                </td>
             </tr>
-                                <tr>
-                                <td colspan="1" colspan="1">
+            <tr>
+                <td colspan="1" colspan="1">
                     <div class="ansibleOptionAnchor" id="return-"></div>
                     <b>ansible_os_product_key</b>
                     <a class="ansibleOptionLink" href="#return-" title="Permalink to this fact"></a>
                     <div style="font-size: small">
                       <span style="color: purple">string</span>
-                                          </div>
-                                    </td>
+                    </div>
+                </td>
                 <td>always</td>
                 <td>
-                                                                        <div>The Windows product key.
+                            <div>The Windows product key.
                             </div>
-                                                                <br/>
-                                            <div style="font-size: smaller"><b>Sample:</b></div>
-                                                <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">T49TD-6VFBW-VV7HY-B2PXY-MY47H</div>
-                                    </td>
+                    <br/>
+                        <div style="font-size: smaller"><b>Sample:</b></div>
+                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">T49TD-6VFBW-VV7HY-B2PXY-MY47H</div>
+                </td>
             </tr>
-                        </table>
+    </table>
     <br/><br/>
 
 

@@ -30,63 +30,64 @@ Parameters
         <tr>
             <th colspan="1">Parameter</th>
             <th>Choices/<font color="blue">Defaults</font></th>
-                        <th width="100%">Comments</th>
+            <th width="100%">Comments</th>
         </tr>
-                    <tr>
-                                                                <td colspan="1">
+            <tr>
+                <td colspan="1">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>audit_type</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
                         <span style="color: purple">list</span>
-                                                 / <span style="color: red">required</span>                    </div>
-                                    </td>
-                                <td>
-                                                                                                                            <ul style="margin: 0; padding: 0"><b>Choices:</b>
-                                                                                                                                                                <li>failure</li>
-                                                                                                                                                                                                <li>none</li>
-                                                                                                                                                                                                <li>success</li>
-                                                                                    </ul>
-                                                                            </td>
-                                                                <td>
-                                            <div>The type of event you would like to audit for.</div>
-                                            <div>Accepts a list. See examples.</div>
-                                                        </td>
+                         / <span style="color: red">required</span>
+                    </div>
+                </td>
+                <td>
+                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                    <li>failure</li>
+                                    <li>none</li>
+                                    <li>success</li>
+                        </ul>
+                </td>
+                <td>
+                        <div>The type of event you would like to audit for.</div>
+                        <div>Accepts a list. See examples.</div>
+                </td>
             </tr>
-                                <tr>
-                                                                <td colspan="1">
+            <tr>
+                <td colspan="1">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>category</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
                         <span style="color: purple">string</span>
-                                                                    </div>
-                                    </td>
-                                <td>
-                                                                                                                                                            </td>
-                                                                <td>
-                                            <div>Single string value for the category you would like to adjust the policy on.</div>
-                                            <div>Cannot be used with <em>subcategory</em>. You must define one or the other.</div>
-                                            <div>Changing this setting causes all subcategories to be adjusted to the defined <em>audit_type</em>.</div>
-                                                        </td>
+                    </div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>Single string value for the category you would like to adjust the policy on.</div>
+                        <div>Cannot be used with <em>subcategory</em>. You must define one or the other.</div>
+                        <div>Changing this setting causes all subcategories to be adjusted to the defined <em>audit_type</em>.</div>
+                </td>
             </tr>
-                                <tr>
-                                                                <td colspan="1">
+            <tr>
+                <td colspan="1">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>subcategory</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
                         <span style="color: purple">string</span>
-                                                                    </div>
-                                    </td>
-                                <td>
-                                                                                                                                                            </td>
-                                                                <td>
-                                            <div>Single string value for the subcategory you would like to adjust the policy on.</div>
-                                            <div>Cannot be used with <em>category</em>. You must define one or the other.</div>
-                                                        </td>
+                    </div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>Single string value for the subcategory you would like to adjust the policy on.</div>
+                        <div>Cannot be used with <em>category</em>. You must define one or the other.</div>
+                </td>
             </tr>
-                        </table>
+    </table>
     <br/>
 
 
@@ -110,7 +111,7 @@ See Also
 Examples
 --------
 
-.. code-block:: yaml+jinja
+.. code-block:: yaml
 
     - name: Enable failure auditing for the subcategory "File System"
       community.windows.win_audit_policy_system:
@@ -141,26 +142,26 @@ Common return values are documented `here <https://docs.ansible.com/ansible/late
             <th>Returned</th>
             <th width="100%">Description</th>
         </tr>
-                    <tr>
-                                <td colspan="1">
+            <tr>
+                <td colspan="1">
                     <div class="ansibleOptionAnchor" id="return-"></div>
                     <b>current_audit_policy</b>
                     <a class="ansibleOptionLink" href="#return-" title="Permalink to this return value"></a>
                     <div style="font-size: small">
                       <span style="color: purple">dictionary</span>
-                                          </div>
-                                    </td>
+                    </div>
+                </td>
                 <td>always</td>
                 <td>
-                                                                        <div>details on the policy being targetted</div>
-                                                                <br/>
-                                            <div style="font-size: smaller"><b>Sample:</b></div>
-                                                <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">{
+                            <div>details on the policy being targetted</div>
+                    <br/>
+                        <div style="font-size: smaller"><b>Sample:</b></div>
+                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">{
       &quot;File Share&quot;:&quot;failure&quot;
     }</div>
-                                    </td>
+                </td>
             </tr>
-                        </table>
+    </table>
     <br/><br/>
 
 

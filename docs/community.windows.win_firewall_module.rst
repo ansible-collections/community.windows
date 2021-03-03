@@ -36,49 +36,93 @@ Parameters
         <tr>
             <th colspan="1">Parameter</th>
             <th>Choices/<font color="blue">Defaults</font></th>
-                        <th width="100%">Comments</th>
+            <th width="100%">Comments</th>
         </tr>
-                    <tr>
-                                                                <td colspan="1">
+            <tr>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>inbound_action</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                    </div>
+                    <div style="font-style: italic; font-size: small; color: darkgreen">added in 1.1.0</div>
+                </td>
+                <td>
+                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                    <li>allow</li>
+                                    <li>block</li>
+                                    <li>not_configured</li>
+                        </ul>
+                </td>
+                <td>
+                        <div>Set to <code>allow</code> or <code>block</code> inbound network traffic in the profile.</div>
+                        <div><code>not_configured</code> is valid when configuring a GPO.</div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>outbound_action</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                    </div>
+                    <div style="font-style: italic; font-size: small; color: darkgreen">added in 1.1.0</div>
+                </td>
+                <td>
+                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                    <li>allow</li>
+                                    <li>block</li>
+                                    <li>not_configured</li>
+                        </ul>
+                </td>
+                <td>
+                        <div>Set to <code>allow</code> or <code>block</code> inbound network traffic in the profile.</div>
+                        <div><code>not_configured</code> is valid when configuring a GPO.</div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="1">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>profiles</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
                         <span style="color: purple">list</span>
-                                                                    </div>
-                                    </td>
-                                <td>
-                                                                                                                            <ul style="margin: 0; padding: 0"><b>Choices:</b>
-                                                                                                                                                                <li><div style="color: blue"><b>Domain</b>&nbsp;&larr;</div></li>
-                                                                                                                                                                                                <li><div style="color: blue"><b>Private</b>&nbsp;&larr;</div></li>
-                                                                                                                                                                                                <li><div style="color: blue"><b>Public</b>&nbsp;&larr;</div></li>
-                                                                                    </ul>
-                                                                                    <b>Default:</b><br/><div style="color: blue">["Domain", "Private", "Public"]</div>
-                                    </td>
-                                                                <td>
-                                            <div>Specify one or more profiles to change.</div>
-                                                        </td>
+                    </div>
+                </td>
+                <td>
+                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                    <li><div style="color: blue"><b>Domain</b>&nbsp;&larr;</div></li>
+                                    <li><div style="color: blue"><b>Private</b>&nbsp;&larr;</div></li>
+                                    <li><div style="color: blue"><b>Public</b>&nbsp;&larr;</div></li>
+                        </ul>
+                        <b>Default:</b><br/><div style="color: blue">["Domain", "Private", "Public"]</div>
+                </td>
+                <td>
+                        <div>Specify one or more profiles to change.</div>
+                </td>
             </tr>
-                                <tr>
-                                                                <td colspan="1">
+            <tr>
+                <td colspan="1">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>state</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
                         <span style="color: purple">string</span>
-                                                                    </div>
-                                    </td>
-                                <td>
-                                                                                                                            <ul style="margin: 0; padding: 0"><b>Choices:</b>
-                                                                                                                                                                <li>disabled</li>
-                                                                                                                                                                                                <li>enabled</li>
-                                                                                    </ul>
-                                                                            </td>
-                                                                <td>
-                                            <div>Set state of firewall for given profile.</div>
-                                                        </td>
+                    </div>
+                </td>
+                <td>
+                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                    <li>disabled</li>
+                                    <li>enabled</li>
+                        </ul>
+                </td>
+                <td>
+                        <div>Set state of firewall for given profile.</div>
+                </td>
             </tr>
-                        </table>
+    </table>
     <br/>
 
 
@@ -95,7 +139,7 @@ See Also
 Examples
 --------
 
-.. code-block:: yaml+jinja
+.. code-block:: yaml
 
     - name: Enable firewall for Domain, Public and Private profiles
       community.windows.win_firewall:
@@ -113,6 +157,13 @@ Examples
         - Domain
       tags: disable_firewall
 
+    - name: Enable firewall for Domain profile and block outbound connections
+      community.windows.win_firewall:
+        profiles: Domain
+        state: enabled
+        outbound_action: block
+      tags: block_connection
+
 
 
 Return Values
@@ -127,58 +178,58 @@ Common return values are documented `here <https://docs.ansible.com/ansible/late
             <th>Returned</th>
             <th width="100%">Description</th>
         </tr>
-                    <tr>
-                                <td colspan="1">
+            <tr>
+                <td colspan="1">
                     <div class="ansibleOptionAnchor" id="return-"></div>
                     <b>enabled</b>
                     <a class="ansibleOptionLink" href="#return-" title="Permalink to this return value"></a>
                     <div style="font-size: small">
                       <span style="color: purple">boolean</span>
-                                          </div>
-                                    </td>
+                    </div>
+                </td>
                 <td>always</td>
                 <td>
-                                                                        <div>Current firewall status for chosen profile (after any potential change).</div>
-                                                                <br/>
-                                            <div style="font-size: smaller"><b>Sample:</b></div>
-                                                <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">True</div>
-                                    </td>
+                            <div>Current firewall status for chosen profile (after any potential change).</div>
+                    <br/>
+                        <div style="font-size: smaller"><b>Sample:</b></div>
+                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">True</div>
+                </td>
             </tr>
-                                <tr>
-                                <td colspan="1">
+            <tr>
+                <td colspan="1">
                     <div class="ansibleOptionAnchor" id="return-"></div>
                     <b>profiles</b>
                     <a class="ansibleOptionLink" href="#return-" title="Permalink to this return value"></a>
                     <div style="font-size: small">
                       <span style="color: purple">string</span>
-                                          </div>
-                                    </td>
+                    </div>
+                </td>
                 <td>always</td>
                 <td>
-                                                                        <div>Chosen profile.</div>
-                                                                <br/>
-                                            <div style="font-size: smaller"><b>Sample:</b></div>
-                                                <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">Domain</div>
-                                    </td>
+                            <div>Chosen profile.</div>
+                    <br/>
+                        <div style="font-size: smaller"><b>Sample:</b></div>
+                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">Domain</div>
+                </td>
             </tr>
-                                <tr>
-                                <td colspan="1">
+            <tr>
+                <td colspan="1">
                     <div class="ansibleOptionAnchor" id="return-"></div>
                     <b>state</b>
                     <a class="ansibleOptionLink" href="#return-" title="Permalink to this return value"></a>
                     <div style="font-size: small">
                       <span style="color: purple">list</span>
-                                          </div>
-                                    </td>
+                    </div>
+                </td>
                 <td>always</td>
                 <td>
-                                                                        <div>Desired state of the given firewall profile(s).</div>
-                                                                <br/>
-                                            <div style="font-size: smaller"><b>Sample:</b></div>
-                                                <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">enabled</div>
-                                    </td>
+                            <div>Desired state of the given firewall profile(s).</div>
+                    <br/>
+                        <div style="font-size: smaller"><b>Sample:</b></div>
+                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">enabled</div>
+                </td>
             </tr>
-                        </table>
+    </table>
     <br/><br/>
 
 
