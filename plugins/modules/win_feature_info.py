@@ -121,13 +121,6 @@ features:
       type: list
       elements: str
       sample: ['iisadmin', 'w3svc']
-    notification:
-      description:
-      - Notifications from feature.
-      - The binary part can be quoted to ensure any spaces in path are not treated as arguments.
-      type: list
-      element: str
-      sample: []
     best_practices_model_id:
       description:
       - BestPracticesModelId for feature C(name).
