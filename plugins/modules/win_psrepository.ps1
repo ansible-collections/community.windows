@@ -1,5 +1,6 @@
 #!powershell
 
+# Copyright: (c) 2021, Nick Duijvelshoff <nick@duijvelshoff.com>
 # Copyright: (c) 2020, Brian Scholer <@briantist>
 # Copyright: (c) 2018, Wojciech Sciesinski <wojciech[at]sciesinski[dot]net>
 # Copyright: (c) 2017, Daniele Lazzari <lazzari@mailup.com>
@@ -17,6 +18,8 @@ $check_mode = Get-AnsibleParam -obj $params -name "_ansible_check_mode" -type "b
 
 $name = Get-AnsibleParam -obj $params -name "name" -type "str" -failifempty $true
 $source_location = Get-AnsibleParam -obj $params -name "source_location" -aliases "source" -type "str"
+$username = Get-AnsibleParam -obj $params -name "username" -type "str"
+$password = Get-AnsibleParam -obj $params -name "password" -aliases "source" -type "str"
 $script_source_location = Get-AnsibleParam -obj $params -name "script_source_location" -type "str"
 $publish_location = Get-AnsibleParam -obj $params -name "publish_location" -type "str"
 $script_publish_location = Get-AnsibleParam -obj $params -name "script_publish_location" -type "str"
@@ -141,6 +144,11 @@ if ($Repo -and ($state -eq "absent" -or ($force -and $changed_properties.Count -
     $result.changed = $true
 }
 
+if ($username -and $password )
+{
+    $credential = New-Object -TypeName PSCredential ($username, ($password | ConvertTo-SecureString -AsPlainText -Force))
+}
+
 if ($state -eq "present") {
     if (-not $Repo -or ($force -and $changed_properties.Count -gt 0)) {
         if (-not $repository_params.InstallationPolicy) {
@@ -148,7 +156,7 @@ if ($state -eq "present") {
         }
         if (-not $check_mode) {
             Update-NuGetPackageProvider
-            Register-PSRepository @repository_params
+            Register-PSRepository -Credential $credential @repository_params
         }
         $result.changed = $true
     }
@@ -156,7 +164,7 @@ if ($state -eq "present") {
         if ($changed_properties.Count -gt 0) {
             if (-not $check_mode) {
                 Update-NuGetPackageProvider
-                Set-PSRepository -Name $name @changed_properties
+                Set-PSRepository -Name $name -Credential $credential @changed_properties
             }
             $result.changed = $true
         }

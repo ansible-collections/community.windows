@@ -1,6 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
+# Copyright: (c) 2021, Nick Duijvelshoff <nick@duijvelshoff.com>
 # Copyright: (c) 2020, Brian Scholer <@briantist>
 # Copyright: (c) 2018, Wojciech Sciesinski <wojciech[at]sciesinski[dot]net>
 # Copyright: (c) 2017, Daniele Lazzari <lazzari@mailup.com>
@@ -37,6 +38,14 @@ options:
   script_publish_location:
     description:
       - Specifies the URI for publishing scripts to this repository.
+    type: str
+  username:
+    description:
+      - Username to authenticate against private repository.
+    type: str
+  password:
+    description:
+      - Password to authenticate against private repository.
     type: str
   state:
     description:
@@ -81,6 +90,7 @@ seealso:
   - module: community.windows.win_psrepository_info
   - module: community.windows.win_psmodule
 author:
+  - Nick Duijvelshoff (@nduijvelshoff)
   - Wojciech Sciesinski (@it-praktyk)
   - Brian Scholer (@briantist)
 '''
@@ -94,6 +104,14 @@ EXAMPLES = r'''
   community.windows.win_psrepository:
     name: MyRepository
     source_location: https://myrepo.com
+    state: present
+
+- name: Register a private PowerShell repository
+  community.windows.win_psrepository:
+    name: MyRepository
+    source_location: https://myrepo.com
+    username: repo_username
+    password: repo_password
     state: present
 
 - name: Remove a PowerShell repository
