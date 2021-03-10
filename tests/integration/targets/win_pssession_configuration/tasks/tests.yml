@@ -64,13 +64,44 @@
     async_poll: 0
   register: status
 
-- name: Wait for it to complete
-  async_status:
-    jid: "{{ status.ansible_job_id }}"
-  until: status.finished
-  retries: 10
-  delay: 1
-  register: status
+- name: Check that the task is not finished (was started async)
+  assert:
+    that: not status.finished
+    quiet: yes
+
+- name: Try to wait for it, so we're back in a good state for the next set of tests
+  # this block represents roughly what you would have to do in your plays if it weren't for the action plugin
+  # except the action is still more robust, as some of the operations restart the WinRM service more than once
+  # and none of this would work with check mode.
+  # If this becomes unstable, we may need to consider nesting another block/rescue, or putting this into another
+  # task file so we can loop over it, or introduce a "long enough" pause task, or possibly
+  # removing the async_poll: 0 tests altogether.
+  # Note that removing the test means not having any test that we're correctly returning asynchronously.
+  # https://github.com/ansible-collections/community.windows/issues/211
+  block:
+    - set_fact:
+        jid: "{{ status.ansible_job_id }}"
+
+    # we expect this one to fail with a connection error eventually and fall into to the rescue block
+    - name: Wait for it to complete
+      async_status:
+        jid: "{{ jid }}"
+      until: status.finished
+      retries: 10
+      delay: 1
+      register: status
+  rescue:
+    # once here, we'll use wait_for_connection before attempting to wait for status again
+    - wait_for_connection:
+
+    # repeat this task to ensure we finish the remote work
+    - name: Wait for it to complete
+      async_status:
+        jid: "{{ jid }}"
+      until: status.finished
+      retries: 10
+      delay: 1
+      register: status
 
 - name: Check for changed status
   assert:

@@ -56,6 +56,7 @@ class ActionModule(ActionBase):
         # if it's not in check mode, call the module async so the WinRM restart doesn't kill ansible
         if not check_mode:
             self._task.async_val = async_timeout
+            self._task.poll = async_poll
 
         result = status = self._execute_module(
             task_vars=task_vars,
