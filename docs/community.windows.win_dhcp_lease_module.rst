@@ -243,7 +243,7 @@ Examples
 
     - name: Ensure DHCP lease or reservation does not exist
       community.windows.win_dhcp_lease:
-        mac: 00:B1:8A:D1:5A:1F
+        mac: 00-B1-8A-D1-5A-1F
         state: absent
 
     - name: Ensure DHCP lease or reservation does not exist
