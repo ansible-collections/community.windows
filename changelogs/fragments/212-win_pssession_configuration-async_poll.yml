@@ -1,0 +1,3 @@
+---
+bugfixes:
+  - win_pssession_configuration - the ``async_poll`` option was not actually used and polling mode was always used with the default poll delay (https://github.com/ansible-collections/community.windows/pull/212).
