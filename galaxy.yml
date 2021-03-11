@@ -6,7 +6,7 @@ authors:
 - Jordan Borean @jborean93
 - Matt Davis @nitzmahone
 description: |
-  Ansible collection for community Windows pluigns.
+  Ansible collection for community Windows plugins.
 license_file: COPYING
 tags:
 - windows
