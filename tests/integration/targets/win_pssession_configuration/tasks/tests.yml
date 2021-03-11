@@ -55,7 +55,7 @@
 
 #######
 
-- name: Change something async fire-and-forget
+- name: Try to disable polling (failure expected)
   win_pssession_configuration:
     name: "{{ config_name }}"
     description: "{{ config_description }}~~~~"
@@ -63,32 +63,13 @@
     async_timeout: 500
     async_poll: 0
   register: status
+  ignore_errors: yes
 
-- name: Wait for it to complete
-  async_status:
-    jid: "{{ status.ansible_job_id }}"
-  until: status.finished
-  retries: 10
-  delay: 1
-  register: status
-
-- name: Check for changed status
+- name: Ensure it failed
   assert:
-    that: status is changed
-    quiet: yes
-
-- name: Change it back with custom async values
-  win_pssession_configuration:
-    name: "{{ config_name }}"
-    description: "{{ config_description }}"
-    modules_to_import: Microsoft.PowerShell.Utility
-    async_timeout: 500
-    async_poll: 2
-  register: status
-
-- name: Check for changed status
-  assert:
-    that: status is changed
+    that:
+      - status is failed
+      - status.msg is search('async_poll')
     quiet: yes
 
 - name: Try it with the keywords (failure expected)
