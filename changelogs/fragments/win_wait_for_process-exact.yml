@@ -1,0 +1,2 @@
+bugfixes:
+- win_wait_for_process - Fix bug when specifying multiple ``process_name_exact`` values - https://github.com/ansible-collections/community.windows/issues/203
