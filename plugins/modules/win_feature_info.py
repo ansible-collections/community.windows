@@ -7,6 +7,7 @@
 DOCUMENTATION = r'''
 ---
 module: win_feature_info
+version_added: '1.4.0'
 short_description: Gather information about Windows features
 description:
 - Gather information about all or a specific installed Windows feature(s).
