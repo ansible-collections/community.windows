@@ -1,11 +1,5 @@
 #!powershell
 
-# Copyright: (c) 2020, Ansible Project
-# GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
-
-#AnsibleRequires -CSharpUtil Ansible.Basic
-#AnsibleRequires -CSharpUtil ansible_collections.ansible.windows.plugins.module_utils.SCManager
-
 $spec = @{
     options             = @{
         name = @{ type = "str"; default = '*'  }
@@ -23,7 +17,7 @@ $features = Get-WindowsFeature -Name $name
 
 $module.Result.features = @(foreach ($feature in ($features)) {
         # These should closely reflect the options for win_feature
-        [Ordered]@{
+        @{
             name                           = $feature.Name
             display_name                   = $feature.DisplayName
             description                    = $feature.Description
