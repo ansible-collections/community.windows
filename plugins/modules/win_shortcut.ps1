@@ -15,7 +15,7 @@ $spec = @{
         state = @{ type='str'; default='present'; choices=@( 'absent', 'present' ) }
         arguments = @{ type='str'; aliases=@( 'args' ) }
         directory = @{ type='path' }
-        hotkey = @{ type='str' }
+        hotkey = @{ type='str'; no_log=$false }
         icon = @{ type='path' }
         description = @{ type='str' }
         windowstyle = @{ type='str'; choices=@( 'maximized', 'minimized', 'normal' ) }
