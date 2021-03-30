@@ -84,6 +84,7 @@ Function Install-PrereqModule {
                     $install_params = @{
                         Name = $Name
                         MinimumVersion = $PrereqModules[$Name]
+                        AllowClobber = $allow_clobber
                         Force = $true
                         WhatIf = $CheckMode
                     }
