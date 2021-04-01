@@ -85,6 +85,10 @@ function Present($path, $regex, $line, $insertafter, $insertbefore, $create, $ba
 		msg = "";
 	}
 
+	If ($insertbefore -and $insertafter) {
+		Add-Warning $result "Both insertbefore and insertafter parameters found, ignoring `"insertafter=$insertafter`""
+	}
+
 	# Read the dest file lines using the indicated encoding into a mutable ArrayList.
 	$before = [System.IO.File]::ReadAllLines($cleanpath, $encodingobj)
 	If ($null -eq $before) {
@@ -401,10 +405,6 @@ If ($state -eq "present") {
 
 	If (-not $line) {
 		Fail-Json @{} "line= is required with state=present";
-	}
-
-	If ($insertbefore -and $insertafter) {
-		Add-Warning $result "Both insertbefore and insertafter parameters found, ignoring `"insertafter=$insertafter`""
 	}
 
 	If (-not $insertbefore -and -not $insertafter) {
