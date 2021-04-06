@@ -50,8 +50,11 @@ if ($diff_mode) {
     $result.diff = @{}
 }
 
-$members_before = Get-AdGroup -Identity $ADGroup @extra_args -Properties Member | select-Object -Property 'Member' -ExpandProperty 'Member'
-$members_before = $members_before | ForEach-Object{Get-AdUser $_ @extra_args -Properties SamAccountName, sid | select-object -Property SamAccountName, sid}
+$group = Get-ADGroup $ADGroup @extra_args
+$filter = " (&(objectClass=groupOfNames)(memberOf=$($group.DistinguishedName)))"
+
+
+$members_before = Get-ADObject -LDAPFilter $filter -Properties sAMAccountName, objectSID @extra_args
 $pure_members = [System.Collections.Generic.List`1[String]]@()
 
 foreach ($member in $members) {
@@ -90,9 +93,7 @@ foreach ($member in $members) {
 
 if ($state -eq "pure") {
     # Perform removals for existing group members not defined in $members
-    $current_members = Get-AdGroup -Identity $ADGroup @extra_args -Properties Member | select-Object -Property 'Member' -ExpandProperty 'Member'
-    $current_members = $current_members | ForEach-Object{Get-AdUser $_ @extra_args -Properties SamAccountName, sid | select-object -Property SamAccountName, sid}
-
+    $current_members = Get-ADObject -LDAPFilter $filter -Properties sAMAccountName, objectSID @extra_args
 
     foreach ($current_member in $current_members) {
         $user_to_remove = $true
@@ -104,15 +105,14 @@ if ($state -eq "pure") {
         }
 
         if ($user_to_remove) {
-            Remove-ADPrincipalGroupMembership -Identity $current_member -MemberOf $ADGroup -WhatIf:$check_mode -Confirm:$False
+            Remove-ADPrincipalGroupMembership -Identity $current_member -MemberOf $ADGroup -WhatIf:$check_mode -Confirm:$False @extra_member_args
             $result.removed.Add($current_member.SamAccountName)
             $result.changed = $true
         }
     }
 }
 
-$final_members = Get-AdGroup -Identity $ADGroup @extra_args -Properties Member | select-Object -Property 'Member' -ExpandProperty 'Member'
-$final_members = $final_members | ForEach-Object{Get-AdUser $_ @extra_args -Properties SamAccountName | select-object -Property SamAccountName}
+$final_members = Get-ADObject -LDAPFilter $filter -Properties sAMAccountName, objectSID @extra_args
 
 if ($final_members) {
     $result.members = [Array]$final_members.SamAccountName
