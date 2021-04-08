@@ -6,10 +6,10 @@
     type: "scope"
     name: "DHCP-TestScope-IPv4"
     scope: "{{ dhcp_scope }}"
-    startrange: "{{ dhcp_scope_start }}"
-    endrange: "{{ dhcp_scope_end }}"
-    scopestate: InActive
-    subnetmask: "{{ dhcp_scope_subnet_mask }}"
+    start_range: "{{ dhcp_scope_start }}"
+    end_range: "{{ dhcp_scope_end }}"
+    scope_state: InActive
+    subnet_mask: "{{ dhcp_scope_subnet_mask }}"
 
 - name: ADD | DHCP IPv4 Scope (Idempotentcy Check) - Changed should equal false
   win_dhcp_server:
@@ -18,10 +18,18 @@
     type: "scope"
     name: "DHCP-TestScope-IPv4"
     scope: "{{ dhcp_scope }}"
-    startrange: "{{ dhcp_scope_start }}"
-    endrange: "{{ dhcp_scope_end }}"
-    scopestate: InActive
-    subnetmask: "{{ dhcp_scope_subnet_mask }}"
+    start_range: "{{ dhcp_scope_start }}"
+    end_range: "{{ dhcp_scope_end }}"
+    scope_state: InActive
+    subnet_mask: "{{ dhcp_scope_subnet_mask }}"
+  register: create_scope4
+  failed_when: create_scope4.changed != false
+
+- name: VALIDATE | DHCP Scope | IPv4
+  ansible.windows.win_shell: |
+    Get-DhcpServerv4Scope | Where-Object ScopeId -eq {{ dhcp_scope }}
+  register: validate_server4_out
+  failed_when: validate_server4_out.stdout == ""
 
 - name: ADD | DHCP IPv6 Scope
   win_dhcp_server:
@@ -30,8 +38,8 @@
     type: "scope"
     name: "DHCP-TestScope-IPv6"
     prefix: "{{ dhcp_scope_prefix }}"
-    validlifetime: "{{ dhcp_scope_validlifetime }}"
-    preferredlifetime: "{{ dhcp_scope_preferredlifetime }}"
+    valid_lifetime: "{{ dhcp_scope_validlifetime }}"
+    preferred_lifetime: "{{ dhcp_scope_preferredlifetime }}"
 
 - name: ADD | DHCP IPv6 Scope (Idempotentcy Check) - Changed should equal false
   win_dhcp_server:
@@ -40,5 +48,13 @@
     type: "scope"
     name: "DHCP-TestScope-IPv6"
     prefix: "{{ dhcp_scope_prefix }}"
-    validlifetime: "{{ dhcp_scope_validlifetime }}"
-    preferredlifetime: "{{ dhcp_scope_preferredlifetime }}"
+    valid_lifetime: "{{ dhcp_scope_validlifetime }}"
+    preferred_lifetime: "{{ dhcp_scope_preferredlifetime }}"
+  register: create_scope6
+  failed_when: create_scope6.changed != false
+
+- name: VALIDATE | DHCP Scope | IPv4
+  ansible.windows.win_shell: |
+    Get-DhcpServerv6Scope | Where-Object Prefix -eq {{ dhcp_scope_prefix }}
+  register: validate_server6_out
+  failed_when: validate_server6_out.stdout == ""
