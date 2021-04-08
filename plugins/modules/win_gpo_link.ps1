@@ -135,15 +135,15 @@ function Get-Gplink {
                     $enforced = "Yes"
                 }
                 #we create an object representing each GPOs, its links status and link order
-                $return = New-Object psobject
-                $return | Add-Member -membertype NoteProperty -Name "Target" -Value $target
-                $return | Add-Member -membertype NoteProperty -Name "GPOID" -Value $gpoguid
-                $return | Add-Member -membertype NoteProperty -Name "DisplayName" -Value $gponame
-                $return | Add-Member -membertype NoteProperty -Name "Domain" -Value $gpodomain
-                $return | Add-Member -membertype NoteProperty -Name "Enforced" -Value $enforced
-                $return | Add-Member -membertype NoteProperty -Name "Enabled" -Value $enabled
-                $return | Add-Member -membertype NoteProperty -Name "Order" -Value $order
-                $return
+                [PSCustomObject]@{
+                    Target = $target
+                    GPOID = $gpoguid
+                    DisplayName = $gponame
+                    Domain = $gpodomain
+                    Enforced = $enforced
+                    Enabled = $enabled
+                    Order = $order
+                }
             }
         }
     }
