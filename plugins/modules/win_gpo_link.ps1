@@ -150,7 +150,7 @@ function Get-Gplink {
 }
 $spec = @{
     options = @{
-        state       = @{ type = "str"; choices = "query", "present", "absent"; default = "present" }
+        state       = @{ type = "str"; choices = "present", "absent"; default = "present" }
         path        = @{ type = "list"; elements = "str"; required = $true }
         gpo_name     = @{ type = "str"; required = $true }
         order       = @{ type = "int" }
