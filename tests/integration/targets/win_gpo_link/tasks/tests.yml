@@ -1,39 +1,39 @@
 ---
 - name: Create simple GroupPolicy Link
-  win_gpo_link:
+  community.windows.win_gpo_link:
      state: present
-     gponame: "{{ gpo_name }}"
-     path: 
+     gpo_name: "{{ gpo_name }}"
+     path:
        - "{{ gpo_path }}"
 
 - name: Create simple GroupPolicy Link (Idempotentcy Check) - Changed should equal false
-  win_gpo_link:
+  community.windows.win_gpo_link:
      state: present
-     gponame: "{{ gpo_name }}"
-     path: 
+     gpo_name: "{{ gpo_name }}"
+     path:
        - "{{ gpo_path }}"
   register: create_link
   failed_when: create_link.changed != false
 
 - name: Validate the GPLink
   ansible.windows.win_shell: |
-    (Get-ADObject -Filter { distinguishedname -eq "{{ gpo_path }}" } -Properties gplink | Select gplink).gplink.split("]") | ForEach-Object{ 
+    (Get-ADObject -Filter { distinguishedname -eq "{{ gpo_path }}" } -Properties gplink | Select gplink).gplink.split("]") | ForEach-Object{
      if($_.substring(12, 36) -contains (get-gpo -Name "{{ gpo_name }}" | Select ID).id.guid.toupper()){Write-Host "$true";break;}}
   register: validate_gplink_out
   failed_when: validate_gplink_out.stdout == ""
 
 - name: Delete simple GroupPolicy Link (Idempotentcy Check) - Changed should equal false
-  win_gpo_link:
+  community.windows.win_gpo_link:
      state: absent
      gponame: "{{ gpo_name }}"
-     path: 
+     path:
        - "{{ gpo_path }}"
 
 - name: Delete simple GroupPolicy Link (Idempotentcy Check) - Changed should equal false
-  win_gpo_link:
+  community.windows.win_gpo_link:
      state: absent
-     gponame: "{{ gpo_name }}"
-     path: 
+     gpon_ame: "{{ gpo_name }}"
+     path:
        - "{{ gpo_path }}"
   register: delete_link
   failed_when: delete_link.changed != false

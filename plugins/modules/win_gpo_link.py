@@ -8,15 +8,13 @@ DOCUMENTATION = r'''
 ---
 module: win_gpo_link
 author: Sebastian Gruber (@sgruber94)
+version_added: '1.4.0'
 short_description: Link a GroupPolicy to a specific ActiveDirectory OU
 description:
 - The C(win_gpo_link) module can link GroupPolicy to a specific ActiveDirectory OU.
 requirements:
   - PowerShell Module GroupPolicy (https://docs.microsoft.com/en-us/powershell/module/grouppolicy)
   - PowerShell Module activedirectory (https://docs.microsoft.com/en-us/powershell/module/activedirectory)
-seealso:
-  - module: community.windows.win_gpo_force
-  - module: community.windows.win_gpo_manage
 notes:
   - This must be run on a host that has the GroupPolicy PowerShell module installed.
 options:
@@ -27,7 +25,6 @@ options:
     choices:
       - present
       - absent
-      - query
     default: present
   path:
     description:
@@ -35,7 +32,7 @@ options:
     elements: str
     type: list
     required: yes
-  gponame:
+  gpo_name:
     description:
       - used by module when creating,quering or removing GPO Link
       - Name of the GPO
@@ -47,7 +44,7 @@ options:
       - That the settings of the GPO cannot be blocked (by blocking inheritance) at a lower-level Active Directory container.
     type: bool
     default: no
-  linkenabled:
+  link_enabled:
     description:
       - Disabling a GPO link does not disable the GPO itself
     type: bool
@@ -67,20 +64,20 @@ EXAMPLES = r'''
 - name: Create simple GroupPolicy Link
   community.windows.win_gpo_link:
     state: present
-    gponame: mysimpletest
+    gpo_name: mysimpletest
     path: 'OU=Switzerland,OU=Lab Accounts,DC=intern,DC=example,DC=de'
 
 - name: Create GroupPolicy Link enforced
   community.windows.win_gpo_link:
     state: present
-    gponame: mysimpletestmysimpletestenforced
+    gpo_name: mysimpletestmysimpletestenforced
     path: 'OU=Switzerland,OU=Lab Accounts,DC=intern,DC=example,DC=de'
     enforced: yes
 
 - name: Delete GroupPolicy Link enforced
   community.windows.win_gpo_link:
     state: absent
-    gponame: test99
+    gpo_name: test99
     path: 'OU=Switzerland,OU=Lab Accounts,DC=intern,DC=example,DC=de'
 
 '''

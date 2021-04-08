@@ -152,24 +152,23 @@ $spec = @{
     options = @{
         state       = @{ type = "str"; choices = "query", "present", "absent"; default = "present" }
         path        = @{ type = "list"; elements = "str"; required = $true }
-        gponame     = @{ type = "str"; required = $true }
+        gpo_name     = @{ type = "str"; required = $true }
         order       = @{ type = "int" }
         domain      = @{ type = "str" }
         enforced    = @{ type = "bool"; default = $false }
-        linkenabled = @{ type = "bool"; default = $true }
+        link_enabled = @{ type = "bool"; default = $true }
     }
     supports_check_mode = $true
 }
 $module = [Ansible.Basic.AnsibleModule]::Create($args, $spec)
 $state = $module.Params.state
 $path = $module.Params.path
-$gponame = $module.Params.gponame
+$gponame = $module.Params.gpo_name
 $gpoorder = $module.Params.order
 $gpodomain = $module.Params.domain
 $gposerver = $module.Params.server
 $enforcedbool = $module.Params.enforced
-$gpolinkenabledbool = $module.Params.linkenabled
-$ErrorActionPreference = 'Stop'#Error Action
+$gpolinkenabledbool = $module.Params.link_enabled
 try {
     Import-Module GroupPolicy
 } catch {
@@ -178,7 +177,7 @@ try {
 try {
     Import-Module activedirectory
 } catch {
-    $module.FailJson("win_grouppolicy requires the activedirectory  PS module to be installed")
+    $module.FailJson("win_grouppolicy requires the activedirectory  PS module to be installed", $_)
 }
 #Converting Needed Variables from bool into Strings :)
 #Microsoft specified that as string. Possible "No","yes","Unspecified" https://docs.microsoft.com/en-us/powershell/module/grouppolicy/set-gplink
@@ -193,16 +192,6 @@ if ($enforcedbool) {
     $enforced = "no"
 }
 #States
-if ($state -eq "query") {
-    foreach ($pa in $path) {
-        [string]$path = $pa
-        if ($path) {
-            get-gplink -path $path
-        } else {
-            $module.FailJson("GPO Target Path not set. Please specify that.")
-        }
-    }
-}
 if ($state -eq "present") {
     $gpos = Get-GPO -All
     if ($gpos.Displayname -contains $gponame) {
