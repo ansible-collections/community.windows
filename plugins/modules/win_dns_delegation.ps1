@@ -39,7 +39,7 @@ if ($state -eq "present") {
     #check if exist
     if ($delegationzone) {
         if ($delegationzone[0].NameServer.RecordData.NameServer.trim(".") -notmatch $nameserver) {
-            Add-DnsServerZoneDelegation @parms -PassThru -Confirm:$false
+            Add-DnsServerZoneDelegation @parms -Confirm:$false -Force
             $module.Result.changed = $true
         } else {
             #entry exist need to compare
@@ -61,7 +61,7 @@ if ($state -eq "present") {
         }
     } else {
         #create dns delegation
-        Add-DnsServerZoneDelegation @parms -PassThru -Confirm:$false
+        Add-DnsServerZoneDelegation @parms  -Confirm:$false
         $module.Result.changed = $true
     }
 }
@@ -69,7 +69,7 @@ if ($state -eq "present") {
 if ($state -eq "absent") {
     if ($delegationzone) {
         #remove dns zone delegation
-        Remove-DnsServerZoneDelegation @parms -PassThru -Confirm:$false
+        Remove-DnsServerZoneDelegation @parms  -Confirm:$false -Force
         $module.Result.changed = $true
     } else {
         #nothing to do
