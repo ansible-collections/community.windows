@@ -26,7 +26,7 @@ $folderpath = $module.Params.folder
 try {
     Import-Module GroupPolicy
 } catch {
-    $module.FailJson("win_grouppolicy requires the GroupPolicy PS module to be installed")
+    $module.FailJson("win_gpo_manage requires the GroupPolicy PS module to be installed", $_)
 }
 function Import-GPOs {
     param (
