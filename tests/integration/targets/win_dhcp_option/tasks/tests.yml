@@ -1,21 +1,21 @@
 ---
 - name: ADD | DHCP Option | IPv4 | Reservation
-  win_dhcp_option:
+  community.windows.win_dhcp_option:
      state: present
      version: "IPv4"
      type: "reservation"
-     optionid: "{{ dhcp_option_id_reservation4 }}"
+     option_id: "{{ dhcp_option_id_reservation4 }}"
      value: "{{ dhcp_option_value_reservation }}"
-     reservedip: "{{ dhcp_leased_ip }}"
+     reserved_ip: "{{ dhcp_leased_ip }}"
 
 - name: ADD | DHCP Option | IPv4 | Reservation - Changed should equal false
-  win_dhcp_option:
+  community.windows.win_dhcp_option:
      state: present
      version: "IPv4"
      type: "reservation"
-     optionid: "{{ dhcp_option_id_reservation4 }}"
+     option_id: "{{ dhcp_option_id_reservation4 }}"
      value: "{{ dhcp_option_value_reservation }}"
-     reservedip: "{{ dhcp_leased_ip }}"
+     reserved_ip: "{{ dhcp_leased_ip }}"
   register: create_reservation4option
   failed_when: create_reservation4option.changed != false
 
@@ -25,21 +25,21 @@
   register: validate_reservation4_out
   failed_when: validate_reservation4_out.stdout == ""
 
-- name: ADD | DHCP Option | IPv4 | SCOPE 
-  win_dhcp_option:
+- name: ADD | DHCP Option | IPv4 | SCOPE
+  community.windows.win_dhcp_option:
      state: present
      version: "IPv4"
      type: "scope"
-     optionid: "{{ dhcp_option_id_scope4 }}"
+     option_id: "{{ dhcp_option_id_scope4 }}"
      value: "{{ dhcp_option_value_scope }}"
      scope: "{{ dhcp_scope4_id }}"
 
 - name: ADD | DHCP Option | IPv4 | SCOPE (Idempotentcy Check) - Changed should equal false
-  win_dhcp_option:
+  community.windows.win_dhcp_option:
      state: present
      version: "IPv4"
      type: "scope"
-     optionid: "{{ dhcp_option_id_scope4 }}"
+     option_id: "{{ dhcp_option_id_scope4 }}"
      value: "{{ dhcp_option_value_scope }}"
      scope: "{{ dhcp_scope4_id }}"
   register: create_scope4option
@@ -50,21 +50,21 @@
     Get-DhcpServerv4Scope | Get-DhcpServerv4OptionValue | Where-Object OptionId -eq {{ dhcp_option_id_scope4 }}
   register: validate_scope4_out
   failed_when: validate_scope4_out.stdout == ""
-    
+
 - name: ADD | DHCP Option | IPv4 | SERVER
-  win_dhcp_option:
+  community.windows.win_dhcp_option:
     state: present
     version: "IPv4"
     type: "server"
-    optionid: "{{ dhcp_option_id_server4 }}"
+    option_id: "{{ dhcp_option_id_server4 }}"
     value: "{{ dhcp_option_value_server }}"
 
 - name: ADD | DHCP Option | IPv4 | SERVER
-  win_dhcp_option:
+  community.windows.win_dhcp_option:
     state: present
     version: "IPv4"
     type: "server"
-    optionid: "{{ dhcp_option_id_server4 }}"
+    option_id: "{{ dhcp_option_id_server4 }}"
     value: "{{ dhcp_option_value_server }}"
   register: create_server4option
   failed_when: create_server4option.changed != false
@@ -76,41 +76,41 @@
   failed_when: validate_server4_out.stdout == ""
 
 - name: REMOVE | DHCP Option | IPv4 | Reservation
-  win_dhcp_option:
+  community.windows.win_dhcp_option:
     state: absent
     version: "IPv4"
     type: "Reservation"
     scope: "{{ dhcp_scope4_id }}"
-    optionid: "{{ dhcp_option_id_scope4 }}"
+    option_id: "{{ dhcp_option_id_scope4 }}"
     value: "{{ dhcp_option_value_scope }}"
 
 - name: REMOVE | DHCP Option | IPv4 | Reservation  (Idempotentcy Check) - Changed should equal false
-  win_dhcp_option:
+  community.windows.win_dhcp_option:
     state: absent
     version: "IPv4"
     type: "Reservation"
     scope: "{{ dhcp_scope4_id }}"
-    optionid: "{{ dhcp_option_id_scope4 }}"
+    option_id: "{{ dhcp_option_id_scope4 }}"
     value: "{{ dhcp_option_value_scope }}"
   register: remove_reservation4option
   failed_when: remove_reservation4option.changed != false
 
 - name: REMOVE | DHCP Option | IPv4 | SCOPE
-  win_dhcp_option:
+  community.windows.win_dhcp_option:
     state: absent
     version: "IPv4"
     type: "scope"
     scope: "{{ dhcp_scope4_id }}"
-    optionid: "{{ dhcp_option_id_scope4 }}"
+    option_id: "{{ dhcp_option_id_scope4 }}"
     value: "{{ dhcp_option_value_scope }}"
 
 - name: REMOVE | DHCP Option | IPv4 | SCOPE  (Idempotentcy Check) - Changed should equal false
-  win_dhcp_option:
+  community.windows.win_dhcp_option:
     state: absent
     version: "IPv4"
     type: "scope"
     scope: "{{ dhcp_scope4_id }}"
-    optionid: "{{ dhcp_option_id_scope4 }}"
+    option_id: "{{ dhcp_option_id_scope4 }}"
     value: "{{ dhcp_option_value_scope }}"
   register: remove_scope4option
   failed_when: remove_scope4option.changed != false
@@ -122,19 +122,19 @@
   failed_when: validate_state_out.stdout != ""
 
 - name: REMOVE | DHCP Option | IPv4 | SERVER
-  win_dhcp_option:
+  community.windows.win_dhcp_option:
     state: absent
     version: "IPv4"
     type: "server"
-    optionid: "{{ dhcp_option_id_server4 }}"
+    option_id: "{{ dhcp_option_id_server4 }}"
     value: "{{ dhcp_option_value_server }}"
 
 - name: REMOVE | DHCP Option | IPv4 | SERVER  (Idempotentcy Check) - Changed should equal false
-  win_dhcp_option:
+  community.windows.win_dhcp_option:
     state: absent
     version: "IPv4"
     type: "server"
-    optionid: "{{ dhcp_option_id_server4 }}"
+    option_id: "{{ dhcp_option_id_server4 }}"
     value: "{{ dhcp_option_value_server }}"
   register: remove_server4option
   failed_when: remove_server4option.changed != false
