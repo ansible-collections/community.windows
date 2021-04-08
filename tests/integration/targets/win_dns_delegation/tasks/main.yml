@@ -8,20 +8,62 @@
     state: present
   register: ensure_addns_roles
 
+- name: Ensure loopback address is set to DNS
+  ansible.windows.win_dns_client:
+    adapter_names: '*'
+    ipv4_addresses: 127.0.0.1
+
 - name: Reboot
   ansible.windows.win_reboot:
   when: ensure_addns_roles.reboot_required
 
-- name: ADD | DNS Zone Delegation
-  win_dns_delegation:
+- name: Ensure file-backed primary DNS zone is present
+  community.windows.win_dns_zone:
+    name: "{{ win_dns_delegation_parentzone }}"
+    replication: none
+    type: primary
     state: present
-    zone: "example.com"
-    name: "testlab"
-    NameServer: "ns.example.com"
-    IPAddress: 192.168.111.1
+
+- name: ADD | DNS Zone Delegation
+  community.windows.win_dns_delegation:
+    state: present
+    parent_zone: "{{ win_dns_delegation_parentzone }}"
+    name: "{{ win_dns_delegation_childzone }}"
+    name_server: "ns.example.com"
+    ip_address: "{{ win_dns_delegation_ipaddress }}"
+
+- name: ADD | DNS Zone Delegation (Idempotentcy Check) - Changed should equal false
+  community.windows.win_dns_delegation:
+    state: present
+    parent_zone: "{{ win_dns_delegation_parentzone }}"
+    name: "{{ win_dns_delegation_childzone }}"
+    name_server: "ns.example.com"
+    ip_address: "{{ win_dns_delegation_ipaddress }}"
+  register: create_dnszonedelegation
+  failed_when: create_dnszonedelegation.changed != false
+
+- name: VALIDATE | DNS Zone Delegation
+  ansible.windows.win_shell: |
+   Get-DnsServerZoneDelegation -ChildZoneName {{ win_dns_delegation_childzone }}  -ZoneName {{ win_dns_delegation_parentzone }}
+  register: validate_reservation4_out
+  failed_when: validate_reservation4_out.stdout == ""
 
 - name: Remove | DNS Zone Delegation
-  win_dns_delegation:
+  community.windows.win_dns_delegation:
     state: absent
-    zone: "example.com"
-    name: "testlab2"
+    parent_zone: "{{ win_dns_delegation_parentzone }}"
+    name: "{{ win_dns_delegation_childzone }}"
+
+- name: Remove | DNS Zone Delegation (Idempotentcy Check) - Changed should equal false
+  community.windows.win_dns_delegation:
+    state: absent
+    parent_zone: "{{ win_dns_delegation_parentzone }}"
+    name: "{{ win_dns_delegation_childzone }}"
+  register: remove_dnszonedelegation
+  failed_when: remove_dnszonedelegation.changed != false
+
+- name: VALIDATE | DNS Zone Delegation
+  ansible.windows.win_shell: |
+   Get-DnsServerZoneDelegation -ChildZoneName {{ win_dns_delegation_childzone }}  -ZoneName {{ win_dns_delegation_parentzone }}
+  register: validate_reservation4_out
+  failed_when: validate_reservation4_out.stdout != ""

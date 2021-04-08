@@ -9,6 +9,7 @@ DOCUMENTATION = r'''
 module: win_dns_delegation
 short_description: Manage Windows Server DNS Zone Delegations
 author: Sebastian Gruber (@sgruber94)
+version_added: '1.4.0'
 requirements:
   - This module requires Windows Server 2012R2 or Newer
   - This module requires PowerShell Module DNSServer(https://docs.microsoft.com/en-us/powershell/module/dnsserver/?view=win10-ps)
@@ -24,7 +25,7 @@ options:
       - Fully qualified name of the DNS zone that will be delegated.
     type: str
     required: true
-  zone:
+  parent_zone:
     description:
       - Fully qualified name of the main DNS zone.
     type: str
@@ -39,13 +40,13 @@ options:
     type: str
     default: present
     choices: [ present, absent ]
-  NameServer:
+  name_server:
     description:
       - Specifies the NameServer for that DNS zone.
       - DNS queries for a delegated zone are sent to these IPAddress.
       - Required if l(state=present), otherwise ignored.
     type: str
-  IPAddress:
+  ip_address:
     description:
       - Specifies an list of IP addresses of the main NameServer of the zone.
       - Required if l(state=present), otherwise ignored.
@@ -57,15 +58,15 @@ EXAMPLES = r'''
     - name: ADD | DNS Zone Delegation
       community.windows.win_dns_delegation:
           state: present
-          zone: "example.com"
+          parent_zone: "example.com"
           name: "testlab"
-          NameServer: "ns.example.com"
-          IPAddress: 192.168.111.1
+          name_server: "ns.example.com"
+          ip_address: 192.168.111.1
 
     - name: Remove | DNS Zone Delegation
       community.windows.win_dns_delegation:
           state: absent
-          zone: "example.com"
+          parent_zone: "example.com"
           name: "testlab2"
 '''
 

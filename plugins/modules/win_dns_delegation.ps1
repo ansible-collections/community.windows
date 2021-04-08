@@ -6,105 +6,69 @@
 
 $spec = @{
     options             = @{
-        name       = @{ type = "str"; required = $true }
-        zone       = @{ type = "str"; required = $true }
-        state      = @{ type = "str"; choices = "absent", "present"; default = "present" }
-        NameServer = @{ type = "str" }
-        IPAddress  = @{ type = "list"; elements = "str" }
+        name        = @{ type = "str"; required = $true }
+        parent_zone        = @{ type = "str"; required = $true }
+        state       = @{ type = "str"; choices = "absent", "present"; default = "present" }
+        name_server = @{ type = "str" }
+        ip_address  = @{ type = "list"; elements = "str" }
     }
     supports_check_mode = $true
 }
 $module = [Ansible.Basic.AnsibleModule]::Create($args, $spec)
 $check_mode = $module.CheckMode
 $name = $module.Params.name
-$zone = $module.Params.zone
+$zone = $module.Params.parent_zone
 $state = $module.Params.state
-$NameServer = $module.Params.NameServer
-$IPAddress = $module.Params.IPAddress
+$NameServer = $module.Params.name_server
+$IPAddress = $module.Params.ip_address
 
 $parms = @{
     Name          = $zone
     ChildZoneName = $name
 }
-Try {
-    # Import DNS Server PS Module
-    Import-Module DNSServer
-} Catch {
-    # Couldn't load the DNS Module
-    $module.FailJson("The DNSServer module failed to load properly: $($_.Exception.Message)", $_)
-}
-
-try {
-    $delegationzone = Get-DnsServerZoneDelegation @parms
-} catch {
-    $module.FailJson("Failed to get dns delegation zone. $($_.Exception.Message)", $_)
-}
+if ($check_mode) { $parms.WhatIf = $check_mode }
+# Import DNS Server PS Module
+Import-Module DNSServer
+$delegationzone = Get-DnsServerZoneDelegation @parms
 
 if ($state -eq "present") {
     $parms.NameServer = $NameServer
     $parms.IPAddress = $IPAddress
-    if ($check_mode) { $parms.WhatIf = $check_mode }
     #check if exist
     if ($delegationzone) {
         if ($delegationzone[0].NameServer.RecordData.NameServer.trim(".") -notmatch $nameserver) {
-            try {
-                Add-DnsServerZoneDelegation @parms -PassThru -Confirm:$false
-                $module.Result.changed = $true
-            } catch {
-                $module.FailJson("Failed to add dns delegation zone $($name): $($_.Exception.Message)", $_)
-            }
-
+            Add-DnsServerZoneDelegation @parms -PassThru -Confirm:$false
+            $module.Result.changed = $true
         } else {
             #entry exist need to compare
             $addressv4 = $delegationzone[0].IPAddress.RecordData.IPV4Address.IPAddressToString
             $addressv6 = $delegationzone[0].IPAddress.RecordData.IPV6Address.IPAddressToString
             if ($addressv4) {
-                try {
-                    $diffnsipv4 = Compare-Object -ReferenceObject $addressv4 -DifferenceObject $ipaddress
-                } catch {
-                    $module.FailJson("Failed to compare delegation NameServer zone $($name): $($_.Exception.Message)", $_)
-                }
+                $diffnsipv4 = Compare-Object -ReferenceObject $addressv4 -DifferenceObject $ipaddress
             }
             if ($addressv6) {
-                try {
-                    $diffnsipv6 = Compare-Object -ReferenceObject $addressv6 -DifferenceObject $ipaddress
-                } catch {
-                    $module.FailJson("Failed to compare delegation NameServer zone $($name): $($_.Exception.Message)", $_)
-                }
+                $diffnsipv6 = Compare-Object -ReferenceObject $addressv6 -DifferenceObject $ipaddress
             }
             if (($diffnsipv4.count -gt 0) -or ($diffnsipv6.count -gt 0 )) {
-                try {
-                    #changing ip address
-                    Set-DnsServerZoneDelegation @parms -Confirm:$false
-                    $module.Result.changed = $true
-                } catch {
-                    $module.FailJson("Failed to change dns Server zone $($name): $($_.Exception.Message)", $_)
-                }
+                #changing ip address
+                Set-DnsServerZoneDelegation @parms -Confirm:$false
+                $module.Result.changed = $true
             } else {
                 $module.Result.changed = $false
             }
         }
     } else {
         #create dns delegation
-        try {
-            Add-DnsServerZoneDelegation @parms -PassThru -Confirm:$false
-            $module.Result.changed = $true
-        } catch {
-            $module.FailJson("Failed to add dns delegation zone $($name): $($_.Exception.Message)", $_)
-        }
+        Add-DnsServerZoneDelegation @parms -PassThru -Confirm:$false
+        $module.Result.changed = $true
     }
 }
 
 if ($state -eq "absent") {
-    if ($check_mode) { $parms.WhatIf = $check_mode }
     if ($delegationzone) {
         #remove dns zone delegation
-        try {
-            Remove-DnsServerZoneDelegation @parms -PassThru -Confirm:$false
-            $module.Result.changed = $true
-        } catch {
-            $module.FailJson("Failed to remove dns delegation zone $($name): $($_.Exception.Message)", $_)
-        }
+        Remove-DnsServerZoneDelegation @parms -PassThru -Confirm:$false
+        $module.Result.changed = $true
     } else {
         #nothing to do
         $module.Result.changed = $false
