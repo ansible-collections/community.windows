@@ -17,9 +17,9 @@ requirements:
 options:
   state:
     description:
-      - When l(type=present), GroupPolicy will be imported from a specific Folder
-      - When l(type=absent), is set then I(name) must also be set. Deletes GPO
-      - When l(type=exported), GroupPolicy will be exported from to a specific Folder
+      - When l(state=present), GroupPolicy will be imported from a specific Folder
+      - When l(state=absent), is set then I(name) must also be set. Deletes GPO
+      - When l(state=exported), GroupPolicy will be exported from to a specific Folder
     type: str
     choices:
       - present
