@@ -173,7 +173,7 @@ $ErrorActionPreference = 'Stop'#Error Action
 try {
     Import-Module GroupPolicy
 } catch {
-    $module.FailJson("win_grouppolicy requires the GroupPolicy  PS module to be installed")
+    $module.FailJson("win_gpo_link requires the GroupPolicy  PS module to be installed", $_)
 }
 try {
     Import-Module activedirectory
