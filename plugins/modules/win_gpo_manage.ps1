@@ -118,10 +118,7 @@ if ($gpomode -eq "remove") {
             $module.result.diff.after = [Array]$removedgpo | Out-String
         } else {
             #remove gpos
-            $gpoafter = (Get-GPO -All).Displayname
-            $after = [System.Collections.Generic.List`1[String]]
-            $after.AddRange($gpoafter)
-            $module.result.diff.after = $after | Out-String
+            $module.Diff.after = @((Get-Gpo -All).Displayname)`
         }
     }
 }
