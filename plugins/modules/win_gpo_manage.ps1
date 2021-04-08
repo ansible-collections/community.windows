@@ -7,20 +7,20 @@
 $spec = @{
     options  = @{
         name     = @{ type = "list"; elements = "str" }
+        state     = @{ type = "str"; choices = "present", "absent", "exported";required=$true }
         folder   = @{ type = "path"; default = "C:\GPO" }
-        mode     = @{ type = "str"; choices = "import", "query", "remove", "export";required=$true }
         override = @{ type = "bool"; default = $false }# Skip if import gpo
     }
     required_if = @(
-        @("mode", "import", @("folder")),
-        @("mode", "export", @("folder")),
-        @("mode", "remove", @("name"))
+        @("state", "present", @("folder")),
+        @("state", "exported", @("folder")),
+        @("state", "absent", @("name"))
         )
     supports_check_mode = $true
 }
 $module = [Ansible.Basic.AnsibleModule]::Create($args, $spec)
 $check_mode = $module.CheckMode
-$gpomode = $module.Params.mode
+$gpomode = $module.Params.state
 $removedgpo = $module.Params.name
 $folderpath = $module.Params.folder
 try {
@@ -76,24 +76,21 @@ function Export-GPOs {
         } else {
             if(!(Test-Path -LiteralPath $Path)) {
                 #Folder doesnt exist
-                New-Item -ItemType directory -Path $Path -WhatIf:$check_mode
+                New-Item -ItemType directory -Path $Path -WhatIf:$check_mode | Out-Null
             }
             if((Test-Path -LiteralPath $Path) -and ($override)) {
                 Remove-Item -ItemType directory -Path $Path -WhatIf:$check_mode
-                New-Item -ItemType directory -Path $Path -WhatIf:$check_mode
+                New-Item -ItemType directory -Path $Path -WhatIf:$check_mode | Out-Null
             }
             Backup-GPO -Guid $Entry.id -Path $Path -WhatIf:$check_mode
             $module.result.exported.Add($entry.Displayname)
         }
     }
 }
-if ($diff_mode) {
-    $module.result.diff = @{}
-}
-if ($gpomode -eq "remove") {
+if ($gpomode -eq "absent") {
     #Removes GPOs
     $gpo = (Get-GPO -All).Displayname
-    $module.diff.before = $gpo | Out-String
+    $module.Diff.before = $gpo
     if ($removedgpo.count -gt 0) {
         foreach ($gporemove in $removedgpo) {
             if($gpos -contains $removedgpo) {
@@ -112,29 +109,24 @@ if ($gpomode -eq "remove") {
     } else {
         $module.result.changed = $false #there are no gpos
     }
-    if ($diff_mode -and $result.changed) {
+    if ($module.DiffMode -and $result.changed) {
         if (!$check_mode) {
             #only check
-            $module.result.diff.after = [Array]$removedgpo | Out-String
+            $module.Diff.after = [Array]$removedgpo
         } else {
             #remove gpos
             $module.Diff.after = @((Get-Gpo -All).Displayname)`
         }
     }
 }
-if ($gpomode -eq "query") {
-    $queryresult = Get-GPO -All
-    $module.result.query_result = $queryresult
-    $module.result.changed = $false
-}
-if ($gpomode -like "import") {
+if ($gpomode -like "present") {
     try {
         Import-GPOs -importfolder $folderpath
     } catch {
         $module.FailJson("an exception occurred when importing GPO - $($_.Exception.Message)")
     }
 }
-if ($gpomode -eq "export") {
+if ($gpomode -eq "exported") {
     try {
         Export-GPOs  -exportfolder $folderpath
     } catch {

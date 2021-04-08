@@ -15,7 +15,7 @@ description:
 requirements:
   - PowerShell Module GroupPolicy (https://docs.microsoft.com/en-us/powershell/module/grouppolicy)
 options:
-  mode:
+  state:
     description:
       - When l(type=present), GroupPolicy will be imported from a specific Folder
       - When l(type=absent), is set then I(name) must also be set. Deletes GPO
@@ -28,13 +28,13 @@ options:
     required: yes
   folder:
     description:
-      - Required if l(type=present) or l(type=export)
+      - Required if l(state=present) or l(state=export)
       - Specify Folder to Import or Export GroupPolicy
     type: path
     default: C:\GPO
   name:
     description:
-      - Required if l(type=absent) is set.
+      - Required if l(state=absent) is set.
       - Specify Name of GroupPolicies that should be deleted
     elements: str
     type: list
@@ -49,17 +49,17 @@ options:
 EXAMPLES = r'''
 - name: Import GroupPolicys from a Folder
   community.windows.win_gpo_manage:
-    mode: present
+    state: present
     folder: C:\gpo
 
 - name: Export all GroupPolicys to a Folder
   community.windows.win_gpo_manage:
-    mode: exported
+    state: exported
     folder: C:\gpoexport
 
 - name: Delete specific GroupPolicy
   community.windows.win_gpo_manage:
-    mode: absent
+    state: absent
     name: '"GPO-1","GPO-2"'
 
 '''
