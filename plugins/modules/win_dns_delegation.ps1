@@ -29,7 +29,9 @@ $parms = @{
 if ($check_mode) { $parms.WhatIf = $check_mode }
 # Import DNS Server PS Module
 Import-Module DNSServer
-$delegationzone = Get-DnsServerZoneDelegation @parms
+
+#check if delegated zone exists
+$delegationzone = Get-DnsServerZoneDelegation -Name $zone | where-Object ChildZoneName -like "$name*"
 
 if ($state -eq "present") {
     $parms.NameServer = $NameServer
