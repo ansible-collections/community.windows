@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 # Copyright: (c) 2018, Varun Chopra (@chopraaa) <v@chopraaa.com>
+# Mountpoint feature added by Eriol (@aelfwine88)
 # GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 
 DOCUMENTATION = r'''
@@ -21,8 +22,13 @@ options:
   drive_letter:
     description:
       - Used for accessing partitions if I(disk_number) and I(partition_number) are not provided.
-      - Use C(auto) for automatically assigning a drive letter, or a letter A-Z for manually assigning a drive letter to a new partition.
+      - In case of a new parition the valid options are the following:
+        Use C(auto) for automatically assigning a drive letter.
+        Any unused letter from A-Z for manually assigning a drive letter.
+        An empty or a non existing directory for manually assigning a mountpoint.
         If not specified, no drive letter is assigned when creating a new partition.
+      - If I(disk_number) and I(partition_number) is specified it can remounting the a parition
+        to the given mountpoint, drive letter or unmount with C(none).
     type: str
   disk_number:
     description:
@@ -77,8 +83,8 @@ options:
 notes:
   - A minimum Operating System Version of 6.2 is required to use this module. To check if your OS is compatible, see
     U(https://docs.microsoft.com/en-us/windows/desktop/sysinfo/operating-system-version).
-  - This module cannot be used for removing the drive letter associated with a partition, initializing a disk or, file system formatting.
-  - Idempotence works only if you're specifying a drive letter or other unique attributes such as a combination of disk number and partition number.
+  - This module cannot be used for initializing a disk or file system formatting.
+  - Idempotence works only if you're specifying a I(drive_letter) or other unique attributes such as a combination of disk number and partition number.
   - For more information, see U(https://msdn.microsoft.com/en-us/library/windows/desktop/hh830524.aspx).
 author:
   - Varun Chopra (@chopraaa) <v@chopraaa.com>
@@ -91,9 +97,9 @@ EXAMPLES = r'''
     partition_size: 5 GiB
     disk_number: 1
 
-- name: Resize previously created partition to it's maximum size and change it's drive letter to E
+- name: Resize previously created partition to it's maximum size and change it's mountpoint to E:\SQL_Log
   community.windows.win_partition:
-    drive_letter: E
+    drive_letter: E:\SQL_Log
     partition_size: -1
     partition_number: 1
     disk_number: 1
