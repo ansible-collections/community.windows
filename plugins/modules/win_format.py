@@ -12,7 +12,7 @@ description:
 options:
   drive_letter:
     description:
-      - Used to specify the drive letter of the volume to be formatted.
+      - Used to specify the drive letter or directory mountpoint of the volume to be formatted.
     type: str
   path:
     description:
