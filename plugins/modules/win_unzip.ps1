@@ -33,7 +33,7 @@ $result = @{
     src = $src -replace '\$',''
 }
 
-Function Expand-Zip($src, $dest) {
+Function Expand-ZipNet($src, $dest) {
     $archive = [System.IO.Compression.ZipFile]::Open($src, [System.IO.Compression.ZipArchiveMode]::Read, [System.Text.Encoding]::UTF8)
     foreach ($entry in $archive.Entries) {
         $archive_name = $entry.FullName
@@ -96,39 +96,57 @@ If (-Not (Test-Path -LiteralPath $src)) {
 $ext = [System.IO.Path]::GetExtension($src)
 
 If (-Not (Test-Path -LiteralPath $dest -PathType Container)){
-    Try{
+    try {
         New-Item -ItemType "directory" -path $dest -WhatIf:$check_mode | out-null
     } Catch {
         Fail-Json -obj $result -message "Error creating '$dest' directory! Msg: $($_.Exception.Message)"
     }
 }
+# defaulting to Expand-Archive from PowerShell v5+
+$version = "default";
 
-If ($ext -eq ".zip" -And $recurse -eq $false -And -Not $password) {
-    # TODO: PS v5 supports zip extraction, use that if available
-    $use_legacy = $false
-    try {
-        # determines if .net 4.5 is available, if this fails we need to fall
-        # back to the legacy COM Shell.Application to extract the zip
-        Add-Type -AssemblyName System.IO.Compression.FileSystem | Out-Null
-        Add-Type -AssemblyName System.IO.Compression | Out-Null
-    } catch {
-        $use_legacy = $true
-    }
-
-    if ($use_legacy) {
+if ($ext -eq ".zip" -And $recurse -eq $false -And -Not $password) {
+    if (-Not (Get-Command "Expand-Archive")) {
+        # no Expand-Archive command, so we have to use .NET or legacy version
         try {
-            Expand-ZipLegacy -src $src -dest $dest
+            # determines if .net 4.5 is available, if this fails we need to fall
+            # back to the legacy COM Shell.Application to extract the zip
+            Add-Type -AssemblyName System.IO.Compression.FileSystem | Out-Null
+            Add-Type -AssemblyName System.IO.Compression | Out-Null
+            $version = "net"
         } catch {
-            Fail-Json -obj $result -message "Error unzipping '$src' to '$dest'!. Method: COM Shell.Application, Exception: $($_.Exception.Message)"
-        }
-    } else {
-        try {
-            Expand-Zip -src $src -dest $dest
-        } catch {
-            Fail-Json -obj $result -message "Error unzipping '$src' to '$dest'!. Method: System.IO.Compression.ZipFile, Exception: $($_.Exception.Message)"
+            $version = "legacy";
         }
     }
-} Else {
+    
+    switch ($version) {
+        "default" {
+            try {
+                Expand-Archive -Path $src -DestinationPath $dest -WhatIf:$check_mode
+                $result.changed = $true
+            } catch {
+                Fail-Json -obj $result -message "Error unzipping '$src' to '$dest'!. Method: Expand-Archive, Exception: $($_.Exception.Message)"
+            }
+        }
+        "net" { 
+            try {
+                Expand-ZipNet -src $src -dest $dest
+            } catch {
+                Fail-Json -obj $result -message "Error unzipping '$src' to '$dest'!. Method: System.IO.Compression.ZipFile, Exception: $($_.Exception.Message)"
+            }
+        }
+        "legacy" {
+            try {
+                Expand-ZipLegacy -src $src -dest $dest
+            } catch {
+                Fail-Json -obj $result -message "Error unzipping '$src' to '$dest'!. Method: COM Shell.Application, Exception: $($_.Exception.Message)"
+            }
+        }
+        default {
+            Fail-Json -obj $result -message "Error during obtaining unzip method version. Either unknown PowerShell version or module corrupted."
+        }
+    }
+} else {
     # Check if PSCX is installed
     $list = Get-Module -ListAvailable
 
