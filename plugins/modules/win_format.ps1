@@ -19,21 +19,29 @@ $spec = @{
         file_system = @{ type = "str"; choices = "ntfs", "refs", "exfat", "fat32", "fat" }
         allocation_unit_size = @{ type = "int" }
         large_frs = @{ type = "bool" }
-        full = @{ type = "bool"; default = $false }
-        compress = @{ type = "bool" }
+        full_format = @{ type = "bool"; default = $false }
+        compress_volume = @{ type = "bool" }
         integrity_streams = @{ type = "bool" }
         force = @{ type = "bool"; default = $false }
+        filepath = @{ type = "str" }
     }
     mutually_exclusive = @(
-        ,@('drive_letter', 'path', 'label')
+        ,@('drive_letter', 'path', 'label', 'filepath')
     )
     required_one_of = @(
-        ,@('drive_letter', 'path', 'label')
+        ,@('drive_letter', 'path', 'label', 'filepath')
     )
     supports_check_mode = $true
 }
 
 $module = [Ansible.Basic.AnsibleModule]::Create($args, $spec)
+
+$filepath = $null
+
+if(Test-Path $drive_letter -PathType Container) {
+    $filepath = $drive_letter
+    $drive_letter = $null
+}
 
 $drive_letter = $module.Params.drive_letter
 $path = $module.Params.path
@@ -69,7 +77,8 @@ function Get-AnsibleVolume {
     param(
         $DriveLetter,
         $Path,
-        $Label
+        $Label,
+        $FilePath
     )
 
     if ($null -ne $DriveLetter) {
@@ -93,8 +102,15 @@ function Get-AnsibleVolume {
             $module.FailJson("There was an error retrieving the volume using label $($Label): $($_.Exception.Message)", $_)
         }
     }
+    elseif ($null -ne $FilePath) {
+        try {
+            $volume = Get-Volume -FilePath $FilePath
+        } catch {
+            $module.FailJson("There was an error retrieving the volume using filepath $($FilePath): $($_.Exception.Message)", $_)
+        }
+    }
     else {
-        $module.FailJson("Unable to locate volume: drive_letter, path and label were not specified")
+        $module.FailJson("Unable to locate volume: drive_letter, path, label or filepath were not specified")
     }
 
     return $volume
@@ -138,7 +154,7 @@ function Format-AnsibleVolume {
 
 }
 
-$ansible_volume = Get-AnsibleVolume -DriveLetter $drive_letter -Path $path -Label $label
+$ansible_volume = Get-AnsibleVolume -DriveLetter $drive_letter -Path $path -Label $label -FilePath $filepath 
 $ansible_file_system = $ansible_volume.FileSystem
 $ansible_volume_size = $ansible_volume.Size
 $ansible_volume_alu = (Get-CimInstance -ClassName Win32_Volume -Filter "DeviceId = '$($ansible_volume.path.replace('\','\\'))'" -Property BlockSize).BlockSize
@@ -146,7 +162,7 @@ $ansible_volume_alu = (Get-CimInstance -ClassName Win32_Volume -Filter "DeviceId
 $ansible_partition = Get-Partition -Volume $ansible_volume
 
 if (-not $force_format -and $null -ne $allocation_unit_size -and $ansible_volume_alu -ne 0 -and $null -ne $ansible_volume_alu -and $allocation_unit_size -ne $ansible_volume_alu) {
-        $module.FailJson("Force format must be specified since target allocation unit size: $($allocation_unit_size) is different from the current allocation unit size of the volume: $($ansible_volume_alu)")
+    $module.FailJson("Force format must be specified since target allocation unit size: $($allocation_unit_size) is different from the current allocation unit size of the volume: $($ansible_volume_alu)")
 }
 
 foreach ($access_path in $ansible_partition.AccessPaths) {
