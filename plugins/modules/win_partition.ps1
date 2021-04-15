@@ -1,6 +1,7 @@
 #!powershell
 
 # Copyright: (c) 2018, Varun Chopra (@chopraaa) <v@chopraaa.com>
+# Mountpoint feature added by Eriol (@aelfwine88)
 # GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 
 #AnsibleRequires -CSharpUtil Ansible.Basic
@@ -45,6 +46,8 @@ $size_is_maximum = $false
 $ansible_partition = $false
 $ansible_partition_size = $null
 $partition_style = $null
+$mountpoint = $false
+$DL = $null
 
 $gpt_styles = @{
     system_partition = "c12a7328-f81f-11d2-ba4b-00a0c93ec93b"
@@ -61,6 +64,7 @@ $mbr_styles = @{
     ifs = 7
     fat32 = 12
 }
+
 
 function Convert-SizeToBytes {
     param(
@@ -93,34 +97,87 @@ if ($null -ne $partition_size) {
     }
 }
 
+# Formating drive_letter
+# Case of letter remove unnecesary characters
+if ($drive_letter -match "^[a-zA-Z]:$" -or $drive_letter -match "^[a-zA-Z]:\\$") {
+	$drive_letter = $drive_letter.substring(0,1)
+}
+# Case of mountpoint add ending backslash
+if ($null -ne $drive_letter -and $drive_letter.Length -gt 3 -and $drive_letter -ne "none") {
+	if ($drive_letter.substring($drive_letter.Length - 1) -ne '\') {
+		$drive_letter = $drive_letter + '\'
+	}
+}
+
 # If partition_exists, we can change or delete it; otherwise we only need the disk to create a new partition
+# If both disk_number and partition_number defined partition will be selected by those
 if ($null -ne $disk_number -and $null -ne $partition_number) {
     $ansible_partition = Get-Partition -DiskNumber $disk_number -PartitionNumber $partition_number -ErrorAction SilentlyContinue
 }
-# Check if drive_letter is either auto-assigned or a character from A-Z
-elseif ($drive_letter -and -not ($disk_number -and $partition_number)) {
-    if ($drive_letter -eq "auto" -or $drive_letter -match "^[a-zA-Z]$") {
+# If either disk_number or partition_number not defined trying to identify partition by drive_letter
+elseif ($drive_letter -and -not $disk_number) {
+	if ($drive_letter -match "^[a-zA-Z]$") {
         $ansible_partition = Get-Partition -DriveLetter $drive_letter -ErrorAction SilentlyContinue
     }
-    else {
-        $module.FailJson("Incorrect usage of drive_letter: specify a drive letter from A-Z or use 'auto' to automatically assign a drive letter")
-    }
+	elseif (Test-Path $drive_letter -PathType Container) {
+		$ansible_partition = Get-Partition | Where-Object -Property AccessPaths -Contains "$drive_letter"
+	}
 }
-elseif ($disk_number) {
-    try {
-        Get-Disk -Number $disk_number | Out-Null
-    } catch {
-        $module.FailJson("Specified disk does not exist")
-    }
+
+# If ansible_partition was not identified check if disk_number is valid
+if (!$ansible_partition) {
+	if ($disk_number) {
+		try {
+			Get-Disk -Number $disk_number | Out-Null
+		} catch {
+			$module.FailJson("Specified disk does not exist")
+		}
+	}
+	else {
+		$module.FailJson("You must provide at least a disk_number or an existing drive_letter")
+	}
 }
-else {
-    $module.FailJson("You must provide disk_number, partition_number")
+
+# Check if drive_letter is a new letter or new mountpoint
+if ([bool]$ansible_partition.PSobject.Properties['DriveLetter']) {
+	$DL = $ansible_partition.DriveLetter
+}
+if ($drive_letter -NotIn ("auto", "none", $null, $DL)) {
+	# Check if drive_letter is an existing directory
+	if (Test-Path $drive_letter -PathType Container) {
+		# Check if drive_letter empty
+		if (-Not (Test-Path $drive_letter*)) {
+			$mountpoint = $true
+		}
+		else {
+			$module.FailJson("Incorrect usage of drive_letter: specified directory is not empty")
+		}
+	}
+	# Check if drive_letter can be a new mountpoint directory
+	elseif ($drive_letter.Length -gt 3) {
+		if (Test-Path $drive_letter.substring(0,3) -PathType Container) {
+			try {
+				New-Item -ItemType "Directory" -Path "$drive_letter" -Force | Out-Null
+			} catch {
+				$module.FailJson("Cannot create mountpoint directory for drive_letter")
+			}
+			$mountpoint = $true
+		}
+		else {
+			$module.FailJson("Incorrect usage of drive_letter: specify a valid directory path or a drive letter from A-Z or use 'auto' to automatically assign a drive letter or 'none' to unmount partition")
+		}
+	}
+	# Check if drive_letter is a valid drive letter
+	elseif ($drive_letter -notmatch "^[a-zA-Z]$") {
+		$module.FailJson("Incorrect usage of drive_letter: specify a valid directory path or a drive letter from A-Z or use 'auto' to automatically assign a drive letter or 'none' to unmount partition")
+	}
 }
 
 # Partition can't have two partition styles
 if ($null -ne $gpt_type -and $null -ne $mbr_type) {
     $module.FailJson("Cannot specify both GPT and MBR partition styles. Check which partition style is supported by the disk")
 }
+
 
 function New-AnsiblePartition {
     param(
@@ -138,10 +195,12 @@ function New-AnsiblePartition {
     }
 
     if ($null -ne $Letter) {
-        switch ($Letter) {
+        switch -Wildcard ($Letter) {
             "auto" {
                 $parameters.Add("AssignDriveLetter", $True)
             }
+			"*:\*" {
+			}
             default {
                 $parameters.Add("DriveLetter", $Letter)
             }
@@ -164,6 +223,15 @@ function New-AnsiblePartition {
         $new_partition = New-Partition @parameters
     } catch {
         $module.FailJson("Unable to create a new partition: $($_.Exception.Message)", $_)
+    }
+
+	if ($mountpoint -and $new_partition) {
+		try {
+			Add-PartitionAccessPath -DiskNumber $new_partition.DiskNumber -PartitionNumber $new_partition.PartitionNumber -AccessPath "$Letter"
+			$new_partition = Get-Disk -Number $new_partition.DiskNumber | Get-Partition -Partition $new_partition.PartitionNumber
+		} catch {
+			$module.FailJson("Unable to mount partition: $($_.Exception.Message)", $_)
+		}
     }
 
     return $new_partition
@@ -205,6 +273,14 @@ function Set-AnsiblePartitionState {
 
 if ($ansible_partition) {
     if ($state -eq "absent") {
+		# Wipe previous AccessPaths
+		$ansible_partition.AccessPaths.Where({ $_ -like '*:\*'; }) | ForEach {
+			try {
+				Remove-PartitionAccessPath -DiskNumber $ansible_partition.DiskNumber -PartitionNumber $ansible_partition.PartitionNumber -AccessPath "$_"
+			} catch {
+				$module.FailJson("Unable to wipe previous AccessPaths: $($_.Exception.Message)", $_)
+			}
+		}
         try {
             Remove-Partition -DiskNumber $ansible_partition.DiskNumber -PartitionNumber $ansible_partition.PartitionNumber -Confirm:$false -WhatIf:$module.CheckMode
         } catch {
@@ -246,16 +322,37 @@ if ($ansible_partition) {
             }
         }
 
-        if ($drive_letter -NotIn ("auto", $null, $ansible_partition.DriveLetter)) {
-            if (-not $module.CheckMode) {
-                try {
-                    Set-Partition -DiskNumber $ansible_partition.DiskNumber -PartitionNumber $ansible_partition.PartitionNumber -NewDriveLetter $drive_letter
-                } catch {
-                    $module.FailJson("Unable to change drive letter: $($_.Exception.Message)", $_)
-                }
-            }
-            $module.Result.changed = $true
-        }
+        if ($drive_letter -NotIn ("auto", $null, $DL)) {
+			# Wipe previous AccessPaths
+			$ansible_partition.AccessPaths.Where({ $_ -like '*:\*'; }) | ForEach {
+				try {
+					Remove-PartitionAccessPath -DiskNumber $ansible_partition.DiskNumber -PartitionNumber $ansible_partition.PartitionNumber -AccessPath "$_"
+				} catch {
+					$module.FailJson("Unable to wipe previous AccessPaths: $($_.Exception.Message)", $_)
+				}
+			}
+            if ($mountpoint) {
+				# Mount into directory
+				if (-not $module.CheckMode) {
+					try {
+						Add-PartitionAccessPath -DiskNumber $ansible_partition.DiskNumber -PartitionNumber $ansible_partition.PartitionNumber -AccessPath "$drive_letter"
+					} catch {
+						$module.FailJson("Unable to mount the partition: $($_.Exception.Message)", $_)
+					}
+				}
+				$module.Result.changed = $true
+			} else {
+				# Add or change drive letter
+				if (-not $module.CheckMode -and $drive_letter -ne "none") {
+					try {
+						Set-Partition -DiskNumber $ansible_partition.DiskNumber -PartitionNumber $ansible_partition.PartitionNumber -NewDriveLetter $drive_letter
+					} catch {
+						$module.FailJson("Unable to change drive letter: $($_.Exception.Message)", $_)
+					}
+				}
+				$module.Result.changed = $true
+			}
+		}
     }
 }
 else {
