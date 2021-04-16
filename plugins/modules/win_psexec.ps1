@@ -135,7 +135,10 @@ $start_datetime = [DateTime]::UtcNow
 # if the user does not want to present password - we are replacing it with a *PASSWORD_REPLACED* string
 $toLog = $argument_string
 If ($log_password -eq $false) {
-    $toLog.Replace($password, "*PASSWORD_REPLACED*")
+    If (!([string]::IsNullOrEmpty($password))) {
+        # change only when password is present as it is optional
+        $toLog.Replace($password, "*PASSWORD_REPLACED*")
+    }
 }
 
 $module.Result.psexec_command = $toLog
