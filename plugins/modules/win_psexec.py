@@ -39,7 +39,13 @@ options:
     description:
     - The password for the (remote) user to run the command as.
     - This is mandatory in order authenticate yourself.
+    - You can view the password in log message using log_password option
     type: str
+  log_password:
+    description:
+    - Shows the password in log message
+    type: bool
+    default: no
   chdir:
     description:
     - Run the command from this (remote) directory.

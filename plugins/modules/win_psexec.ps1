@@ -27,6 +27,7 @@ $spec = @{
         session = @{ type='int' }
         priority = @{ type='str'; choices=@( 'background', 'low', 'belownormal', 'abovenormal', 'high', 'realtime' ) }
         timeout = @{ type='int' }
+        log_password = @{ type='bool'; default=$false }
     }
 }
 
@@ -48,6 +49,7 @@ $interactive = $module.Params.interactive
 $session = $module.Params.session
 $priority = $module.Params.Priority
 $timeout = $module.Params.timeout
+$log_password = $module.Params.log_password
 
 $module.Result.changed = $true
 
@@ -63,7 +65,7 @@ If ($nobanner -eq $true) {
 
 # Support running on local system if no hostname is specified
 If ($hostnames) {
-    $hostname_argument = ($hostnames | sort -Unique) -join ','
+    $hostname_argument = ($hostnames | Sort-Object  -Unique) -join ','
     $arguments.Add("\\$hostname_argument")
 }
 
@@ -129,7 +131,14 @@ $argument_string = Argv-ToString -arguments $arguments
 $argument_string += " $command"
 
 $start_datetime = [DateTime]::UtcNow
-$module.Result.psexec_command = $argument_string
+
+# if the user does not want to present password - we are replacing it with a *PASSWORD_REPLACED* string
+$toLog = $argument_string
+If ($log_password -eq $false) {
+    $toLog.Replace($password, "*PASSWORD_REPLACED*")
+}
+
+$module.Result.psexec_command = $toLog
 
 $command_result = Run-Command -command $argument_string
 
