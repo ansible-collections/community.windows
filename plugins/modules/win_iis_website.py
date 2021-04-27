@@ -47,10 +47,6 @@ options:
     description:
       - The host header to bind to / use for the new site.
     type: str
-  ssl:
-    description:
-      - Enables HTTPS binding on the site..
-    type: str
   parameters:
     description:
       - Custom site Parameters from string where properties are separated by a pipe and property name/values by colon Ex. "foo:1|bar:2"
