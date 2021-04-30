@@ -1,0 +1,129 @@
+---
+- name: create test directory for CI
+  ansible.builtin.win_shell: 'New-Item -Force -Path C:\testdir\ -ItemType Directory'
+  
+- name: create test files for CI
+  ansible.builtin.win_shell: 'New-Item -Force -Path C:\testdir\test.txt -Value "This is a test file."' 
+
+# Case01: Check file compression
+- name: compress a file (check)
+  win_zip:
+    src: C:\testdir\test.txt
+    dest: C:\testdir\test_file.zip
+  register: zip_check
+  check_mode: yes
+
+- name: get result of compress zip (check)
+  ansible.windows.win_stat:
+    path: C:\testdir\test_file.zip
+  register: zip_actual_check
+
+- name: assert result of zip (check)
+  assert:
+    that:
+    - zip_check is changed
+    - not zip_actual_check.stat.exists
+
+- name: compress a file
+  win_zip:
+    src: C:\testdir\test.txt
+    dest: C:\testdir\test_file.zip
+  register: zip
+
+- name: get result of compress zip
+  ansible.windows.win_stat:
+    path: C:\testdir\test_file.zip
+  register: zip_actual
+
+- name: assert result of zip
+  assert:
+    that:
+    - zip is changed
+    - zip_actual.stat.exists
+
+# Case02: Check directory compression
+- name: compress a directory (check)
+  win_zip:
+    src: C:\testdir\
+    dest: C:\testdir\test_dir.zip
+  register: zip_check
+  check_mode: yes
+
+- name: get result of compress zip (check)
+  ansible.windows.win_stat:
+    path: C:\testdir\test_dir.zip
+  register: zip_actual_check
+
+- name: assert result of zip (check)
+  assert:
+    that:
+    - zip_check is changed
+    - not zip_actual_check.stat.exists
+
+- name: compress a directory
+  win_zip:
+    src: C:\testdir\
+    dest: C:\testdir\test_dir.zip
+  register: zip
+
+- name: get result of compress zip
+  ansible.windows.win_stat:
+    path: C:\testdir\test_dir.zip
+  register: zip_actual
+
+- name: assert result of zip
+  assert:
+    that:
+    - zip is changed
+    - zip_actual.stat.exists
+
+# Case03: Check overwrite option
+- name: compress a file overwrite=no (check)
+  win_zip:
+    src: C:\testdir\test.txt
+    dest: C:\testdir\test_file.zip
+  register: zip_check
+  check_mode: yes
+
+- name: assert result of zip
+  assert:
+    that:
+    - zip_check is skipped
+
+- name: compress a file overwrite=no
+  win_zip:
+    src: C:\testdir\test.txt
+    dest: C:\testdir\test_file.zip
+  register: zip
+
+- name: assert result of zip
+  assert:
+    that:
+    - zip is skipped
+
+- name: compress a file overwrite=yes (check)
+  win_zip:
+    src: C:\testdir\test.txt
+    dest: C:\testdir\test_file.zip
+    overwrite: yes
+  register: zip_check
+  check_mode: yes
+
+- name: assert result of zip 
+  assert:
+    that:
+    - zip_check is changed
+    - zip_actual.stat.exists
+
+- name: compress a file overwrite=yes
+  win_zip:
+    src: C:\testdir\test.txt
+    dest: C:\testdir\test_file.zip
+    overwrite: yes
+  register: zip_check
+
+- name: assert result of zip 
+  assert:
+    that:
+    - zip_check is changed
+    - zip_actual.stat.exists

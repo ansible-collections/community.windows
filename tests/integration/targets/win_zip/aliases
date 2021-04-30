@@ -1,0 +1,5 @@
+shippable/windows/group5
+skip/windows/2008    # Need to use PowerShell 5.0
+skip/windows/2008-R2 # Need to use PowerShell 5.0
+skip/windows/2012    # Need to use PowerShell 5.0
+skip/windows/2012-R2 # Need to use PowerShell 5.0
