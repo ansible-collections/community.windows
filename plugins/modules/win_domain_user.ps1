@@ -35,7 +35,8 @@ Function Test-Credential {
         )
         $failed_codes = @(
             0x0000052E,  # ERROR_LOGON_FAILURE
-            0x00000532  # ERROR_PASSWORD_EXPIRED
+            0x00000532,  # ERROR_PASSWORD_EXPIRED
+            0x00000773  # ERROR_PASSWORD_MUST_CHANGE
         )
 
         if ($_.Exception.NativeErrorCode -in $failed_codes) {
