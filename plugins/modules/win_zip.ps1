@@ -45,7 +45,6 @@ Function Compress-Zip($src, $dest) {
 
         If (Test-Path -LiteralPath $src -PathType Container) {
             $zip = [System.IO.Compression.ZipFile]::CreateFromDirectory($src, $dest, $compressionLevel, $true)
-            $zip.Dispose()
         } Else {
             $zip = [System.IO.Compression.ZipFile]::Open($dest, 'Update')
             [System.IO.Compression.ZipFileExtensions]::CreateEntryFromFile($zip, $src, $srcFile, $compressionLevel)
