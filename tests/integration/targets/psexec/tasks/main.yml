@@ -9,9 +9,9 @@
   register: encryption_supported_raw
 
 - name: install pypsexec Python library for tests
-  pip:
-    name: pypsexec
-    state: latest
+  command: '{{ ansible_python_interpreter | default("python") }} -m pip install pypsexec'
+  register: psexec_install
+  changed_when: '"Requirement already satisfied: pypsexec" not in psexec_install.stdout'
   delegate_to: localhost
 
 - name: define psexec variables
