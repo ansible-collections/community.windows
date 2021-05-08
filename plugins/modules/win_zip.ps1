@@ -50,8 +50,8 @@ Function Compress-Zip($src, $dest) {
             [System.IO.Compression.ZipFileExtensions]::CreateEntryFromFile($zip, $src, $srcFile, $compressionLevel)
             $zip.Dispose()
         }
-        $module.Result.changed = $true
     }
+    $module.Result.changed = $true
 }
 
 Compress-Zip -src $src -dest $dest
