@@ -1,0 +1,2 @@
+bugfixes:
+- win_domain_user - Make sure a password is set to change when it is marked as password needs to be changed before logging in - https://github.com/ansible-collections/community.windows/issues/223
