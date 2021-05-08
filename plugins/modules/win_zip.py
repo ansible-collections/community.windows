@@ -12,7 +12,7 @@ description:
 - Compress file or directory as zip archive.
 - For non-Windows targets, use the M(ansible.builtin.archive) module instead.
 requirements:
-- PowerShell v5.0 or later
+- .NET Framework 4.5 or later
 options:
   src:
     description:
@@ -24,13 +24,6 @@ options:
       - Destination path of zip file (provide absolute path of zip file on the target node).
     type: path
     required: yes
-  overwrite:
-    description:
-      - If the zip file exists, the task will delete the old zip file then recreate it.
-    type: bool
-    default: false
-notes:
-- The maximum file size is 2GB because there's a limitation of the underlying API.
 seealso:
 - module: ansible.builtin.archive
 author:
@@ -48,22 +41,4 @@ EXAMPLES = r'''
     src: C:\Users\hiyoko\log\
     dest: C:\Users\hiyoko\log.zip
 
-- name: Recreate a zip file when the dest path already exists
-  community.windows.win_zip:
-    src: C:\Users\hiyoko\log.txt
-    dest: C:\Users\hiyoko\log.zip
-    overwrite: yes
-'''
-
-RETURN = r'''
-dest:
-    description: The provided destination path
-    returned: always
-    type: str
-    sample: C:\Users\hiyoko\application-error-logs.zip
-src:
-    description: The provided source path
-    returned: always
-    type: str
-    sample: C:\Users\hiyoko\application-error-logs\
 '''
