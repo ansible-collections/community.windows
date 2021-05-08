@@ -40,7 +40,7 @@ If(-not (Test-Path -LiteralPath 'HKLM:\SOFTWARE\Microsoft\NET Framework Setup\ND
 }
 
 Function Compress-Zip($src, $dest) {
-    If (-not $check_mode) {
+    If (-not $module.CheckMode) {
         Add-Type -AssemblyName System.IO.Compression.FileSystem
 
         If (Test-Path -LiteralPath $src -PathType Container) {
