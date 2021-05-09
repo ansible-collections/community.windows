@@ -15,7 +15,7 @@
     state: directory
 
 - name: create test files for CI
-  ansible.builtin.win_shell: 'New-Item -Force -Path C:\testdir\src\test.txt -Value "This is a test file."' 
+  ansible.builtin.win_shell: 'Set-Content -LiteralPath C:\testdir\src\test.txt -Value "This is a test file."' 
 
 # Case01: Check file compression
 - name: compress a file (check)
