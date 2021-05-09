@@ -19,6 +19,11 @@ $dest = $module.Params.dest
 
 $srcFile = [System.IO.Path]::GetFileName($src)
 $compressionLevel = [System.IO.Compression.CompressionLevel]::Optimal
+$srcWildcard=$false
+
+If ($src -match '\*$') {
+    $srcWildcard=$true
+}
 
 If(-not (Test-Path -LiteralPath $src)) {
     $module.FailJson("The source file or directory '$src' does not exist.")
@@ -35,20 +40,23 @@ If(Test-Path -LiteralPath $dest) {
 }
 
 # Check .NET v4.5 or later version exists or not
-If(-not (Test-Path -LiteralPath 'HKLM:\SOFTWARE\Microsoft\NET Framework Setup\NDP\v4\Full')) {
-    $module.FailJson(".NET Framework 4.5 or later version needs to be installed.")
+try {
+    Add-Type -AssemblyName System.IO.Compression.FileSystem -ErrorAction Stop
+} catch {
+    $module.FailJson(".NET Framework 4.5 or later version needs to be installed.", $_)
 }
 
 Function Compress-Zip($src, $dest) {
     If (-not $module.CheckMode) {
-        Add-Type -AssemblyName System.IO.Compression.FileSystem
-
         If (Test-Path -LiteralPath $src -PathType Container) {
-            $zip = [System.IO.Compression.ZipFile]::CreateFromDirectory($src, $dest, $compressionLevel, $true)
+            [System.IO.Compression.ZipFile]::CreateFromDirectory($src, $dest, $compressionLevel, $srcWildcard)
         } Else {
             $zip = [System.IO.Compression.ZipFile]::Open($dest, 'Update')
-            [System.IO.Compression.ZipFileExtensions]::CreateEntryFromFile($zip, $src, $srcFile, $compressionLevel)
-            $zip.Dispose()
+            try {
+                [System.IO.Compression.ZipFileExtensions]::CreateEntryFromFile($zip, $src, $srcFile, $compressionLevel)
+            } finally {
+                $zip.Dispose()
+            }
         }
     }
     $module.Result.changed = $true
