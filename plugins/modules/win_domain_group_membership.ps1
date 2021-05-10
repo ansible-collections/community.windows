@@ -50,8 +50,7 @@ if ($diff_mode) {
     $result.diff = @{}
 }
 
-$group = Get-ADGroup $ADGroup @extra_args
-$filter = " (&(objectClass=groupOfNames)(memberOf=$($group.DistinguishedName)))"
+$filter = "(memberOf=$($ADGroup.DistinguishedName))"
 
 
 $members_before = Get-ADObject -LDAPFilter $filter -Properties sAMAccountName, objectSID @extra_args
