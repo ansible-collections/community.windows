@@ -1,0 +1,2 @@
+bugfixes:
+- win_domain_group_membership - Handle timeouts when dealing with group with lots of members - https://github.com/ansible-collections/community.windows/pull/204
