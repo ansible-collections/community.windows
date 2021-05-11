@@ -7,22 +7,26 @@
 
 $spec = @{
     options = @{
-        src = @{ type = 'path'; required = $true }
+        # Need to support \* which type='path' does not, the path is expanded further down.
+        src = @{ type = 'str'; required = $true }
         dest = @{ type = 'path'; required = $true }
     }
     supports_check_mode = $true
 }
 $module = [Ansible.Basic.AnsibleModule]::Create($args, $spec)
 
-$src = $module.Params.src
+$src = [Environment]::ExpandEnvironmentVariables($module.Params.src)
 $dest = $module.Params.dest
 
 $srcFile = [System.IO.Path]::GetFileName($src)
 $compressionLevel = [System.IO.Compression.CompressionLevel]::Optimal
+$encoding = New-Object -TypeName System.Text.UTF8Encoding -ArgumentList $false
 $srcWildcard=$false
 
-If ($src -match '\*$') {
+# If the path ends with '\*' we want to include the dir contents and not the dir itself
+If ($src -match '\\\*$') {
     $srcWildcard=$true
+    $src = $src.Substring(0, $src.Length - 2)
 }
 
 If(-not (Test-Path -LiteralPath $src)) {
@@ -34,7 +38,6 @@ If($dest -notlike "*.zip") {
 }
 
 If(Test-Path -LiteralPath $dest) {
-    $module.Result.skipped = $true
     $module.Result.msg = "The destination zip file '$dest' already exists."
     $module.ExitJson()
 }
@@ -49,11 +52,11 @@ try {
 Function Compress-Zip($src, $dest) {
     If (-not $module.CheckMode) {
         If (Test-Path -LiteralPath $src -PathType Container) {
-            [System.IO.Compression.ZipFile]::CreateFromDirectory($src, $dest, $compressionLevel, $srcWildcard)
+            [System.IO.Compression.ZipFile]::CreateFromDirectory($src, $dest, $compressionLevel, (-not $srcWildcard), $encoding)
         } Else {
             $zip = [System.IO.Compression.ZipFile]::Open($dest, 'Update')
             try {
-                [System.IO.Compression.ZipFileExtensions]::CreateEntryFromFile($zip, $src, $srcFile, $compressionLevel)
+                [void][System.IO.Compression.ZipFileExtensions]::CreateEntryFromFile($zip, $src, $srcFile, $compressionLevel)
             } finally {
                 $zip.Dispose()
             }

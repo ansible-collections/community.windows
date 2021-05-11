@@ -11,13 +11,17 @@ short_description: Compress file or directory as zip archive on the Windows node
 description:
 - Compress file or directory as zip archive.
 - For non-Windows targets, use the M(ansible.builtin.archive) module instead.
+notes:
+- The filenames in the zip are encoded using UTF-8.
 requirements:
 - .NET Framework 4.5 or later
 options:
   src:
     description:
       - File or directory path to be zipped (provide absolute path on the target node).
-    type: path
+      - When a directory path the directory is zipped as the root entry in the archive.
+      - Specify C(\*) to the end of I(src) to zip the contents of the directory and not the directory itself.
+    type: str
     required: yes
   dest:
     description:
@@ -36,9 +40,14 @@ EXAMPLES = r'''
     src: C:\Users\hiyoko\log.txt
     dest: C:\Users\hiyoko\log.zip
 
-- name: Compress a directory
+- name: Compress a directory as the root of the archive
   community.windows.win_zip:
-    src: C:\Users\hiyoko\log\
+    src: C:\Users\hiyoko\log
+    dest: C:\Users\hiyoko\log.zip
+
+- name: Compress the directories contents
+  community.windows.win_zip:
+    src: C:\Users\hiyoko\log\*
     dest: C:\Users\hiyoko\log.zip
 
 '''
