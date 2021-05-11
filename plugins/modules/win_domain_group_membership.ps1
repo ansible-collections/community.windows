@@ -52,7 +52,6 @@ if ($diff_mode) {
 
 $filter = "(memberOf=$($ADGroup.DistinguishedName))"
 
-
 $members_before = Get-ADObject -LDAPFilter $filter -Properties sAMAccountName, objectSID @extra_args
 $pure_members = [System.Collections.Generic.List`1[String]]@()
 
