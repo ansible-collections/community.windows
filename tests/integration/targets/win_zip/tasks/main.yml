@@ -1,0 +1,165 @@
+---
+- set_fact:
+    zip_info: |
+      param ($Path)
+
+      $ErrorActionPreference = 'Stop'
+      $Ansible.Changed = $false
+
+      $utf8 = New-Object -TypeName Text.UTF8Encoding -ArgumentList $false
+      Add-Type -AssemblyName System.IO.Compression -ErrorAction Stop
+      Add-Type -AssemblyName System.IO.Compression.FileSystem -ErrorAction Stop
+
+      $zip = $null
+      $fs = [IO.File]::OpenRead($Path)
+      try {
+          $zip = New-Object -TypeName IO.Compression.ZipArchive -ArgumentList $fs, 'Read', $false, $utf8
+
+          $zip.Entries | Select-Object -Propert FullName, Length
+      }
+      finally {
+          if ($zip) { $zip.Dispose() }
+          $fs.Dispose()
+      }
+
+- name: create testdir\src directory for CI
+  ansible.windows.win_file:
+    path: '{{ win_zip_dir }}\src\'
+    state: directory
+
+- name: create testdir\zipped directory for CI
+  ansible.windows.win_file:
+    path: '{{ win_zip_dir }}\zipped\'
+    state: directory
+
+- name: create test files for CI
+  ansible.builtin.win_copy:
+    content: |
+      This is a test file.
+    dest: '{{ win_zip_dir }}\src\{{ win_zip_name }}.txt'
+
+# Case01: Check file compression
+- name: compress a file (check)
+  win_zip:
+    src: '{{ win_zip_dir }}\src\{{ win_zip_name }}.txt'
+    dest: '{{ win_zip_dir }}\zipped\test_file.zip'
+  register: zip_check
+  check_mode: yes
+
+- name: get result of compress zip (check)
+  ansible.windows.win_stat:
+    path: '{{ win_zip_dir }}\zipped\test_file.zip'
+  register: zip_actual_check
+
+- name: assert result of zip (check)
+  assert:
+    that:
+    - zip_check is changed
+    - not zip_actual_check.stat.exists
+
+- name: compress a file
+  win_zip:
+    src: '{{ win_zip_dir }}\src\{{ win_zip_name }}.txt'
+    dest: '{{ win_zip_dir }}\zipped\test_file.zip'
+  register: zip
+
+- name: get result of compress zip
+  ansible.windows.win_powershell:
+    script: '{{ zip_info }}'
+    parameters:
+      Path: '{{ win_zip_dir }}\zipped\test_file.zip'
+  register: zip_actual
+
+- name: assert result of zip
+  assert:
+    that:
+    - zip is changed
+    - zip_actual.output | length == 1
+    - zip_actual.output[0]['FullName'] == win_zip_name + '.txt'
+    - zip_actual.output[0]['Length'] == 21
+
+# Case02: Check directory compression
+- name: compress a directory (check)
+  win_zip:
+    src: '{{ win_zip_dir }}\src\'
+    dest: '{{ win_zip_dir }}\test_dir.zip'
+  register: zip_check
+  check_mode: yes
+
+- name: get result of compress zip (check)
+  ansible.windows.win_stat:
+    path: '{{ win_zip_dir }}\test_dir.zip'
+  register: zip_actual_check
+
+- name: assert result of zip (check)
+  assert:
+    that:
+    - zip_check is changed
+    - not zip_actual_check.stat.exists
+
+- name: compress a directory
+  win_zip:
+    src: '{{ win_zip_dir }}\src\'
+    dest: '{{ win_zip_dir }}\test_dir.zip'
+  register: zip
+
+- name: get result of compress zip
+  ansible.windows.win_powershell:
+    script: '{{ zip_info }}'
+    parameters:
+      Path: '{{ win_zip_dir }}\test_dir.zip'
+  register: zip_actual
+
+- name: assert result of zip
+  assert:
+    that:
+    - zip is changed
+    - zip_actual.output | length == 1
+    # Should contain the original base directory
+    - zip_actual.output[0]['FullName'] == "src\\" + win_zip_name + '.txt'
+    - zip_actual.output[0]['Length'] == 21
+
+- name: compress a directories contents
+  win_zip:
+    src: '{{ win_zip_dir }}\src\*'
+    dest: '{{ win_zip_dir }}\test_dir_content.zip'
+  register: zip
+
+- name: get result of compress zip
+  ansible.windows.win_powershell:
+    script: '{{ zip_info }}'
+    parameters:
+      Path: '{{ win_zip_dir }}\test_dir_content.zip'
+  register: zip_actual
+
+- name: assert result of zip
+  assert:
+    that:
+    - zip is changed
+    - zip_actual.output | length == 1
+    # Should not contain the original base directory
+    - zip_actual.output[0]['FullName'] == win_zip_name + '.txt'
+    - zip_actual.output[0]['Length'] == 21
+
+- name: compress a file with existing dest (check)
+  win_zip:
+    src: '{{ win_zip_dir }}\src\{{ win_zip_name }}.txt'
+    dest: '{{ win_zip_dir }}\zipped\test_file.zip'
+  register: zip_check
+  check_mode: yes
+
+- name: assert result of zip (check)
+  assert:
+    that:
+    - not zip_check is changed
+
+- name: compress a file to existing dest 
+  win_zip:
+    src: '{{ win_zip_dir }}\src\{{ win_zip_name }}.txt'
+    dest: '{{ win_zip_dir }}\zipped\test_file.zip'
+  register: zip
+
+- name: assert result of zip
+  assert:
+    that:
+    - not zip is changed
