@@ -6,17 +6,17 @@
 #AnsibleRequires -CSharpUtil Ansible.Basic
 
 $spec = @{
-    options             = @{
-        name     = @{ type = "str"; required = $true }
-        port     = @{ type = "int" }
-        priority = @{ type = "int" }
-        state    = @{ type = "str"; choices = "absent", "present"; default = "present" }
-        ttl      = @{ type = "int"; default = "3600" }
-        type     = @{ type = "str"; choices = "A", "AAAA", "CNAME", "NS", "PTR", "SRV", "TXT"; required = $true }
-        value    = @{ type = "list"; elements = "str"; aliases = @( 'values' ) }
-        weight   = @{ type = "int" }
-        zone     = @{ type = "str"; required = $true }
-        server   = @{ type = "str"; aliases = @("computer_name") }
+    options = @{
+        name = @{ type = "str"; required = $true }
+        port = @{ type = "int"}
+        priority = @{ type = "int"}
+        state = @{ type = "str"; choices = "absent", "present"; default = "present" }
+        ttl = @{ type = "int"; default = "3600" }
+        type = @{ type = "str"; choices = "A","AAAA","CNAME","NS","PTR","SRV","TXT"; required = $true }
+        value = @{ type = "list"; elements = "str"; default = @() ; aliases=@( 'values' )}
+        weight = @{ type = "int"}
+        zone = @{ type = "str"; required = $true }
+        computer_name = @{ type = "str" }
     }
     required_if         = @(, @("type", "SRV", @("port", "priority", "weight")))
     supports_check_mode = $true
@@ -61,10 +61,10 @@ $record_argument_name = @{
     AAAA  = "IPv6Address";
     CNAME = "HostNameAlias";
     # MX = "MailExchange";
-    NS    = "NameServer";
-    PTR   = "PtrDomainName";
-    SRV   = "DomainName";
-    TXT   = "DescriptiveText"
+    NS = "NameServer";
+    PTR = "PtrDomainName";
+    SRV = "DomainName";
+    TXT = "DescriptiveText"
 }[$type]
 $changes = @{
     before = "";
@@ -113,8 +113,8 @@ if ($null -ne $records) {
                     $changes.after += "[$zone] $($record.HostName) $($ttl.TotalSeconds) IN $type $record_value $value`n"
                     $module.Result.changed = $true
                 }
-            } else {
-                # This record matches one of the values; but does it match the TTL?
+            } else{
+                 # This record matches one of the values; but does it match the TTL?
                 if ($record.TimeToLive -ne $ttl) {
                     $new_record = $record.Clone()
                     $new_record.TimeToLive = $ttl
@@ -135,10 +135,6 @@ if ($null -ne $values -and $values.Count -gt 0) {
     foreach ($value in $values) {
         $splat_args = @{ $type = $true; $record_argument_name = $value }
         $module.Result.debug_splat_args = $splat_args
-        $default_args = @{
-            ZoneName   = $zone
-            TimeToLive = $ttl
-        }
         $srv_args = @{
             DomainName = $value
             Weight     = $weight
@@ -147,11 +143,11 @@ if ($null -ne $values -and $values.Count -gt 0) {
         }
         try {
             if ($type -eq 'SRV') {
-                Add-DnsServerResourceRecord -SRV -Name $name @srv_args @extra_args @default_args -WhatIf:$module.CheckMode
-            } elseif ($type -eq 'TXT') {
-                Add-DnsServerResourceRecord -TXT -Name $name -DescriptiveText $value @default_args @extra_args -WhatIf:$module.CheckMode
+                Add-DnsServerResourceRecord -SRV -Name $name @srv_args @extra_args -WhatIf:$module.CheckMode
+            }elseif ($type -eq 'TXT') {
+                Add-DnsServerResourceRecord -TXT -Name $name -DescriptiveText $value -ZoneName $zone -TimeToLive $ttl @extra_args -WhatIf:$module.CheckMode
             } else {
-                Add-DnsServerResourceRecord -Name $name -AllowUpdateAny @default_args @splat_args -WhatIf:$module.CheckMode @extra_args
+                Add-DnsServerResourceRecord -Name $name -AllowUpdateAny -ZoneName $zone -TimeToLive $ttl @splat_args -WhatIf:$module.CheckMode @extra_args
             }
         } catch {
             $module.FailJson("Error adding DNS $type resource $name in zone $zone with value $value", $_)
