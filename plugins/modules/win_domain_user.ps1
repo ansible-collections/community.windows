@@ -280,12 +280,9 @@ If ($state -eq 'present') {
     }
 
     if ($run_change) {
-        try {
-            $user_obj = $user_obj | Set-ADUser -WhatIf:$check_mode -PassThru @set_args
-        } catch {
-            Fail-Json $result "failed to change user $($name): $($_.Exception.Message)"
-        }
+        Set-ADUser -Identity $user_guid -WhatIf:$check_mode @set_args
         $result.changed = $true
+        $user_obj = Get-ADUser -Identity $user_guid -Properties * @extra_args
     }
 
 
