@@ -1,2 +1,0 @@
-bugfixes:
-- win_domain_user - fix reporting on user when running in check mode - https://github.com/ansible-collections/community.windows/pull/248
