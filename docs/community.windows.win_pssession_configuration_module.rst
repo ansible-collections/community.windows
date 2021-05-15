@@ -99,6 +99,7 @@ Parameters
                         <div>Sets a delay in seconds between each check of the asynchronous execution status.</div>
                         <div>Replicates the functionality of the <code>poll</code> keyword.</div>
                         <div>Has no effect in check mode.</div>
+                        <div><em>async_poll=0</em> is not supported.</div>
                 </td>
             </tr>
             <tr>
@@ -858,9 +859,8 @@ Notes
 
 .. note::
    - This module will restart the WinRM service on any change. This will terminate all WinRM connections including those by other Ansible runs.
-   - Internally this module uses ``async`` when not in check mode to ensure things goes smoothly when restarting the WinRM service.
+   - Internally this module uses ``async`` when not in check mode to ensure things go smoothly when restarting the WinRM service.
    - The standard ``async`` and ``poll`` keywords cannot be used; instead use the *async_timeout* and *async_poll* options to control asynchronous execution.
-   - Setting *async_poll=0* will return a result that can be used with ``async_status``.
    - Options that don't list a default value here will use the defaults of ``New-PSSessionConfigurationFile`` and ``Register-PSSessionConfiguration``.
    - If a value can be specified in both a session config file and directly in the session options, this module will prefer the setting be in the config file.
 

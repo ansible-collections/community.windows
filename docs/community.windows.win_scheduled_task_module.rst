@@ -178,7 +178,7 @@ Parameters
                         <div><code>1</code> means the task is compatible with Task Scheduler 1.0(Windows Vista, Windows Server 2008 and older).</div>
                         <div><code>2</code> means the task is compatible with Task Scheduler 2.0(Windows 7, Windows Server 2008 R2).</div>
                         <div><code>3</code> means the task is compatible with Task Scheduler 2.0(Windows 7, Windows Server 2008 R2).</div>
-                        <div><code>4</code> means the task is compatible with Task Scheduler 2.0(Windows 10, Windows Server 2019).</div>
+                        <div><code>4</code> means the task is compatible with Task Scheduler 2.0(Windows 10, Windows Server 2016, Windows Server 2019).</div>
                 </td>
             </tr>
             <tr>
