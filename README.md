@@ -139,7 +139,7 @@ See [Developing modules for Windows](https://docs.ansible.com/ansible/latest/dev
 
 You can also join us on:
 
-Freenode IRC - ``#ansible-windows`` Freenode channel
+IRC - ``#ansible-windows`` [irc.libera.chat](https://libera.chat/) channel
 
 See the [Ansible Community Guide](https://docs.ansible.com/ansible/latest/community/index.html) for details on contributing to Ansible.
 
@@ -204,7 +204,7 @@ After the version is published, verify it exists on the [Windows Community Colle
 
 ## More Information
 
-For more information about Ansible's Windows integration, join the `#ansible-windows` channel on Freenode IRC, and browse the resources in the [Windows Working Group](https://github.com/ansible/community/wiki/Windows) Community wiki page.
+For more information about Ansible's Windows integration, join the `#ansible-windows` channel on [libera.chat](https://libera.chat/) IRC, and browse the resources in the [Windows Working Group](https://github.com/ansible/community/wiki/Windows) Community wiki page.
 
 - [Ansible Collection overview](https://github.com/ansible-collections/overview)
 - [Ansible User guide](https://docs.ansible.com/ansible/latest/user_guide/index.html)
