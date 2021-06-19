@@ -188,6 +188,7 @@ if ($state -eq "present") {
             if ($forwarder_timeout -and -not ($forwarder_timeout -in 0..15)) {
                 $module.Warn("The forwarder_timeout param must be an integer value between 0 and 15")
             }
+            if ($parms.ReplicationScope -eq 'none'){$parms.Remove('ReplicationScope')}
             if (-not $current_zone) {
                 # create zone
                 Try { Add-DnsServerConditionalForwarderZone @parms -WhatIf:$check_mode }

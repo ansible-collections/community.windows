@@ -1,0 +1,2 @@
+bugfixes:
+- win_dns_zone - Fix idempotency when using a DNS zone with forwarders - https://github.com/ansible-collections/community.windows/issues/259
