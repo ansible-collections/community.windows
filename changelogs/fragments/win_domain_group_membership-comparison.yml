@@ -1,0 +1,2 @@
+bugfixes:
+- win_domain_group_member - Fix faulty logic when comparing existing group members - https://github.com/ansible-collections/community.windows/issues/256

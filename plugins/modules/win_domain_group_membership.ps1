@@ -72,7 +72,7 @@ foreach ($member in $members) {
 
     $user_in_group = $false
     foreach ($current_member in $members_before) {
-        if ($current_member.sid -eq $group_member.objectSid) {
+        if ($current_member.objectSid -eq $group_member.objectSid) {
             $user_in_group = $true
             break
         }
@@ -96,7 +96,7 @@ if ($state -eq "pure") {
     foreach ($current_member in $current_members) {
         $user_to_remove = $true
         foreach ($pure_member in $pure_members) {
-            if ($pure_member -eq $current_member.sid) {
+            if ($pure_member -eq $current_member.objectSid) {
                 $user_to_remove = $false
                 break
             }
