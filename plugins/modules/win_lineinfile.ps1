@@ -67,6 +67,7 @@ function Present($path, $regex, $line, $insertafter, $insertbefore, $create, $ba
 	# Note that we have to clean up the path because ansible wants to treat / and \ as
 	# interchangeable in windows pathnames, but .NET framework internals do not support that.
 	$cleanpath = $path.Replace("/", "\");
+	$endswithnewline = $null
 
 	# Check if path exists. If it does not exist, either create it if create == "yes"
 	# was specified or fail with a reasonable error message.
@@ -76,6 +77,7 @@ function Present($path, $regex, $line, $insertafter, $insertbefore, $create, $ba
 		}
 		# Create new empty file, using the specified encoding to write correct BOM
 		[System.IO.File]::WriteAllLines($cleanpath, "", $encodingobj);
+		$endswithnewline = $false
 	}
 
 	# Initialize result information
@@ -96,6 +98,10 @@ function Present($path, $regex, $line, $insertafter, $insertbefore, $create, $ba
 	}
 	Else {
 		$lines = [System.Collections.ArrayList] $before;
+		If ($null -eq $endswithnewline ) {
+			$alltext = [System.IO.File]::ReadAllText($cleanpath, $encodingobj);
+			$endswithnewline = (($alltext[-1] -eq "`n") -or ($alltext[-1] -eq "`r"))
+		}
 	}
 
 	if ($diff_support) {
@@ -195,6 +201,10 @@ function Present($path, $regex, $line, $insertafter, $insertbefore, $create, $ba
 			$result.backup = $result.backup_file
 		}
 
+		if ($endswithnewline) {
+			$lines.Add("")
+		}
+
 		$writelines_params = @{
 			outlines = $lines
 			path = $path
@@ -241,6 +251,10 @@ function Absent($path, $regex, $line, $backup, $validate, $encodingobj, $linesep
 	}
 	Else {
 		$lines = [System.Collections.ArrayList] $before;
+		$alltext = [System.IO.File]::ReadAllText($cleanpath, $encodingobj);
+		If (($alltext[-1] -eq "`n") -or ($alltext[-1] -eq "`r")) {
+			$lines.Add("")
+		}
 	}
 
 	if ($diff_support) {
