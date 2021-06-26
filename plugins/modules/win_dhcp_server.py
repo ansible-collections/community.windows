@@ -52,14 +52,12 @@ options:
       - This time span is equal to or greater than the Preferred Lifetime also assigned to the scope.
       - Required if l(version=IPv6) and l(type=scope), otherwise ignored.
     type: str
-    default: "0.04:00:00"
   preferred_lifetime:
     description:
       - defines Preferred Life Time for IPv6
       - This time span is equal to or less than the valid lifetime also assigned to the scope.
       - Required if l(version=IPv6) and l(type=scope), otherwise ignored.
     type: str
-    default: "0.02:00:00"
   scope_state:
     description:
       - Specify if a scope is Active or Inactive

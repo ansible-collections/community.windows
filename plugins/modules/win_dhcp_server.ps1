@@ -9,8 +9,8 @@ $spec = @{
         version            = @{ type = "str"; choices = "IPv4", "IPv6"; default = "IPv4" }
         scope              = @{ type = "str"; aliases = "prefix" }
         name               = @{ type = "str"; required = $true }
-        valid_lifetime     = @{ type = "str" ; default = "0.04:00:00" }
-        preferred_lifetime = @{ type = "str" ; default = "0.02:00:00" }
+        valid_lifetime     = @{ type = "str" }
+        preferred_lifetime = @{ type = "str" }
         start_range        = @{ type = "str" }
         end_range          = @{ type = "str" }
         subnet_mask        = @{ type = "str" }
