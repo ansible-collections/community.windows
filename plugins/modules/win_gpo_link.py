@@ -8,7 +8,7 @@ DOCUMENTATION = r'''
 ---
 module: win_gpo_link
 author: Sebastian Gruber (@sgruber94)
-version_added: '1.4.0'
+version_added: '1.6.0'
 short_description: Link a GroupPolicy to a specific ActiveDirectory OU
 description:
 - The C(win_gpo_link) module can link GroupPolicy to a specific ActiveDirectory OU.
