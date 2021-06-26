@@ -9,7 +9,7 @@ DOCUMENTATION = r'''
 module: win_dhcp_option
 short_description: Manage Windows Server DHCP Options
 author: Sebastian Gruber (@sgruber94)
-version_added: '1.4.0'
+version_added: '1.6.0'
 requirements:
   - This module requires Windows Server 2012 or Newer
 description:
