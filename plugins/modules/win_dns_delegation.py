@@ -9,7 +9,7 @@ DOCUMENTATION = r'''
 module: win_dns_delegation
 short_description: Manage Windows Server DNS Zone Delegations
 author: Sebastian Gruber (@sgruber94)
-version_added: '1.4.0'
+version_added: '1.6.0'
 requirements:
   - This module requires Windows Server 2012R2 or Newer
   - This module requires PowerShell Module DNSServer(https://docs.microsoft.com/en-us/powershell/module/dnsserver/?view=win10-ps)
