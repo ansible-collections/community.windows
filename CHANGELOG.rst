@@ -5,13 +5,24 @@ Community Windows Release Notes
 .. contents:: Topics
 
 
-v1.4.0
+v1.5.0
 ======
 
 Release Summary
 ---------------
 
-- Release summary for v1.4.0
+- Release summary for v1.5.0
+
+Bugfixes
+--------
+
+- win_dns_zone - Fix idempotency when using a DNS zone with forwarders - https://github.com/ansible-collections/community.windows/issues/259
+- win_domain_group_member - Fix faulty logic when comparing existing group members - https://github.com/ansible-collections/community.windows/issues/256
+- win_lineinfile - Avoid stripping the newline at the end of a file - https://github.com/ansible-collections/community.windows/pull/219
+- win_product_facts - fixed an issue that the module doesn't correctly convert a product id (https://github.com/ansible-collections/community.windows/pull/251).
+
+v1.4.0
+======
 
 Bugfixes
 --------
