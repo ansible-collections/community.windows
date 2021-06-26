@@ -35,8 +35,10 @@ $state = $module.Params.state
 $computername = $module.Params.computername #optional to specifiy another computer
 $force = $module.Params.force #optional for forcing Parameter
 #Scope
-[System.TimeSpan]$validlifetime = $module.Params.validlifetime   #needed for IPv6 Scope
-[System.TimeSpan]$preferredlifetime = $module.Params.preferredlifetime #needed for IPv6 Scope
+if($version -match "IPv6" ){
+    [System.TimeSpan]$validlifetime = $module.Params.validlifetime   #needed for IPv6 Scope
+    [System.TimeSpan]$preferredlifetime = $module.Params.preferredlifetime #needed for IPv6 Scope
+}
 $subnetmask = $module.Params.subnetmask #needed for IPv4 Scope
 $extra_param = @{}
 if ($computername) { $extra_param.ComputerName = $computername }
