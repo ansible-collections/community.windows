@@ -143,7 +143,7 @@ if ($null -ne $values -and $values.Count -gt 0) {
         }
         try {
             if ($type -eq 'SRV') {
-                Add-DnsServerResourceRecord -SRV -Name $name @srv_args @extra_args -WhatIf:$module.CheckMode
+                Add-DnsServerResourceRecord -SRV -Name $name  -ZoneName $zone @srv_args @extra_args -WhatIf:$module.CheckMode
             }elseif ($type -eq 'TXT') {
                 Add-DnsServerResourceRecord -TXT -Name $name -DescriptiveText $value -ZoneName $zone -TimeToLive $ttl @extra_args -WhatIf:$module.CheckMode
             } else {
