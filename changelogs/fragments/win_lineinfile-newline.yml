@@ -1,2 +1,0 @@
-bugfixes:
-- win_lineinfile - Avoid stripping the newline at the end of a file - https://github.com/ansible-collections/community.windows/pull/219

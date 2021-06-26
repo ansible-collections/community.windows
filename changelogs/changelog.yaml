@@ -187,8 +187,6 @@ releases:
         also formally disables ``async_poll=0`` (https://github.com/ansible-collections/community.windows/pull/212).
       - win_wait_for_process - Fix bug when specifying multiple ``process_name_exact``
         values - https://github.com/ansible-collections/community.windows/issues/203
-      release_summary:
-      - Release summary for v1.4.0
     fragments:
     - 212-win_pssession_configuration-async_poll.yml
     - release-summary.yml
@@ -204,3 +202,21 @@ releases:
       name: win_feature_info
       namespace: ''
     release_date: '2021-05-15'
+  1.5.0:
+    changes:
+      bugfixes:
+      - win_dns_zone - Fix idempotency when using a DNS zone with forwarders - https://github.com/ansible-collections/community.windows/issues/259
+      - win_domain_group_member - Fix faulty logic when comparing existing group members
+        - https://github.com/ansible-collections/community.windows/issues/256
+      - win_lineinfile - Avoid stripping the newline at the end of a file - https://github.com/ansible-collections/community.windows/pull/219
+      - win_product_facts - fixed an issue that the module doesn't correctly convert
+        a product id (https://github.com/ansible-collections/community.windows/pull/251).
+      release_summary:
+      - Release summary for v1.5.0
+    fragments:
+    - 251-win_product_facts.yml
+    - release-summary.yml
+    - win_dns_zone-forwarder.yml
+    - win_domain_group_membership-comparison.yml
+    - win_lineinfile-newline.yml
+    release_date: '2021-06-26'
