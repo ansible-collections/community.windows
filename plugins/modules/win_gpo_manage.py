@@ -9,7 +9,7 @@ DOCUMENTATION = r'''
 module: win_gpo_manage
 short_description: Imports,Export,Removes Group Policy on windows hosts
 author: Sebastian Gruber (@sgruber94)
-version_added: '1.4.0'
+version_added: '1.6.0'
 description:
   - The C(win_gpo_manage) module can manage GroupPolicys on the windows host.
 requirements:
