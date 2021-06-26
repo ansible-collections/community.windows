@@ -26,22 +26,22 @@ $check_mode = $module.CheckMode
 $type = $module.Params.type
 $version = $module.Params.version
 $scope_id = $module.Params.scope
-$startrange = $module.Params.startrange
-$endrange = $module.Params.endrange
+$startrange = $module.Params.start_range
+$endrange = $module.Params.end_range
 $name = $module.Params.name
-$scopestate = $module.Params.scopestate # defines if the scope is activated or inactive
+$scopestate = $module.Params.scope_state # defines if the scope is activated or inactive
 #extraparam
 $state = $module.Params.state
-$computername = $module.Params.computername #optional to specifiy another computer
+$dhcp_server = $module.Params.dhcp_server #optional to specifiy dhcp_server
 $force = $module.Params.force #optional for forcing Parameter
 #Scope
 if($version -match "IPv6" ){
-    [System.TimeSpan]$validlifetime = $module.Params.validlifetime   #needed for IPv6 Scope
-    [System.TimeSpan]$preferredlifetime = $module.Params.preferredlifetime #needed for IPv6 Scope
+    [System.TimeSpan]$validlifetime = $module.Params.valid_lifetime   #needed for IPv6 Scope
+    [System.TimeSpan]$preferredlifetime = $module.Params.preferred_lifetime #needed for IPv6 Scope
 }
-$subnetmask = $module.Params.subnetmask #needed for IPv4 Scope
+$subnetmask = $module.Params.subnet_mask #needed for IPv4 Scope
 $extra_param = @{}
-if ($computername) { $extra_param.ComputerName = $computername }
+if ($dhcp_server) { $extra_param.ComputerName = $dhcp_server }
 
 #ToDo: Need to validate each Param for types
 $varsnotcorrect = $true
