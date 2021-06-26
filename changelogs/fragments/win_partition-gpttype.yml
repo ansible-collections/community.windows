@@ -1,2 +1,0 @@
-bugfixes:
-- win_partition - Fix gtp_type setting in win_partition - https://github.com/ansible-collections/community.windows/issues/241
