@@ -82,3 +82,21 @@
     that:
     - whoami_multiple_args.rc == 1
     - whoami_multiple_args.psexec_command == "psexec.exe -accepteula powershell.exe -NonInteractive \"exit 1\""
+
+- name: Run command with password
+  win_psexec:
+    command: whoami.exe
+    username: fake_user
+    password: '{{ item }}'
+    executable: '{{ testing_dir }}\PsExec.exe'
+  ignore_errors: yes  # The username/password isn't valid so it will fail
+  loop:
+  - Testing123
+  - Testing"123  # This makes sure the escaped password for the cmd is also masked
+  register: psexec_pass
+
+- name: Test password not in psexec_command output
+  assert:
+    that:
+    - psexec_pass.results[0].psexec_command.endswith("-u fake_user -p *PASSWORD_REPLACED* -accepteula whoami.exe")
+    - psexec_pass.results[1].psexec_command.endswith("-u fake_user -p *PASSWORD_REPLACED* -accepteula whoami.exe")
