@@ -88,6 +88,7 @@
     command: whoami.exe
     username: fake_user
     password: '{{ item }}'
+    executable: '{{ testing_dir }}\PsExec.exe'
   ignore_errors: yes  # The username/password isn't valid so it will fail
   loop:
   - Testing123
