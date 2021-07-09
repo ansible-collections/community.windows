@@ -98,5 +98,5 @@
 - name: Test password not in psexec_command output
   assert:
     that:
-    - psexec_pass.results[0].psexec_command == "psexec.exe -u fake_user -p *PASSWORD_REPLACED* -accepteula whoami.exe"
-    - psexec_pass.results[1].psexec_command == "psexec.exe -u fake_user -p *PASSWORD_REPLACED* -accepteula whoami.exe"
+    - psexec_pass.results[0].psexec_command.endswith("-u fake_user -p *PASSWORD_REPLACED* -accepteula whoami.exe")
+    - psexec_pass.results[1].psexec_command.endswith("-u fake_user -p *PASSWORD_REPLACED* -accepteula whoami.exe")
