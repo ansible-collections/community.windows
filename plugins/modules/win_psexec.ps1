@@ -27,7 +27,6 @@ $spec = @{
         session = @{ type='int' }
         priority = @{ type='str'; choices=@( 'background', 'low', 'belownormal', 'abovenormal', 'high', 'realtime' ) }
         timeout = @{ type='int' }
-        log_password = @{ type='bool'; default=$false }
     }
 }
 
@@ -49,7 +48,6 @@ $interactive = $module.Params.interactive
 $session = $module.Params.session
 $priority = $module.Params.Priority
 $timeout = $module.Params.timeout
-$log_password = $module.Params.log_password
 
 $module.Result.changed = $true
 
@@ -132,13 +130,11 @@ $argument_string += " $command"
 
 $start_datetime = [DateTime]::UtcNow
 
-# if the user does not want to present password - we are replacing it with a *PASSWORD_REPLACED* string
+# Replace password with *PASSWORD_REPLACED* to avoid disclosing sensitive data
 $toLog = $argument_string
-If ($log_password -eq $false) {
-    If (!([string]::IsNullOrEmpty($password))) {
-        # change only when password is present as it is optional
-        $toLog.Replace($password, "*PASSWORD_REPLACED*")
-    }
+if ($password) {
+    $maskedPassword = Argv-ToString $password
+    $toLog = $toLog.Replace($maskedPassword, "*PASSWORD_REPLACED*")
 }
 
 $module.Result.psexec_command = $toLog

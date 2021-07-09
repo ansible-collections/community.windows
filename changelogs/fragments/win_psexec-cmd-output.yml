@@ -1,0 +1,2 @@
+security_fixes:
+- win_psexec - Ensure password is masked in ``psexec_command`` return result - https://github.com/ansible-collections/community.windows/issues/43
