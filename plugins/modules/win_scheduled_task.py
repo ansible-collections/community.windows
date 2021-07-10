@@ -212,15 +212,16 @@ options:
       state_change:
         description:
         - Allows you to define the kind of Terminal Server session change that triggers a task.
+        - Before C(v1.6.0) of this collection this could only be set by the raw integer values.
         - Optional when C(type=session_state_change)
-        - C(1) means TASK_CONSOLE_CONNECT
-        - C(2) means TASK_CONSOLE_DISCONNECT
-        - C(3) means TASK_REMOTE_CONNECT
-        - C(4) means TASK_REMOTE_DISCONNECT
-        - C(7) means TASK_SESSION_LOCK
-        - C(8) means TASK_SESSION_UNLOCK
-        type: int
-        choices: [ 1, 2, 3, 4, 7, 8 ]
+        type: str
+        choices:
+        - console_connect
+        - console_disconnect
+        - remote_connect
+        - remote_disconnect
+        - session_lock
+        - session_unlock
 
   # Principal options
   display_name:

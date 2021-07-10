@@ -1,0 +1,3 @@
+minor_changes:
+- win_scheduled_task - Support setting human friendly ``state_change`` values on a ``session_state_change`` trigger
+- win_scheduled_task_state - Added ``state_change_str`` to the trigger output to give a human readable description of the value

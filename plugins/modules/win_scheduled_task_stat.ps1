@@ -67,6 +67,16 @@ public enum TASK_TRIGGER_TYPE2
     TASK_TRIGGER_LOGON                 = 9,
     TASK_TRIGGER_SESSION_STATE_CHANGE  = 11
 }
+
+public enum TASK_SESSION_STATE_CHANGE_TYPE
+{
+    TASK_CONSOLE_CONNECT	= 1,
+    TASK_CONSOLE_DISCONNECT	= 2,
+    TASK_REMOTE_CONNECT	    = 3,
+    TASK_REMOTE_DISCONNECT	= 4,
+    TASK_SESSION_LOCK	    = 7,
+    TASK_SESSION_UNLOCK	    = 8
+}
 "@
 
 $original_tmp = $env:TMP
@@ -314,7 +324,16 @@ if ($null -ne $name) {
 
                 Get-Member -InputObject $item -MemberType Property | ForEach-Object {
                     if ($_.Name -notin $ignored_properties) {
-                        $item_info.$($_.Name) = (Get-PropertyValue -task_property $property -com $item -property $_.Name)
+                        $value = (Get-PropertyValue -task_property $property -com $item -property $_.Name)
+                        $item_info.$($_.Name) = $value
+
+                        # This was added after StateChange was represented by the raw enum value so we include both
+                        # for backwards compatibility.
+                        if ($_.Name -eq 'StateChange') {
+                            $item_info.StateChangeStr = if ($value) {
+                                [Enum]::ToObject([TASK_SESSION_STATE_CHANGE_TYPE], $value).ToString()
+                            }
+                        }
                     }
                 }
                 $result.$property += $item_info
