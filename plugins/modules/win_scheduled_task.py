@@ -212,7 +212,6 @@ options:
       state_change:
         description:
         - Allows you to define the kind of Terminal Server session change that triggers a task.
-        - Before C(v1.6.0) of this collection this could only be set by the raw integer values.
         - Optional when C(type=session_state_change)
         type: str
         choices:
@@ -222,6 +221,7 @@ options:
         - remote_disconnect
         - session_lock
         - session_unlock
+        version_added: 1.6.0
 
   # Principal options
   display_name:

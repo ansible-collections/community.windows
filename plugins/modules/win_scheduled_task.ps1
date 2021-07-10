@@ -125,12 +125,12 @@ public enum TASK_TRIGGER_TYPE2 // https://msdn.microsoft.com/en-us/library/windo
 
 public enum TASK_SESSION_STATE_CHANGE_TYPE // https://docs.microsoft.com/en-us/windows/win32/api/taskschd/ne-taskschd-task_session_state_change_type
 {
-    TASK_CONSOLE_CONNECT	= 1,
-    TASK_CONSOLE_DISCONNECT	= 2,
-    TASK_REMOTE_CONNECT	    = 3,
-    TASK_REMOTE_DISCONNECT	= 4,
-    TASK_SESSION_LOCK	    = 7,
-    TASK_SESSION_UNLOCK	    = 8
+    TASK_CONSOLE_CONNECT    = 1,
+    TASK_CONSOLE_DISCONNECT = 2,
+    TASK_REMOTE_CONNECT     = 3,
+    TASK_REMOTE_DISCONNECT  = 4,
+    TASK_SESSION_LOCK       = 7,
+    TASK_SESSION_UNLOCK     = 8
 }
 "@
 
@@ -937,26 +937,16 @@ for ($i = 0; $i -lt $triggers.Count; $i++) {
         $trigger.months_of_year = $month_value
     }
     if ($trigger.ContainsKey("state_change")) {
-        $trigger.state_change = if ($trigger.state_change -in @(1, 'console_connect')) {
-            [TASK_SESSION_STATE_CHANGE_TYPE]::TASK_CONSOLE_CONNECT
-        }
-        elseif ($trigger.state_change -in @(2, 'console_disconnect')) {
-            [TASK_SESSION_STATE_CHANGE_TYPE]::TASK_CONSOLE_DISCONNECT
-        }
-        elseif ($trigger.state_change -in @(3, 'remote_connect')) {
-            [TASK_SESSION_STATE_CHANGE_TYPE]::TASK_REMOTE_CONNECT
-        }
-        elseif ($trigger.state_change -in @(4, 'remote_disconnect')) {
-            [TASK_SESSION_STATE_CHANGE_TYPE]::TASK_REMOTE_DISCONNECT
-        }
-        elseif ($trigger.state_change -in @(7, 'session_lock')) {
-            [TASK_SESSION_STATE_CHANGE_TYPE]::TASK_SESSION_LOCK
-        }
-        elseif ($trigger.state_change -in @(8, 'session_unlock')) {
-            [TASK_SESSION_STATE_CHANGE_TYPE]::TASK_SESSION_UNLOCK
-        }
-        else {
-            Fail-Json -obj $result -message "invalid state_change '$($trigger.state_change)'"
+        $trigger.state_change = switch($trigger.state_change) {
+            console_connect { [TASK_SESSION_STATE_CHANGE_TYPE]::TASK_CONSOLE_CONNECT }
+            console_disconnect { [TASK_SESSION_STATE_CHANGE_TYPE]::TASK_CONSOLE_DISCONNECT }
+            remote_connect { [TASK_SESSION_STATE_CHANGE_TYPE]::TASK_REMOTE_CONNECT }
+            remote_disconnect { [TASK_SESSION_STATE_CHANGE_TYPE]::TASK_REMOTE_DISCONNECT }
+            session_lock { [TASK_SESSION_STATE_CHANGE_TYPE]::TASK_SESSION_LOCK }
+            session_unlock { [TASK_SESSION_STATE_CHANGE_TYPE]::TASK_SESSION_UNLOCK }
+            default {
+                Fail-Json -obj $result -message "invalid state_change '$($trigger.state_change)'"
+            }
         }
     }
     $triggers[$i] = $trigger
