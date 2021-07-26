@@ -5,13 +5,28 @@ Community Windows Release Notes
 .. contents:: Topics
 
 
-v1.5.0
+v1.6.0
 ======
 
 Release Summary
 ---------------
 
-- Release summary for v1.5.0
+- Release summary for v1.6.0
+
+Minor Changes
+-------------
+
+- win_dns_record - Added txt Support
+- win_scheduled_task - Added support for setting a ``session_state_change`` trigger by documenting the human friendly values for ``state_change``
+- win_scheduled_task_state - Added ``state_change_str`` to the trigger output to give a human readable description of the value
+
+Security Fixes
+--------------
+
+- win_psexec - Ensure password is masked in ``psexec_command`` return result - https://github.com/ansible-collections/community.windows/issues/43
+
+v1.5.0
+======
 
 Bugfixes
 --------
