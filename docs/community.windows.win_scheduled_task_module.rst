@@ -176,7 +176,7 @@ Parameters
                         <div>The integer value with indicates which version of Task Scheduler a task is compatible with.</div>
                         <div><code>0</code> means the task is compatible with the AT command.</div>
                         <div><code>1</code> means the task is compatible with Task Scheduler 1.0(Windows Vista, Windows Server 2008 and older).</div>
-                        <div><code>2</code> means the task is compatible with Task Scheduler 2.0(Windows 7, Windows Server 2008 R2).</div>
+                        <div><code>2</code> means the task is compatible with Task Scheduler 2.0(Windows Vista, Windows Server 2008).</div>
                         <div><code>3</code> means the task is compatible with Task Scheduler 2.0(Windows 7, Windows Server 2008 R2).</div>
                         <div><code>4</code> means the task is compatible with Task Scheduler 2.0(Windows 10, Windows Server 2016, Windows Server 2019).</div>
                 </td>
@@ -676,7 +676,7 @@ Parameters
                 <td>
                         <div>The days of the week for the trigger.</div>
                         <div>Can be a list or comma separated string of full day names e.g. monday instead of mon.</div>
-                        <div>Required when <code>type</code> is <code>weekly</code>, <code>type=session_state_change</code>.</div>
+                        <div>Required when <code>type</code> is <code>weekly</code>.</div>
                         <div>Optional when <code>type=monthlydow</code>.</div>
                 </td>
             </tr>
@@ -923,9 +923,35 @@ Parameters
                 <td>
                         <div>The start time for the task, even if the trigger meets the other start criteria, it won&#x27;t start until this time is met.</div>
                         <div>If you wish to run a task at 9am on a day you still need to specify the date on which the trigger is activated, you can set any date even ones in the past.</div>
-                        <div>Required when <code>type</code> is <code>daily</code>, <code>monthlydow</code>, <code>monthly</code>, <code>time</code>, <code>weekly</code>, (session_state_change).</div>
+                        <div>Required when <code>type</code> is <code>daily</code>, <code>monthlydow</code>, <code>monthly</code>, <code>time</code>, <code>weekly</code>.</div>
                         <div>Optional for the rest of the trigger types.</div>
                         <div>This is in ISO 8601 DateTime format <code>YYYY-MM-DDThh:mm:ss</code>.</div>
+                </td>
+            </tr>
+            <tr>
+                    <td class="elbow-placeholder"></td>
+                <td colspan="2">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>state_change</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                    </div>
+                    <div style="font-style: italic; font-size: small; color: darkgreen">added in 1.6.0</div>
+                </td>
+                <td>
+                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                    <li>console_connect</li>
+                                    <li>console_disconnect</li>
+                                    <li>remote_connect</li>
+                                    <li>remote_disconnect</li>
+                                    <li>session_lock</li>
+                                    <li>session_unlock</li>
+                        </ul>
+                </td>
+                <td>
+                        <div>Allows you to define the kind of Terminal Server session change that triggers a task.</div>
+                        <div>Optional when <code>type=session_state_change</code></div>
                 </td>
             </tr>
             <tr>

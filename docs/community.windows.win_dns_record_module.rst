@@ -162,12 +162,14 @@ Parameters
                                     <li>NS</li>
                                     <li>PTR</li>
                                     <li>SRV</li>
+                                    <li>TXT</li>
                         </ul>
                 </td>
                 <td>
                         <div>The type of DNS record to manage.</div>
                         <div><code>SRV</code> was added in the 1.0.0 release of this collection.</div>
                         <div><code>NS</code> was added in the 1.1.0 release of this collection.</div>
+                        <div><code>TXT</code> was added in the 1.6.0 release of this collection.</div>
                 </td>
             </tr>
             <tr>
@@ -318,6 +320,16 @@ Examples
           - 10.0.0.4
         zone: "example.com"
 
+    # Demonstrate creating a TXT record
+
+    - name: Creating a TXT record with descriptive Text
+      community.windows.win_dns_record:
+        name: "test"
+        state: present
+        type: "TXT"
+        value: "justavalue"
+        zone: "example.com"
+
 
 
 
@@ -328,4 +340,5 @@ Status
 Authors
 ~~~~~~~
 
+- Sebastian Gruber (@sgruber94)
 - John Nelson (@johnboy2)
