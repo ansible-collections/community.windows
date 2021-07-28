@@ -31,7 +31,7 @@ $type = $module.Params.type
 $values = $module.Params.value
 $weight = $module.Params.weight
 $zone = $module.Params.zone
-$dns_computer_name = $module.Params.server
+$dns_computer_name = $module.Params.computer_name
 $extra_args = @{}
 if ($null -ne $dns_computer_name) {
     $extra_args.ComputerName = $dns_computer_name
