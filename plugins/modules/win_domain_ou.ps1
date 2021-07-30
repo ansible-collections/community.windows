@@ -14,12 +14,12 @@ $spec = @{
         name = @{ type = "str"; required = $true }
         protected = @{ type = "bool"; default = $false }
         path = @{ type = "str"; required = $false }
-        filter = @{type = "str"; default = '*';}
+        filter = @{type = "str"; default = "*" }
         recursive = @{ type = "bool"; default = $false }
         domain_username = @{ type = "str"; }
-        domain_password = @{ type = "str";  no_log = $true }
-        domain_server = @{ type = "str"; }
-        properties = @{ type = "dict";}
+        domain_password = @{ type = "str"; no_log = $true }
+        domain_server = @{ type = "str" }
+        properties = @{ type = "dict" }
     }
     required_together = @(
             ,@('domain_password', 'domain_username')
@@ -46,8 +46,8 @@ if ($module.Params.properties.count -ne 0){
     $module.Params.properties.Keys | Foreach-Object{
         $extra_args.Properties = New-Object Collections.Generic.List[string]
         $item = $_
-        $keyName = ""
-        if ($item.Contains("_")){
+        [string]$keyName
+        if ( $item.Contains("_") ){
             $item.Split("_") | Foreach-Object{
                 $keyName = $keyname + $_.substring(0,1).toupper() + $_.substring(1).tolower()
             }
@@ -107,7 +107,7 @@ Function Get-SimulatedOu {
 
     $parms = @{
         Name = $Object.name
-        DistinguishedName = "OU=$($Object.name)," + $Object.path
+        DistinguishedName = "OU=$($Object.name),$($Object.path)"
         ProtectedFromAccidentalDeletion = $Object.protected
     }
 
@@ -206,7 +206,6 @@ if ($null -eq $path){
         $module.FailJson("Unable to find default domain $($_.Exception.Message)", $_)
     }
 }
-}
 
 # determine if requested OU exist
 Try {
@@ -215,7 +214,6 @@ Try {
     $module.Diff.before = Get-OuObject -Object $current_ou
     $module.Result.ou = $module.Diff.before
 } Catch {
-    #$module.FailJson("current_ou error $($_.Exception.Message)", $_)
     $module.Diff.before = ""
     $current_ou = $false
 }
@@ -269,7 +267,6 @@ if ($state -eq "absent") {
 }
 
 # determine if a change was made
-
 if (-not $check_mode) {
     try{
         $module.Result.extra_args = $extra_args
