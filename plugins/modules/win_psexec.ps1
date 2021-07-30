@@ -63,7 +63,7 @@ If ($nobanner -eq $true) {
 
 # Support running on local system if no hostname is specified
 If ($hostnames) {
-    $hostname_argument = ($hostnames | sort -Unique) -join ','
+    $hostname_argument = ($hostnames | Sort-Object  -Unique) -join ','
     $arguments.Add("\\$hostname_argument")
 }
 
@@ -129,7 +129,15 @@ $argument_string = Argv-ToString -arguments $arguments
 $argument_string += " $command"
 
 $start_datetime = [DateTime]::UtcNow
-$module.Result.psexec_command = $argument_string
+
+# Replace password with *PASSWORD_REPLACED* to avoid disclosing sensitive data
+$toLog = $argument_string
+if ($password) {
+    $maskedPassword = Argv-ToString $password
+    $toLog = $toLog.Replace($maskedPassword, "*PASSWORD_REPLACED*")
+}
+
+$module.Result.psexec_command = $toLog
 
 $command_result = Run-Command -command $argument_string
 

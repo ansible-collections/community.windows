@@ -50,7 +50,9 @@ if ($diff_mode) {
     $result.diff = @{}
 }
 
-$members_before = Get-AdGroupMember -Identity $ADGroup @extra_args
+$filter = "(memberOf=$($ADGroup.DistinguishedName))"
+
+$members_before = Get-ADObject -LDAPFilter $filter -Properties sAMAccountName, objectSID @extra_args
 $pure_members = [System.Collections.Generic.List`1[String]]@()
 
 foreach ($member in $members) {
@@ -70,7 +72,7 @@ foreach ($member in $members) {
 
     $user_in_group = $false
     foreach ($current_member in $members_before) {
-        if ($current_member.sid -eq $group_member.objectSid) {
+        if ($current_member.objectSid -eq $group_member.objectSid) {
             $user_in_group = $true
             break
         }
@@ -89,26 +91,26 @@ foreach ($member in $members) {
 
 if ($state -eq "pure") {
     # Perform removals for existing group members not defined in $members
-    $current_members = Get-AdGroupMember -Identity $ADGroup @extra_args
+    $current_members = Get-ADObject -LDAPFilter $filter -Properties sAMAccountName, objectSID @extra_args
 
     foreach ($current_member in $current_members) {
         $user_to_remove = $true
         foreach ($pure_member in $pure_members) {
-            if ($pure_member -eq $current_member.sid) {
+            if ($pure_member -eq $current_member.objectSid) {
                 $user_to_remove = $false
                 break
             }
         }
 
         if ($user_to_remove) {
-            Remove-ADPrincipalGroupMembership -Identity $current_member -MemberOf $ADGroup -WhatIf:$check_mode -Confirm:$False
+            Remove-ADPrincipalGroupMembership -Identity $current_member -MemberOf $ADGroup -WhatIf:$check_mode -Confirm:$False @extra_member_args
             $result.removed.Add($current_member.SamAccountName)
             $result.changed = $true
         }
     }
 }
 
-$final_members = Get-AdGroupMember -Identity $ADGroup @extra_args
+$final_members = Get-ADObject -LDAPFilter $filter -Properties sAMAccountName, objectSID @extra_args
 
 if ($final_members) {
     $result.members = [Array]$final_members.SamAccountName

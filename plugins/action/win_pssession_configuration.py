@@ -4,12 +4,10 @@
 from __future__ import (absolute_import, division, print_function)
 __metaclass__ = type
 
-import ntpath
 import time
 
 from ansible.errors import AnsibleError
 from ansible.plugins.action import ActionBase
-from ansible.utils.vars import merge_hash
 from ansible.playbook.task import Task
 from ansible.utils.display import Display
 display = Display()
@@ -37,6 +35,9 @@ class ActionModule(ActionBase):
 
         result = super(ActionModule, self).run(tmp, task_vars)
 
+        if async_poll <= 0:
+            raise AnsibleError("The 'async_poll' option must be greater than 0, got: %i" % async_poll)
+
         # build the wait_for_connection object for later use
         wait_for_connection_task = self._task.copy()
         wait_for_connection_task.args = {
@@ -56,6 +57,7 @@ class ActionModule(ActionBase):
         # if it's not in check mode, call the module async so the WinRM restart doesn't kill ansible
         if not check_mode:
             self._task.async_val = async_timeout
+            self._task.poll = async_poll
 
         result = status = self._execute_module(
             task_vars=task_vars,
@@ -63,8 +65,8 @@ class ActionModule(ActionBase):
         )
         display.vvvv("Internal Async Result: %r" % status)
 
-        # if we're in check mode (not doing async) or not polling, return the result now
-        if check_mode or async_poll == 0:
+        # if we're in check mode (not doing async) return the result now
+        if check_mode:
             return result
 
         # turn off async so we don't run the following actions as async

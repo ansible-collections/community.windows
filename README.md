@@ -50,6 +50,7 @@ Name | Description
 [community.windows.win_dotnet_ngen](https://github.com/ansible-collections/community.windows/blob/main/docs/community.windows.win_dotnet_ngen_module.rst)|Runs ngen to recompile DLLs after .NET  updates
 [community.windows.win_eventlog](https://github.com/ansible-collections/community.windows/blob/main/docs/community.windows.win_eventlog_module.rst)|Manage Windows event logs
 [community.windows.win_eventlog_entry](https://github.com/ansible-collections/community.windows/blob/main/docs/community.windows.win_eventlog_entry_module.rst)|Write entries to Windows event logs
+[community.windows.win_feature_info](https://github.com/ansible-collections/community.windows/blob/main/docs/community.windows.win_feature_info_module.rst)|Gather information about Windows features
 [community.windows.win_file_compression](https://github.com/ansible-collections/community.windows/blob/main/docs/community.windows.win_file_compression_module.rst)|Alters the compression of files and directories on NTFS partitions.
 [community.windows.win_file_version](https://github.com/ansible-collections/community.windows/blob/main/docs/community.windows.win_file_version_module.rst)|Get DLL or EXE file build version
 [community.windows.win_firewall](https://github.com/ansible-collections/community.windows/blob/main/docs/community.windows.win_firewall_module.rst)|Enable or disable the Windows Firewall
@@ -109,6 +110,7 @@ Name | Description
 [community.windows.win_wakeonlan](https://github.com/ansible-collections/community.windows/blob/main/docs/community.windows.win_wakeonlan_module.rst)|Send a magic Wake-on-LAN (WoL) broadcast packet
 [community.windows.win_webpicmd](https://github.com/ansible-collections/community.windows/blob/main/docs/community.windows.win_webpicmd_module.rst)|Installs packages using Web Platform Installer command-line
 [community.windows.win_xml](https://github.com/ansible-collections/community.windows/blob/main/docs/community.windows.win_xml_module.rst)|Manages XML file content on Windows hosts
+[community.windows.win_zip](https://github.com/ansible-collections/community.windows/blob/main/docs/community.windows.win_zip_module.rst)|Compress file or directory as zip archive on the Windows node
 
 <!--end collection content-->
 
@@ -137,7 +139,7 @@ See [Developing modules for Windows](https://docs.ansible.com/ansible/latest/dev
 
 You can also join us on:
 
-Freenode IRC - ``#ansible-windows`` Freenode channel
+IRC - ``#ansible-windows`` [irc.libera.chat](https://libera.chat/) channel
 
 See the [Ansible Community Guide](https://docs.ansible.com/ansible/latest/community/index.html) for details on contributing to Ansible.
 
@@ -182,10 +184,8 @@ The current process for publishing new versions of the Windows Community Collect
 * Update `galaxy.yml` with the new version for the collection.
 * Rebuild the plugin docs:
     ```bash
-    git clone https://github.com/ansible-network/collection_prep.git /tmp/collection_prep
-    pip install /tmp/collection_prep
+    pip install git+https://github.com/ansible-network/collection_prep
     collection_prep_add_docs --path ./ --branch-name main
-    rm -rf /tmp/collection_prep
     ```
 * Update the `CHANGELOG`:
   * Make sure you have [`antsibull-changelog`](https://pypi.org/project/antsibull-changelog/) installed `pip install antsibull-changelog`.
@@ -197,14 +197,14 @@ The current process for publishing new versions of the Windows Community Collect
     ```bash
     git clone https://github.com/ansible-collections/community.windows.git /tmp/community.windows
     ansible-galaxy collection build /tmp/community.windows --output-path /tmp/community.windows
-    ansible-galaxy collection publish $(find /tmp/community.windows -maxdepth 1 -name 'community-windows-*.tar.gz') --token <API_KEY>
+    ansible-galaxy collection publish $(find /tmp/community.windows -maxdepth 1 -name 'community-windows-*.tar.gz') --token <API_KEY> -vv
 
 After the version is published, verify it exists on the [Windows Community Collection Galaxy page](https://galaxy.ansible.com/community/windows).
 
 
 ## More Information
 
-For more information about Ansible's Windows integration, join the `#ansible-windows` channel on Freenode IRC, and browse the resources in the [Windows Working Group](https://github.com/ansible/community/wiki/Windows) Community wiki page.
+For more information about Ansible's Windows integration, join the `#ansible-windows` channel on [libera.chat](https://libera.chat/) IRC, and browse the resources in the [Windows Working Group](https://github.com/ansible/community/wiki/Windows) Community wiki page.
 
 - [Ansible Collection overview](https://github.com/ansible-collections/overview)
 - [Ansible User guide](https://docs.ansible.com/ansible/latest/user_guide/index.html)

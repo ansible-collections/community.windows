@@ -94,7 +94,7 @@ options:
           the date on which the trigger is activated, you can set any date even
           ones in the past.
         - Required when C(type) is C(daily), C(monthlydow), C(monthly),
-          C(time), C(weekly), (session_state_change).
+          C(time), C(weekly).
         - Optional for the rest of the trigger types.
         - This is in ISO 8601 DateTime format C(YYYY-MM-DDThh:mm:ss).
         type: str
@@ -145,7 +145,7 @@ options:
         - The days of the week for the trigger.
         - Can be a list or comma separated string of full day names e.g. monday
           instead of mon.
-        - Required when C(type) is C(weekly), C(type=session_state_change).
+        - Required when C(type) is C(weekly).
         - Optional when C(type=monthlydow).
         type: str
       days_of_month:
@@ -209,6 +209,19 @@ options:
             description:
             - Whether a running instance of the task is stopped at the end of the repetition pattern.
             type: bool
+      state_change:
+        description:
+        - Allows you to define the kind of Terminal Server session change that triggers a task.
+        - Optional when C(type=session_state_change)
+        type: str
+        choices:
+        - console_connect
+        - console_disconnect
+        - remote_connect
+        - remote_disconnect
+        - session_lock
+        - session_unlock
+        version_added: 1.6.0
 
   # Principal options
   display_name:
@@ -306,9 +319,9 @@ options:
       is compatible with.
     - C(0) means the task is compatible with the AT command.
     - C(1) means the task is compatible with Task Scheduler 1.0(Windows Vista, Windows Server 2008 and older).
-    - C(2) means the task is compatible with Task Scheduler 2.0(Windows 7, Windows Server 2008 R2).
+    - C(2) means the task is compatible with Task Scheduler 2.0(Windows Vista, Windows Server 2008).
     - C(3) means the task is compatible with Task Scheduler 2.0(Windows 7, Windows Server 2008 R2).
-    - C(4) means the task is compatible with Task Scheduler 2.0(Windows 10, Windows Server 2019).
+    - C(4) means the task is compatible with Task Scheduler 2.0(Windows 10, Windows Server 2016, Windows Server 2019).
     type: int
     choices: [ 0, 1, 2, 3, 4 ]
   delete_expired_task_after:

@@ -60,6 +60,7 @@ Function Install-NugetProvider {
 Function Install-PrereqModule {
     Param(
         [Switch]$TestInstallationOnly,
+        [bool]$AllowClobber,
         [Bool]$CheckMode
     )
 
@@ -87,8 +88,12 @@ Function Install-PrereqModule {
                         Force = $true
                         WhatIf = $CheckMode
                     }
-                    if ((Get-Command -Name Install-Module).Parameters.ContainsKey('SkipPublisherCheck')) {
+                    $installCmd = Get-Command -Name Install-Module
+                    if ($installCmd.Parameters.ContainsKey('SkipPublisherCheck')) {
                         $install_params.SkipPublisherCheck = $true
+                    }
+                    if ($installCmd.Parameters.ContainsKey('AllowClobber')) {
+                        $install_params.AllowClobber = $AllowClobber
                     }
 
                     Install-Module @install_params > $null
@@ -421,7 +426,7 @@ if ( ($allow_clobber -or $allow_prerelease -or $skip_publisher_check -or
     $required_version -or $minimum_version -or $maximum_version) ) {
     # Update the PowerShellGet and PackageManagement modules.
     # It's required to support AllowClobber, AllowPrerelease parameters.
-    Install-PrereqModule -CheckMode $check_mode
+    Install-PrereqModule -AllowClobber $allow_clobber -CheckMode $check_mode
 }
 
 Import-Module -Name PackageManagement, PowerShellGet

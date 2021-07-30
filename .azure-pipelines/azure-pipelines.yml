@@ -36,7 +36,7 @@ variables:
 resources:
   containers:
     - container: default
-      image: quay.io/ansible/azure-pipelines-test-container:1.8.0
+      image: quay.io/ansible/azure-pipelines-test-container:1.9.0
 
 pool: Standard
 
@@ -49,6 +49,19 @@ stages:
         parameters:
           nameFormat: '{0}'
           testFormat: 'devel/{0}'
+          targets:
+            - name: Sanity
+              test: sanity
+            - name: Units
+              test: units
+  - stage: Ansible_2_11
+    displayName: Ansible 2.11
+    dependsOn: []
+    jobs:
+      - template: templates/matrix.yml
+        parameters:
+          nameFormat: '{0}'
+          testFormat: '2.11/{0}'
           targets:
             - name: Sanity
               test: sanity
@@ -90,6 +103,7 @@ stages:
     condition: succeededOrFailed()
     dependsOn:
       - Ansible_devel
+      - Ansible_2_11
       - Ansible_2_10
       - Windows
     jobs:

@@ -74,6 +74,9 @@
       months_of_year: june,december
       run_on_last_day_of_month: true
       start_boundary: '2017-09-20T03:44:38'
+    - type: session_state_change
+      state_change: console_disconnect
+      user_id: '{{ admin_account_name }}'
 
 - name: get stat of existing folder with task
   win_scheduled_task_stat:
@@ -143,7 +146,7 @@
     - stat_task_present.settings.restart_count == 3
     - stat_task_present.settings.restart_interval == "PT15M"
     - stat_task_present.state.status == "TASK_STATE_READY"
-    - stat_task_present.triggers|count == 2
+    - stat_task_present.triggers|count == 3
     - stat_task_present.triggers[0].delay == "PT15M"
     - stat_task_present.triggers[0].type == "TASK_TRIGGER_BOOT"
     - stat_task_present.triggers[0].repetition.stop_at_duration_end == False
@@ -157,6 +160,10 @@
     - stat_task_present.triggers[1].repetition.stop_at_duration_end == False
     - stat_task_present.triggers[1].repetition.duration == None
     - stat_task_present.triggers[1].repetition.interval == None
+    - stat_task_present.triggers[2].type == "TASK_TRIGGER_SESSION_STATE_CHANGE"
+    - stat_task_present.triggers[2].user_id.endswith(admin_account_name)
+    - stat_task_present.triggers[2].state_change == 2
+    - stat_task_present.triggers[2].state_change_str == "TASK_CONSOLE_DISCONNECT"
 
 - name: change principal to system account so it will run in the next step
   win_scheduled_task:

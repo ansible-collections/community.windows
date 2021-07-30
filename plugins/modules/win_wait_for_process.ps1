@@ -92,14 +92,8 @@ Function Get-FilteredProcesses {
         }
 
         # If a process name was specified in the filter, validate that here.
-        if ($ProcessNameExact -is [Array]) {
-            if ($ProcessNameExact -notcontains $Process.ProcessName) {
-                continue
-            }
-        } elseif ($ProcessNameExact) {
-            if ($ProcessNameExact -ne $Process.ProcessName) {
-                continue
-            }
+        if ($ProcessNameExact -and $ProcessNameExact -notcontains $Process.ProcessName) {
+            continue
         }
 
         # If a PID was specified in the filter, validate that here.

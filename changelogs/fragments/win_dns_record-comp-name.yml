@@ -1,0 +1,2 @@
+bugfixes:
+- win_dns_record - Fix issue when trying to use the ``computer_name`` option - https://github.com/ansible-collections/community.windows/issues/276

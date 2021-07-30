@@ -5,13 +5,59 @@ Community Windows Release Notes
 .. contents:: Topics
 
 
-v1.3.0
+v1.6.0
 ======
 
 Release Summary
 ---------------
 
-- Release summary for v1.3.0
+- Release summary for v1.6.0
+
+Minor Changes
+-------------
+
+- win_dns_record - Added txt Support
+- win_scheduled_task - Added support for setting a ``session_state_change`` trigger by documenting the human friendly values for ``state_change``
+- win_scheduled_task_state - Added ``state_change_str`` to the trigger output to give a human readable description of the value
+
+Security Fixes
+--------------
+
+- win_psexec - Ensure password is masked in ``psexec_command`` return result - https://github.com/ansible-collections/community.windows/issues/43
+
+v1.5.0
+======
+
+Bugfixes
+--------
+
+- win_dns_zone - Fix idempotency when using a DNS zone with forwarders - https://github.com/ansible-collections/community.windows/issues/259
+- win_domain_group_member - Fix faulty logic when comparing existing group members - https://github.com/ansible-collections/community.windows/issues/256
+- win_lineinfile - Avoid stripping the newline at the end of a file - https://github.com/ansible-collections/community.windows/pull/219
+- win_product_facts - fixed an issue that the module doesn't correctly convert a product id (https://github.com/ansible-collections/community.windows/pull/251).
+
+v1.4.0
+======
+
+Bugfixes
+--------
+
+- win_domain_group_membership - Handle timeouts when dealing with group with lots of members - https://github.com/ansible-collections/community.windows/pull/204
+- win_domain_user - Make sure a password is set to change when it is marked as password needs to be changed before logging in - https://github.com/ansible-collections/community.windows/issues/223
+- win_domain_user - fix reporting on user when running in check mode - https://github.com/ansible-collections/community.windows/pull/248
+- win_lineinfile - Fix crash when using ``insertbefore`` and ``insertafter`` at the same time - https://github.com/ansible-collections/community.windows/issues/220
+- win_partition - Fix gtp_type setting in win_partition - https://github.com/ansible-collections/community.windows/issues/241
+- win_psmodule - Makes sure ``-AllowClobber`` is used when updating pre-requisites if requested - https://github.com/ansible-collections/community.windows/issues/42
+- win_pssession_configuration - the ``async_poll`` option was not actually used and polling mode was always used with the default poll delay; this change also formally disables ``async_poll=0`` (https://github.com/ansible-collections/community.windows/pull/212).
+- win_wait_for_process - Fix bug when specifying multiple ``process_name_exact`` values - https://github.com/ansible-collections/community.windows/issues/203
+
+New Modules
+-----------
+
+- win_feature_info - Gather information about Windows features
+
+v1.3.0
+======
 
 Minor Changes
 -------------

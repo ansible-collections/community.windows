@@ -103,6 +103,7 @@
   win_wait_for_process:
     process_name_exact:
     - spoolsv
+    - other_process  # Tests that just 1 needs to match
     timeout: 60
     state: absent
   async: 30
