@@ -49,7 +49,6 @@ if ($module.Params.properties.count -ne 0){
         $keyName = ""
         if ($item.Contains("_")){
             $item.Split("_") | Foreach-Object{
-                write-host $_
                 $keyName = $keyname + $_.substring(0,1).toupper() + $_.substring(1).tolower()
             }
         }else{
@@ -78,7 +77,6 @@ if ($module.Params.properties.count -ne 0){
         $keyName = ""
         if ($item.Contains("_")){
             $item.Split("_") | Foreach-Object{
-                write-host $_
                 $keyName = $keyname + $_.substring(0,1).toupper() + $_.substring(1).tolower()
             }
         }else{
@@ -202,7 +200,12 @@ if ($null -eq $path){
     }else{
         $module.FailJson("path was null and unable to determine default domain $($_.Exception.Message)", $_)
     }
-    $path = $matches.Values[0]
+    if ($matched){
+        $path = $matches.Values[0]
+    }else{
+        $module.FailJson("Unable to find default domain $($_.Exception.Message)", $_)
+    }
+}
 }
 
 # determine if requested OU exist

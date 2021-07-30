@@ -69,8 +69,7 @@ options:
   domain_password:
     type: str
     description:
-    - The password for the domain you are accessig
-    
+    - The password for the domain you are accessing
   filter:
     type: str
     description: filter for lookup of ou.
