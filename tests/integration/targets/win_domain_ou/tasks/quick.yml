@@ -194,9 +194,9 @@
   assert:
     that:
       - test1a.ou.name == "AnsibleFest"
-      - test3a.ou.properties.street_address == "1155 Perimeter Center West"
-      - test7a.ou.properties.country == "US"
-      - test6a.ou.properties.city == "Sandy Springs"
+      - test3a.ou.street_address == "1155 Perimeter Center West"
+      - test7a.ou.country == "US"
+      - test6a.ou.city == "Sandy Springs"
 
 - name: Run Check Mode Tests
   block:
