@@ -67,8 +67,14 @@ options:
       used instead when using CredSSP or Kerberos with credential delegation.
     type: str
   domain_password:
+    type: str
     description:
-    - The password for
+    - The password for the domain you are accessig
+    
+  filter:
+    type: str
+    description: filter for lookup of ou.
+    default: '*'
   properties:
     type: dict
     description:
@@ -109,7 +115,7 @@ EXAMPLES = r'''
       description: EUC Business Unit
       postal_code: 30189
   delegate_to: win-ad1.euc.vmware.lab
-  
+
 - name: Ensure OU updated with new properties
   community.windows.win_domain_ou:
     name: WS1Users
