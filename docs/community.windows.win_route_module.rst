@@ -35,7 +35,7 @@ Parameters
             <tr>
                 <td colspan="1">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>destination</b>
+                    <b>network</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
                         <span style="color: purple">string</span>
@@ -45,7 +45,23 @@ Parameters
                 <td>
                 </td>
                 <td>
-                        <div>Destination IP address in CIDR format (ip address/prefix length).</div>
+                        <div>Destination network.</div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>mask</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                         / <span style="color: red">required</span>
+                    </div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>Destination network's mask.</div>
                 </td>
             </tr>
             <tr>
@@ -55,13 +71,13 @@ Parameters
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
                         <span style="color: purple">string</span>
+                         / <span style="color: red">required</span>
                     </div>
                 </td>
                 <td>
                 </td>
                 <td>
                         <div>The gateway used by the static route.</div>
-                        <div>If <code>gateway</code> is not provided it will be set to <code>0.0.0.0</code>.</div>
                 </td>
             </tr>
             <tr>
@@ -118,16 +134,19 @@ Examples
 .. code-block:: yaml
 
     ---
-    - name: Add a network static route
+    - name: Add a network static route.
       community.windows.win_route:
-        destination: 192.168.2.10/32
-        gateway: 192.168.1.1
+        network: 192.168.24.0
+        mask: 255.255.255.0
+        gateway: 192.168.24.1
         metric: 1
         state: present
 
-    - name: Remove a network static route
+    - name: Remove a network static route.
       community.windows.win_route:
-        destination: 192.168.2.10/32
+        network: 192.168.24.0
+        mask: 255.255.255.0
+        gateway: 192.168.24.1
         state: absent
 
 
@@ -158,7 +177,7 @@ Common return values are documented `here <https://docs.ansible.com/ansible/late
                             <div>A message describing the task result.</div>
                     <br/>
                         <div style="font-size: smaller"><b>Sample:</b></div>
-                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">Route added</div>
+                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">Route added!</div>
                 </td>
             </tr>
     </table>
@@ -173,3 +192,4 @@ Authors
 ~~~~~~~
 
 - Daniele Lazzari (@dlazz)
+- Modified by: Vicente Danzmann Vivian (@iVcente)
