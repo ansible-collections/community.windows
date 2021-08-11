@@ -1,3 +1,4 @@
 ---
-default_gateway: 192.168.1.1
-destination_ip_address: 192.168.2.10
+default_gateway: 192.168.24.1
+destination_network: 192.168.24.0
+destination_mask: 255.255.255.0

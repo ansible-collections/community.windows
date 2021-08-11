@@ -192,4 +192,4 @@ Authors
 ~~~~~~~
 
 - Daniele Lazzari (@dlazz)
-- Modified by: Vicente Danzmann Vivian (@iVcente)
+- Vicente Danzmann Vivian (@iVcente)

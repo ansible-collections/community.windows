@@ -1,6 +1,7 @@
 ---
 # test code for the win_psmodule module when using winrm connection
 # (c) 2017, Daniele Lazzari <lazzari@mailup.com>
+# Modified by: Vicente Danzmann Vivian (iVcente)
 
 # This file is part of Ansible
 #
@@ -18,12 +19,12 @@
 # along with Ansible.  If not, see <http://www.gnu.org/licenses/>.
 
 
-- name: get os info
+- name: Get OS info.
   ansible.windows.win_shell: '[Environment]::OSVersion.Version -ge [Version]"6.3"'
   register: os
 
-- name: Perform with os Windows 2012R2 or newer
+- name: Perform with OS Windows 2012R2 or newer.
   when: os.stdout_lines[0] == "True"
   block:
-    - name: run all tasks
+    - name: Run all tasks.
       include: tests.yml

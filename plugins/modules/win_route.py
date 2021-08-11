@@ -41,7 +41,7 @@ options:
     default: present
 notes:
   - Works only with Windows 2012 R2 and newer.
-authors:
+author:
 - Daniele Lazzari (@dlazz)
 - Vicente Danzmann Vivian (@iVcente)
 '''
