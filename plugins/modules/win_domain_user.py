@@ -120,6 +120,7 @@ options:
       - This is allowed to a maximum of 20 characters due to pre-Windows 2000 restrictions.
       - Default to the C(<username>) specified in C(upn) or C(name) if not set.
     type: str
+    version_added: 1.7.0
   email:
     description:
       - Configures the user's email address.
@@ -361,6 +362,7 @@ sam_account_name:
     returned: always
     type: str
     sample: nick
+    version_added: 1.7.0
 user_cannot_change_password:
     description: true if the user is not allowed to change password
     returned: always
