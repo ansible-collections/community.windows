@@ -89,6 +89,7 @@ $groups = Get-AnsibleParam -obj $params -name "groups" -type "list"
 $enabled = Get-AnsibleParam -obj $params -name "enabled" -type "bool" -default $true
 $path = Get-AnsibleParam -obj $params -name "path" -type "str"
 $upn = Get-AnsibleParam -obj $params -name "upn" -type "str"
+$sam_account_name = Get-AnsibleParam -obj $params -name "sam_account_name" -type "str"
 
 # User informational parameters
 $user_info = @{
@@ -163,6 +164,9 @@ If ($state -eq 'present') {
           $create_args.UserPrincipalName  = $upn
           $create_args.SamAccountName  = $upn.Split('@')[0]
         }
+        If ($null -ne $sam_account_name) {
+          $create_args.SamAccountName  = $sam_account_name
+        }
         $user_obj = New-ADUser @create_args -WhatIf:$check_mode -PassThru @extra_args
         $user_guid = $user_obj.ObjectGUID
         $new_user = $true
@@ -215,6 +219,11 @@ If ($state -eq 'present') {
     # Assign other account settings
     If (($null -ne $upn) -and ($upn -ne $user_obj.UserPrincipalName)) {
         Set-ADUser -Identity $user_guid -UserPrincipalName $upn -WhatIf:$check_mode @extra_args
+        $user_obj = Get-ADUser -Identity $user_guid -Properties * @extra_args
+        $result.changed = $true
+    }
+    If (($null -ne $sam_account_name) -and ($sam_account_name -ne $user_obj.SamAccountName)) {
+        Set-ADUser -Identity $user_guid -SamAccountName $sam_account_name -WhatIf:$check_mode @extra_args
         $user_obj = Get-ADUser -Identity $user_guid -Properties * @extra_args
         $result.changed = $true
     }
@@ -367,6 +376,7 @@ If ($user_obj) {
     $result.account_locked = $user_obj.LockedOut
     $result.sid = [string]$user_obj.SID
     $result.upn = $user_obj.UserPrincipalName
+    $result.sam_account_name = $user_obj.SamAccountName
     $result.groups = Get-PrincipalGroups $user_guid $extra_args
     $result.msg = "User '$name' is present"
     $result.state = "present"
