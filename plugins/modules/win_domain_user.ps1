@@ -186,7 +186,12 @@ If ($state -eq 'present') {
         If ($new_user -or ($update_password -eq "always")) {
             $set_new_credentials = $true
         } elseif ($update_password -eq "when_changed") {
-            $set_new_credentials = -not (Test-Credential -Username $user_obj.UserPrincipalName -Password $password)
+            If ($user_obj.UserPrincipalName) {
+                $set_new_credentials = -not (Test-Credential -Username $user_obj.UserPrincipalName -Password $password)
+            }
+            else {
+                $set_new_credentials = -not (Test-Credential -Username $user_obj.SamAccountName -Password $password)
+            }
         } else {
             $set_new_credentials = $false
         }
