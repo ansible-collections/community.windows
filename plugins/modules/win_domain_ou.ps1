@@ -14,7 +14,7 @@ $spec = @{
         name = @{ type = "str"; required = $true }
         protected = @{ type = "bool"; default = $false }
         path = @{ type = "str"; required = $false }
-        filter = @{type = "str"; required = $false }
+        filter = @{type = "str"; default = '*' }
         recursive = @{ type = "bool"; default = $false }
         domain_username = @{ type = "str"; }
         domain_password = @{ type = "str"; no_log = $true }
@@ -51,9 +51,8 @@ if ($module.Params.properties.count -ne 0){
     $extra_args.Properties = '*'
 }
 
-if ($null -ne $module.Params.filter){
-    $extra_args.Filter = $module.Params.filter
-}
+
+$extra_args.Filter = $module.Params.filter
 $check_mode = $module.CheckMode
 
 $name = $module.Params.name
@@ -111,6 +110,8 @@ Function Get-SimulatedOu {
 Function Get-OuObject {
     Param([PSObject]$Object)
     $obj = $Object | Select-Object -Property * -ExcludeProperty nTSecurityDescriptor
+    try{$obj.ObjectGUID = $Object.ObjectGUID}
+    catch{$module.FailJson("Adding objectGUid Line:112 $($_.Exception.Message)", $_)}
     return $obj
 }
 

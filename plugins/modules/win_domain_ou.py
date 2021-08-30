@@ -9,10 +9,8 @@ DOCUMENTATION = r'''
 ---
 module: win_domain_ou
 short_description: Manage Active Directory Organizational Units
+author: ['Joe Zollo (@joezollo)', 'Larry Lane (@gamethis)']
 version_added: 1.7.0
-author:
-- Joe Zollo (@joezollo)
-- Larry Lane (@gamethis)
 requirements:
   - This module requires Windows Server 2012 or Newer
 description:
@@ -49,7 +47,7 @@ options:
         the OU and all child OU's.
     type: str
     default: present
-    choices: [ 'present', 'absent' ]
+    choices: [ present, absent ]
   recursive:
     description:
       - Removes the OU and any child items it contains.
@@ -58,31 +56,29 @@ options:
     default: false
   domain_server:
     description:
-      - Specifies the Active Directory Domain Services instance to connect to.
-      - Can be in the form of an FQDN or NetBIOS name.
-      - If not specified then the value is based on the domain of the computer
-        running PowerShell.
+    - Specifies the Active Directory Domain Services instance to connect to.
+    - Can be in the form of an FQDN or NetBIOS name.
+    - If not specified then the value is based on the domain of the computer
+      running PowerShell.
     type: str
   domain_username:
     description:
-      - The username to use when interacting with AD.
-      - If this is not set then the user Ansible used to log in with will be
-        used instead when using CredSSP or Kerberos with credential delegation.
+    - The username to use when interacting with AD.
+    - If this is not set then the user Ansible used to log in with will be
+      used instead when using CredSSP or Kerberos with credential delegation.
     type: str
   domain_password:
+    type: str
     description:
-      - The password for the domain you are accessing
-    type: str
+    - The password for the domain you are accessing
   filter:
-    description: filter for lookup of ou.
     type: str
+    description: filter for lookup of ou.
+    default: '*'
   properties:
     type: dict
     description:
       - Free form dict of properties for the organizational unit.
-      - Key should be in camelCase.
-      - For more information on available properties see
-        https://docs.microsoft.com/en-us/powershell/module/activedirectory/set-adorganizationalunit.
 '''
 
 EXAMPLES = r'''
@@ -114,10 +110,10 @@ EXAMPLES = r'''
     properties:
       city: Sandy Springs
       state: Georgia
-      StreetAddress: 1155 Perimeter Center West
+      street_address: 1155 Perimeter Center West
       country: US
       description: EUC Business Unit
-      postalCode: 30189
+      postal_code: 30189
   delegate_to: win-ad1.euc.vmware.lab
 
 - name: Ensure OU updated with new properties
