@@ -110,8 +110,6 @@ Function Get-SimulatedOu {
 Function Get-OuObject {
     Param([PSObject]$Object)
     $obj = $Object | Select-Object -Property * -ExcludeProperty nTSecurityDescriptor
-    try{$obj.ObjectGUID = $Object.ObjectGUID}
-    catch{$module.FailJson("Adding objectGUid Line:112 $($_.Exception.Message)", $_)}
     return $obj
 }
 
