@@ -49,7 +49,7 @@ options:
         the OU and all child OU's.
     type: str
     default: present
-    choices: [ present, absent ]
+    choices: [ 'present', 'absent' ]
   recursive:
     description:
       - Removes the OU and any child items it contains.
@@ -58,32 +58,32 @@ options:
     default: false
   domain_server:
     description:
-    - Specifies the Active Directory Domain Services instance to connect to.
-    - Can be in the form of an FQDN or NetBIOS name.
-    - If not specified then the value is based on the domain of the computer
-      running PowerShell.
+      - Specifies the Active Directory Domain Services instance to connect to.
+      - Can be in the form of an FQDN or NetBIOS name.
+      - If not specified then the value is based on the domain of the computer
+        running PowerShell.
     type: str
   domain_username:
     description:
-    - The username to use when interacting with AD.
-    - If this is not set then the user Ansible used to log in with will be
-      used instead when using CredSSP or Kerberos with credential delegation.
+      - The username to use when interacting with AD.
+      - If this is not set then the user Ansible used to log in with will be
+        used instead when using CredSSP or Kerberos with credential delegation.
     type: str
   domain_password:
-    type: str
     description:
-    - The password for the domain you are accessing
-  filter:
+      - The password for the domain you are accessing
     type: str
+  filter:
     description: filter for lookup of ou.
+    type: str
     default: '*'
   properties:
     type: dict
     description:
       - Free form dict of properties for the organizational unit.
       - Key should be in camelCase.
-      - syntax is Key: Value. ie `City: Gainesville`
-      - For more information on available properties see https://docs.microsoft.com/en-us/powershell/module/activedirectory/set-adorganizationalunit.
+      - For more information on available properties see 
+        https://docs.microsoft.com/en-us/powershell/module/activedirectory/set-adorganizationalunit.
       
 '''
 
