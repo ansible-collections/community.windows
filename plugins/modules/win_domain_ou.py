@@ -76,7 +76,6 @@ options:
   filter:
     description: filter for lookup of ou.
     type: str
-    default: '*'
   properties:
     type: dict
     description:
