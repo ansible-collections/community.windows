@@ -82,7 +82,7 @@ options:
     description:
       - Free form dict of properties for the organizational unit.
       - Key should be in camelCase.
-      - For more information on available properties see 
+      - For more information on available properties see
         https://docs.microsoft.com/en-us/powershell/module/activedirectory/set-adorganizationalunit.
 '''
 
