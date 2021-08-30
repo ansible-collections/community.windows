@@ -9,7 +9,10 @@ DOCUMENTATION = r'''
 ---
 module: win_domain_ou
 short_description: Manage Active Directory Organizational Units
-author: Joe Zollo (@joezollo), Larry Lane (@gamethis)
+version_added: 1.7.0
+author:
+- Joe Zollo (@joezollo)
+- Larry Lane (@gamethis)
 requirements:
   - This module requires Windows Server 2012 or Newer
 description:
@@ -77,7 +80,11 @@ options:
   properties:
     type: dict
     description:
-      - Defines specific LDAP properties for the organizational unit.
+      - Free form dict of properties for the organizational unit.
+      - Key should be in camelCase.
+      - syntax is Key: Value. ie `City: Gainesville`
+      - For more information on available properties see https://docs.microsoft.com/en-us/powershell/module/activedirectory/set-adorganizationalunit.
+      
 '''
 
 EXAMPLES = r'''
@@ -109,10 +116,10 @@ EXAMPLES = r'''
     properties:
       city: Sandy Springs
       state: Georgia
-      street_address: 1155 Perimeter Center West
+      StreetAddress: 1155 Perimeter Center West
       country: US
       description: EUC Business Unit
-      postal_code: 30189
+      postalCode: 30189
   delegate_to: win-ad1.euc.vmware.lab
 
 - name: Ensure OU updated with new properties
