@@ -82,7 +82,7 @@ Function Compare-OuObject {
     }else{
         $x = Compare-Object -ReferenceObject $Original -DifferenceObject $Updated
     }
-    $x.Count -eq 0
+    return $x.Count -eq 0
 }
 
 Function Get-SimulatedOu {
@@ -159,7 +159,7 @@ if ($state -eq "present") {
         Try {
             $module.Result.params = $parms
             $module.Result.extra_args = $onboard_extra_args
-            New-ADOrganizationalUnit @parms @onboard_extra_args -ProtectedFromAccidentalDeletion $protected -WhatIf:$check_mode
+            $current_ou = New-ADOrganizationalUnit @parms @onboard_extra_args -ProtectedFromAccidentalDeletion $protected -WhatIf:$check_mode
         }Catch {
             $module.FailJson("Failed to create organizational unit: $($_.Exception.Message)", $_)
         }
@@ -210,11 +210,11 @@ if (-not $check_mode) {
         $Module.FailJson("Failed to Get-ADOrganizationalUnit: Line 245 $($_.Exception.Message)", $_)
     }
     # compare old/new objects
+    $module.Result.ou = Get-OuObject -Object $current_ou
+    $module.Diff.after = Get-OuObject -Object $new_ou
     if (-not (Compare-OuObject -Original $current_ou -Updated $new_ou -properties $extra_args.Properties)) {
         $module.Result.changed = $true
-        $module.Result.ou = Get-OuObject -Object $new_ou
-        $module.Diff.after = Get-OuObject -Object $new_ou
-    }
+    }else{}
 }
 
 # simulate changes
