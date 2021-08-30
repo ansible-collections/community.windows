@@ -84,7 +84,6 @@ options:
       - Key should be in camelCase.
       - For more information on available properties see 
         https://docs.microsoft.com/en-us/powershell/module/activedirectory/set-adorganizationalunit.
-      
 '''
 
 EXAMPLES = r'''
