@@ -143,7 +143,7 @@
     properties:
       country: US
       description: EUC Business Unit
-      postal_code: 30189
+      postalCode: 30189
   register: test7
   failed_when: test7 is not changed
 
@@ -154,7 +154,7 @@
     properties:
       country: US
       description: EUC Business Unit
-      postal_code: 30189
+      postalCode: 30189
   register: test7a
   failed_when: test7a is changed
 
@@ -218,7 +218,7 @@
           street_address: 1155 Perimeter Center West
           country: US
           description: EUC Business Unit
-          postal_code: 30189
+          postalCode: 30189
       register: test2c
       failed_when: test2c is changed
 
@@ -247,7 +247,7 @@
         properties:
           city: Sandy Springs
           state: Georgia
-          street_address: 1155 Perimeter Center West
+          streetAddress: 1155 Perimeter Center West
       register: test5c
       failed_when: test5c is changed
 
@@ -258,7 +258,7 @@
         properties:
           country: US
           description: EUC Business Unit
-          postal_code: 30189
+          postalCode: 30189
       register: test6c
       failed_when: test6c is changed
 
