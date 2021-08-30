@@ -45,16 +45,7 @@ if ($module.Params.properties.count -ne 0){
     $extra_args.Properties = ""
     $module.Params.properties.Keys | Foreach-Object{
         $extra_args.Properties = New-Object Collections.Generic.List[string]
-        $item = $_
-        [string]$keyName
-        if ( $item.Contains("_") ){
-            $item.Split("_") | Foreach-Object{
-                $keyName = $keyname + $_.substring(0,1).toupper() + $_.substring(1).tolower()
-            }
-        }else{
-            $keyName = $item.substring(0,1).toupper() + $item.substring(1).tolower()
-        }
-        $extra_args.Properties.Add($keyName)
+        $extra_args.Properties.Add($_)
     }
 }else{
     $extra_args.Properties = '*'
@@ -73,16 +64,7 @@ $recursive = $module.Params.recursive
 $parms = @{}
 if ($module.Params.properties.count -ne 0){
     $module.Params.properties.Keys | ForEach-Object{
-        $item = $_
-        $keyName = ""
-        if ($item.Contains("_")){
-            $item.Split("_") | Foreach-Object{
-                $keyName = $keyname + $_.substring(0,1).toupper() + $_.substring(1).tolower()
-            }
-        }else{
-            $keyName = $item.substring(0,1).toupper() + $item.substring(1).tolower()
-        }
-        $parms.Add($keyName,$module.Params.properties.Item($_))
+        $parms.Add($_,$module.Params.properties.Item($_))
     }
 }
 $module.Result.params = $parms
@@ -124,57 +106,9 @@ Function Get-SimulatedOu {
     # convert to psobject & return
     [PSCustomObject]$parms
 }
-function Convert-ObjectToSnakeCase {
-    <#
-        .SYNOPSIS
-        Converts an object with CamelCase properties to a dictionary with snake_case keys.
-        Works in the spirit of and depends on the existing CamelConversion module util.
-    #>
-    [CmdletBinding()]
-    param(
-        [Parameter(Mandatory=$true,ValueFromPipeline=$true)]
-        [OutputType([System.Collections.Specialized.OrderedDictionary])]
-        [Object]
-        $InputObject ,
-
-        [Parameter()]
-        [Switch]
-        $NoRecurse ,
-
-        [Parameter()]
-        [Switch]
-        $OmitNull
-    )
-
-    Process {
-        $result = [Ordered]@{}
-        foreach ($property in $InputObject.PSObject.Properties) {
-            $value = $property.Value
-            if (-not $NoRecurse -and $value -is [System.Collections.IDictionary]) {
-                $value = Convert-DictToSnakeCase -dict $value
-            }
-            elseif (-not $NoRecurse -and ($value -is [Array] -or $value -is [System.Collections.ArrayList])) {
-                $value = Convert-ListToSnakeCase -list $value
-            }
-            elseif ($null -eq $value) {
-                if ($OmitNull) {
-                    continue
-                }
-            }
-            elseif (-not $NoRecurse -and $value -isnot [System.ValueType] -and $value -isnot [string]) {
-                $value = Convert-ObjectToSnakeCase -InputObject $value
-            }
-
-            $name = Convert-StringToSnakeCase -string $property.Name
-            $result[$name] = $value
-        }
-        $result
-    }
-}
 Function Get-OuObject {
     Param([PSObject]$Object)
     $obj = $Object | Select-Object -Property * -ExcludeProperty ObjectGUID,nTSecurityDescriptor
-    $obj = Convert-ObjectToSnakeCase -InputObject $obj -NoRecurse
     try{$obj.object_guid = $Object.ObjectGUID}
     catch{$module.FailJson("Adding objectGUid $($_.Exception.Message)", $_)}
     return $obj
