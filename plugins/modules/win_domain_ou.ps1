@@ -42,15 +42,15 @@ if ($null -ne $module.Params.domain_server) {
     $onboard_extra_args.Server = $module.Params.domain_server
 }
 if ($module.Params.properties.count -ne 0){
-    $extra_args.Properties = ""
+    $Properties = New-Object Collections.Generic.List[string]
     $module.Params.properties.Keys | Foreach-Object{
-        $extra_args.Properties = New-Object Collections.Generic.List[string]
-        $extra_args.Properties.Add($_)
+        $Properties.Add($_)
     }
+    $extra_args.Properties = $Properties
 }else{
     $extra_args.Properties = '*'
+    $Properties = '*'
 }
-
 
 $extra_args.Filter = $module.Params.filter
 $check_mode = $module.CheckMode
@@ -61,6 +61,7 @@ $path = $module.Params.path
 $state = $module.Params.state
 $recursive = $module.Params.recursive
 
+# setup Dynamic Params
 # setup Dynamic Params
 $parms = @{}
 if ($module.Params.properties.count -ne 0){
@@ -159,7 +160,7 @@ if ($state -eq "present") {
         Try {
             $module.Result.params = $parms
             $module.Result.extra_args = $onboard_extra_args
-            $current_ou = New-ADOrganizationalUnit @parms @onboard_extra_args -ProtectedFromAccidentalDeletion $protected -WhatIf:$check_mode
+            New-ADOrganizationalUnit @parms @onboard_extra_args -ProtectedFromAccidentalDeletion $protected -WhatIf:$check_mode
         }Catch {
             $module.FailJson("Failed to create organizational unit: $($_.Exception.Message)", $_)
         }
