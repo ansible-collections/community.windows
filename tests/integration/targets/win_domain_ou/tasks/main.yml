@@ -1,3 +1,6 @@
 ---
 - name: Run the specified test
   include_tasks: "{{ win_domain_ou_test_type }}.yml"
+
+- name: Run Tests
+  import_tasks: tests.yml

@@ -23,7 +23,7 @@
     whoami
     try{Import-Module ActiveDirectory}
     catch{
-      start-sleep -seconds 5
+      start-sleep -seconds 10
       Import-Module ActiveDirectory
     }
   ignore_errors: true
@@ -32,6 +32,3 @@
 - name: Reboot Again
   ansible.windows.win_reboot:
   when: import_test is failed
-
-- name: Run Tests
-  include_tasks: quick.yml
