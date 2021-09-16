@@ -137,7 +137,7 @@ if ($null -eq $path){
         $module.FailJson("Line 137: Path was null and unable to determine default domain $($_.Exception.Message)", $_)
     }
     if ($matched){
-        $path = $matches.Values[0]    
+        $path = $matches.Values[0]
     }else{
         $module.FailJson("Line 142: Unable to find default domain $($_.Exception.Message)", $_)
     }
@@ -214,7 +214,7 @@ if (-not $check_mode) {
     }catch{
         $module.FailJson("Line 215: Failed to Get-ADOrganizationalUnit: $($_.Exception.Message)", $_)
     }
-   
+
     $module.Diff.after = Get-OuObject -Object $new_ou
     $module.Result.ou = $module.Diff.after
     # compare old/new objects
