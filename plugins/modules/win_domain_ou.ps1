@@ -5,7 +5,6 @@
 # GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 
 #AnsibleRequires -CSharpUtil Ansible.Basic
-#Requires -Module Ansible.ModuleUtils.CamelConversion
 #Requires -Module ActiveDirectory
 
 $spec = @{
@@ -121,11 +120,11 @@ Function Get-OuObject {
 
 # attempt import of module
 Try { Import-Module ActiveDirectory }
-Catch { $module.FailJson("Line 124: The ActiveDirectory module failed to load properly: $($_.Exception.Message)", $_) }
+Catch { $module.FailJson("The ActiveDirectory module failed to load properly: $($_.Exception.Message)", $_) }
 
 Try{
     $all_ous = Get-ADOrganizationalUnit @extra_args
-}Catch{$module.FailJson("Line 128: Get-ADOrganizationalUnit failed: $($_.Exception.Message)", $_) }
+}Catch{$module.FailJson("Get-ADOrganizationalUnit failed: $($_.Exception.Message)", $_) }
 
 # set path if not defined to base domain
 if ($null -eq $path){
@@ -134,12 +133,12 @@ if ($null -eq $path){
     }elseif ($($all_ous | Measure-Object | Select-Object -ExpandProperty Count) -gt 1) {
         $matched = $all_ous[0].DistinguishedName -match "DC=.+"
     }else{
-        $module.FailJson("Line 137: Path was null and unable to determine default domain $($_.Exception.Message)", $_)
+        $module.FailJson("Path was null and unable to determine default domain $($_.Exception.Message)", $_)
     }
     if ($matched){
         $path = $matches.Values[0]
     }else{
-        $module.FailJson("Line 142: Unable to find default domain $($_.Exception.Message)", $_)
+        $module.FailJson("Unable to find default domain $($_.Exception.Message)", $_)
     }
 }
 
@@ -164,7 +163,7 @@ if ($state -eq "present") {
         Try {
             New-ADOrganizationalUnit @params @onboard_extra_args -ProtectedFromAccidentalDeletion $protected -WhatIf:$check_mode
         }Catch {
-            $module.FailJson("Line 167: Failed to create organizational unit: $($_.Exception.Message)", $_)
+            $module.FailJson("Failed to create organizational unit: $($_.Exception.Message)", $_)
         }
         $module.Result.Changed = $true
     }
@@ -174,7 +173,7 @@ if ($state -eq "present") {
         Try {
             Set-ADOrganizationalUnit -Identity "OU=$name,$path" @params @onboard_extra_args -WhatIf:$check_mode
         }Catch {
-            $module.FailJson("Line 177: Failed to update organizational unit: $($_.Exception.Message)", $_)
+            $module.FailJson("Failed to update organizational unit: $($_.Exception.Message)", $_)
         }
     }
 }
@@ -186,7 +185,7 @@ if ($state -eq "absent") {
             # override protected from accidental deletion
             Set-ADOrganizationalUnit -Identity "OU=$name,$path" -ProtectedFromAccidentalDeletion $false @onboard_extra_args -Confirm:$False -WhatIf:$check_mode
         }Catch{
-            $module.FailJson("Line 184: Failed to remove ProtectedFromAccidentalDeletion Lock: $($_.Exception.Message)", $_)
+            $module.FailJson("Failed to remove ProtectedFromAccidentalDeletion Lock: $($_.Exception.Message)", $_)
         }
         try{
             # check recursive deletion
@@ -197,7 +196,7 @@ if ($state -eq "absent") {
             }
             $module.Diff.after = ""
         } Catch {
-            $module.FailJson("Line 200: Failed to remove OU: $($_.Exception.Message)", $_)
+            $module.FailJson("Failed to remove OU: $($_.Exception.Message)", $_)
         }
         $module.Result.changed = $true
     }
@@ -212,7 +211,7 @@ if (-not $check_mode) {
             $_.DistinguishedName -eq "OU=$name,$path"
         }
     }catch{
-        $module.FailJson("Line 215: Failed to Get-ADOrganizationalUnit: $($_.Exception.Message)", $_)
+        $module.FailJson("Failed to Get-ADOrganizationalUnit: $($_.Exception.Message)", $_)
     }
 
     $module.Diff.after = Get-OuObject -Object $new_ou
