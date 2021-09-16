@@ -54,7 +54,6 @@ if ($module.Params.properties.count -ne 0){
 
 $extra_args.Filter = $module.Params.filter
 $check_mode = $module.CheckMode
-
 $name = $module.Params.name
 $protected = $module.Params.protected
 $path = $module.Params.path
@@ -62,24 +61,32 @@ $state = $module.Params.state
 $recursive = $module.Params.recursive
 
 # setup Dynamic Params
-# setup Dynamic Params
-$parms = @{}
+$params = @{}
 if ($module.Params.properties.count -ne 0){
     $module.Params.properties.Keys | ForEach-Object{
-        $parms.Add($_,$module.Params.properties.Item($_))
+        $params.Add($_,$module.Params.properties.Item($_))
     }
 }
-$module.Result.params = $parms
+# capture settings to know what we are doing
+$module.Result.params = $params
+$module.Result.extra_args = $extra_args
+$module.Result.onboard_extra_args = $onboard_extra_args
+$module.Result.properties = $properties
 
 Function Compare-OuObject {
     Param(
         [PSObject]$Original,
         [PSObject]$Updated,
-        [string]$properties
+        $properties
     )
-    if ($Original -eq $false) { return $false }
+    if (($Null -eq $Original) -or ($Original -eq $false)) { return $false }
     if ($properties -ne '*'){
         $x = Compare-Object -ReferenceObject $Original -DifferenceObject $Updated -Property $properties
+        #$module.Result.original = $Original | ConvertTo-Json -Compress
+        #$module.Result.updated = $Updated | ConvertTo-Json -Compress
+        #$module.Result.compare_properties = $properties
+        #$module.FailJson("Testing: failed compare $($x.count) $($properties.GetType().Name)")
+
     }else{
         $x = Compare-Object -ReferenceObject $Original -DifferenceObject $Updated
     }
@@ -88,58 +95,55 @@ Function Compare-OuObject {
 
 Function Get-SimulatedOu {
     Param($Object)
-
-    $parms = @{
+    $params = @{
         Name = $Object.name
         DistinguishedName = "OU=$($Object.name),$($Object.path)"
         ProtectedFromAccidentalDeletion = $Object.protected
     }
-
     if ($Object.properties) {
-        if ($Object.properties.description) { $parms.Description = $Object.properties.description }
-        if ($Object.properties.city) { $parms.City = $Object.properties.city }
-        if ($Object.properties.state) { $parms.State = $Object.properties.state }
-        if ($Object.properties.street_address) { $parms.StreetAddress = $Object.properties.street_address }
-        if ($Object.properties.postal_code) { $parms.PostalCode = $Object.properties.postal_code }
-        if ($Object.properties.country) { $parms.Country = $Object.properties.country }
-        if ($Object.properties.managed_by) { $parms.ManagedBy = $Object.properties.managed_by }
+        if ($Object.properties.description) { $params.Description = $Object.properties.description }
+        if ($Object.properties.city) { $params.City = $Object.properties.city }
+        if ($Object.properties.state) { $params.State = $Object.properties.state }
+        if ($Object.properties.street_address) { $params.StreetAddress = $Object.properties.street_address }
+        if ($Object.properties.postal_code) { $params.PostalCode = $Object.properties.postal_code }
+        if ($Object.properties.country) { $params.Country = $Object.properties.country }
+        if ($Object.properties.managed_by) { $params.ManagedBy = $Object.properties.managed_by }
     }
-
     # convert to psobject & return
-    [PSCustomObject]$parms
+    [PSCustomObject]$params
 }
+
 Function Get-OuObject {
     Param([PSObject]$Object)
-    $obj = $Object | Select-Object -Property * -ExcludeProperty nTSecurityDescriptor
+    $obj = $Object | Select-Object -Property * -ExcludeProperty nTSecurityDescriptor | ConvertTo-Json -Depth 1 | ConvertFrom-Json
     return $obj
 }
 
 # attempt import of module
 Try { Import-Module ActiveDirectory }
-Catch { $module.FailJson("The ActiveDirectory module failed to load properly: $($_.Exception.Message)", $_) }
+Catch { $module.FailJson("Line 124: The ActiveDirectory module failed to load properly: $($_.Exception.Message)", $_) }
 
 Try{
-    $module.Result.extra_args = $extra_args
     $all_ous = Get-ADOrganizationalUnit @extra_args
-}Catch{$module.FailJson("Line 191: Get-ADOrganizationalUnit failed: $($_.Exception.Message)", $_) }
-
+}Catch{$module.FailJson("Line 128: Get-ADOrganizationalUnit failed: $($_.Exception.Message)", $_) }
 
 # set path if not defined to base domain
 if ($null -eq $path){
     if ($($all_ous | Measure-Object | Select-Object -ExpandProperty Count) -eq 1){
         $matched = $all_ous.DistinguishedName -match "DC=.+"
-
     }elseif ($($all_ous | Measure-Object | Select-Object -ExpandProperty Count) -gt 1) {
         $matched = $all_ous[0].DistinguishedName -match "DC=.+"
     }else{
-        $module.FailJson("path was null and unable to determine default domain $($_.Exception.Message)", $_)
+        $module.FailJson("Line 137: Path was null and unable to determine default domain $($_.Exception.Message)", $_)
     }
     if ($matched){
-        $path = $matches.Values[0]
+        $path = $matches.Values[0]    
     }else{
-        $module.FailJson("Unable to find default domain $($_.Exception.Message)", $_)
+        $module.FailJson("Line 142: Unable to find default domain $($_.Exception.Message)", $_)
     }
 }
+
+$module.Result.path = $path
 
 # determine if requested OU exist
 Try {
@@ -151,29 +155,26 @@ Try {
     $module.Diff.before = ""
     $current_ou = $false
 }
-
 if ($state -eq "present") {
     # ou does not exist, create object
     if(-not $current_ou) {
-        $parms.Name = $name
-        $parms.Path = $path
+        $params.Name = $name
+        $params.Path = $path
+        $module.Result.params = $params
         Try {
-            $module.Result.params = $parms
-            $module.Result.extra_args = $onboard_extra_args
-            New-ADOrganizationalUnit @parms @onboard_extra_args -ProtectedFromAccidentalDeletion $protected -WhatIf:$check_mode
+            New-ADOrganizationalUnit @params @onboard_extra_args -ProtectedFromAccidentalDeletion $protected -WhatIf:$check_mode
         }Catch {
-            $module.FailJson("Failed to create organizational unit: $($_.Exception.Message)", $_)
+            $module.FailJson("Line 167: Failed to create organizational unit: $($_.Exception.Message)", $_)
         }
+        $module.Result.Changed = $true
     }
 
     # ou exists, update object
     if ($current_ou) {
         Try {
-            $module.Result.params = $parms
-            $module.Result.extra_args = $onboard_extra_args
-            Set-ADOrganizationalUnit -Identity "OU=$name,$path" @parms @onboard_extra_args -WhatIf:$check_mode
+            Set-ADOrganizationalUnit -Identity "OU=$name,$path" @params @onboard_extra_args -WhatIf:$check_mode
         }Catch {
-            $module.FailJson("Failed to update organizational unit: $($_.Exception.Message)", $_)
+            $module.FailJson("Line 177: Failed to update organizational unit: $($_.Exception.Message)", $_)
         }
     }
 }
@@ -183,19 +184,22 @@ if ($state -eq "absent") {
     if ($current_ou -and -not $check_mode) {
         Try {
             # override protected from accidental deletion
-            $module.Result.extra_args = $onboard_extra_args
             Set-ADOrganizationalUnit -Identity "OU=$name,$path" -ProtectedFromAccidentalDeletion $false @onboard_extra_args -Confirm:$False -WhatIf:$check_mode
+        }Catch{
+            $module.FailJson("Line 184: Failed to remove ProtectedFromAccidentalDeletion Lock: $($_.Exception.Message)", $_)
+        }
+        try{
             # check recursive deletion
             if ($recursive) {
                 Remove-ADOrganizationalUnit -Identity "OU=$name,$path" -Confirm:$False -WhatIf:$check_mode -Recursive @onboard_extra_args
             }else {
                 Remove-ADOrganizationalUnit -Identity "OU=$name,$path" -Confirm:$False -WhatIf:$check_mode @onboard_extra_args
             }
-            $module.Result.changed = $true
             $module.Diff.after = ""
         } Catch {
-            $module.FailJson("Failed to remove OU: $($_.Exception.Message)", $_)
+            $module.FailJson("Line 200: Failed to remove OU: $($_.Exception.Message)", $_)
         }
+        $module.Result.changed = $true
     }
     $module.ExitJson()
 }
@@ -208,28 +212,30 @@ if (-not $check_mode) {
             $_.DistinguishedName -eq "OU=$name,$path"
         }
     }catch{
-        $Module.FailJson("Failed to Get-ADOrganizationalUnit: Line 245 $($_.Exception.Message)", $_)
+        $module.FailJson("Line 215: Failed to Get-ADOrganizationalUnit: $($_.Exception.Message)", $_)
     }
-    # compare old/new objects
-    $module.Result.ou = Get-OuObject -Object $current_ou
+   
     $module.Diff.after = Get-OuObject -Object $new_ou
-    if (-not (Compare-OuObject -Original $current_ou -Updated $new_ou -properties $extra_args.Properties)) {
+    $module.Result.ou = $module.Diff.after
+    # compare old/new objects
+    if(-not (Compare-OuObject -Original $module.Diff.before -Updated $module.Diff.after -properties $module.Result.extra_args.Properties)) {
         $module.Result.changed = $true
-    }else{}
+    }
 }
 
 # simulate changes
 if ($check_mode -and $current_ou) {
     $new_ou = @{}
     $current_ou.PropertyNames | ForEach-Object {
-            if ($parms[$_.Name]) { $new_ou[$_.Name] = $parms[$_.Name] }
+            if ($params[$_.Name]) { $new_ou[$_.Name] = $params[$_.Name] }
             else { $new_ou[$_.Name] = $_.Value }
     }
     $module.Diff.after = Get-OuObject -Object $new_ou
+    $module.Result.ou = $module.Diff.after
 }
 # simulate new ou created
 if ($check_mode -and -not $current_ou) {
-    $simulated_ou = Get-SimulatedOu -Object $parms
+    $simulated_ou = Get-SimulatedOu -Object $params
     $module.Diff.after = Get-OuObject -Object $simulated_ou
 }
 
