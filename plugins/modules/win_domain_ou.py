@@ -78,7 +78,7 @@ options:
   properties:
     type: dict
     description:
-      - Free form dict of properties for the organizational unit.
+      - Free form dict of properties for the organizational unit. Follows LDAP property names, like StreetAddress or PostalCode.
 '''
 
 EXAMPLES = r'''
