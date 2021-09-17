@@ -34,14 +34,14 @@
   register: test1a
   failed_when: test1a is changed
 
-- name: Ensure OU is present
+- name: Ensure OU is present with path
   community.windows.win_domain_ou:
     name: End User Computing
     path: "{{ win_domain_ou_root_path }}"
   register: test2
   failed_when: test2 is not changed
 
-- name: Ensure OU is present (idempotence check)
+- name: Ensure OU is present with path (idempotence check)
   community.windows.win_domain_ou:
     name: End User Computing
     path: "{{ win_domain_ou_root_path }}"
@@ -56,10 +56,10 @@
     properties:
       city: Sandy Springs
       state: Georgia
-      street_address: 1155 Perimeter Center West
+      streetaddress: 1155 Perimeter Center West
       country: US
       description: EUC Business Unit
-      postal_code: 30189
+      postalcode: 30189
   register: test3
   failed_when: test3 is not changed
 
@@ -71,10 +71,10 @@
     properties:
       city: Sandy Springs
       state: Georgia
-      street_address: 1155 Perimeter Center West
+      streetaddress: 1155 Perimeter Center West
       country: US
       description: EUC Business Unit
-      postal_code: 30189
+      postalcode: 30189
   register: test3a
   failed_when: test3a is changed
 
@@ -121,7 +121,7 @@
     properties:
       city: Sandy Springs
       state: Georgia
-      street_address: 1155 Perimeter Center West
+      streetaddress: 1155 Perimeter Center West
   register: test6
   failed_when: test6 is not changed
 
@@ -132,7 +132,7 @@
     properties:
       city: Sandy Springs
       state: Georgia
-      street_address: 1155 Perimeter Center West
+      streetaddress: 1155 Perimeter Center West
   register: test6a
   failed_when: test6a is changed
 
@@ -143,7 +143,7 @@
     properties:
       country: US
       description: EUC Business Unit
-      postalCode: 30189
+      postalcode: 30189
   register: test7
   failed_when: test7 is not changed
 
@@ -154,7 +154,7 @@
     properties:
       country: US
       description: EUC Business Unit
-      postalCode: 30189
+      postalcode: 30189
   register: test7a
   failed_when: test7a is changed
 
@@ -190,13 +190,17 @@
   register: test9a
   failed_when: test9a is changed
 
+- name: debug
+  ansible.builtin.debug:
+    var: test1a.ou.Name
+
 - name: Assertions
   assert:
     that:
-      - test1a.ou.name == "AnsibleFest"
-      - test3a.ou.street_address == "1155 Perimeter Center West"
-      - test7a.ou.country == "US"
-      - test6a.ou.city == "Sandy Springs"
+      - test1a.ou.Name == "AnsibleFest"
+      - test3a.ou.StreetAddress == "1155 Perimeter Center West"
+      - test7a.ou.Country == "US"
+      - test6a.ou.City == "Sandy Springs"
 
 - name: Run Check Mode Tests
   block:
@@ -215,10 +219,10 @@
         properties:
           city: Sandy Springs
           state: Georgia
-          street_address: 1155 Perimeter Center West
+          streetaddress: 1155 Perimeter Center West
           country: US
           description: EUC Business Unit
-          postalCode: 30189
+          postalcode: 30189
       register: test2c
       failed_when: test2c is changed
 
@@ -247,7 +251,7 @@
         properties:
           city: Sandy Springs
           state: Georgia
-          streetAddress: 1155 Perimeter Center West
+          streetaddress: 1155 Perimeter Center West
       register: test5c
       failed_when: test5c is changed
 
@@ -258,7 +262,7 @@
         properties:
           country: US
           description: EUC Business Unit
-          postalCode: 30189
+          postalcode: 30189
       register: test6c
       failed_when: test6c is changed
 
