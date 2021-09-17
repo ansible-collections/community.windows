@@ -66,11 +66,6 @@ if ($module.Params.properties.count -ne 0){
         $params.Add($_,$module.Params.properties.Item($_))
     }
 }
-# capture settings to know what we are doing
-$module.Result.params = $params
-$module.Result.extra_args = $extra_args
-$module.Result.onboard_extra_args = $onboard_extra_args
-$module.Result.properties = $properties
 
 Function Compare-OuObject {
     Param(
