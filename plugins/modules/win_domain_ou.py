@@ -110,10 +110,10 @@ EXAMPLES = r'''
     properties:
       city: Sandy Springs
       state: Georgia
-      street_address: 1155 Perimeter Center West
+      StreetAddress: 1155 Perimeter Center West
       country: US
       description: EUC Business Unit
-      postal_code: 30189
+      PostalCode: 30189
   delegate_to: win-ad1.euc.vmware.lab
 
 - name: Ensure OU updated with new properties
@@ -124,7 +124,7 @@ EXAMPLES = r'''
     properties:
       city: Atlanta
       state: Georgia
-      managed_by: jzollo@vmware.com
+      managedBy: jzollo@vmware.com
   delegate_to: win-ad1.euc.vmware.lab
 '''
 
@@ -142,11 +142,11 @@ ou:
     modified:
     protected:
     properties:
-      display_name:
+      displayName:
       description:
       city:
-      street_address:
-      postal_code:
+      streetAddress:
+      postalCode:
       country:
-      managed_by:
+      managedBY:
 '''
