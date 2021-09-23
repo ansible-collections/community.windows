@@ -226,8 +226,6 @@ releases:
         trigger by documenting the human friendly values for ``state_change``
       - win_scheduled_task_state - Added ``state_change_str`` to the trigger output
         to give a human readable description of the value
-      release_summary:
-      - Release summary for v1.6.0
       security_fixes:
       - win_psexec - Ensure password is masked in ``psexec_command`` return result
         - https://github.com/ansible-collections/community.windows/issues/43
@@ -237,3 +235,27 @@ releases:
     - win_dns_record-txtsupport.yml
     - win_psexec-cmd-output.yml
     release_date: '2021-07-27'
+  1.7.0:
+    changes:
+      bugfixes:
+      - win_dns_record - Fix issue when trying to use the ``computer_name`` option
+        - https://github.com/ansible-collections/community.windows/issues/276
+      - win_domain_user - Fallback to NETBIOS username for password verification check
+        if the UPN is not set - https://github.com/ansible-collections/community.windows/pull/289
+      - 'win_initialize_disk - Ensure ``online: False`` doesn''t bring the disk online
+        again - https://github.com/ansible-collections/community.windows/pull/268'
+      - win_lineinfile - Fix up diff output with ending newlines - https://github.com/ansible-collections/community.windows/pull/283
+      - win_region - Fix ``copy_settings`` on a host that has disabled ``reg.exe``
+        access - https://github.com/ansible-collections/community.windows/issues/287
+      minor_changes:
+      - win_domain_user - Added ``sam_account_name`` to explicitly set the ``sAMAccountName``
+        property of an object - https://github.com/ansible-collections/community.windows/issues/281
+    fragments:
+    - 1.7.0-release.yml
+    - win_dns_record-comp-name.yml
+    - win_domain_user-missing-upn.yml
+    - win_domain_user_samaccount.yml
+    - win_initialize_disk-offline.yml
+    - win_lineinfile-diff.yml
+    - win_region_hardened_registry.yml
+    release_date: '2021-09-23'

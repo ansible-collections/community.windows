@@ -5,13 +5,25 @@ Community Windows Release Notes
 .. contents:: Topics
 
 
-v1.6.0
+v1.7.0
 ======
 
-Release Summary
----------------
+Minor Changes
+-------------
 
-- Release summary for v1.6.0
+- win_domain_user - Added ``sam_account_name`` to explicitly set the ``sAMAccountName`` property of an object - https://github.com/ansible-collections/community.windows/issues/281
+
+Bugfixes
+--------
+
+- win_dns_record - Fix issue when trying to use the ``computer_name`` option - https://github.com/ansible-collections/community.windows/issues/276
+- win_domain_user - Fallback to NETBIOS username for password verification check if the UPN is not set - https://github.com/ansible-collections/community.windows/pull/289
+- win_initialize_disk - Ensure ``online: False`` doesn't bring the disk online again - https://github.com/ansible-collections/community.windows/pull/268
+- win_lineinfile - Fix up diff output with ending newlines - https://github.com/ansible-collections/community.windows/pull/283
+- win_region - Fix ``copy_settings`` on a host that has disabled ``reg.exe`` access - https://github.com/ansible-collections/community.windows/issues/287
+
+v1.6.0
+======
 
 Minor Changes
 -------------

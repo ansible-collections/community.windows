@@ -1,3 +1,0 @@
-bugfixes:
-- >-
-  win_initialize_disk - Ensure ``online: False`` doesn't bring the disk online again - https://github.com/ansible-collections/community.windows/pull/268
