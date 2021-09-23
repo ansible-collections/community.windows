@@ -1,2 +1,0 @@
-bugfixes:
-- win_region - Fix ``copy_settings`` on a host that has disabled ``reg.exe`` access - https://github.com/ansible-collections/community.windows/issues/287

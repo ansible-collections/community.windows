@@ -16,7 +16,7 @@ community.windows.win_scheduled_task
 
 Synopsis
 --------
-- Creates/modified or removes Windows scheduled tasks.
+- Creates/modifies or removes Windows scheduled tasks.
 
 
 

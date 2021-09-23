@@ -1,2 +1,0 @@
-bugfixes:
-- win_lineinfile - Fix up diff output with ending newlines - https://github.com/ansible-collections/community.windows/pull/283
