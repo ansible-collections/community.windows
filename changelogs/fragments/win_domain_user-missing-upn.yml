@@ -1,0 +1,2 @@
+bugfixes:
+- win_domain_user - Fallback to NETBIOS username for password verification check if the UPN is not set - https://github.com/ansible-collections/community.windows/pull/289

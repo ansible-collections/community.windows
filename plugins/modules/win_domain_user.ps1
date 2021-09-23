@@ -141,7 +141,7 @@ Function Get-PrincipalGroups {
 }
 
 try {
-    $user_obj = Get-ADUser -Identity $identity -Properties * @extra_args
+    $user_obj = Get-ADUser -Identity $identity -Properties ('*','msDS-PrincipalName') @extra_args
     $user_guid = $user_obj.ObjectGUID
 }
 catch [Microsoft.ActiveDirectory.Management.ADIdentityNotFoundException] {
@@ -175,7 +175,7 @@ If ($state -eq 'present') {
         If ($check_mode) {
             Exit-Json $result
         }
-        $user_obj = Get-ADUser -Identity $user_guid -Properties * @extra_args
+        $user_obj = Get-ADUser -Identity $user_guid -Properties ('*','msDS-PrincipalName') @extra_args
     }
 
     If ($password) {
@@ -186,7 +186,14 @@ If ($state -eq 'present') {
         If ($new_user -or ($update_password -eq "always")) {
             $set_new_credentials = $true
         } elseif ($update_password -eq "when_changed") {
-            $set_new_credentials = -not (Test-Credential -Username $user_obj.UserPrincipalName -Password $password)
+            $user_identifier = If ($user_obj.UserPrincipalName) {
+                $user_obj.UserPrincipalName
+            }
+            else {
+                $user_obj.'msDS-PrincipalName'
+            }
+
+            $set_new_credentials = -not (Test-Credential -Username $user_identifier -Password $password)
         } else {
             $set_new_credentials = $false
         }
