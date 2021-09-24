@@ -134,19 +134,31 @@ ou:
   returned: When l(state=present)
   type: dict
   sample:
-    name:
-    guid:
-    distinguished_name:
-    canonoical_name:
-    created:
-    modified:
-    protected:
-    properties:
-      displayName:
-      description:
-      city:
-      streetAddress:
-      postalCode:
-      country:
-      managedBY:
+    AddedProperties: []
+    City: "Sandy Springs"
+    Country: null
+    DistinguishedName: "OU=VMW Atlanta,DC=ansible,DC=test"
+    LinkedGroupPolicyObjects: []
+    ManagedBy: null
+    ModifiedProperties: []
+    Name: "VMW Atlanta"
+    ObjectClass: "organizationalUnit"
+    ObjectGUID: "3e987e30-93ad-4229-8cd0-cff6a91275e4"
+    PostalCode: null
+    PropertyCount: 11
+    PropertyNames:
+      City
+      Country
+      DistinguishedName
+      LinkedGroupPolicyObjects
+      ManagedBy
+      Name
+      ObjectClass
+      ObjectGUID
+      PostalCode
+      State
+      StreetAddress
+    RemovedProperties: []
+    State: "Georgia"
+    StreetAddress: "1155 Perimeter Center West"
 '''
