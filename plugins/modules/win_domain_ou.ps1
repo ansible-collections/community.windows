@@ -232,12 +232,10 @@ if (-not $check_mode) {
             $module.FailJson("Failed to Get-ADOrganizationalUnit: $($_.Exception.Message)", $_)
         }
     }
-
     $module.Diff.after = $new_ou
     $module.Result.ou = Get-OuObject $module.Diff.after
     # compare old/new objects
     $module.Result.changed = Compare-OuObject -module $module
-    
 }
 
 # simulate changes
