@@ -1,0 +1,87 @@
+---
+- name: Run Check Mode Tests
+  block:
+    - name: Ensure OU is present (check_mode)
+      community.windows.win_domain_ou:
+        name: ansible_checkmode
+      register: test1c
+      failed_when: test1c is changed
+    
+    - name: Ensure OU has updated properties (check_mode)
+      community.windows.win_domain_ou:
+        name: End User Computing
+        protected: true
+        path: "{{ win_domain_ou_root_path }}"
+        properties:
+          city: Sandy Springs
+          state: Georgia
+          streetaddress: 1155 Perimeter Center West
+          country: US
+          description: EUC Business Unit
+          postalcode: 30189
+      register: test2c
+      failed_when: test2c is changed
+
+    - name: Ensure OU structure is present (check_mode)
+      community.windows.win_domain_ou:
+        name: "{{ item.name }}"
+        protected: false
+        path: "{{ item.path }}"
+      loop: "{{ win_domain_ou_structure }}"
+      register: test3c
+      failed_when: test3c is changed
+
+    - name: Ensure OU structure is absent, recursive (check_mode)
+      community.windows.win_domain_ou:
+        name: VMware
+        path: "{{ win_domain_ou_root_path }}"
+        state: absent
+        recursive: true
+      register: test4c
+      failed_when: test4c is changed
+
+    - name: Ensure OU is present with specific properties (check_mode)
+      community.windows.win_domain_ou:
+        name: VMW Atlanta
+        path: "{{ win_domain_ou_root_path }}"
+        properties:
+          city: Sandy Springs
+          state: Georgia
+          streetaddress: 1155 Perimeter Center West
+      register: test5c
+      failed_when: test5c is changed
+
+    - name: Ensure OU is present with specific properties added (check_mode)
+      community.windows.win_domain_ou:
+        name: VMW Atlanta
+        path: "{{ win_domain_ou_root_path }}"
+        properties:
+          country: US
+          description: EUC Business Unit
+          postalcode: 30189
+      register: test6c
+      failed_when: test6c is changed
+
+    - name: Ensure OU is absent (check_mode)
+      community.windows.win_domain_ou:
+        name: End User Computing
+        path: "{{ win_domain_ou_root_path }}"
+        state: absent
+      register: test7c
+      failed_when: test7c is changed
+
+    - name: Ensure OU is absent (check_mode)
+      community.windows.win_domain_ou:
+        name: VMW Atlanta
+        path: "{{ win_domain_ou_root_path }}"
+        state: absent
+      register: test8c
+      failed_when: test8c is changed
+  check_mode: true
+
+- name: sanity check on check_mode
+  ansible.windows.win_shell: |
+    get-adorganizationalunit -Identity ansible_checkmode
+  register: test1d
+  failed_when: "'ansible_checkmode' in test1d.stdout"
+  changed_when: false
