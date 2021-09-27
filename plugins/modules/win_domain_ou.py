@@ -10,7 +10,7 @@ DOCUMENTATION = r'''
 module: win_domain_ou
 short_description: Manage Active Directory Organizational Units
 author: ['Joe Zollo (@joezollo)', 'Larry Lane (@gamethis)']
-version_added: 1.7.0
+version_added: 1.8.0
 requirements:
   - This module requires Windows Server 2012 or Newer
 description:
