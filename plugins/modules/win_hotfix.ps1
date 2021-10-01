@@ -88,7 +88,9 @@ Function Get-HotfixMetadataFromFile($extract_path) {
     }
     [xml]$xml = Get-Content -LiteralPath $metadata_path.FullName
 
-    $cab_source_filename = $xml.unattend.servicing.package.source.GetAttribute("location")
+	$source = $xml.unattend.servicing.package
+	$source = $source | foreach-object {$_.source.location}
+	$source | foreach-object{$cab_source_filename =  $_
     $cab_source_filename = Split-Path -Path $cab_source_filename -Leaf
     $cab_file = Join-Path -Path $extract_path -ChildPath $cab_source_filename
 
@@ -123,6 +125,7 @@ Function Get-HotfixMetadataFromFile($extract_path) {
     }
 
     return $metadata
+}
 }
 
 Function Get-HotfixMetadataFromKB($kb) {
