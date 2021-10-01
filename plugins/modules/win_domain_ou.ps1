@@ -151,12 +151,12 @@ if ($null -eq $path){
     }elseif ($($all_ous | Measure-Object | Select-Object -ExpandProperty Count) -gt 1) {
         $matched = $all_ous[0].DistinguishedName -match "DC=.+"
     }else{
-        $module.FailJson("Path was null and unable to determine default domain $($_.Exception.Message)", $_)
+        $module.FailJson("Path was null and unable to determine default domain $($_.Exception.Message)")
     }
     if ($matched){
         $path = $matches.Values[0]
     }else{
-        $module.FailJson("Unable to find default domain $($_.Exception.Message)", $_)
+        $module.FailJson("Unable to find default domain $($_.Exception.Message)")
     }
 }
 $module.Result.path = $path
@@ -207,7 +207,7 @@ if ($state -eq "absent") {
             try{
                 Remove-ADOrganizationalUnit -Identity "OU=$name,$path" -Confirm:$False -WhatIf:$check_mode -Recursive @onboard_extra_args
             }catch{
-                $module.FailJson("Failed to recurssively Remove-ADOrganizationalUnit $($_.Exception.Message)", $_)
+                $module.FailJson("Failed to recursively Remove-ADOrganizationalUnit $($_.Exception.Message)", $_)
             }
         }else{
             try{
