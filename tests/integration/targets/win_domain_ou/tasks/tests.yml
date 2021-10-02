@@ -1,27 +1,4 @@
 ---
-- name: Wait for ADWS
-  community.windows.win_wait_for_process:
-    process_name_exact: Microsoft.ActiveDirectory.WebServices
-    timeout: 120
-    sleep: 5
-    process_min_count: 1
-
-- name: Try Import Again
-  block:
-    - name: Try Import-Module
-      ansible.windows.win_shell: |
-        whoami
-        try{Import-Module ActiveDirectory}
-        catch{
-          start-sleep -seconds 5
-          Import-Module ActiveDirectory
-        }
-      register: import_test2
-  rescue:
-    - name: Try Import-Module
-      ansible.windows.win_shell: C:\Windows\system32\WindowsPowerShell\v1.0\Modules\ActiveDirectory\ActiveDirectory.psd1
-      register: import_test3
-
 - name: Ensure OU is present
   community.windows.win_domain_ou:
     name: AnsibleFest
