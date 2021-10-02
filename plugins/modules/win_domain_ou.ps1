@@ -5,6 +5,7 @@
 # GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 
 #AnsibleRequires -CSharpUtil Ansible.Basic
+#Requires -Module Ansible.ModuleUtils.CamelConversion
 #Requires -Module ActiveDirectory
 
 $spec = @{
@@ -66,28 +67,50 @@ if ($module.Params.properties.count -ne 0){
         $params.Add($_,$module.Params.properties.Item($_))
     }
 }
+# capture settings to know what we are doing
+$module.Result.params = $params
+$module.Result.extra_args = $extra_args
+$module.Result.onboard_extra_args = $onboard_extra_args
+$module.Result.properties = $properties
+
+Function Compare-OuObject {
+    Param(
+        [PSObject]$Original,
+        [PSObject]$Updated,
+        $properties
+    )
+    if (($Null -eq $Original) -or ($Original -eq $false)) { return $false }
+    if ($properties -ne '*'){
+        $x = Compare-Object -ReferenceObject $Original -DifferenceObject $Updated -Property $properties
+        #$module.Result.original = $Original | ConvertTo-Json -Compress
+        #$module.Result.updated = $Updated | ConvertTo-Json -Compress
+        #$module.Result.compare_properties = $properties
+        #$module.FailJson("Testing: failed compare $($x.count) $($properties.GetType().Name)")
+
+    }else{
+        $x = Compare-Object -ReferenceObject $Original -DifferenceObject $Updated
+    }
+    return $x.Count -eq 0
+}
 
 Function Get-SimulatedOu {
     Param($Object)
-    $ou = @{
+    $params = @{
         Name = $Object.name
         DistinguishedName = "OU=$($Object.name),$($Object.path)"
         ProtectedFromAccidentalDeletion = $Object.protected
-        Properties = New-Object Collections.Generic.List[string]
     }
-    $ou.Properties.Add("Name")
-    $ou.Properties.Add("DistinguishedName")
-    $ou.Properties.Add("ProtectedFromAccidentalDeletion")
-    if ($Object.Params.properties.Count -ne 0){
-        $Object.Params.properties.Keys | ForEach-Object{
-            $property = $_
-            $module.Result.simulate_property = $property
-            $ou.Add($property,$Object.Params.properties.Item($property))
-            $ou.Properties.Add($property)
-        }
+    if ($Object.properties) {
+        if ($Object.properties.description) { $params.Description = $Object.properties.description }
+        if ($Object.properties.city) { $params.City = $Object.properties.city }
+        if ($Object.properties.state) { $params.State = $Object.properties.state }
+        if ($Object.properties.street_address) { $params.StreetAddress = $Object.properties.street_address }
+        if ($Object.properties.postal_code) { $params.PostalCode = $Object.properties.postal_code }
+        if ($Object.properties.country) { $params.Country = $Object.properties.country }
+        if ($Object.properties.managed_by) { $params.ManagedBy = $Object.properties.managed_by }
     }
     # convert to psobject & return
-    [PSCustomObject]$ou
+    [PSCustomObject]$params
 }
 
 Function Get-OuObject {
@@ -98,10 +121,11 @@ Function Get-OuObject {
 
 # attempt import of module
 Try { Import-Module ActiveDirectory }
-Catch { $module.FailJson("The ActiveDirectory module failed to load properly: $($_.Exception.Message)", $_) }
+Catch { $module.FailJson("Line 124: The ActiveDirectory module failed to load properly: $($_.Exception.Message)", $_) }
+
 Try{
     $all_ous = Get-ADOrganizationalUnit @extra_args
-}Catch{$module.FailJson("Get-ADOrganizationalUnit failed: $($_.Exception.Message)", $_) }
+}Catch{$module.FailJson("Line 128: Get-ADOrganizationalUnit failed: $($_.Exception.Message)", $_) }
 
 # set path if not defined to base domain
 if ($null -eq $path){
@@ -110,129 +134,109 @@ if ($null -eq $path){
     }elseif ($($all_ous | Measure-Object | Select-Object -ExpandProperty Count) -gt 1) {
         $matched = $all_ous[0].DistinguishedName -match "DC=.+"
     }else{
-        $module.FailJson("Path was null and unable to determine default domain $($_.Exception.Message)")
+        $module.FailJson("Line 137: Path was null and unable to determine default domain $($_.Exception.Message)", $_)
     }
     if ($matched){
         $path = $matches.Values[0]
     }else{
-        $module.FailJson("Unable to find default domain $($_.Exception.Message)")
+        $module.FailJson("Line 142: Unable to find default domain $($_.Exception.Message)", $_)
     }
 }
+
 $module.Result.path = $path
 
 # determine if requested OU exist
-$current_ou = $false
 Try {
     $current_ou = $all_ous | Where-Object {
             $_.DistinguishedName -eq "OU=$name,$path"}
     $module.Diff.before = Get-OuObject -Object $current_ou
-    $module.Result.ou = Get-OuObject $module.Diff.before
+    $module.Result.ou = $module.Diff.before
 } Catch {
     $module.Diff.before = ""
     $current_ou = $false
 }
-
-# determine if ou needs created
-if (($state -eq "present") -and (-not $current_ou)){
-$create_ou = $true
-}else{
-$create_ou = $false
-}
-
-# determine if ou needs change
-$update_ou = $false
-if (($state -eq "present") -and ($create_ou -eq $false)){
-    if ($module.Params.properties.Count -ne 0){
-        $changed_properties = New-Object Collections.Generic.List[hashtable]
-        $module.Params.properties.Keys | ForEach-Object{
-            $property = $_
-            $current_value = $current_ou.Item($property)
-            $requested_value = $module.Params.properties.Item($property)
-            if (-not ($current_value -eq $requested_value) ){
-                $changed_properties.Add(
-                    @{
-                        "Actual_$property"= $current_value
-                        "Requested_$property" =  $requested_value
-                    }
-                )
-            }
-        }
-        if ($changed_properties.Count -ge 1){
-            $update_ou = $true
-        }
-    }
-}
-
 if ($state -eq "present") {
     # ou does not exist, create object
-    if($create_ou) {
+    if(-not $current_ou) {
         $params.Name = $name
         $params.Path = $path
+        $module.Result.params = $params
         Try {
             New-ADOrganizationalUnit @params @onboard_extra_args -ProtectedFromAccidentalDeletion $protected -WhatIf:$check_mode
         }Catch {
-            $module.FailJson("Failed to create organizational unit: $($_.Exception.Message)", $_)
+            $module.FailJson("Line 167: Failed to create organizational unit: $($_.Exception.Message)", $_)
         }
-        $module.Result.changed = $true
-        if ($check_mode){
-            $module.Diff.after = Get-SimulatedOu -Object $module
-        }else{
-            $new_ou = Get-ADOrganizationalUnit @extra_args | Where-Object {
-                $_.DistinguishedName -eq "OU=$name,$path"
-            }
-            $module.Diff.after = Get-OuObject -Object $new_ou 
-        }
+        $module.Result.Changed = $true
     }
-    # ou exists, update object if needed
-    if ($update_ou){
+
+    # ou exists, update object
+    if ($current_ou) {
         Try {
             Set-ADOrganizationalUnit -Identity "OU=$name,$path" @params @onboard_extra_args -WhatIf:$check_mode
-            $module.Result.changed = $true
         }Catch {
-            $module.FailJson("Failed to update organizational unit: $($_.Exception.Message)", $_)
-        }
-        if ($check_mode){
-            $module.Diff.after = Get-SimulatedOu -Object $module
-        }else{
-            $new_ou = Get-ADOrganizationalUnit @extra_args | Where-Object {
-                $_.DistinguishedName -eq "OU=$name,$path"
-            }
-            $module.Diff.after = Get-OuObject -Object $new_ou 
+            $module.FailJson("Line 177: Failed to update organizational unit: $($_.Exception.Message)", $_)
         }
     }
 }
 
 if ($state -eq "absent") {
     # ou exists, delete object
-    if ($current_ou) {
+    if ($current_ou -and -not $check_mode) {
         Try {
             # override protected from accidental deletion
             Set-ADOrganizationalUnit -Identity "OU=$name,$path" -ProtectedFromAccidentalDeletion $false @onboard_extra_args -Confirm:$False -WhatIf:$check_mode
-            $module.Result.changed = $true
         }Catch{
-            $module.FailJson("Failed to remove ProtectedFromAccidentalDeletion Lock: $($_.Exception.Message)", $_)
+            $module.FailJson("Line 184: Failed to remove ProtectedFromAccidentalDeletion Lock: $($_.Exception.Message)", $_)
         }
+        try{
             # check recursive deletion
-        if ($recursive) {
-            try{
+            if ($recursive) {
                 Remove-ADOrganizationalUnit -Identity "OU=$name,$path" -Confirm:$False -WhatIf:$check_mode -Recursive @onboard_extra_args
-                $module.Result.changed = $true
-                $module.Diff.after = ""
-                $module.Result.ou = ""
-            }catch{
-                $module.FailJson("Failed to recursively Remove-ADOrganizationalUnit $($_.Exception.Message)", $_)
-            }
-        }else{
-            try{
+            }else {
                 Remove-ADOrganizationalUnit -Identity "OU=$name,$path" -Confirm:$False -WhatIf:$check_mode @onboard_extra_args
-                $module.Result.changed = $true
-                $module.Diff.after = ""
-                $module.Result.ou = ""
-            }Catch{
-                $module.FailJson("Failed to Remove-ADOrganizationalUnit: $($_.Exception.Message)", $_)
             }
+            $module.Diff.after = ""
+        } Catch {
+            $module.FailJson("Line 200: Failed to remove OU: $($_.Exception.Message)", $_)
         }
+        $module.Result.changed = $true
     }
+    $module.ExitJson()
+}
+
+# determine if a change was made
+if (-not $check_mode) {
+    try{
+        $module.Result.extra_args = $extra_args
+        $new_ou = Get-ADOrganizationalUnit @extra_args | Where-Object {
+            $_.DistinguishedName -eq "OU=$name,$path"
+        }
+    }catch{
+        $module.FailJson("Line 215: Failed to Get-ADOrganizationalUnit: $($_.Exception.Message)", $_)
+    }
+
+    $module.Diff.after = Get-OuObject -Object $new_ou
+    $module.Result.ou = $module.Diff.after
+    # compare old/new objects
+    if(-not (Compare-OuObject -Original $module.Diff.before -Updated $module.Diff.after -properties $module.Result.extra_args.Properties)) {
+        $module.Result.changed = $true
+    }
+}
+
+# simulate changes
+if ($check_mode -and $current_ou) {
+    $new_ou = @{}
+    $current_ou.PropertyNames | ForEach-Object {
+            if ($params[$_.Name]) { $new_ou[$_.Name] = $params[$_.Name] }
+            else { $new_ou[$_.Name] = $_.Value }
+    }
+    $module.Diff.after = Get-OuObject -Object $new_ou
+    $module.Result.ou = $module.Diff.after
+}
+# simulate new ou created
+if ($check_mode -and -not $current_ou) {
+    $simulated_ou = Get-SimulatedOu -Object $params
+    $module.Diff.after = Get-OuObject -Object $simulated_ou
 }
 
 $module.ExitJson()
