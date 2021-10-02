@@ -10,3 +10,13 @@ win_domain_ou_structure:
     name: Workspace ONE Cloud Services
   - path: "OU=Workspace ONE Cloud Services,OU=End User Computing,OU=VMware,{{ win_domain_ou_root_path }}"
     name: SaaS Development and Enablement
+
+win_domain_ou_structure_check_mode:
+  - path: "{{ win_domain_ou_root_path }}"
+    name: VMware_check
+  - path: "OU=VMware_check,{{ win_domain_ou_root_path }}"
+    name: End User Computing
+  - path: "OU=End User Computing,OU=VMware_check,{{ win_domain_ou_root_path }}"
+    name: Workspace ONE Cloud Services
+  - path: "OU=Workspace ONE Cloud Services,OU=End User Computing,OU=VMware_check,{{ win_domain_ou_root_path }}"
+    name: SaaS Development and Enablement
