@@ -83,6 +83,7 @@ options:
 '''
 
 EXAMPLES = r'''
+---
 - name: Ensure OU is present & protected
   community.windows.win_domain_ou:
     name: AnsibleFest
@@ -131,12 +132,15 @@ EXAMPLES = r'''
 
 RETURN = r'''
 path:
-  description: Base ou path used by module either when provided I(path=DC=Ansible,DC=Test) or derived by module.
+  description:
+    - Base ou path used by module either when provided I(path=DC=Ansible,DC=Test) or derived by module.
+  returned: always
   type: str
   sample:
     path: "DC=ansible,DC=test"
 ou:
-  description: New/Updated organizational unit parameters
+  description: 
+    - New/Updated organizational unit parameters
   returned: When I(state=present)
   type: dict
   sample:
