@@ -180,7 +180,7 @@ if ($state -eq "present") {
             $new_ou = Get-ADOrganizationalUnit @extra_args | Where-Object {
                 $_.DistinguishedName -eq "OU=$name,$path"
             }
-            $module.Diff.after = Get-OuObject -Object $new_ou 
+            $module.Diff.after = Get-OuObject -Object $new_ou
         }
     }
     # ou exists, update object if needed
@@ -197,7 +197,7 @@ if ($state -eq "present") {
             $new_ou = Get-ADOrganizationalUnit @extra_args | Where-Object {
                 $_.DistinguishedName -eq "OU=$name,$path"
             }
-            $module.Diff.after = Get-OuObject -Object $new_ou 
+            $module.Diff.after = Get-OuObject -Object $new_ou
         }
     }
 }
