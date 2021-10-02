@@ -10,9 +10,10 @@ DOCUMENTATION = r'''
 module: win_domain_ou
 short_description: Manage Active Directory Organizational Units
 author: ['Joe Zollo (@joezollo)', 'Larry Lane (@gamethis)']
-version_added: 1.7.0
+version_added: 1.8.0
 requirements:
   - This module requires Windows Server 2012 or Newer
+  - Powershell ActiveDirectory Module
 description:
   - Manage Active Directory Organizational Units
   - Adds, Removes and Modifies Active Directory Organizational Units
@@ -26,7 +27,7 @@ options:
   protected:
     description:
       - Indicates whether to prevent the object from being deleted. When this
-        l(protected=true), you cannot delete the corresponding object without
+        I(protected=true), you cannot delete the corresponding object without
         changing the value of the property.
     type: bool
     default: false
@@ -40,10 +41,10 @@ options:
   state:
     description:
       - Specifies the desired state of the OU.
-      - When l(state=present) the module will attempt to create the specified
+      - When I(state=present) the module will attempt to create the specified
         OU if it does not already exist.
-      - When l(state=absent), the module will remove the specified OU.
-      - When l(state=absent) and l(recursive=true), the module will remove all
+      - When I(state=absent), the module will remove the specified OU.
+      - When I(state=absent) and I(recursive=true), the module will remove all
         the OU and all child OU's.
     type: str
     default: present
@@ -78,7 +79,7 @@ options:
   properties:
     type: dict
     description:
-      - Free form dict of properties for the organizational unit.
+      - Free form dict of properties for the organizational unit. Follows LDAP property names, like C(StreetAddress) or C(PostalCode).
 '''
 
 EXAMPLES = r'''
@@ -110,10 +111,10 @@ EXAMPLES = r'''
     properties:
       city: Sandy Springs
       state: Georgia
-      street_address: 1155 Perimeter Center West
+      StreetAddress: 1155 Perimeter Center West
       country: US
       description: EUC Business Unit
-      postal_code: 30189
+      PostalCode: 30189
   delegate_to: win-ad1.euc.vmware.lab
 
 - name: Ensure OU updated with new properties
@@ -124,29 +125,46 @@ EXAMPLES = r'''
     properties:
       city: Atlanta
       state: Georgia
-      managed_by: jzollo@vmware.com
+      managedBy: jzollo@vmware.com
   delegate_to: win-ad1.euc.vmware.lab
 '''
 
 RETURN = r'''
+path: 
+  description: Base ou path used by module either when provided I(path=DC=Ansible,DC=Test) or derived by module.
+  type: str
+  sample:
+    path: "DC=ansible,DC=test"
 ou:
   description: New/Updated organizational unit parameters
-  returned: When l(state=present)
+  returned: When I(state=present)
   type: dict
   sample:
-    name:
-    guid:
-    distinguished_name:
-    canonoical_name:
-    created:
-    modified:
-    protected:
-    properties:
-      display_name:
-      description:
-      city:
-      street_address:
-      postal_code:
-      country:
-      managed_by:
+    AddedProperties: []
+    City: "Sandy Springs"
+    Country: null
+    DistinguishedName: "OU=VMW Atlanta,DC=ansible,DC=test"
+    LinkedGroupPolicyObjects: []
+    ManagedBy: null
+    ModifiedProperties: []
+    Name: "VMW Atlanta"
+    ObjectClass: "organizationalUnit"
+    ObjectGUID: "3e987e30-93ad-4229-8cd0-cff6a91275e4"
+    PostalCode: null
+    PropertyCount: 11
+    PropertyNames:
+      City
+      Country
+      DistinguishedName
+      LinkedGroupPolicyObjects
+      ManagedBy
+      Name
+      ObjectClass
+      ObjectGUID
+      PostalCode
+      State
+      StreetAddress
+    RemovedProperties: []
+    State: "Georgia"
+    StreetAddress: "1155 Perimeter Center West"
 '''
