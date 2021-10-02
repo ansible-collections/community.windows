@@ -13,6 +13,7 @@ author: ['Joe Zollo (@joezollo)', 'Larry Lane (@gamethis)']
 version_added: 1.8.0
 requirements:
   - This module requires Windows Server 2012 or Newer
+  - Powershell ActiveDirectory Module
 description:
   - Manage Active Directory Organizational Units
   - Adds, Removes and Modifies Active Directory Organizational Units
@@ -26,7 +27,7 @@ options:
   protected:
     description:
       - Indicates whether to prevent the object from being deleted. When this
-        l(protected=true), you cannot delete the corresponding object without
+        I(protected=true), you cannot delete the corresponding object without
         changing the value of the property.
     type: bool
     default: false
@@ -40,10 +41,10 @@ options:
   state:
     description:
       - Specifies the desired state of the OU.
-      - When l(state=present) the module will attempt to create the specified
+      - When I(state=present) the module will attempt to create the specified
         OU if it does not already exist.
-      - When l(state=absent), the module will remove the specified OU.
-      - When l(state=absent) and l(recursive=true), the module will remove all
+      - When I(state=absent), the module will remove the specified OU.
+      - When I(state=absent) and I(recursive=true), the module will remove all
         the OU and all child OU's.
     type: str
     default: present
@@ -78,7 +79,7 @@ options:
   properties:
     type: dict
     description:
-      - Free form dict of properties for the organizational unit. Follows LDAP property names, like StreetAddress or PostalCode.
+      - Free form dict of properties for the organizational unit. Follows LDAP property names, like C(StreetAddress) or C(PostalCode).
 '''
 
 EXAMPLES = r'''
@@ -129,9 +130,14 @@ EXAMPLES = r'''
 '''
 
 RETURN = r'''
+path: 
+  description: Base ou path used by module either when provided I(path=DC=Ansible,DC=Test) or derived by module.
+  type: str
+  sample:
+    path: "DC=ansible,DC=test"
 ou:
   description: New/Updated organizational unit parameters
-  returned: When l(state=present)
+  returned: When I(state=present)
   type: dict
   sample:
     AddedProperties: []
