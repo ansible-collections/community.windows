@@ -181,10 +181,6 @@
   register: test9a
   failed_when: test9a is changed
 
-- name: debug
-  ansible.builtin.debug:
-    var: test1a.ou.Name
-
 - name: Assertions
   assert:
     that:
