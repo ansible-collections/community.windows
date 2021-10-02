@@ -139,7 +139,7 @@ path:
   sample:
     path: "DC=ansible,DC=test"
 ou:
-  description: 
+  description:
     - New/Updated organizational unit parameters
   returned: When I(state=present)
   type: dict
