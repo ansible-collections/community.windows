@@ -130,7 +130,7 @@ EXAMPLES = r'''
 '''
 
 RETURN = r'''
-path: 
+path:
   description: Base ou path used by module either when provided I(path=DC=Ansible,DC=Test) or derived by module.
   type: str
   sample:
