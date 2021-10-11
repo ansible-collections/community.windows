@@ -1,0 +1,2 @@
+bugfixes:
+- win_audit_rule - Fix exception when trying to change a rule on a hidden or protected system file - https://github.com/ansible-collections/community.windows/issues/17
