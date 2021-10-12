@@ -225,7 +225,9 @@ if ($state -eq "absent") {
         } elseif ($hotfix_metadata.state -ne "Installed") {
             if (-not $check_mode) {
                 try {
-                    $install_result = Add-WindowsPackage -Online -PackagePath $hotfix_metadata.path -NoRestart
+227                 foreach($path in $hotfix_metadata.path) {
+228                     $install_result = Add-WindowsPackage -Online -PackagePath $path -NoRestart
+229                    }
                 } catch {
                     Fail-Json $result "failed to add windows package from path $($hotfix_metadata.path): $($_.Exception.Message)"
                 }
