@@ -32,7 +32,7 @@ $result = @{
 
 # Search disks
 try {
-    $disks = Get-Disk
+    $disks = Get-Disk | Where-Object { $null -ne $_.Number }
 } catch {
     Fail-Json -obj $result -message "Failed to search the disks on the target: $($_.Exception.Message)"
 }
