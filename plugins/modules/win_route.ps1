@@ -31,11 +31,8 @@ Function Add-Route {
     [bool]$CheckMode
     )
 
-
-  $IpAddress = $Destination.split('/')[0]
-
   # Check if the static route is already present
-  $Route = Get-CimInstance win32_ip4PersistedrouteTable -Filter "Destination = '$($IpAddress)'"
+  $Route = Get-NetRoute | Where-Object -FilterScript { $_.DestinationPrefix -EQ $Destination }
   if (!($Route)){
     try {
       # Find Interface Index
@@ -64,8 +61,8 @@ Function Remove-Route {
     [string]$Destination,
     [bool]$CheckMode
     )
-  $IpAddress = $Destination.split('/')[0]
-  $Route = Get-CimInstance win32_ip4PersistedrouteTable -Filter "Destination = '$($IpAddress)'"
+  # Check if the static route is already present
+  $Route = Get-NetRoute | Where-Object -FilterScript { $_.DestinationPrefix -EQ $Destination }
   if ($Route){
     try {
 
