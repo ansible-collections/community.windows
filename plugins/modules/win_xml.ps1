@@ -150,6 +150,7 @@ if ($nodeListCount -eq 0) {
 
 $changed = $false
 $result.msg = "not changed"
+$result.removed = ""
 
 if ($type -eq "element") {
     if ($state -eq "absent") {
@@ -159,7 +160,7 @@ if ($type -eq "element") {
                 $removedNode = $node.get_ParentNode().RemoveChild($node)
                 $changed = $true
                 if ($debug) {
-                    $result.removed += $result.removed + $removedNode.get_OuterXml()
+                    $result.removed += $removedNode.get_OuterXml() + ", "
                 }
             }
         }
