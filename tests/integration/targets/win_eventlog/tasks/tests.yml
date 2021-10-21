@@ -285,7 +285,31 @@
       state: present
     register: add_log_with_existing_source
     failed_when: add_log_with_existing_source.changed != false or add_log_with_existing_source.msg != "Source WinEventLogSource1 already exists and cannot be created"
+  
+  - name: remove WinEventLogSource2 source from event log
+    win_eventlog: 
+      <<: *wele_present
+      sources:
+        - WinEventLogSource2
+      state: absent
+      register: source_does_not_exist
+      failed_when: source_does_not_exist == false 
 
+  - name: Add new source to existing log
+    win_eventlog:
+      <<: *wele_present
+      sources:
+        - WinEventLogSource2
+      register: add_source_to_existing
+      failed_when: add_source_to_existing.changed == false or add_source_with_existing.msg != "Source WinEventLogSource2 already exists and cannot be created"
+  
+  - name: test new source in existing log
+    assert:
+      that:
+        - add_source_to_existing_log.changed == true
+        - add_source_to_existing_log.exists == true
+        - add_source_to_existing_log.sources == ["WinEventLogSource1", "WinEventLogSource2", "WinEventLogTest"]
+        - add_source_to_existing_log.sources_changed == ["WinEventLogSource2"]
 
   - name: Add new log
     win_eventlog:

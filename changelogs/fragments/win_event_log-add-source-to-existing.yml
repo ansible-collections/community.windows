@@ -1,0 +1,2 @@
+bugfixes:
+- win_eventlog - Added examples and tests for adding an event log source to an existing eventlog

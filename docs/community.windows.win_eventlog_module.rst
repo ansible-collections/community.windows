@@ -214,6 +214,12 @@ Examples
           - NewLogSource1
           - NewLogSource2
         state: present
+    
+    - name: Add a new custom source to an existing event log
+      community.windows.win_eventlog:
+        name: Application
+        sources:
+          - NewLogSource1
 
     - name: Change the category and message resource files used for NewLogSource1
       community.windows.win_eventlog:
