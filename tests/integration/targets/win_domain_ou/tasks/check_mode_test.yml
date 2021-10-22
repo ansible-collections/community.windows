@@ -1,0 +1,116 @@
+---
+- name: Setup structure for checkmode
+  block:
+    - name: Ensure OU structure is present
+      community.windows.win_domain_ou:
+        name: "{{ item.name }}"
+        protected: false
+        path: "{{ item.path }}"
+      loop: "{{ win_domain_ou_structure }}"
+      register: test_setup_checkmode
+      failed_when: test_setup_checkmode is not changed
+
+- name: Run Check Mode Tests
+  block:
+    - name: Ensure OU is present (check_mode)
+      community.windows.win_domain_ou:
+        name: ansible_checkmode
+      register: test_check_mode_1
+      failed_when: test_check_mode_1 is not changed
+
+    - name: Ensure OU has updated properties (check_mode)
+      community.windows.win_domain_ou:
+        name: End User Computing
+        protected: true
+        path: "{{ win_domain_ou_root_path }}"
+        properties:
+          city: Sandy Springs
+          state: Georgia
+          streetaddress: 1155 Perimeter Center West
+          country: US
+          description: EUC Business Unit
+          postalcode: 30189
+      register: test_check_mode_2
+      failed_when: test_check_mode_2 is not changed
+
+    - name: Ensure OU structure win_domain_ou_structure_check_mode is present (check_mode)
+      community.windows.win_domain_ou:
+        name: "{{ item.name }}"
+        protected: false
+        path: "{{ item.path }}"
+      loop: "{{ win_domain_ou_structure_check_mode }}"
+      register: test_check_mode_3
+      failed_when: test_check_mode_3 is not changed
+
+    - name: Ensure OU structure win_domain_ou_structure is present (check_mode)
+      community.windows.win_domain_ou:
+        name: "{{ item.name }}"
+        protected: false
+        path: "{{ item.path }}"
+      loop: "{{ win_domain_ou_structure }}"
+      register: test_check_mode_4
+      failed_when: test_check_mode_4 is changed
+
+    - name: Ensure OU structure is absent, recursive (check_mode)
+      community.windows.win_domain_ou:
+        name: VMware
+        path: "{{ win_domain_ou_root_path }}"
+        state: absent
+        recursive: true
+      register: test_check_mode_5
+      failed_when: test_check_mode_5 is not changed
+
+    - name: Ensure OU is present with specific properties (check_mode)
+      community.windows.win_domain_ou:
+        name: VMW Atlanta
+        path: "{{ win_domain_ou_root_path }}"
+        properties:
+          city: Sandy Springs
+          state: Georgia
+          streetaddress: 1155 Perimeter Center West
+      register: test_check_mode_6
+      failed_when: test_check_mode_6 is not changed
+
+    - name: Ensure OU is present with specific properties added (check_mode)
+      community.windows.win_domain_ou:
+        name: VMW Atlanta
+        path: "{{ win_domain_ou_root_path }}"
+        properties:
+          country: US
+          description: EUC Business Unit
+          postalcode: 30189
+      register: test_check_mode_7
+      failed_when: test_check_mode_7 is not changed
+
+    - name: Ensure existing ou 'End User Computing' is absent (check_mode)
+      community.windows.win_domain_ou:
+        name: End User Computing
+        path: "OU=VMware,{{ win_domain_ou_root_path }}"
+        state: absent
+      register: test_check_mode_8
+      failed_when: test_check_mode_8 is not changed
+
+    - name: Ensure NonExisting OU 'VMW Atlanta' is absent (check_mode)
+      community.windows.win_domain_ou:
+        name: "VMW Atlanta"
+        path: "{{ win_domain_ou_root_path }}"
+        state: absent
+      register: test_check_mode_9
+      failed_when: test_check_mode_9 is changed
+  check_mode: true
+
+- name: sanity check on check_mode
+  ansible.windows.win_shell: |
+    get-adorganizationalunit -Identity ansible_checkmode
+  register: test_sanity
+  failed_when: "'ansible_checkmode' in test_sanity.stdout"
+  changed_when: false
+
+- name: Teardown structure used for checkmode
+  community.windows.win_domain_ou:
+    name: VMware
+    path: "{{ win_domain_ou_root_path }}"
+    state: absent
+    recursive: true
+  register: test_teardown
+  failed_when: test_teardown is not changed

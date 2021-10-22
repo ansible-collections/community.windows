@@ -1,0 +1,6 @@
+---
+- name: Run Tests
+  import_tasks: tests.yml
+
+- name: Run Check Mode Tests
+  import_tasks: check_mode_test.yml
