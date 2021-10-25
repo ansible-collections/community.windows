@@ -288,20 +288,19 @@
   
   - name: remove WinEventLogSource2 source from event log
     win_eventlog: 
-      <<: *wele_present
+      name: NewWinEventLogTest
       sources:
         - WinEventLogSource2
       state: absent
-      register: source_does_not_exist
-      failed_when: source_does_not_exist == false 
 
   - name: Add new source to existing log
     win_eventlog:
-      <<: *wele_present
+      name: NewWinEventLogTest
       sources:
         - WinEventLogSource2
-      register: add_source_to_existing
-      failed_when: add_source_to_existing.changed == false or add_source_with_existing.msg != "Source WinEventLogSource2 already exists and cannot be created"
+      state: present
+    register: add_source_to_existing
+    failed_when: add_source_to_existing.changed == false or add_source_with_existing.msg != "Source WinEventLogSource2 already exists and cannot be created"
   
   - name: test new source in existing log
     assert:
