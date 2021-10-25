@@ -1,0 +1,3 @@
+bugfixes:
+- >-
+  win_xml - Fix removal operation when running with higher verbosities - https://github.com/ansible-collections/community.windows/issues/275
