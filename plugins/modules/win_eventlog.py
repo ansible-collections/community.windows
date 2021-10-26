@@ -30,6 +30,7 @@ options:
   sources:
     description:
       - A list of one or more sources to ensure are present/absent in the log.
+        When present along with an existing event log name, the new source will be added to the existing event log.
       - When C(category_file), C(message_file) and/or C(parameter_file) are specified,
         these values are applied across all sources.
     type: list
@@ -78,6 +79,12 @@ EXAMPLES = r'''
       - NewLogSource1
       - NewLogSource2
     state: present
+
+- name: Add a new custom source to an existing event log
+  community.windows.win_eventlog:
+    name: Application
+    sources:
+      - NewLogSource1  
 
 - name: Change the category and message resource files used for NewLogSource1
   community.windows.win_eventlog:
