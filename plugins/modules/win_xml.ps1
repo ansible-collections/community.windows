@@ -182,7 +182,7 @@ if ($type -eq "element") {
             [bool]$present = $false
             [bool]$changed = $false
             $element_count = $elements.get_Count()
-            if ($debug) {
+            if (($debug) -or ($count)) {
                 $nstatus = "node: " + $node.get_Value() + " element: " + $elements.get_OuterXml() + " Element count is $element_count"
                 Add-Warning $result $nstatus
             }
