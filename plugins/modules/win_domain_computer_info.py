@@ -16,13 +16,8 @@ description:
 options:
   identity:
     description:
-      Specifies an Active Directory computer object by providing one of the following property values.
-      The identifier in parentheses is the LDAP display name for the attribute.
-      The acceptable values for this parameter are:
-        - A distinguished name
-        - A GUID C(objectGUID)
-        - A security identifier C(objectSid)
-        - A Security Accounts Manager account name C(sAMAccountName)
+      - Specifies an Active Directory computer object by providing one of the following property values.
+      - A distinguished name, A GUID I(objectGUID), A security identifier I(objectSid), or A Security Accounts Manager account name I(sAMAccountName)
     type: str
   domain_server:
     description:
@@ -34,8 +29,7 @@ options:
   domain_username:
     description:
       - The username to use when interacting with AD.
-      - If this is not set then the user Ansible used to log in with will be
-        used instead when using CredSSP or Kerberos with credential delegation.
+      - If this is not set then the user Ansible used to log in with will be used instead when using CredSSP or Kerberos with credential delegation.
     type: str
   domain_password:
     description:
@@ -43,18 +37,18 @@ options:
     type: str
   properties:
     description:
-      - list of propterties to pass to Get-AdComputer
+      - list of propterties to pass to I(Get-AdComputer)
       - case insensitive
     type: list
     elements: str
-    default: ["*"]
+    default: ['*']
   excluded_properties:
     description:
       - list of properties to exclude from return
       - case insensitive
     type: list
     elements: str
-    default: ["DeclaredConstructors", "DeclaredMembers", "nTSecurityDescriptor"]
+    default: [ DeclaredConstructors, DeclaredMembers, nTSecurityDescriptor ]
   search_scope:
     description:
       - Specify the scope of when searching for a computer.
@@ -62,10 +56,7 @@ options:
         will not search any objects inside a container..
       - C(OneLevel) will search the current path and any immediate objects in that path.
       - C(Subtree) will search the current path and all objects of that path recursively.
-    choices:
-      - Base
-      - OneLevel
-      - Subtree
+    choices: [ Base, OneLevel, Subtree]
     type: str
   filter:
     description:
@@ -119,7 +110,7 @@ exists:
   sample: true
 computers:
   description:
-    - 1 or more computer object 
+    - 1 or more computer object
     - return contents depends on I(properties) and rights of user to view the Directory
     - Listed some of the most common below under I(contains)
   returned: When I(exists)
@@ -127,69 +118,80 @@ computers:
   elements: dict
   contains:
     AccountExpirationDate:
-      description: Accout Expiration Date
-      type: str
-    AccountExpires:
       description:
-      type: int
+        - Accout Expiration Date
+      type: str
     AccountLockoutTime:
-      description: Time of Account Lockout
+      description:
+        - Time of Account Lockout
       type: str
     BadLogonCount:
-      description: Number of bad loggons
+      description:
+        - Number of bad loggons
       type: int
     badPasswordTime:
-      description: Time of last bad loggon
+      description:
+        - Time of last bad loggon
+      type: str
     CanonicalName:
       description:
+        - Canonical Name of computer object
       type: str
     Created:
-      description: Date created
+      description:
+        - Date created
       type: str
     Description:
-      description: discription on computer object
+      description:
+        - discription on computer object
       type: str
     DisplayName:
-      description: Displayed name
+      description:
+        - Displayed name
       type: str
     DistinguishedName:
-      description: full cn of computer ie. CN=ANSIBLE-TESTER,OU=Domain Controllers,DC=ansible,DC=test
+      description:
+        - fully qualified CN of computer
+      sample: CN=ANSIBLE-TESTER,OU=Domain Controllers,DC=ansible,DC=test
       type: str
     DNSHostName:
-      description: fqdn name of system ie. ansible-tester.ansible.test
+      description:
+        - fqdn name of system ie. ansible-tester.ansible.test
       type: str
     Enabled:
-      description: Tells if computer object is enabled
+      description:
+        - Tells if computer object is enabled
       type: bool
     Name:
-      description: Name of computer object
+      description:
+        - Name of computer object
       type: str
     PasswordExpired:
-      description: Bool to tell if Password is expired
+      description:
+        - Bool to tell if Password is expired
       type: bool
     PasswordLastSet:
-      description: Date of last password set
+      description:
+        Date of last password set
       type: str
     PasswordNeverExpires:
       description: Bool to state if password never expires
       type: bool
     SamAccountName:
       description:
+        - Security Accounts Manager account name
       type: str
-    sAMAccountType:
-      description:
-      type: int
     SID:
-      description: Security Identifier
+      description:
+        - Security Identifier
       type: list
       elements: dict
-    SIDHistory :
-      description:
-      type: list
     whenChanged:
       description:
+        - last time computer object was changed
       type: str
     whenCreated:
       description:
+        - time when computer object was created
       type: str
 '''
