@@ -1,0 +1,61 @@
+---
+- name: Collect only selected facts
+  ansible.builtin.setup:
+    filter:
+      - ansible_hostname
+      - ansible_os_family
+
+- name: Get Computer Info
+  community.windows.win_domain_computer_info:
+    identity: "{{ ansible_hostname }}"
+  register: test1
+  failed_when: test1 is changed
+
+- name: Get Computer Info (idempotence check)
+  community.windows.win_domain_computer_info:
+    identity: "{{ ansible_hostname }}"
+  register: test1a
+  failed_when: test1a is changed
+
+- name: Get Computer Info with Properties
+  community.windows.win_domain_computer_info:
+    identity: "{{ ansible_hostname }}"
+    properties:
+      - name
+      - samaccountname
+      - dnshostname
+  register: test2
+  failed_when: test2 is changed
+
+- name: Get Computer Info with Properties (idempotence check)
+  community.windows.win_domain_computer_info:
+    identity: "{{ ansible_hostname }}"
+    properties:
+      - name
+      - samaccountname
+      - dnshostname
+  register: test2a
+  failed_when: test2a is changed
+
+- name: Search for non-existent computer
+  community.windows.win_domain_computer_info:
+    identity: "NonExistentComputer"
+    properties:
+      - name
+      - samaccountname
+      - dnshostname
+  register: test3
+  failed_when: test3.exists
+
+- name: show tests
+  ansible.builtin.debug:
+    var: test3
+    
+- name: Validate Assertions
+  assert:
+    that:
+      - test1.computers[0].SamAccountName == "ANSIBLE-TESTER$"
+      - test1a.computers[0].PrimaryGroup == "CN=Domain Controllers,CN=Users,DC=ansible,DC=test"
+      - test2.computers[0].DNSHostName == "ansible-tester.ansible.test"
+      - test2a.computers[0].Name == "ANSIBLE-TESTER"
+      - not test3.exists
