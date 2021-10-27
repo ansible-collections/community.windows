@@ -91,7 +91,7 @@ function Install-ScoopBucket {
     [Parameter(Mandatory = $true)] [String]$bucket,
     [String]$repo
   )
-  $arguments = [System.Collections.ArrayList]@("powershell.exe", $scoop_path, "bucket", "add")
+  $arguments = [System.Collections.Generic.List[String]]@("powershell.exe", $scoop_path, "bucket", "add")
   $arguments.Add($bucket)
   if ($repo) {
     $arguments.Add($repo)

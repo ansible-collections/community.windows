@@ -93,6 +93,7 @@ $spec = @{
         store_name     = @{ type = "str"; default = "My"; }
         store_location = @{ type = "str"; default = "LocalMachine"; choices = $store_location_values; }
     }
+    supports_check_mode = $true
 }
 
 $module = [Ansible.Basic.AnsibleModule]::Create($args, $spec)

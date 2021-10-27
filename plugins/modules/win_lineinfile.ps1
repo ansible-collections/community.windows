@@ -105,6 +105,9 @@ function Present($path, $regex, $line, $insertafter, $insertbefore, $create, $ba
 	}
 
 	if ($diff_support) {
+		if ($endswithnewline) {
+			$before += ""
+		}
 		$result.diff = @{
 			before = $before -join $linesep;
 		}
@@ -254,6 +257,7 @@ function Absent($path, $regex, $line, $backup, $validate, $encodingobj, $linesep
 		$alltext = [System.IO.File]::ReadAllText($cleanpath, $encodingobj);
 		If (($alltext[-1] -eq "`n") -or ($alltext[-1] -eq "`r")) {
 			$lines.Add("")
+			$before += ""
 		}
 	}
 

@@ -1,0 +1,3 @@
+---
+bugfixes:
+    - win_pssession_configuration - the associated action plugin detects check mode using a method that isn't always accurate (https://github.com/ansible-collections/community.windows/pull/318).

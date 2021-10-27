@@ -5,7 +5,6 @@
 
 #Requires -Module Ansible.ModuleUtils.CamelConversion
 #Requires -Module Ansible.ModuleUtils.Legacy
-#Requires -Module Ansible.ModuleUtils.SID
 
 $params = Parse-Args -arguments $args -supports_check_mode $true
 $_remote_tmp = Get-AnsibleParam $params "_ansible_remote_tmp" -type "path" -default $env:TMP
@@ -15,6 +14,47 @@ $name = Get-AnsibleParam -obj $params -name "name" -type "str"
 
 $result = @{
     changed = $false
+}
+
+Function ConvertTo-NormalizedUser {
+    [CmdletBinding()]
+    param (
+        [Parameter(Mandatory=$true)]
+        [String]$InputObject
+    )
+
+    $candidates = @(if ($InputObject.Contains('\')) {
+        $nameSplit = $InputObject.Split('\', 2)
+
+        if ($nameSplit[0] -eq '.') {
+            # If the domain portion is . try using the hostname then falling back to just the username.
+            # Usually the hostname just works except when running on a DC where it's a domain account
+            # where looking up just the username should work.
+            ,@($env:COMPUTERNAME, $nameSplit[1])
+            $nameSplit[1]
+        } else {
+            ,$nameSplit
+        }
+    } else {
+        $InputObject
+    })
+
+    $sid = for ($i = 0; $i -lt $candidates.Length; $i++) {
+        $candidate = $candidates[$i]
+        $ntAccount = New-Object -TypeName System.Security.Principal.NTAccount -ArgumentList $candidate
+        try {
+            $ntAccount.Translate([System.Security.Principal.SecurityIdentifier])
+            break
+        }
+        catch [System.Security.Principal.IdentityNotMappedException] {
+            if ($i -eq ($candidates.Length - 1)) {
+                throw
+            }
+            continue
+        }
+    }
+
+    $sid.Translate([System.Security.Principal.NTAccount]).Value
 }
 
 $task_enums = @"
@@ -234,12 +274,10 @@ Function Get-PropertyValue($task_property, $com, $property) {
             break
         }
         UserId {
-            $sid = Convert-ToSID -account_name $raw_value
-            $value = Convert-FromSid -sid $sid
+            $value = ConvertTo-NormalizedUser -InputObject $raw_value
         }
         GroupId {
-            $sid = Convert-ToSID -account_name $raw_value
-            $value = Convert-FromSid -sid $sid
+            $value = ConvertTo-NormalizedUser -InputObject $raw_value
         }
         default {
             $value = $raw_value

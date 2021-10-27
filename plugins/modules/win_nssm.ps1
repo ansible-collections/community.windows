@@ -48,7 +48,7 @@ $app_stop_method_skip = Get-AnsibleParam -obj $params -name "app_stop_method_ski
 # Deprecated options, will be removed in a major release after 2021-07-01.
 $startMode = Get-AnsibleParam -obj $params -name "start_mode" -type "str" -default "auto" -validateset $start_modes_map.Keys -resultobj $result
 $dependencies = Get-AnsibleParam -obj $params -name "dependencies" -type "list"
-$user = Get-AnsibleParam -obj $params -name "user" -type "str"
+$user = Get-AnsibleParam -obj $params -name "username" -type "str" -aliases "user"
 $password = Get-AnsibleParam -obj $params -name "password" -type "str"
 
 $result = @{
@@ -317,6 +317,66 @@ function Add-DepByDate {
     }
 }
 
+Function ConvertTo-NormalizedUser {
+    [CmdletBinding()]
+    param (
+        [Parameter(Mandatory=$true)]
+        [String]$InputObject
+    )
+
+    $systemSid = [System.Security.Principal.SecurityIdentifier]'S-1-5-18'
+
+    # Try to get the SID from the raw value or with LocalSystem (what services consider to be SYSTEM).
+    try {
+        $sid = New-Object -TypeName System.Security.Principal.SecurityIdentifier -ArgumentList $InputObject
+    }
+    catch [ArgumentException] {
+        if ($InputObject -eq "LocalSystem") {
+            $sid = $systemSid
+        }
+    }
+
+    if (-not $sid) {
+        $candidates = @(if ($InputObject.Contains('\')) {
+            $nameSplit = $InputObject.Split('\', 2)
+
+            if ($nameSplit[0] -eq '.') {
+                # If the domain portion is . try using the hostname then falling back to just the username.
+                # Usually the hostname just works except when running on a DC where it's a domain account
+                # where looking up just the username should work.
+                ,@($env:COMPUTERNAME, $nameSplit[1])
+                $nameSplit[1]
+            } else {
+                ,$nameSplit
+            }
+        } else {
+            $InputObject
+        })
+
+        $sid = for ($i = 0; $i -lt $candidates.Length; $i++) {
+            $candidate = $candidates[$i]
+            $ntAccount = New-Object -TypeName System.Security.Principal.NTAccount -ArgumentList $candidate
+            try {
+                $ntAccount.Translate([System.Security.Principal.SecurityIdentifier])
+                break
+            }
+            catch [System.Security.Principal.IdentityNotMappedException] {
+                if ($i -eq ($candidates.Length - 1)) {
+                    throw
+                }
+                continue
+            }
+        }
+    }
+
+    if ($sid -eq $systemSid) {
+        "LocalSystem"
+    }
+    else {
+        $sid.Translate([System.Security.Principal.NTAccount]).Value
+    }
+}
+
 if (($null -ne $appParameters) -and ($null -ne $appArguments)) {
     Fail-Json $result "'app_parameters' and 'arguments' are mutually exclusive but have both been set."
 }
@@ -349,42 +409,6 @@ if ($null -ne $appParameters) {
     # The rest of the code should use only the new $appArguments variable
 }
 
-if ($state -in @("started","stopped","restarted")) {
-    $dep = @{
-        Message = "The values 'started', 'stopped', and 'restarted' for 'state' will be removed soon, use the win_service module to start or stop the service instead"
-        Date = "2022-07-01"
-    }
-    Add-DepByDate @dep
-}
-if ($params.ContainsKey('start_mode')) {
-    $dep = @{
-        Message = "The parameter 'start_mode' will be removed soon, use the win_service module instead"
-        Date = "2022-07-01"
-    }
-    Add-DepByDate @dep
-}
-if ($null -ne $dependencies) {
-    $dep = @{
-        Message = "The parameter 'dependencies' will be removed soon, use the win_service module instead"
-        Date = "2022-07-01"
-    }
-    Add-DepByDate @dep
-}
-if ($null -ne $user) {
-    $dep = @{
-        Message = "The parameter 'user' will be removed soon, use the win_service module instead"
-        Date = "2022-07-01"
-    }
-    Add-DepByDate @dep
-}
-if ($null -ne $password) {
-    $dep = @{
-        Message = "The parameter 'password' will be removed soon, use the win_service module instead"
-        Date = "2022-07-01"
-    }
-    Add-DepByDate @dep
-}
-
 if ($state -ne 'absent') {
     if ($null -eq $application) {
         Fail-Json -obj $result -message "The application parameter must be defined when the state is not absent."
@@ -398,8 +422,25 @@ if ($state -ne 'absent') {
         $appDirectory = (Get-Item -LiteralPath $application).DirectoryName
     }
 
-    if ($user -and -not $password) {
-        Fail-Json -obj $result -message "User without password is informed for service ""$name"""
+    if ($user) {
+        $user = ConvertTo-NormalizedUser -InputObject $user
+        if ($user -in @(
+            (ConvertTo-NormalizedUser -InputObject 'S-1-5-18'),  # SYSTEM
+            (ConvertTo-NormalizedUser -InputObject 'S-1-5-19'),  # LOCAL SERVICE
+            (ConvertTo-NormalizedUser -InputObject 'S-1-5-20')   # NETWORK SERVICE
+        )) {
+            # These accounts have no password (NSSM expects nothing)
+            $password = ""
+        }
+        elseif ($user.EndsWith('$')) {
+            # While a gMSA doesn't have a password NSSM will fail with no password so we set a dummy value. The service
+            # still starts up properly with this so SCManager handles this nicely.
+            $password = "gsma_password"
+        }
+        elseif (-not $password) {
+            # Any other account requires a password here.
+            Fail-Json -obj $result -message "User without password is informed for service ""$name"""
+        }
     }
 }
 
@@ -514,17 +555,17 @@ if ($state -eq 'absent') {
         #minimum size before rotating
         Update-NssmServiceParameter -parameter "AppRotateBytes" -value $app_rotate_bytes @common_params
 
-
-        ############## DEPRECATED block since 2.8. Remove in 2.12 ##############
         Update-NssmServiceParameter -parameter "DependOnService" -arguments $dependencies @common_params
         if ($user) {
-            $fullUser = $user
-            if (-Not($user.contains("@")) -And ($user.Split("\").count -eq 1)) {
-                $fullUser = ".\" + $user
-            }
-
             # Use custom compare callback to test only the username (and not the password)
-            Update-NssmServiceParameter -parameter "ObjectName" -arguments @($fullUser, $password) -compare {param($actual,$expected) $actual[0] -eq $expected[0]} @common_params
+            Update-NssmServiceParameter -parameter "ObjectName" -arguments @($user, $password) -compare {
+                param($actual,$expected)
+
+                $actualUser = ConvertTo-NormalizedUser -InputObject $actual[0]
+                $expectedUser = ConvertTo-NormalizedUser -InputObject $expected[0]
+
+                $actualUser -eq $expectedUser
+            } @common_params
         }
         $mappedMode = $start_modes_map.$startMode
         Update-NssmServiceParameter -parameter "Start" -value $mappedMode @common_params
@@ -535,7 +576,6 @@ if ($state -eq 'absent') {
         if($state -in "started","restarted") {
             Start-NssmService @common_params
         }
-        ########################################################################
 
         # Added per users` requests
         if ($null -ne $app_stop_method_console)

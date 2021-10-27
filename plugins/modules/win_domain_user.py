@@ -114,6 +114,13 @@ options:
         versions of Active Directory.
       - The format is C(<username>@<domain>).
     type: str
+  sam_account_name:
+    description:
+      - Configures the SAM Account Name (C(sAMAccountName)) for the account.
+      - This is allowed to a maximum of 20 characters due to pre-Windows 2000 restrictions.
+      - Default to the C(<username>) specified in C(upn) or C(name) if not set.
+    type: str
+    version_added: 1.7.0
   email:
     description:
       - Configures the user's email address.
@@ -350,6 +357,12 @@ upn:
     returned: always
     type: str
     sample: nick@domain.local
+sam_account_name:
+    description: The SAM Account Name of the account
+    returned: always
+    type: str
+    sample: nick
+    version_added: 1.7.0
 user_cannot_change_password:
     description: true if the user is not allowed to change password
     returned: always
