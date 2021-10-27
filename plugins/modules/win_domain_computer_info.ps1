@@ -11,7 +11,8 @@ $spec = @{
     options = @{
         identity = @{ type = "str";  }
         properties = @{type = "list"; default = '*'}
-        search_scope = @{ type = 'str'; choices = @('base', 'one_level', 'subtree')}
+        search_scope = @{ type = 'str'; choices = @('Base', 'OneLevel', 'Subtree')}
+        search_base = @{ type = 'str';}
         filter = @{type= "str";}
         ldap_filter = @{type= "str";}
         domain_username = @{ type = "str"; }
@@ -54,6 +55,9 @@ if ($module.Params.properties.count -ne 0){
 }
 if ($null -ne $module.Params.search_scope){
     $extra_args.SearchScope = $module.Params.search_scope
+}
+if ($null -ne $module.Params.search_base){
+    $extra_args.SearchBase = $module.Params.search_base
 }
 if ($null -ne $module.Params.filter){
     $extra_args.Filter = $module.Params.filter

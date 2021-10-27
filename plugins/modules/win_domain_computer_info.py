@@ -14,9 +14,15 @@ requirements:
 description:
   - Gather information about 1 or more computers in Active Directory domain.
 options:
-  name:
+  identity:
     description:
-      - the C(name) or fqdn name of the computer to get the info for.
+      Specifies an Active Directory computer object by providing one of the following property values. 
+      The identifier in parentheses is the LDAP display name for the attribute.
+      The acceptable values for this parameter are:
+        - A distinguished name
+        - A GUID C(objectGUID)
+        - A security identifier C(objectSid)
+        - A Security Accounts Manager account name C(sAMAccountName)
     type: str
   domain_server:
     description:
@@ -33,7 +39,7 @@ options:
     type: str
   domain_password:
     description:
-    - The password for domain targeted
+      - The password for domain targeted
     type: str
   properties:
     description:
@@ -44,30 +50,32 @@ options:
     default: "*"
   search_scope:
     description:
-    - Specify the scope of when searching for a computer.
-    - C(base) will limit the search to the base object so the maximum number of objects returned is always one. This
-      will not search any objects inside a container..
-    - C(one_level) will search the current path and any immediate objects in that path.
-    - C(subtree) will search the current path and all objects of that path recursively.
+      - Specify the scope of when searching for a computer.
+      - C(Base) will limit the search to the base object so the maximum number of objects returned is always one. This
+        will not search any objects inside a container..
+      - C(OneLevel) will search the current path and any immediate objects in that path.
+      - C(Subtree) will search the current path and all objects of that path recursively.
     choices:
-    - base
-    - one_level
-    - subtree
+      - Base
+      - OneLevel
+      - Subtree
     type: str
   filter:
     description:
-    - Specify filter to use with Get-Adcomputer
+      - Specify filter to use with Get-Adcomputer
     type: str
   ldap_filter:
     description:
-    - Specify ldap filter to use with Get-Adcomputer
+      - Specify ldap filter to use with Get-Adcomputer
     type: str
-
-
+  search_base:
+    description:
+      - Specifies an Active Directory path to search under.
+    type: str
 seealso:
-- module: ansible.windows.win_domain_object_info
+  - module: ansible.windows.win_domain_object_info
 author:
-- Larry Lane (@gamethis)
+  - Larry Lane (@gamethis)
 '''
 
 EXAMPLES = r'''
