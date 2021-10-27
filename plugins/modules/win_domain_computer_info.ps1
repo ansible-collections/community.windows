@@ -10,7 +10,8 @@ Set-StrictMode -Version 2.0
 $spec = @{
     options = @{
         identity = @{ type = "str";  }
-        properties = @{type = "list"; default = '*'}
+        properties = @{type = "list"; elements = "str"; default = @('*')}
+        excluded_properties = @{type= "list"; elements = "str"; default = @('DeclaredConstructors', 'DeclaredMembers', 'nTSecurityDescriptor')}
         search_scope = @{ type = 'str'; choices = @('Base', 'OneLevel', 'Subtree')}
         search_base = @{ type = 'str';}
         filter = @{type= "str";}
@@ -39,12 +40,11 @@ $module = [Ansible.Basic.AnsibleModule]::Create($args, $spec)
 $module.Result.computers = @{}
 $module.Result.exists = $false
 $module.Result.changed = $false
-
 $extra_args = @{}
 if ($null -ne $module.Params.Identity){
     $extra_args.Identity = $module.Params.identity
 }
-if ($module.Params.properties.count -ne 0){
+if ( '*' -notin $module.Params.properties){
     $extra_args.Properties = New-Object Collections.Generic.List[string]
     $module.Params.properties | Foreach-Object{
         $keyName = $_
@@ -63,7 +63,7 @@ if ($null -ne $module.Params.filter){
     $extra_args.Filter = $module.Params.filter
 }
 if ($null -ne $module.Params.ldap_filter){
-    $extra_args.ldap_filter = $module.Params.ldap_filter
+    $extra_args.LDAPFilter = $module.Params.ldap_filter
 }
 
 if ($null -ne $module.Params.domain_username) {
@@ -87,7 +87,7 @@ Catch {$module.FailJson("Get-ADComputer @extra_args failed durring execution: $(
 # Process return info
 $module.Result.computers = @(foreach ($Computer in ($All_Computer_Info)) {
     $returnObj = @{}
-    $computer.GetEnumerator() | Foreach-Object {
+    $computer.GetEnumerator() | Select-Object -ExcludeProperty $module.Params.excluded_properties | Foreach-Object {
         $name = $_.key
         $value =$_.value | ConvertTo-Json -Depth 2 | ConvertFrom-Json
         $returnObj.Add($name, $value )

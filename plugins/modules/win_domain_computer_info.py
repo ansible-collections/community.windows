@@ -16,7 +16,7 @@ description:
 options:
   identity:
     description:
-      Specifies an Active Directory computer object by providing one of the following property values. 
+      Specifies an Active Directory computer object by providing one of the following property values.
       The identifier in parentheses is the LDAP display name for the attribute.
       The acceptable values for this parameter are:
         - A distinguished name
@@ -47,7 +47,14 @@ options:
       - case insensitive
     type: list
     elements: str
-    default: "*"
+    default: ["*"]
+  excluded_properties:
+    description:
+      - list of properties to exclude from return
+      - case insensitive
+    type: list
+    elements: str
+    default: ["DeclaredConstructors", "DeclaredMembers", "nTSecurityDescriptor"]
   search_scope:
     description:
       - Specify the scope of when searching for a computer.
@@ -91,12 +98,12 @@ EXAMPLES = r'''
 
 - name: Get info for current computer
   community.windows.win_domain_computer_info:
-    name: "{{ ansible_host }}"
+    identity: "{{ ansible_host }}"
     register: computer_info
 
 - name: Get Computer Info with Properties
   community.windows.win_domain_computer_info:
-    name: "{{ ansible_hostname }}"
+    identity: "{{ ansible_hostname }}"
     properties:
       - name
       - samaccountname
@@ -105,262 +112,84 @@ EXAMPLES = r'''
 '''
 
 RETURN = r'''
+exists:
+  description: Whether any features were found based on the criteria specified.
+  returned: always
+  type: bool
+  sample: true
 computers:
-  AccountExpirationDate:
-    description: Accout Expiration Date
-    type: str
-  AccountExpires:
-    description:
-    type: int
-  AccountLockoutTime:
-    description:
-    type: str
-  AccountNotDelegated:
-    description:
-    type: bool
-  AllowReversiblePasswordEncryption:
-    description:
-    type: bool
-  # AuthenticationPolicy:
-  #  description::
-  #  type: str
-  # AuthenticationPolicySilo:
-  # description::
-  # BadLogonCount:
-  # description::
-  # badPasswordTime:
-  #  description:
-  # badPwdCount:
-  #  description:
-  CannotChangePassword:
-    description:
-    type: bool
-  CanonicalName:
-    description:
-    type: str
-  Certificates:
-    description:
-    type: list
-  CN:
-    description:
-    type: str
-  codePage:
-    description
-    type: int
-  countryCode:
-    description:
-    type: int
-  Created:
-    description:
-    type: str
-  createTimeStamp:
-    description:
-    type: str
-  Deleted:
-    description:
-    type: bool
-  Description:
-    description:
-    type: str
-  DisplayName:
-    description:
-    type: str
-  DistinguishedName:
-    description:
-    type: str
-  DNSHostName:
-    description:
-    type: str
-  DoesNotRequirePreAuth:
-    description:
-    type: str
-  dSCorePropagationData:
-    description:
-    type: list
-  Enabled:
-    description:
-    type: bool
-  HomedirRequired:
-    description:
-    type: str
-  HomePage:
-    description:
-    type: str
-  instanceType:
-    description:
-    type: int
-  IPv4Address:
-    description:
-    type: str
-  IPv6Address:
-    description:
-    type: str
-  isCriticalSystemObject:
-    description:
-    type: bool
-  isDeleted:
-    description:
-    type: bool
-  # KerberosEncryptionType:
-  #   description:
-  #   type: str
-  LastBadPasswordAttempt:
-    description:
-    type: str
-  LastKnownParent :
-    description:
-    type: str
-  # lastLogoff:
-  #  description:
-  # type: int
-  lastLogon:
-    description:
-    type: int
-  LastLogonDate:
-    description:
-    type: int
-  # lastLogonTimestamp:
-  #   description:
-  # type: str
-  localPolicyFlags:
-    description:
-    type: int
-  Location:
-    description:
-    type: str
-  LockedOut:
-    description:
-    type: bool
-  logonCount:
-    description:
-    type: int
-  ManagedBy:
-    description:
-    type: str
-  MemberOf:
-    description:
-    type: list
-  MNSLogonAccount:
-    description:
-    type: str
-  Modified:
-    description:
-    type: str
-  modifyTimeStamp:
-    description:
-    type: str
-  # msDS_SupportedEncryptionTypes  :
-  #   description:
-  # msDS_User_Account_Control_Computed :
-  #   description:
-  Name:
-    description:
-    type: str
-  nTSecurityDescriptor:
-    description:
-    type: str
-  ObjectCategory:
-    description:
-    type: str
-  ObjectClass:
-    description:
-    type: str
-  ObjectGUID:
-    description:
-    type: str
-  objectSid:
-    description:
-    type: str
-  OperatingSystem:
-    description:
-    type: str
-  OperatingSystemHotfix:
-    description:
-    type: str
-  OperatingSystemServicePack:
-    description:
-    type: str
-  OperatingSystemVersion:
-    description:
-    type: str
-  PasswordExpired:
-    description:
-    type: bool
-  PasswordLastSet:
-    description:
-    type: str
-  PasswordNeverExpires:
-    description:
-    type: bool
-  PasswordNotRequired:
-    description:
-    type: bool
-  PrimaryGroup:
-    description:
-    type: str
-  primaryGroupID:
-    description:
-    type: int
-  # PrincipalsAllowedToDelegateToAccount:
-  #   description:
-  ProtectedFromAccidentalDeletion:
-    description:
-    type: bool
-  pwdLastSet:
-    description:
-    type: str
-  SamAccountName:
-    description:
-    type: str
-  sAMAccountType:
-    description:
-    type: int
-  sDRightsEffective:
-    description:
-    type: str
-  ServiceAccount:
-    description:
-    type: str
-  servicePrincipalName:
-    description:
-    type: list
-  ServicePrincipalNames:
-    description:
-    type: list
-  SID:
-    description:
-    type: str
-  SIDHistory :
-    description:
-    type: list
-  TrustedForDelegation:
-    description:
-    type: bool
-  TrustedToAuthForDelegation:
-    description:
-    type: bool
-  UseDESKeyOnly:
-    description:
-    type: bool
-  userAccountControl:
-    description:
-    type: str
-  userCertificate:
-    description:
-    type: str
-  UserPrincipalName:
-    description:
-    type: str
-  uSNChanged:
-    description:
-    type: int
-  uSNCreated:
-    description:
-    type: int
-  whenChanged:
-    description:
-    type: str
-  whenCreated:
-    description:
-    type: str
+  description:
+    - 1 or more computer object 
+    - return contents depends on I(properties) and rights of user to view the Directory
+    - Listed some of the most common below under I(contains)
+  returned: When I(exists)
+  type: list
+  elements: dict
+  contains:
+    AccountExpirationDate:
+      description: Accout Expiration Date
+      type: str
+    AccountExpires:
+      description:
+      type: int
+    AccountLockoutTime:
+      description: Time of Account Lockout
+      type: str
+    BadLogonCount:
+      description: Number of bad loggons
+      type: int
+    badPasswordTime:
+      description: Time of last bad loggon
+    CanonicalName:
+      description:
+      type: str
+    Created:
+      description: Date created
+      type: str
+    Description:
+      description: discription on computer object
+      type: str
+    DisplayName:
+      description: Displayed name
+      type: str
+    DistinguishedName:
+      description: full cn of computer ie. CN=ANSIBLE-TESTER,OU=Domain Controllers,DC=ansible,DC=test
+      type: str
+    DNSHostName:
+      description: fqdn name of system ie. ansible-tester.ansible.test
+      type: str
+    Enabled:
+      description: Tells if computer object is enabled
+      type: bool
+    Name:
+      description: Name of computer object
+      type: str
+    PasswordExpired:
+      description: Bool to tell if Password is expired
+      type: bool
+    PasswordLastSet:
+      description: Date of last password set
+      type: str
+    PasswordNeverExpires:
+      description: Bool to state if password never expires
+      type: bool
+    SamAccountName:
+      description:
+      type: str
+    sAMAccountType:
+      description:
+      type: int
+    SID:
+      description: Security Identifier
+      type: list
+      elements: dict
+    SIDHistory :
+      description:
+      type: list
+    whenChanged:
+      description:
+      type: str
+    whenCreated:
+      description:
+      type: str
 '''
