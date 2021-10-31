@@ -153,15 +153,23 @@ $result.msg = "not changed"
 
 if ($type -eq "element") {
     if ($state -eq "absent") {
+
+        $removals = [System.Collections.Generic.List[String]]@()
+
         foreach ($node in $nodeList) {
             # there are some nodes that match xpath, delete without comparing them to fragment
             if (-Not $check_mode) {
-                $removedNode = $node.get_ParentNode().RemoveChild($node)
+                [void]$node.get_ParentNode().RemoveChild($node)
                 $changed = $true
-                if ($debug) {
-                    $result.removed += $result.removed + $removedNode.get_OuterXml()
-                }
             }
+
+            if ($debug) {
+                $removals.Add($node.get_OuterXml())
+            }
+        }
+
+        if ($removals) {
+            $result.removed = $removals -join ", "
         }
     } else { # state -eq 'present'
         $xmlfragment = $null
