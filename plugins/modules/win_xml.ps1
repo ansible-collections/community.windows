@@ -181,8 +181,6 @@ if ($type -eq "element") {
             $elements = $node.get_ChildNodes()
             [bool]$present = $false
             [bool]$changed = $false
-            $element_count = $elements.get_Count()
-            }
             if ($elements.get_Count()) {
                 if ($debug) {
                     $err = @()
