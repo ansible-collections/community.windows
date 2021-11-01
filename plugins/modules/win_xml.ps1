@@ -189,17 +189,12 @@ if ($type -eq "element") {
             $elements = $node.get_ChildNodes()
             [bool]$present = $false
             [bool]$changed = $false
-            $element_count = $elements.get_Count()
-            $nstatus = "node: " + $node.get_Value() + " element: " + $elements.get_OuterXml() + " Element count is $element_count"
-            Add-Warning $result $nstatus
             if ($elements.get_Count()) {
                 if ($debug) {
                     $err = @()
                     $result.err = {$err}.Invoke()
                 }
                 foreach ($element in $elements) {
-                    $estatus = "element is " + $element.get_OuterXml()
-                    Add-Warning $result $estatus
                     try {
                         Compare-XmlDocs $candidate $element
                         $present = $true
