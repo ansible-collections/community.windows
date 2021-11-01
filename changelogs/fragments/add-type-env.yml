@@ -1,0 +1,4 @@
+bugfixes:
+- win_region - Fix conflicts with existing ``LIB`` environment variable
+- win_scheduled_task_stat - Fix conflicts with existing ``LIB`` environment variable
+- win_scheduled_task - Fix conflicts with existing ``LIB`` environment variable
