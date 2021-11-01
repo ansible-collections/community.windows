@@ -380,6 +380,12 @@ if ($null -ne $name) {
     }
 }
 
-$module.Result = Convert-DictToSnakeCase -dict $module.Result
+# Convert-DictToSnakeCase returns a Hashtable but Ansible.Basic expect a Dictionary. This is a hack until the snake
+# conversion code has been moved to this collection and updated to handle this.
+$new_result = [System.Collections.Generic.Dictionary[[String], [Object]]]@{}
+foreach ($kvp in (Convert-DictToSnakeCase -dict $module.Result).GetEnumerator()) {
+    $new_result[$kvp.Name] = $kvp.Value
+}
+$module.Result = $new_result
 
 $module.ExitJson()
