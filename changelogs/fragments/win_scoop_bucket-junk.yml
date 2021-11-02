@@ -1,2 +1,0 @@
-bugfixes:
-- win_scoop_bucket - Ensure no extra data is sent to the controller resulting in a junk output warning

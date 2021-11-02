@@ -1,7 +1,0 @@
-minor_changes:
-- win_nssm - Support gMSA accounts for ``user``
-- win_nssm - Remove deprecation for ``state``, ``dependencies``, ``user``, ``password``, ``start_mode``
-- win_nssm - Added ``username`` as an alias for ``user``
-
-bugfixes:
-- win_nssm - Perform better user comparison checks for idempotency

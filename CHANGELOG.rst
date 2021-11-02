@@ -5,6 +5,40 @@ Community Windows Release Notes
 .. contents:: Topics
 
 
+v1.8.0
+======
+
+Release Summary
+---------------
+
+- Release summary for v1.8.0
+
+Minor Changes
+-------------
+
+- win_nssm - Added ``username`` as an alias for ``user``
+- win_nssm - Remove deprecation for ``state``, ``dependencies``, ``user``, ``password``, ``start_mode``
+- win_nssm - Support gMSA accounts for ``user``
+
+Bugfixes
+--------
+
+- win_audit_rule - Fix exception when trying to change a rule on a hidden or protected system file - https://github.com/ansible-collections/community.windows/issues/17
+- win_firewall - Fix GpoBoolean/Boolean comparation(windows versions compatibility increase)
+- win_nssm - Perform better user comparison checks for idempotency
+- win_pssession_configuration - the associated action plugin detects check mode using a method that isn't always accurate (https://github.com/ansible-collections/community.windows/pull/318).
+- win_region - Fix conflicts with existing ``LIB`` environment variable
+- win_scheduled_task - Fix conflicts with existing ``LIB`` environment variable
+- win_scheduled_task_stat - Fix conflicts with existing ``LIB`` environment variable
+- win_scoop_bucket - Ensure no extra data is sent to the controller resulting in a junk output warning
+- win_xml - Do not show warnings for normal operations - https://github.com/ansible-collections/community.windows/issues/205
+- win_xml - Fix removal operation when running with higher verbosities - https://github.com/ansible-collections/community.windows/issues/275
+
+New Modules
+-----------
+
+- win_domain_ou - Manage Active Directory Organizational Units
+
 v1.7.0
 ======
 

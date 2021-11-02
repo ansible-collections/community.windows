@@ -1,2 +1,0 @@
-bugfixes:
-- win_xml - Do not show warnings for normal operations - https://github.com/ansible-collections/community.windows/issues/205

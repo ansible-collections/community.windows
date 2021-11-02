@@ -46,6 +46,7 @@ Name | Description
 [community.windows.win_domain_group](https://github.com/ansible-collections/community.windows/blob/main/docs/community.windows.win_domain_group_module.rst)|Creates, modifies or removes domain groups
 [community.windows.win_domain_group_membership](https://github.com/ansible-collections/community.windows/blob/main/docs/community.windows.win_domain_group_membership_module.rst)|Manage Windows domain group membership
 [community.windows.win_domain_object_info](https://github.com/ansible-collections/community.windows/blob/main/docs/community.windows.win_domain_object_info_module.rst)|Gather information an Active Directory object
+[community.windows.win_domain_ou](https://github.com/ansible-collections/community.windows/blob/main/docs/community.windows.win_domain_ou_module.rst)|Manage Active Directory Organizational Units
 [community.windows.win_domain_user](https://github.com/ansible-collections/community.windows/blob/main/docs/community.windows.win_domain_user_module.rst)|Manages Windows Active Directory user accounts
 [community.windows.win_dotnet_ngen](https://github.com/ansible-collections/community.windows/blob/main/docs/community.windows.win_dotnet_ngen_module.rst)|Runs ngen to recompile DLLs after .NET  updates
 [community.windows.win_eventlog](https://github.com/ansible-collections/community.windows/blob/main/docs/community.windows.win_eventlog_module.rst)|Manage Windows event logs
