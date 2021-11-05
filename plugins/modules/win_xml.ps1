@@ -58,6 +58,7 @@ function Compare-XmlDocs($actual, $expected) {
         }
     }
 
+    <#
     ##children
     if ($expected.get_ChildNodes().Count -ne $actual.get_ChildNodes().Count)  {
         throw "child node mismatch. for actual=" + $actual.get_Name()
@@ -69,6 +70,7 @@ function Compare-XmlDocs($actual, $expected) {
         }
         Compare-XmlDocs $expected.get_ChildNodes()[$i] $actual.get_ChildNodes()[$i]
     }
+    #>
 
     if ($expected.get_InnerText()) {
         if ($expected.get_InnerText() -ne $actual.get_InnerText()) {
@@ -205,11 +207,11 @@ if ($type -eq "element") {
                         }
                     }
                 }
-                if (-Not $present -and ($state -eq "present")) {
-                    [void]$node.AppendChild($candidate)
-                    $result.msg = $result.msg + "xml added "
-                    $changed = $true
-                }
+            }
+            if (-Not $present -and ($state -eq "present")) {
+                [void]$node.AppendChild($candidate)
+                $result.msg = $result.msg + "xml added "
+                $changed = $true
             }
         }
     }
