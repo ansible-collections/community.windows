@@ -1,0 +1,121 @@
+---
+- name: Create Jane
+  community.windows.win_domain_user:
+    name: Jane
+    password: J@n3P4ssw0rd#
+    state: present
+    update_password: on_create
+    account_locked: false
+    password_never_expires: false
+    enabled: true
+  register: new_user_test
+  failed_when: new_user_test is not success
+
+- name: Create Jane (idempotence check)
+  community.windows.win_domain_user:
+    name: Jane
+    password: J@n3P4ssw0rd#
+    state: present
+    update_password: on_create
+    account_locked: false
+    password_never_expires: false
+    enabled: true
+  register: new_user_test_idempotent
+  failed_when: new_user_test_idempotent is changed
+
+- name: Create Jane update password
+  community.windows.win_domain_user:
+    name: Jane
+    password: J@n3P4ssw0rd#
+    state: present
+    update_password: always
+    account_locked: false
+    password_never_expires: false
+    enabled: true
+  register: password_changed
+  failed_when: not password_changed.changed
+
+- name: Create user with invalid password
+  community.windows.win_domain_user:
+    name: bob
+    upn: Bob@ansible.test
+    firstname: Bob
+    surname: Smith
+    company: BobCo
+    password: 123
+    state: present
+    groups:
+      - Domain Admins
+    street: 123 4th St.
+    city: Sometown
+    state_province: IN
+    postal_code: 12345
+    country: US
+    attributes:
+      telephoneNumber: 555-123456
+    update_password: when_changed
+    password_never_expires: true
+  register: bad_password_test
+  failed_when: bad_password_test is success
+
+- name: Create user again with valid password
+  community.windows.win_domain_user:
+    name: bob
+    upn: Bob@ansible.test
+    firstname: Bob
+    surname: Smith
+    company: BobCo
+    password: B0bP4ssw0rd
+    state: present
+    groups:
+      - Domain Admins
+    street: 123 4th St.
+    city: Sometown
+    state_province: IN
+    postal_code: 12345
+    country: US
+    attributes:
+      telephoneNumber: 555-123456
+    update_password: when_changed
+    password_never_expires: true
+  register: good_password_test
+  failed_when: good_password_test is not success
+
+- name: Remove bob
+  community.windows.win_domain_user:
+    name: bob
+    state: absent
+  register: user_removed
+  failed_when: not user_removed.changed
+
+- name: Remove bob (idempotence check)
+  community.windows.win_domain_user:
+    name: bob
+    state: absent
+  register: user_removed_idempotent
+  failed_when: user_removed_idempotent.changed
+
+- name: Remove Jane
+  community.windows.win_domain_user:
+    name: Jane
+    state: absent
+
+- name: Assertions
+  assert:
+    that:
+      - new_user_test.changed
+      - new_user_test.created
+      - not new_user_test.password_never_expires
+      - not new_user_test_idempotent.changed
+      - new_user_test_idempotent.distinguished_name == "CN=Jane,CN=Users,DC=ansible,DC=test"
+      - password_changed.changed
+      - password_changed.password_updated
+      - bad_password_test.changed
+      - bad_password_test.created
+      - good_password_test.changed
+      - good_password_test.upn == "Bob@ansible.test"
+      - good_password_test.password_never_expires
+      - good_password_test.company == "BobCo"
+      - not good_password_test.created
+      - good_password_test.password_updated
+      - user_removed.state == "absent"

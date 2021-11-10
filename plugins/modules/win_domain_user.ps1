@@ -36,7 +36,8 @@ Function Test-Credential {
         $failed_codes = @(
             0x0000052E,  # ERROR_LOGON_FAILURE
             0x00000532,  # ERROR_PASSWORD_EXPIRED
-            0x00000773  # ERROR_PASSWORD_MUST_CHANGE
+            0x00000773,  # ERROR_PASSWORD_MUST_CHANGE
+            0x00000533   # ERROR_ACCOUNT_DISABLED
         )
 
         if ($_.Exception.NativeErrorCode -in $failed_codes) {
@@ -199,7 +200,11 @@ If ($state -eq 'present') {
         }
         If ($set_new_credentials) {
             $secure_password = ConvertTo-SecureString $password -AsPlainText -Force
-            Set-ADAccountPassword -Identity $user_guid -Reset:$true -Confirm:$false -NewPassword $secure_password -WhatIf:$check_mode @extra_args
+            try {
+                Set-ADAccountPassword -Identity $user_guid -Reset:$true -Confirm:$false -NewPassword $secure_password -WhatIf:$check_mode @extra_args
+            }catch{
+                Fail-Json $result "Failed to set password on account"
+            }
             $user_obj = Get-ADUser -Identity $user_guid -Properties * @extra_args
             $result.password_updated = $true
             $result.changed = $true
