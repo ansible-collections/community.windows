@@ -29,7 +29,8 @@ Function ConvertFrom-Ini($file_path) {
             $value = $matches[2].Trim()
             if ($value -match "^\d+$") {
                 $value = [int]$value
-            } elseif ($value.StartsWith('"') -and $value.EndsWith('"')) {
+            }
+            elseif ($value.StartsWith('"') -and $value.EndsWith('"')) {
                 $value = $value.Substring(1, $value.Length - 2)
             }
 
@@ -46,7 +47,8 @@ $secedit_ini = ConvertFrom-Ini -file_path $secedit_ini_path
 
 if ($secedit_ini.ContainsKey($section)) {
     $result.value = $secedit_ini.$section.$key
-} else {
+}
+else {
     $result.value = $null
 }
 

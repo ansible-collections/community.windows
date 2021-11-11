@@ -24,7 +24,7 @@ function Convert-ObjectToSnakeCase {
     #>
     [CmdletBinding()]
     param(
-        [Parameter(Mandatory=$true,ValueFromPipeline=$true)]
+        [Parameter(Mandatory = $true, ValueFromPipeline = $true)]
         [OutputType([System.Collections.Specialized.OrderedDictionary])]
         [Object]
         $InputObject ,
@@ -74,7 +74,7 @@ function ConvertTo-SerializableScriptInfo {
     #>
     [CmdletBinding()]
     param(
-        [Parameter(Mandatory=$true, ValueFromPipeline=$true)]
+        [Parameter(Mandatory = $true, ValueFromPipeline = $true)]
         [Object]
         $InputObject ,
 
@@ -121,9 +121,9 @@ function ConvertTo-SerializableScriptInfo {
 
 $module.Result.scripts = @(
     Get-InstalledScript -Name $module.Params.name -ErrorAction SilentlyContinue |
-    Where-Object -FilterScript { -not $module.Params.repository -or $_.Repository -eq $module.Params.repository } |
-    ConvertTo-SerializableScriptInfo |
-    Convert-ObjectToSnakeCase -NoRecurse
+        Where-Object -FilterScript { -not $module.Params.repository -or $_.Repository -eq $module.Params.repository } |
+        ConvertTo-SerializableScriptInfo |
+        Convert-ObjectToSnakeCase -NoRecurse
 )
 
 $module.ExitJson()

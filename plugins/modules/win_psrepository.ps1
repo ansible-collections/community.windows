@@ -7,7 +7,8 @@
 
 #Requires -Module Ansible.ModuleUtils.Legacy
 
-[System.Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseDeclaredVarsMoreThanAssignments', '', Justification='Some vars are referenced via Get-Variable')]
+[System.Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseDeclaredVarsMoreThanAssignments', '',
+    Justification = 'Some vars are referenced via Get-Variable')]
 param() # param() is needed for attribute to take effect.
 
 # win_psrepository (Windows PowerShell repositories Additions/Removals/Updates)
@@ -25,7 +26,7 @@ $installation_policy = Get-AnsibleParam -obj $params -name "installation_policy"
 $force = Get-AnsibleParam -obj $params -name "force" -type "bool" -default $false
 $proxy = Get-AnsibleParam -obj $params -name "proxy" -type "str" -failifempty $false
 
-$result = @{"changed" = $false}
+$result = @{"changed" = $false }
 
 # Enable TLS1.1/TLS1.2 if they're available but disabled (eg. .NET 4.5)
 $security_protocols = [System.Net.ServicePointManager]::SecurityProtocol -bor [System.Net.SecurityProtocolType]::SystemDefault
@@ -58,11 +59,11 @@ if ($proxy) {
 function Resolve-LocationParameter {
     [CmdletBinding()]
     param(
-        [Parameter(Mandatory=$true)]
+        [Parameter(Mandatory = $true)]
         [string[]]
         $Name ,
 
-        [Parameter(Mandatory=$true)]
+        [Parameter(Mandatory = $true)]
         [hashtable]
         $Splatter
     )
@@ -72,7 +73,7 @@ function Resolve-LocationParameter {
             $val = Get-Variable -Name $param -ValueOnly -ErrorAction SilentlyContinue
             if ($val) {
                 if ($val -as [uri]) {
-                    $Splatter[$param.Replace('_','')] = $val -as [uri]
+                    $Splatter[$param.Replace('_', '')] = $val -as [uri]
                 }
                 else {
                     Fail-Json -obj $result -Message "'$param' must be a valid URI."
@@ -82,7 +83,7 @@ function Resolve-LocationParameter {
     }
 }
 
-Resolve-LocationParameter -Name source_location,publish_location,script_source_location,script_publish_location -Splatter $repository_params
+Resolve-LocationParameter -Name source_location, publish_location, script_source_location, script_publish_location -Splatter $repository_params
 
 if (-not $repository_params.SourceLocation -and $state -eq 'present' -and ($force -or -not $Repo)) {
     Fail-Json -obj $result -message "'source_location' is required when registering a new repository or using force with 'state' == 'present'."

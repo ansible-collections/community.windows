@@ -21,23 +21,23 @@ $dest = $module.Params.dest
 $srcFile = [System.IO.Path]::GetFileName($src)
 $compressionLevel = [System.IO.Compression.CompressionLevel]::Optimal
 $encoding = New-Object -TypeName System.Text.UTF8Encoding -ArgumentList $false
-$srcWildcard=$false
+$srcWildcard = $false
 
 # If the path ends with '\*' we want to include the dir contents and not the dir itself
 If ($src -match '\\\*$') {
-    $srcWildcard=$true
+    $srcWildcard = $true
     $src = $src.Substring(0, $src.Length - 2)
 }
 
-If(-not (Test-Path -LiteralPath $src)) {
+If (-not (Test-Path -LiteralPath $src)) {
     $module.FailJson("The source file or directory '$src' does not exist.")
 }
 
-If($dest -notlike "*.zip") {
+If ($dest -notlike "*.zip") {
     $module.FailJson("The destination zip file path '$dest' need to be zip file path.")
 }
 
-If(Test-Path -LiteralPath $dest) {
+If (Test-Path -LiteralPath $dest) {
     $module.Result.msg = "The destination zip file '$dest' already exists."
     $module.ExitJson()
 }
@@ -45,7 +45,8 @@ If(Test-Path -LiteralPath $dest) {
 # Check .NET v4.5 or later version exists or not
 try {
     Add-Type -AssemblyName System.IO.Compression.FileSystem -ErrorAction Stop
-} catch {
+}
+catch {
     $module.FailJson(".NET Framework 4.5 or later version needs to be installed.", $_)
 }
 
@@ -53,11 +54,13 @@ Function Compress-Zip($src, $dest) {
     If (-not $module.CheckMode) {
         If (Test-Path -LiteralPath $src -PathType Container) {
             [System.IO.Compression.ZipFile]::CreateFromDirectory($src, $dest, $compressionLevel, (-not $srcWildcard), $encoding)
-        } Else {
+        }
+        Else {
             $zip = [System.IO.Compression.ZipFile]::Open($dest, 'Update')
             try {
                 [void][System.IO.Compression.ZipFileExtensions]::CreateEntryFromFile($zip, $src, $srcFile, $compressionLevel)
-            } finally {
+            }
+            finally {
                 $zip.Dispose()
             }
         }

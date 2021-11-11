@@ -34,7 +34,8 @@ Function Invoke-SecEdit($arguments) {
 
     try {
         $stdout = &SecEdit.exe $arguments | Out-String
-    } catch {
+    }
+    catch {
         $stderr = $_.Exception.Message
     }
     $log = Get-Content -LiteralPath $log_path
@@ -144,7 +145,8 @@ Function ConvertFrom-Ini($file_path) {
             $value = $matches[2].Trim()
             if ($value -match "^\d+$") {
                 $value = [int]$value
-            } elseif ($value.StartsWith('"') -and $value.EndsWith('"')) {
+            }
+            elseif ($value.StartsWith('"') -and $value.EndsWith('"')) {
                 $value = $value.Substring(1, $value.Length - 2)
             }
 
@@ -180,9 +182,11 @@ if ($secedit_ini.$section.ContainsKey($key)) {
         $secedit_ini.$section.$key = $value
         $will_change = $true
     }
-} elseif ([string]$value -eq "") {
-      # Value is requested to be removed, and has already been removed, do nothing
-} else {
+}
+elseif ([string]$value -eq "") {
+    # Value is requested to be removed, and has already been removed, do nothing
+}
+else {
     if ($diff_mode) {
         $result.diff.prepared = @"
 [$section]
@@ -207,9 +211,11 @@ if ($will_change -eq $true) {
             if ($new_value -cne $value) {
                 Fail-Json $result "Failed to change the value for key '$key' in section '$section', the value is still $new_value"
             }
-        } elseif ([string]$value -eq "") {
+        }
+        elseif ([string]$value -eq "") {
             # Value was empty, so OK if no longer in the result
-        } else {
+        }
+        else {
             Fail-Json $result "The key '$key' in section '$section' is not a valid key, cannot set this value"
         }
     }

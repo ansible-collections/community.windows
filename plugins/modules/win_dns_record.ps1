@@ -8,17 +8,17 @@
 $spec = @{
     options = @{
         name = @{ type = "str"; required = $true }
-        port = @{ type = "int"}
-        priority = @{ type = "int"}
+        port = @{ type = "int" }
+        priority = @{ type = "int" }
         state = @{ type = "str"; choices = "absent", "present"; default = "present" }
         ttl = @{ type = "int"; default = "3600" }
-        type = @{ type = "str"; choices = "A","AAAA","CNAME","NS","PTR","SRV","TXT"; required = $true }
-        value = @{ type = "list"; elements = "str"; default = @() ; aliases=@( 'values' )}
-        weight = @{ type = "int"}
+        type = @{ type = "str"; choices = "A", "AAAA", "CNAME", "NS", "PTR", "SRV", "TXT"; required = $true }
+        value = @{ type = "list"; elements = "str"; default = @() ; aliases = @( 'values' ) }
+        weight = @{ type = "int" }
         zone = @{ type = "str"; required = $true }
         computer_name = @{ type = "str" }
     }
-    required_if         = @(, @("type", "SRV", @("port", "priority", "weight")))
+    required_if = @(, @("type", "SRV", @("port", "priority", "weight")))
     supports_check_mode = $true
 }
 $module = [Ansible.Basic.AnsibleModule]::Create($args, $spec)
@@ -40,7 +40,8 @@ if ($state -eq 'present') {
     if ($values.Count -eq 0) {
         $module.FailJson("Parameter 'values' must be non-empty when state='present'")
     }
-} else {
+}
+else {
     if ($values.Count -ne 0) {
         $module.FailJson("Parameter 'values' must be undefined or empty when state='absent'")
     }
@@ -57,8 +58,8 @@ if (($type -eq 'CNAME' -or $type -eq 'NS' -or $type -eq 'PTR' -or $type -eq 'SRV
     }
 }
 $record_argument_name = @{
-    A     = "IPv4Address";
-    AAAA  = "IPv6Address";
+    A = "IPv4Address";
+    AAAA = "IPv6Address";
     CNAME = "HostNameAlias";
     # MX = "MailExchange";
     NS = "NameServer";
@@ -68,7 +69,7 @@ $record_argument_name = @{
 }[$type]
 $changes = @{
     before = "";
-    after  = ""
+    after = ""
 }
 $records = Get-DnsServerResourceRecord -ZoneName $zone -Name $name -RRType $type -Node -ErrorAction:Ignore @extra_args | Sort-Object
 if ($null -ne $records) {
@@ -86,7 +87,8 @@ if ($null -ne $records) {
             $record | Remove-DnsServerResourceRecord -ZoneName $zone -Force -WhatIf:$module.CheckMode @extra_args
             $changes.before += "[$zone] $($record.HostName) $($record.TimeToLive.TotalSeconds) IN $type $record_value`n"
             $module.Result.changed = $true
-        } else {
+        }
+        else {
             if ($type -eq 'SRV') {
                 $record_port_old = $record.RecordData.Port.ToString()
                 $record_priority_old = $record.RecordData.Priority.ToString()
@@ -99,11 +101,15 @@ if ($null -ne $records) {
                     $new_record.RecordData.Weight = $weight
                     Set-DnsServerResourceRecord -ZoneName $zone -OldInputObject $record -NewInputObject $new_record -WhatIf:$module.CheckMode @extra_args
 
-                    $changes.before += "[$zone] $($record.HostName) $($record.TimeToLive.TotalSeconds) IN $type $record_value $record_port_old $record_weight_old $record_priority_old`n"
+                    $changes.before += -join @(
+                        "[$zone] $($record.HostName) $($record.TimeToLive.TotalSeconds) IN "
+                        "$type $record_value $record_port_old $record_weight_old $record_priority_old`n"
+                    )
                     $changes.after += "[$zone] $($record.HostName) $($ttl.TotalSeconds) IN $type $record_value $port $weight $priority`n"
                     $module.Result.changed = $true
                 }
-            } elseif ($type -eq "TXT") {
+            }
+            elseif ($type -eq "TXT") {
                 $record_descriptivetext_old = $record.RecordData.DescriptiveText.ToString()
                 if ($value -ne $record_descriptivetext_old) {
                     $new_record = $record.Clone()
@@ -113,8 +119,9 @@ if ($null -ne $records) {
                     $changes.after += "[$zone] $($record.HostName) $($ttl.TotalSeconds) IN $type $record_value $value`n"
                     $module.Result.changed = $true
                 }
-            } else{
-                 # This record matches one of the values; but does it match the TTL?
+            }
+            else {
+                # This record matches one of the values; but does it match the TTL?
                 if ($record.TimeToLive -ne $ttl) {
                     $new_record = $record.Clone()
                     $new_record.TimeToLive = $ttl
@@ -137,19 +144,22 @@ if ($null -ne $values -and $values.Count -gt 0) {
         $module.Result.debug_splat_args = $splat_args
         $srv_args = @{
             DomainName = $value
-            Weight     = $weight
-            Priority   = $priority
-            Port       = $port
+            Weight = $weight
+            Priority = $priority
+            Port = $port
         }
         try {
             if ($type -eq 'SRV') {
                 Add-DnsServerResourceRecord -SRV -Name $name  -ZoneName $zone @srv_args @extra_args -WhatIf:$module.CheckMode
-            }elseif ($type -eq 'TXT') {
+            }
+            elseif ($type -eq 'TXT') {
                 Add-DnsServerResourceRecord -TXT -Name $name -DescriptiveText $value -ZoneName $zone -TimeToLive $ttl @extra_args -WhatIf:$module.CheckMode
-            } else {
+            }
+            else {
                 Add-DnsServerResourceRecord -Name $name -AllowUpdateAny -ZoneName $zone -TimeToLive $ttl @splat_args -WhatIf:$module.CheckMode @extra_args
             }
-        } catch {
+        }
+        catch {
             $module.FailJson("Error adding DNS $type resource $name in zone $zone with value $value", $_)
         }
         $changes.after += "[$zone] $name $($ttl.TotalSeconds) IN $type $value`n"
@@ -161,11 +171,16 @@ if ($module.CheckMode) {
     # Simulated changes
     $module.Diff.before = $changes.before
     $module.Diff.after = $changes.after
-} else {
+}
+else {
     # Real changes
     $records_end = Get-DnsServerResourceRecord -ZoneName $zone -Name $name -RRType $type -Node -ErrorAction:Ignore @extra_args | Sort-Object
-    $module.Diff.before = @($records | ForEach-Object { "[$zone] $($_.HostName) $($_.TimeToLive.TotalSeconds) IN $type $($_.RecordData.$record_argument_name.ToString())`n" }) -join ''
-    $module.Diff.after = @($records_end | ForEach-Object { "[$zone] $($_.HostName) $($_.TimeToLive.TotalSeconds) IN $type $($_.RecordData.$record_argument_name.ToString())`n" }) -join ''
+    $module.Diff.before = @(
+        $records | ForEach-Object { "[$zone] $($_.HostName) $($_.TimeToLive.TotalSeconds) IN $type $($_.RecordData.$record_argument_name.ToString())`n" }
+    ) -join ''
+    $module.Diff.after = @(
+        $records_end | ForEach-Object { "[$zone] $($_.HostName) $($_.TimeToLive.TotalSeconds) IN $type $($_.RecordData.$record_argument_name.ToString())`n" }
+    ) -join ''
 }
 
 $module.ExitJson()

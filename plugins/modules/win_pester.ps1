@@ -12,7 +12,7 @@ $spec = @{
         path = @{ type = "str"; required = $true }
         tags = @{ type = "list"; elements = "str" }
         test_parameters = @{ type = "dict" }
-        version = @{ type = "str"; aliases = @(,"minimum_version") }
+        version = @{ type = "str"; aliases = @(, "minimum_version") }
     }
     supports_check_mode = $true
 }
@@ -48,8 +48,13 @@ $Pester = 'Pester'
 If (-not (Get-Module -Name $Pester -ErrorAction SilentlyContinue)) {
     If (Get-Module -Name $Pester -ListAvailable -ErrorAction SilentlyContinue) {
         Import-Module $Pester
-    } else {
-        $module.FailJson("Cannot find module: $Pester. Check if pester is installed, and if it is not, install using win_psmodule or chocolatey.chocolatey.win_chocolatey.")
+    }
+    else {
+        $msg = -join @(
+            "Cannot find module: $Pester. Check if pester is installed, and if it is not, "
+            "install using win_psmodule or chocolatey.chocolatey.win_chocolatey."
+        )
+        $module.FailJson($msg)
     }
 }
 
@@ -58,7 +63,7 @@ $Pester_version = (Get-Module -Name $Pester).Version.ToString()
 $module.Result.pester_version = $Pester_version
 
 # Test if the Pester module is available with a version greater or equal than the one specified in the $version parameter
-If ((-not (Get-Module -Name $Pester -ErrorAction SilentlyContinue | Where-Object {$_.Version -ge $version})) -and ($version)) {
+If ((-not (Get-Module -Name $Pester -ErrorAction SilentlyContinue | Where-Object { $_.Version -ge $version })) -and ($version)) {
     $module.FailJson("$Pester version is not greater or equal to $version")
 }
 
@@ -69,19 +74,20 @@ If ($module.Result.pester_version -ge "4.0.0") {
         "show" = "none"
         "PassThru" = $True
     }
-} else {
+}
+else {
     $Parameters = @{
         "quiet" = $True
         "PassThru" = $True
     }
 }
 
-if($tags.count){
+if ($tags.count) {
     $Parameters.Tag = $tags
 }
 
-if($output_file){
-    $Parameters.OutputFile   = $output_file
+if ($output_file) {
+    $Parameters.OutputFile = $output_file
     $Parameters.OutputFormat = $output_format
 }
 
@@ -98,15 +104,18 @@ If (Test-Path -LiteralPath $path -PathType Leaf) {
 
     if ($module.CheckMode) {
         $module.Result.output = "Run pester test in the file: $path$test_parameters_check_mode_msg"
-    } else {
+    }
+    else {
         $module.Result.output = Invoke-Pester @Parameters
     }
-} else {
+}
+else {
     $Parameters.Script = $path
 
     if ($module.CheckMode) {
         $module.Result.output = "Run Pester test(s): $path"
-    } else {
+    }
+    else {
         $module.Result.output = Invoke-Pester @Parameters
     }
 }

@@ -23,7 +23,7 @@ function Convert-ObjectToSnakeCase {
     #>
     [CmdletBinding()]
     param(
-        [Parameter(Mandatory=$true,ValueFromPipeline=$true)]
+        [Parameter(Mandatory = $true, ValueFromPipeline = $true)]
         [OutputType([System.Collections.Specialized.OrderedDictionary])]
         [Object]
         $InputObject ,

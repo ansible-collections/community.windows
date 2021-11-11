@@ -38,7 +38,7 @@ if (-not $check_mode) {
     $result.rc = $LASTEXITCODE
 }
 
-$endsend_at = Get-Date| Out-String
+$endsend_at = Get-Date | Out-String
 $stopwatch.Stop()
 
 $result.changed = $true

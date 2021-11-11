@@ -36,7 +36,8 @@ Function SearchForError($cmd_output, $default_msg) {
             if (Select-String -InputObject $line -pattern "^(\s+)?(\-+)(\s+)?$") {
                 $separator_count += 1
             }
-        } else {
+        }
+        else {
             if (Select-String -InputObject $line -pattern "error") {
                 $error_msg = $line
                 break
@@ -66,7 +67,8 @@ if ($null -eq $flags) {
     if ($recurse) {
         $robocopy_opts += "/e"
     }
-} else {
+}
+else {
     ForEach ($f in $flags.split(" ")) {
         $robocopy_opts += $f
     }
@@ -78,7 +80,8 @@ $result.cmd = "$robocopy $robocopy_opts"
 Try {
     $robocopy_output = &robocopy $robocopy_opts
     $rc = $LASTEXITCODE
-} Catch {
+}
+Catch {
     Fail-Json $result "Error synchronizing $src to $dest! Msg: $($_.Exception.Message)"
 }
 

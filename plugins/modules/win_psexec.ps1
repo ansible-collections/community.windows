@@ -11,22 +11,22 @@
 
 $spec = @{
     options = @{
-        command = @{ type='str'; required=$true }
-        executable = @{ type='path'; default='psexec.exe' }
-        hostnames = @{ type='list'; elements='str' }
-        username = @{ type='str' }
-        password = @{ type='str'; no_log=$true }
-        chdir = @{ type='path' }
-        wait = @{ type='bool'; default=$true }
-        nobanner = @{ type='bool'; default=$false }
-        noprofile = @{ type='bool'; default=$false }
-        elevated = @{ type='bool'; default=$false }
-        limited = @{ type='bool'; default=$false }
-        system = @{ type='bool'; default=$false }
-        interactive = @{ type='bool'; default=$false }
-        session = @{ type='int' }
-        priority = @{ type='str'; choices=@( 'background', 'low', 'belownormal', 'abovenormal', 'high', 'realtime' ) }
-        timeout = @{ type='int' }
+        command = @{ type = 'str'; required = $true }
+        executable = @{ type = 'path'; default = 'psexec.exe' }
+        hostnames = @{ type = 'list'; elements = 'str' }
+        username = @{ type = 'str' }
+        password = @{ type = 'str'; no_log = $true }
+        chdir = @{ type = 'path' }
+        wait = @{ type = 'bool'; default = $true }
+        nobanner = @{ type = 'bool'; default = $false }
+        noprofile = @{ type = 'bool'; default = $false }
+        elevated = @{ type = 'bool'; default = $false }
+        limited = @{ type = 'bool'; default = $false }
+        system = @{ type = 'bool'; default = $false }
+        interactive = @{ type = 'bool'; default = $false }
+        session = @{ type = 'int' }
+        priority = @{ type = 'str'; choices = @( 'background', 'low', 'belownormal', 'abovenormal', 'high', 'realtime' ) }
+        timeout = @{ type = 'int' }
     }
 }
 
@@ -148,7 +148,8 @@ $module.Result.stderr = $command_result.stderr
 
 If ($wait -eq $true) {
     $module.Result.rc = $command_result.rc
-} else {
+}
+else {
     $module.Result.rc = 0
     $module.Result.pid = $command_result.rc
 }

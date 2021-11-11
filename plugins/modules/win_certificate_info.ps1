@@ -5,21 +5,17 @@
 
 #AnsibleRequires -CSharpUtil Ansible.Basic
 
-function ConvertTo-Timestamp($start_date, $end_date)
-{
-    if ($start_date -and $end_date)
-    {
+function ConvertTo-Timestamp($start_date, $end_date) {
+    if ($start_date -and $end_date) {
         return (New-TimeSpan -Start $start_date -End $end_date).TotalSeconds
     }
 }
 
-function Format-Date([DateTime]$date)
-{
+function Format-Date([DateTime]$date) {
     return $date.ToUniversalTime().ToString('yyyy-MM-ddTHH:mm:ssK')
 }
 
-function Get-CertificateInfo ($cert)
-{
+function Get-CertificateInfo ($cert) {
     $epoch_date = Get-Date -Date "01/01/1970"
 
     $cert_info = @{ extensions = @() }
@@ -41,40 +37,31 @@ function Get-CertificateInfo ($cert)
     $cert_info.dns_names = [System.Collections.Generic.List`1[String]]@($cert_info.issued_to)
     $cert_info.raw = [System.Convert]::ToBase64String($cert.GetRawCertData())
     $cert_info.public_key = [System.Convert]::ToBase64String($cert.GetPublicKey())
-    if ($cert.Extensions.Count -gt 0)
-    {
-        [array]$cert_info.extensions = foreach ($extension in $cert.Extensions)
-        {
+    if ($cert.Extensions.Count -gt 0) {
+        [array]$cert_info.extensions = foreach ($extension in $cert.Extensions) {
             $extension_info = @{
                 critical = $extension.Critical
-                field    = $extension.Oid.FriendlyName
-                value    = $extension.Format($false)
+                field = $extension.Oid.FriendlyName
+                value = $extension.Format($false)
             }
-            if ($extension -is [System.Security.Cryptography.X509Certificates.X509BasicConstraintsExtension])
-            {
+            if ($extension -is [System.Security.Cryptography.X509Certificates.X509BasicConstraintsExtension]) {
                 $cert_info.is_ca = $extension.CertificateAuthority
                 $cert_info.path_length_constraint = $extension.PathLengthConstraint
             }
-            elseif ($extension -is [System.Security.Cryptography.X509Certificates.X509EnhancedKeyUsageExtension])
-            {
+            elseif ($extension -is [System.Security.Cryptography.X509Certificates.X509EnhancedKeyUsageExtension]) {
                 $cert_info.intended_purposes = $extension.EnhancedKeyUsages.FriendlyName -as [string[]]
             }
-            elseif ($extension -is [System.Security.Cryptography.X509Certificates.X509KeyUsageExtension])
-            {
+            elseif ($extension -is [System.Security.Cryptography.X509Certificates.X509KeyUsageExtension]) {
                 $cert_info.key_usages = $extension.KeyUsages.ToString().Split(',').Trim() -as [string[]]
             }
-            elseif ($extension -is [System.Security.Cryptography.X509Certificates.X509SubjectKeyIdentifierExtension])
-            {
+            elseif ($extension -is [System.Security.Cryptography.X509Certificates.X509SubjectKeyIdentifierExtension]) {
                 $cert_info.ski = $extension.SubjectKeyIdentifier
             }
-            elseif ($extension.Oid.value -eq '2.5.29.17')
-            {
+            elseif ($extension.Oid.value -eq '2.5.29.17') {
                 $sans = $extension.Format($true).Split("`r`n", [System.StringSplitOptions]::RemoveEmptyEntries)
-                foreach ($san in $sans)
-                {
+                foreach ($san in $sans) {
                     $san_parts = $san.Split("=")
-                    if ($san_parts.Length -ge 2 -and $san_parts[0].Trim() -eq 'DNS Name')
-                    {
+                    if ($san_parts.Length -ge 2 -and $san_parts[0].Trim() -eq 'DNS Name') {
                         $cert_info.dns_names.Add($san_parts[1].Trim())
                     }
                 }
@@ -89,8 +76,8 @@ $store_location_values = ([System.Security.Cryptography.X509Certificates.StoreLo
 
 $spec = @{
     options = @{
-        thumbprint     = @{ type = "str"; required = $false }
-        store_name     = @{ type = "str"; default = "My"; }
+        thumbprint = @{ type = "str"; required = $false }
+        store_name = @{ type = "str"; default = "My"; }
         store_location = @{ type = "str"; default = "LocalMachine"; choices = $store_location_values; }
     }
     supports_check_mode = $true
@@ -108,25 +95,20 @@ $store.Open([System.Security.Cryptography.X509Certificates.OpenFlags]::ReadOnly)
 $module.Result.exists = $false
 $module.Result.certificates = @()
 
-try
-{
-    if ($null -ne $thumbprint)
-    {
+try {
+    if ($null -ne $thumbprint) {
         $found_certs = $store.Certificates.Find([System.Security.Cryptography.X509Certificates.X509FindType]::FindByThumbprint, $thumbprint, $false)
     }
-    else
-    {
+    else {
         $found_certs = $store.Certificates
     }
 
-    if ($found_certs.Count -gt 0)
-    {
+    if ($found_certs.Count -gt 0) {
         $module.Result.exists = $true
         [array]$module.Result.certificates = $found_certs | ForEach-Object { Get-CertificateInfo -cert $_ } | Sort-Object -Property { $_.thumbprint }
     }
 }
-finally
-{
+finally {
     $store.Close()
 }
 

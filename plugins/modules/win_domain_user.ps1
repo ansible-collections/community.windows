@@ -14,7 +14,8 @@ Function Test-Credential {
     if (($Username.ToCharArray()) -contains [char]'@') {
         # UserPrincipalName
         $Domain = $null # force $Domain to be null, to prevent undefined behaviour, as a domain name is already included in the username
-    } elseif (($Username.ToCharArray()) -contains [char]'\') {
+    }
+    elseif (($Username.ToCharArray()) -contains [char]'\') {
         # Pre Win2k Account Name
         $Domain = ($Username -split '\\')[0]
         $Username = ($Username -split '\\', 2)[-1]
@@ -24,26 +25,29 @@ Function Test-Credential {
         $handle = [Ansible.AccessToken.TokenUtil]::LogonUser($Username, $Domain, $Password, "Network", "Default")
         $handle.Dispose()
         return $true
-    } catch [Ansible.AccessToken.Win32Exception] {
+    }
+    catch [Ansible.AccessToken.Win32Exception] {
         # following errors indicate the creds are correct but the user was
         # unable to log on for other reasons, which we don't care about
         $success_codes = @(
-            0x0000052F,  # ERROR_ACCOUNT_RESTRICTION
-            0x00000530,  # ERROR_INVALID_LOGON_HOURS
-            0x00000531,  # ERROR_INVALID_WORKSTATION
+            0x0000052F, # ERROR_ACCOUNT_RESTRICTION
+            0x00000530, # ERROR_INVALID_LOGON_HOURS
+            0x00000531, # ERROR_INVALID_WORKSTATION
             0x00000569  # ERROR_LOGON_TYPE_GRANTED
         )
         $failed_codes = @(
-            0x0000052E,  # ERROR_LOGON_FAILURE
-            0x00000532,  # ERROR_PASSWORD_EXPIRED
+            0x0000052E, # ERROR_LOGON_FAILURE
+            0x00000532, # ERROR_PASSWORD_EXPIRED
             0x00000773  # ERROR_PASSWORD_MUST_CHANGE
         )
 
         if ($_.Exception.NativeErrorCode -in $failed_codes) {
             return $false
-        } elseif ($_.Exception.NativeErrorCode -in $success_codes) {
+        }
+        elseif ($_.Exception.NativeErrorCode -in $success_codes) {
             return $true
-        } else {
+        }
+        else {
             # an unknown failure, reraise exception
             throw $_
         }
@@ -52,10 +56,14 @@ Function Test-Credential {
 
 try {
     Import-Module ActiveDirectory
- }
- catch {
-     Fail-Json $result "Failed to import ActiveDirectory PowerShell module. This module should be run on a domain controller, and the ActiveDirectory module must be available."
- }
+}
+catch {
+    $msg = -join @(
+        "Failed to import ActiveDirectory PowerShell module. This module should be run on a domain controller, "
+        "and the ActiveDirectory module must be available."
+    )
+    Fail-Json $result $msg
+}
 
 $result = @{
     changed = $false
@@ -69,9 +77,9 @@ $params = Parse-Args $args -supports_check_mode $true
 $check_mode = Get-AnsibleParam -obj $params -name "_ansible_check_mode" -default $false
 
 # Module control parameters
-$state = Get-AnsibleParam -obj $params -name "state" -type "str" -default "present" -validateset "present","absent","query"
-$update_password = Get-AnsibleParam -obj $params -name "update_password" -type "str" -default "always" -validateset "always","on_create","when_changed"
-$groups_action = Get-AnsibleParam -obj $params -name "groups_action" -type "str" -default "replace" -validateset "add","remove","replace"
+$state = Get-AnsibleParam -obj $params -name "state" -type "str" -default "present" -validateset "present", "absent", "query"
+$update_password = Get-AnsibleParam -obj $params -name "update_password" -type "str" -default "always" -validateset "always", "on_create", "when_changed"
+$groups_action = Get-AnsibleParam -obj $params -name "groups_action" -type "str" -default "replace" -validateset "add", "remove", "replace"
 $domain_username = Get-AnsibleParam -obj $params -name "domain_username" -type "str"
 $domain_password = Get-AnsibleParam -obj $params -name "domain_password" -type "str" -failifempty ($null -ne $domain_username)
 $domain_server = Get-AnsibleParam -obj $params -name "domain_server" -type "str"
@@ -125,11 +133,12 @@ if ($null -ne $domain_server) {
     $extra_args.Server = $domain_server
 }
 
-Function Get-PrincipalGroups {
+Function Get-PrincipalGroup {
     Param ($identity, $args_extra)
-    try{
+    try {
         $groups = Get-ADPrincipalGroupMembership -Identity $identity @args_extra -ErrorAction Stop
-    } catch {
+    }
+    catch {
         Add-Warning -obj $result -message "Failed to enumerate user groups but continuing on.: $($_.Exception.Message)"
         return @()
     }
@@ -141,7 +150,7 @@ Function Get-PrincipalGroups {
 }
 
 try {
-    $user_obj = Get-ADUser -Identity $identity -Properties ('*','msDS-PrincipalName') @extra_args
+    $user_obj = Get-ADUser -Identity $identity -Properties ('*', 'msDS-PrincipalName') @extra_args
     $user_guid = $user_obj.ObjectGUID
 }
 catch [Microsoft.ActiveDirectory.Management.ADIdentityNotFoundException] {
@@ -157,15 +166,15 @@ If ($state -eq 'present') {
     If (-not $user_obj) {
         $create_args = @{}
         $create_args.Name = $name
-        If ($null -ne $path){
-          $create_args.Path = $path
+        If ($null -ne $path) {
+            $create_args.Path = $path
         }
-        If ($null -ne $upn){
-          $create_args.UserPrincipalName  = $upn
-          $create_args.SamAccountName  = $upn.Split('@')[0]
+        If ($null -ne $upn) {
+            $create_args.UserPrincipalName = $upn
+            $create_args.SamAccountName = $upn.Split('@')[0]
         }
         If ($null -ne $sam_account_name) {
-          $create_args.SamAccountName  = $sam_account_name
+            $create_args.SamAccountName = $sam_account_name
         }
         $user_obj = New-ADUser @create_args -WhatIf:$check_mode -PassThru @extra_args
         $user_guid = $user_obj.ObjectGUID
@@ -175,7 +184,7 @@ If ($state -eq 'present') {
         If ($check_mode) {
             Exit-Json $result
         }
-        $user_obj = Get-ADUser -Identity $user_guid -Properties ('*','msDS-PrincipalName') @extra_args
+        $user_obj = Get-ADUser -Identity $user_guid -Properties ('*', 'msDS-PrincipalName') @extra_args
     }
 
     If ($password) {
@@ -185,7 +194,8 @@ If ($state -eq 'present') {
         # so we don't need to differentiate between this two states.
         If ($new_user -or ($update_password -eq "always")) {
             $set_new_credentials = $true
-        } elseif ($update_password -eq "when_changed") {
+        }
+        elseif ($update_password -eq "when_changed") {
             $user_identifier = If ($user_obj.UserPrincipalName) {
                 $user_obj.UserPrincipalName
             }
@@ -194,7 +204,8 @@ If ($state -eq 'present') {
             }
 
             $set_new_credentials = -not (Test-Credential -Username $user_identifier -Password $password)
-        } else {
+        }
+        else {
             $set_new_credentials = $false
         }
         If ($set_new_credentials) {
@@ -281,7 +292,8 @@ If ($state -eq 'present') {
                 if ($existing_value -cne $attribute_value) {
                     $replace_attributes.$attribute_name = $attribute_value
                 }
-            } else {
+            }
+            else {
                 $add_attributes.$attribute_name = $attribute_value
             }
         }
@@ -311,7 +323,7 @@ If ($state -eq 'present') {
             $groups += (Get-ADGroup -Identity $group @extra_args).DistinguishedName
         }
 
-        $assigned_groups = Get-PrincipalGroups $user_guid $extra_args
+        $assigned_groups = Get-PrincipalGroup $user_guid $extra_args
 
         switch ($groups_action) {
             "add" {
@@ -350,7 +362,8 @@ If ($state -eq 'present') {
             }
         }
     }
-} ElseIf ($state -eq 'absent') {
+}
+ElseIf ($state -eq 'absent') {
     # Ensure user does not exist
     If ($user_obj) {
         Remove-ADUser $user_obj -Confirm:$false -WhatIf:$check_mode @extra_args
@@ -384,7 +397,7 @@ If ($user_obj) {
     $result.sid = [string]$user_obj.SID
     $result.upn = $user_obj.UserPrincipalName
     $result.sam_account_name = $user_obj.SamAccountName
-    $result.groups = Get-PrincipalGroups $user_guid $extra_args
+    $result.groups = Get-PrincipalGroup $user_guid $extra_args
     $result.msg = "User '$name' is present"
     $result.state = "present"
 }
