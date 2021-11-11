@@ -17,7 +17,7 @@ function Test-LogExistence {
     )
 
     $log_exists = $false
-    $log = Get-EventLog -List | Where-Object {$_.Log -eq $LogName}
+    $log = Get-EventLog -List | Where-Object { $_.Log -eq $LogName }
     if ($log) {
         $log_exists = $true
     }
@@ -53,7 +53,7 @@ $log = Get-AnsibleParam -obj $params -name "log" -type "str" -failifempty $true
 $source = Get-AnsibleParam -obj $params -name "source" -type "str" -failifempty $true
 $event_id = Get-AnsibleParam -obj $params -name "event_id" -type "int" -failifempty $true
 $message = Get-AnsibleParam -obj $params -name "message" -type "str" -failifempty $true
-$entry_type = Get-AnsibleParam -obj $params -name "entry_type" -type "str" -validateset "Error","FailureAudit","Information","SuccessAudit","Warning"
+$entry_type = Get-AnsibleParam -obj $params -name "entry_type" -type "str" -validateset "Error", "FailureAudit", "Information", "SuccessAudit", "Warning"
 $category = Get-AnsibleParam -obj $params -name "category" -type "int"
 $raw_data = Get-AnsibleParam -obj $params -name "raw_data" -type "str"
 

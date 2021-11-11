@@ -12,7 +12,7 @@ $params = Parse-Args -arguments $args -supports_check_mode $true
 $check_mode = Get-AnsibleParam -obj $params -name "_ansible_check_mode" -type "bool" -default $false
 
 $name = Get-AnsibleParam -obj $params -name "name" -type "str" -failifempty $true
-$state = Get-AnsibleParam -obj $params -name "state" -type "str" -default "present" -validateSet "started","restarted","stopped","absent","present"
+$state = Get-AnsibleParam -obj $params -name "state" -type "str" -default "present" -validateSet "started", "restarted", "stopped", "absent", "present"
 $result = @{
     changed = $false
     attributes = @{}
@@ -36,7 +36,8 @@ if ($input_attributes) {
     if ($input_attributes -is [System.Collections.Hashtable]) {
         # Uses dict style parameters, newer and recommended style
         $attributes = $input_attributes
-    } else {
+    }
+    else {
         Fail-Json -obj $result -message "Using a string for the attributes parameter is not longer supported, please use a dict instead"
     }
 }
@@ -61,21 +62,24 @@ Function Convert-CollectionToList($collection) {
         foreach ($entry in $raw_list) {
             $list += $entry.Trim()
         }
-    } elseif ($collection -is [Microsoft.IIs.PowerShell.Framework.ConfigurationElement]) {
+    }
+    elseif ($collection -is [Microsoft.IIs.PowerShell.Framework.ConfigurationElement]) {
         # the collection is the value from IIS itself, we need to conver accordingly
         foreach ($entry in $collection.Collection) {
             $list += $entry.Value.ToString()
         }
-    } elseif ($collection -isnot [Array]) {
+    }
+    elseif ($collection -isnot [Array]) {
         $list += $collection
-    } else {
+    }
+    else {
         $list = $collection
     }
 
-    return ,$list
+    return , $list
 }
 
-Function Compare-Values($current, $new) {
+Function Compare-Value($current, $new) {
     if ($null -eq $current) {
         return $true
     }
@@ -93,7 +97,8 @@ Function Compare-Values($current, $new) {
                 return $true
             }
         }
-    } else {
+    }
+    else {
         if ($current -ne $new) {
             return $true
         }
@@ -111,7 +116,8 @@ Function Convert-ToPropertyValue($pool, $attribute_key, $attribute_value) {
         $attribute_parent = "attributes"
         $attribute_child = $attribute_key
         $attribute_meta = $pool.Attributes | Where-Object { $_.Name -eq $attribute_child }
-    } elseif ($attribute_key_split.Length -gt 1) {
+    }
+    elseif ($attribute_key_split.Length -gt 1) {
         $attribute_parent = $attribute_key_split[0]
         $attribute_key_split = $attribute_key_split[1..$($attribute_key_split.Length - 1)]
         $parent = $pool.$attribute_parent
@@ -128,14 +134,14 @@ Function Convert-ToPropertyValue($pool, $attribute_key, $attribute_value) {
 
     if ($attribute_meta) {
         if (($attribute_meta.PSObject.Properties.Name -eq "Collection").Count -gt 0) {
-            return ,(Convert-CollectionToList -collection $attribute_value)
+            return , (Convert-CollectionToList -collection $attribute_value)
         }
         $type = $attribute_meta.Schema.Type
         $value = $attribute_value
         if ($type -eq "enum") {
             # Attempt to convert the value from human friendly to enum value - use existing value if we fail
             $dot_net_class = Get-DotNetClassForAttribute -attribute_parent $attribute_parent
-            $enum_attribute_name = $attribute_child.Substring(0,1).ToUpper() + $attribute_child.Substring(1)
+            $enum_attribute_name = $attribute_child.Substring(0, 1).ToUpper() + $attribute_child.Substring(1)
             $enum = $dot_net_class.GetProperty($enum_attribute_name).PropertyType.FullName
             if ($enum) {
                 $enum_values = [Enum]::GetValues($enum)
@@ -145,7 +151,8 @@ Function Convert-ToPropertyValue($pool, $attribute_key, $attribute_value) {
                             $value = $enum_value
                             break
                         }
-                    } else {
+                    }
+                    else {
                         if ([System.String]$enum_value -eq [System.String]$attribute_value) {
                             $value = $enum_value
                             break
@@ -158,10 +165,12 @@ Function Convert-ToPropertyValue($pool, $attribute_key, $attribute_value) {
         Set-Variable -Name casted_value -Value ($value -as ([type] $attribute_meta.TypeName))
         if ($null -eq $casted_value) {
             $value
-        } else {
+        }
+        else {
             $casted_value
         }
-    } else {
+    }
+    else {
         $attribute_value
     }
 }
@@ -179,18 +188,21 @@ if ($state -eq "absent") {
     if ($pool) {
         try {
             Remove-WebAppPool -Name $name -WhatIf:$check_mode
-        } catch {
+        }
+        catch {
             Fail-Json $result "Failed to remove Web App pool $($name): $($_.Exception.Message)"
         }
         $result.changed = $true
     }
-} else {
+}
+else {
     # Add pool if absent
     if (-not $pool) {
         if (-not $check_mode) {
             try {
                 New-WebAppPool -Name $name > $null
-            } catch {
+            }
+            catch {
                 Fail-Json $result "Failed to create new Web App Pool $($name): $($_.Exception.Message)"
             }
         }
@@ -212,26 +224,42 @@ if ($state -eq "absent") {
             $current_raw_value = Get-ItemProperty -LiteralPath IIS:\AppPools\$name -Name $attribute_key -ErrorAction SilentlyContinue
             $current_value = Convert-ToPropertyValue -pool $pool -attribute_key $attribute_key -attribute_value $current_raw_value
 
-            $changed = Compare-Values -current $current_value -new $new_value
+            $changed = Compare-Value -current $current_value -new $new_value
             if ($changed -eq $true) {
                 if ($new_value -is [Array]) {
                     try {
                         Clear-ItemProperty -LiteralPath IIS:\AppPools\$name -Name $attribute_key -WhatIf:$check_mode
-                    } catch {
-                        Fail-Json -obj $result -message "Failed to clear attribute to Web App Pool $name. Attribute: $attribute_key, Exception: $($_.Exception.Message)"
+                    }
+                    catch {
+                        $msg = -join @(
+                            "Failed to clear attribute to Web App Pool $name. Attribute: $attribute_key, "
+                            "Exception: $($_.Exception.Message)"
+                        )
+                        Fail-Json -obj $result -message $msg
                     }
                     foreach ($value in $new_value) {
                         try {
-                            New-ItemProperty -LiteralPath IIS:\AppPools\$name -Name $attribute_key -Value @{value=$value} -WhatIf:$check_mode > $null
-                        } catch {
-                            Fail-Json -obj $result -message "Failed to add new attribute to Web App Pool $name. Attribute: $attribute_key, Value: $value, Exception: $($_.Exception.Message)"
+                            New-ItemProperty -LiteralPath IIS:\AppPools\$name -Name $attribute_key -Value @{value = $value } -WhatIf:$check_mode > $null
+                        }
+                        catch {
+                            $msg = -join @(
+                                "Failed to add new attribute to Web App Pool $name. Attribute: $attribute_key, "
+                                "Value: $value, Exception: $($_.Exception.Message)"
+                            )
+                            Fail-Json -obj $result -message $msg
                         }
                     }
-                } else {
+                }
+                else {
                     try {
                         Set-ItemProperty -LiteralPath IIS:\AppPools\$name -Name $attribute_key -Value $new_value -WhatIf:$check_mode
-                    } catch {
-                        Fail-Json $result "Failed to set attribute to Web App Pool $name. Attribute: $attribute_key, Value: $new_value, Exception: $($_.Exception.Message)"
+                    }
+                    catch {
+                        $msg = -join @(
+                            "Failed to set attribute to Web App Pool $name. Attribute: $attribute_key, "
+                            "Value: $new_value, Exception: $($_.Exception.Message)"
+                        )
+                        Fail-Json $result $msg
                     }
                 }
                 $result.changed = $true
@@ -244,27 +272,32 @@ if ($state -eq "absent") {
                 if (-not $check_mode) {
                     try {
                         Start-WebAppPool -Name $name > $null
-                    } catch {
+                    }
+                    catch {
                         Fail-Json $result "Failed to start Web App Pool $($name): $($_.Exception.Message)"
                     }
                 }
                 $result.changed = $true
             }
-        } else {
+        }
+        else {
             if ($state -eq "stopped") {
                 if (-not $check_mode) {
                     try {
                         Stop-WebAppPool -Name $name > $null
-                    } catch {
+                    }
+                    catch {
                         Fail-Json $result "Failed to stop Web App Pool $($name): $($_.Exception.Message)"
                     }
                 }
                 $result.changed = $true
-            } elseif ($state -eq "restarted") {
+            }
+            elseif ($state -eq "restarted") {
                 if (-not $check_mode) {
                     try {
                         Restart-WebAppPool -Name $name > $null
-                    } catch {
+                    }
+                    catch {
                         Fail-Json $result "Failed to restart Web App Pool $($name): $($_.Exception.Message)"
                     }
                 }
@@ -278,11 +311,12 @@ if ($state -eq "absent") {
 $pool = Get-Item -LiteralPath IIS:\AppPools\$name -ErrorAction SilentlyContinue
 $elements = @("attributes", "cpu", "failure", "processModel", "recycling")
 
-foreach ($element in $elements)  {
+foreach ($element in $elements) {
     if ($element -eq "attributes") {
         $attribute_collection = $pool.Attributes
         $attribute_parent = $pool
-    } else {
+    }
+    else {
         $attribute_collection = $pool.$element.Attributes
         $attribute_parent = $pool.$element
     }

@@ -22,25 +22,27 @@ $name = $module.Params.name
 Function ConvertTo-NormalizedUser {
     [CmdletBinding()]
     param (
-        [Parameter(Mandatory=$true)]
+        [Parameter(Mandatory = $true)]
         [String]$InputObject
     )
 
     $candidates = @(if ($InputObject.Contains('\')) {
-        $nameSplit = $InputObject.Split('\', 2)
+            $nameSplit = $InputObject.Split('\', 2)
 
-        if ($nameSplit[0] -eq '.') {
-            # If the domain portion is . try using the hostname then falling back to just the username.
-            # Usually the hostname just works except when running on a DC where it's a domain account
-            # where looking up just the username should work.
-            ,@($env:COMPUTERNAME, $nameSplit[1])
-            $nameSplit[1]
-        } else {
-            ,$nameSplit
+            if ($nameSplit[0] -eq '.') {
+                # If the domain portion is . try using the hostname then falling back to just the username.
+                # Usually the hostname just works except when running on a DC where it's a domain account
+                # where looking up just the username should work.
+                , @($env:COMPUTERNAME, $nameSplit[1])
+                $nameSplit[1]
+            }
+            else {
+                , $nameSplit
+            }
         }
-    } else {
-        $InputObject
-    })
+        else {
+            $InputObject
+        })
 
     $sid = for ($i = 0; $i -lt $candidates.Length; $i++) {
         $candidate = $candidates[$i]
@@ -127,14 +129,15 @@ Function Get-PropertyValue($task_property, $com, $property) {
 
     if ($null -eq $raw_value) {
         return $null
-    } elseif ($raw_value.GetType().Name -eq "__ComObject") {
+    }
+    elseif ($raw_value.GetType().Name -eq "__ComObject") {
         $com_values = @{}
         Get-Member -InputObject $raw_value -MemberType Property | ForEach-Object {
             $com_value = Get-PropertyValue -task_property $property -com $raw_value -property $_.Name
             $com_values.$($_.Name) = $com_value
         }
 
-        return ,$com_values
+        return , $com_values
     }
 
     switch ($property) {
@@ -258,7 +261,8 @@ Function Get-PropertyValue($task_property, $com, $property) {
         Type {
             if ($task_property -eq "actions") {
                 $value = [Enum]::ToObject([TASK_ACTION_TYPE], $raw_value).ToString()
-            } elseif ($task_property -eq "triggers") {
+            }
+            elseif ($task_property -eq "triggers") {
                 $value = [Enum]::ToObject([TASK_TRIGGER_TYPE2], $raw_value).ToString()
             }
             break
@@ -283,20 +287,22 @@ Function Get-PropertyValue($task_property, $com, $property) {
         }
     }
 
-    return ,$value
+    return , $value
 }
 
 $service = New-Object -ComObject Schedule.Service
 try {
     $service.Connect()
-} catch {
+}
+catch {
     $module.FailJson("failed to connect to the task scheduler service: $($_.Exception.Message)", $_)
 }
 
 try {
     $task_folder = $service.GetFolder($path)
     $module.Result.folder_exists = $true
-} catch {
+}
+catch {
     $module.Result.folder_exists = $false
     if ($null -ne $name) {
         $module.Result.task_exists = $false
@@ -375,7 +381,8 @@ if ($null -ne $name) {
                 $module.Result.$property += $item_info
             }
         }
-    } else {
+    }
+    else {
         $module.Result.task_exists = $false
     }
 }

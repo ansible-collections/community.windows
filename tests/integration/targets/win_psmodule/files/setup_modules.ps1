@@ -35,7 +35,8 @@ foreach ($package in $packages) {
         if ($package.ContainsKey("prerelease")) {
             $ps_data = "Prerelease = '$($package.prerelease)'"
             $nuget_version = "$($package.version)-$($package.prerelease)"
-        } else {
+        }
+        else {
             $ps_data = ""
             $nuget_version = $package.version
         }
@@ -75,7 +76,8 @@ foreach ($package in $packages) {
         $nupkg_filename = "$($package.name).$($nuget_version).nupkg"
         Copy-Item -Path (Join-Path -Path $tmp_dir -ChildPath $nupkg_filename) `
             -Destination (Join-Path -Path $repo_path -ChildPath $nupkg_filename)
-    } finally {
+    }
+    finally {
         Remove-Item -Path $tmp_dir -Force -Recurse
     }
 }

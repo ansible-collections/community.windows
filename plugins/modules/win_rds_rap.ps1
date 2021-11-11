@@ -10,7 +10,7 @@ $ErrorActionPreference = "Stop"
 
 # List of authentication methods as string. Used for parameter validation and conversion to integer flag, so order is important!
 $computer_group_types = @("rdg_group", "ad_network_resource_group", "allow_any")
-$computer_group_types_wmi = @{rdg_group = "RG"; ad_network_resource_group = "CG"; allow_any = "ALL"}
+$computer_group_types_wmi = @{rdg_group = "RG"; ad_network_resource_group = "CG"; allow_any = "ALL" }
 
 $params = Parse-Args -arguments $args -supports_check_mode $true
 $check_mode = Get-AnsibleParam -obj $params -name "_ansible_check_mode" -type "bool" -default $false
@@ -18,9 +18,10 @@ $diff_mode = Get-AnsibleParam -obj $params -name "_ansible_diff" -type "bool" -d
 
 $name = Get-AnsibleParam -obj $params -name "name" -type "str" -failifempty $true
 $description = Get-AnsibleParam -obj $params -name "description" -type "str"
-$state = Get-AnsibleParam -obj $params -name "state" -type "str" -default "present" -validateset "absent","present","enabled","disabled"
+$state = Get-AnsibleParam -obj $params -name "state" -type "str" -default "present" -validateset "absent", "present", "enabled", "disabled"
 $computer_group_type = Get-AnsibleParam -obj $params -name "computer_group_type" -type "str" -validateset $computer_group_types
-$computer_group = Get-AnsibleParam -obj $params -name "computer_group" -type "str" -failifempty ($computer_group_type -eq "ad_network_resource_group" -or $computer_group_type -eq "rdg_group")
+$computer_group_failure = ($computer_group_type -eq "ad_network_resource_group" -or $computer_group_type -eq "rdg_group")
+$computer_group = Get-AnsibleParam -obj $params -name "computer_group" -type "str" -failifempty $computer_group_failure
 $user_groups = Get-AnsibleParam -obj $params -name "user_groups" -type "list"
 $allowed_ports = Get-AnsibleParam -obj $params -name "allowed_ports" -type "list"
 
@@ -32,13 +33,13 @@ function Get-RAP([string] $name) {
     }
 
     # Fetch RAP properties
-    Get-ChildItem -LiteralPath $rap_path | ForEach-Object { $rap.Add($_.Name,$_.CurrentValue) }
+    Get-ChildItem -LiteralPath $rap_path | ForEach-Object { $rap.Add($_.Name, $_.CurrentValue) }
     # Convert boolean values
     $rap.Enabled = $rap.Status -eq 1
     $rap.Remove("Status")
 
     # Convert computer group name from UPN to Down-Level Logon format
-    if($rap.ComputerGroupType -ne 2) {
+    if ($rap.ComputerGroupType -ne 2) {
         $rap.ComputerGroup = Convert-FromSID -sid (Convert-ToSID -account_name $rap.ComputerGroup)
     }
 
@@ -46,9 +47,10 @@ function Get-RAP([string] $name) {
     $rap.ComputerGroupType = $computer_group_types[$rap.ComputerGroupType]
 
     # Convert allowed ports from string to list
-    if($rap.PortNumbers -eq '*') {
+    if ($rap.PortNumbers -eq '*') {
         $rap.PortNumbers = @("any")
-    } else {
+    }
+    else {
         $rap.PortNumbers = @($rap.PortNumbers -split ',')
     }
 
@@ -63,13 +65,13 @@ function Get-RAP([string] $name) {
 }
 
 function Set-RAPPropertyValue {
-    [CmdletBinding(SupportsShouldProcess=$true)]
+    [CmdletBinding(SupportsShouldProcess = $true)]
     param (
-        [Parameter(Mandatory=$true)]
+        [Parameter(Mandatory = $true)]
         [string] $name,
-        [Parameter(Mandatory=$true)]
+        [Parameter(Mandatory = $true)]
         [string] $property,
-        [Parameter(Mandatory=$true)]
+        [Parameter(Mandatory = $true)]
         $value,
         [Parameter()]
         $resultobj = @{}
@@ -79,13 +81,14 @@ function Set-RAPPropertyValue {
 
     try {
         Set-Item -LiteralPath "$rap_path\$property" -Value $value -ErrorAction stop
-    } catch {
+    }
+    catch {
         Fail-Json -obj $resultobj -message "Failed to set property $property of RAP ${name}: $($_.Exception.Message)"
     }
 }
 
 $result = @{
-  changed = $false
+    changed = $false
 }
 $diff_text = $null
 
@@ -117,9 +120,11 @@ if ($null -ne $user_groups) {
 # Validate computer group parameter
 if ($computer_group_type -eq "allow_any" -and $null -ne $computer_group) {
     Add-Warning -obj $result -message "Parameter 'computer_group' ignored because the computer_group_type is set to allow_any."
-} elseif ($computer_group_type -eq "rdg_group" -and -not (Test-Path -LiteralPath "RDS:\GatewayServer\GatewayManagedComputerGroups\$computer_group")) {
+}
+elseif ($computer_group_type -eq "rdg_group" -and -not (Test-Path -LiteralPath "RDS:\GatewayServer\GatewayManagedComputerGroups\$computer_group")) {
     Fail-Json -obj $result -message "$computer_group is not a valid gateway managed computer group"
-} elseif ($computer_group_type -eq "ad_network_resource_group") {
+}
+elseif ($computer_group_type -eq "ad_network_resource_group") {
     $sid = Convert-ToSID -account_name $computer_group
     if (!$sid) {
         Fail-Json -obj $result -message "$computer_group is not a valid computer group on the host machine or domain."
@@ -151,7 +156,8 @@ if ($state -eq 'absent') {
         $diff_text += "-[$name]"
         $result.changed = $true
     }
-} else {
+}
+else {
     $diff_text_added_prefix = ''
     if (-not $rap_exist) {
         if ($null -eq $user_groups) {
@@ -172,7 +178,13 @@ if ($state -eq 'absent') {
                 ProtocolNames = 'RDP'
                 PortNumbers = '*'
             }
-            $return = Invoke-CimMethod -Namespace Root\CIMV2\TerminalServices -ClassName Win32_TSGatewayResourceAuthorizationPolicy -MethodName Create -Arguments $RapArgs
+            $cimParams = @{
+                Namespace = "Root\CIMV2\TerminalServices"
+                ClassName = "Win32_TSGatewayResourceAuthorizationPolicy"
+                MethodName = "Create"
+                Arguments = $RapArgs
+            }
+            $return = Invoke-CimMethod @cimParams
             if ($return.ReturnValue -ne 0) {
                 Fail-Json -obj $result -message "Failed to create RAP $name (code: $($return.ReturnValue))"
             }
@@ -186,7 +198,7 @@ if ($state -eq 'absent') {
     $diff_text += "$diff_text_added_prefix[$name]`n"
 
     # We cannot configure a RAP that was created above in check mode as it won't actually exist
-    if($rap_exist) {
+    if ($rap_exist) {
         $rap = Get-RAP -Name $name
         $wmi_rap = Get-CimInstance -ClassName Win32_TSGatewayResourceAuthorizationPolicy -Namespace Root\CIMv2\TerminalServices -Filter "name='$($name)'"
 
@@ -227,7 +239,8 @@ if ($state -eq 'absent') {
 
             $result.changed = $true
 
-        } elseif ($null -ne $computer_group -and $computer_group -ne $rap.ComputerGroup) {
+        }
+        elseif ($null -ne $computer_group -and $computer_group -ne $rap.ComputerGroup) {
             $diff_text += "-ComputerGroup = $($rap.ComputerGroup)`n+ComputerGroup = $computer_group`n"
             $return = $wmi_rap | Invoke-CimMethod -MethodName SetResourceGroup -Arguments @{
                 ResourceGroupName = $computer_group
@@ -244,7 +257,7 @@ if ($state -eq 'absent') {
             $groups_to_add = @($user_groups | Where-Object { $rap.UserGroups -notcontains $_ })
 
             $user_groups_diff = $null
-            foreach($group in $groups_to_add) {
+            foreach ($group in $groups_to_add) {
                 if (-not $check_mode) {
                     $return = $wmi_rap | Invoke-CimMethod -MethodName AddUserGroupNames -Arguments @{ UserGroupNames = $group }
                     if ($return.ReturnValue -ne 0) {
@@ -255,7 +268,7 @@ if ($state -eq 'absent') {
                 $result.changed = $true
             }
 
-            foreach($group in $groups_to_remove) {
+            foreach ($group in $groups_to_remove) {
                 if (-not $check_mode) {
                     $return = $wmi_rap | Invoke-CimMethod -MethodName RemoveUserGroupNames -Arguments @{ UserGroupNames = $group }
                     if ($return.ReturnValue -ne 0) {
@@ -266,7 +279,7 @@ if ($state -eq 'absent') {
                 $result.changed = $true
             }
 
-            if($user_groups_diff) {
+            if ($user_groups_diff) {
                 $diff_text += "~UserGroups`n$user_groups_diff"
             }
         }

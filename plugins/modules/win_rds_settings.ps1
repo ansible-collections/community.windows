@@ -17,10 +17,10 @@ $diff_mode = Get-AnsibleParam -obj $params -name "_ansible_diff" -type "bool" -d
 $certificate = Get-AnsibleParam $params -name "certificate_hash" -type "str"
 $max_connections = Get-AnsibleParam $params -name "max_connections" -type "int"
 $ssl_bridging = Get-AnsibleParam -obj $params -name "ssl_bridging" -type "str" -validateset $ssl_bridging_methods
-$enable_only_messaging_capable_clients  = Get-AnsibleParam $params -name "enable_only_messaging_capable_clients" -type "bool"
+$enable_only_messaging_capable_clients = Get-AnsibleParam $params -name "enable_only_messaging_capable_clients" -type "bool"
 
 $result = @{
-  changed = $false
+    changed = $false
 }
 $diff_text = $null
 
@@ -29,12 +29,10 @@ if ($null -eq (Get-Module -Name RemoteDesktopServices -ErrorAction SilentlyConti
     Import-Module -Name RemoteDesktopServices
 }
 
-if ($null -ne $certificate)
-{
+if ($null -ne $certificate) {
     # Validate cert path
     $cert_path = "cert:\LocalMachine\My\$certificate"
-    If (-not (Test-Path -LiteralPath $cert_path) )
-    {
+    If (-not (Test-Path -LiteralPath $cert_path) ) {
         Fail-Json -obj $result -message "Unable to locate certificate at $cert_path"
     }
 
@@ -47,12 +45,10 @@ if ($null -ne $certificate)
     }
 }
 
-if ($null -ne $max_connections)
-{
+if ($null -ne $max_connections) {
     # Set the correct value for unlimited connections
     # TODO Use a more explicit value, maybe a string (ex: "max", "none" or "unlimited") ?
-    If ($max_connections -eq -1)
-    {
+    If ($max_connections -eq -1) {
         $max_connections = (Get-Item -LiteralPath "RDS:\GatewayServer\MaxConnectionsAllowed").CurrentValue
     }
 
@@ -65,8 +61,7 @@ if ($null -ne $max_connections)
     }
 }
 
-if ($null -ne $ssl_bridging)
-{
+if ($null -ne $ssl_bridging) {
     $current_ssl_bridging = (Get-Item -LiteralPath "RDS:\GatewayServer\SSLBridging").CurrentValue
     # Convert the integer value to its representative string
     $current_ssl_bridging_str = $ssl_bridging_methods[$current_ssl_bridging]
@@ -78,15 +73,15 @@ if ($null -ne $ssl_bridging)
     }
 }
 
-if ($null -ne $enable_only_messaging_capable_clients)
-{
+if ($null -ne $enable_only_messaging_capable_clients) {
     $current_enable_only_messaging_capable_clients = (Get-Item -LiteralPath "RDS:\GatewayServer\EnableOnlyMessagingCapableClients").CurrentValue
     # Convert the integer value to boolean
     $current_enable_only_messaging_capable_clients = $current_enable_only_messaging_capable_clients -eq 1
 
     if ($current_enable_only_messaging_capable_clients -ne $enable_only_messaging_capable_clients) {
         Set-Item -LiteralPath "RDS:\GatewayServer\EnableOnlyMessagingCapableClients" -Value ([int]$enable_only_messaging_capable_clients) -WhatIf:$check_mode
-        $diff_text += "-EnableOnlyMessagingCapableClients = $current_enable_only_messaging_capable_clients`n+EnableOnlyMessagingCapableClients = $enable_only_messaging_capable_clients`n"
+        $diff_text += "-EnableOnlyMessagingCapableClients = $current_enable_only_messaging_capable_clients`n"
+        $diff_text += "+EnableOnlyMessagingCapableClients = $enable_only_messaging_capable_clients`n"
         $result.changed = $true
     }
 }

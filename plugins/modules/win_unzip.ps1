@@ -28,9 +28,9 @@ $password = Get-AnsibleParam -obj $params -name "password" -type "str"
 # This catches that possible error, before assigning the JSON $result
 $result = @{
     changed = $false
-    dest = $dest -replace '\$',''
+    dest = $dest -replace '\$', ''
     removed = $false
-    src = $src -replace '\$',''
+    src = $src -replace '\$', ''
 }
 
 Function Expand-Zip($src, $dest) {
@@ -47,7 +47,8 @@ Function Expand-Zip($src, $dest) {
 
         # Ensure file in the archive does not escape the extraction path
         if (-not $full_target_path.StartsWith($full_dest_path)) {
-            Fail-Json -obj $result -message "Error unzipping '$src' to '$dest'! Filename contains relative paths which would extract outside the destination: $entry_target_path"
+            $msg = "Error unzipping '$src' to '$dest'! Filename contains relative paths which would extract outside the destination: $entry_target_path"
+            Fail-Json -obj $result -message $msg
         }
 
         if (-not (Test-Path -LiteralPath $entry_dir)) {
@@ -95,10 +96,11 @@ If (-Not (Test-Path -LiteralPath $src)) {
 
 $ext = [System.IO.Path]::GetExtension($src)
 
-If (-Not (Test-Path -LiteralPath $dest -PathType Container)){
-    Try{
+If (-Not (Test-Path -LiteralPath $dest -PathType Container)) {
+    Try {
         New-Item -ItemType "directory" -path $dest -WhatIf:$check_mode | out-null
-    } Catch {
+    }
+    Catch {
         Fail-Json -obj $result -message "Error creating '$dest' directory! Msg: $($_.Exception.Message)"
     }
 }
@@ -111,30 +113,36 @@ If ($ext -eq ".zip" -And $recurse -eq $false -And -Not $password) {
         # back to the legacy COM Shell.Application to extract the zip
         Add-Type -AssemblyName System.IO.Compression.FileSystem | Out-Null
         Add-Type -AssemblyName System.IO.Compression | Out-Null
-    } catch {
+    }
+    catch {
         $use_legacy = $true
     }
 
     if ($use_legacy) {
         try {
             Expand-ZipLegacy -src $src -dest $dest
-        } catch {
+        }
+        catch {
             Fail-Json -obj $result -message "Error unzipping '$src' to '$dest'!. Method: COM Shell.Application, Exception: $($_.Exception.Message)"
         }
-    } else {
+    }
+    else {
         try {
             Expand-Zip -src $src -dest $dest
-        } catch {
+        }
+        catch {
             Fail-Json -obj $result -message "Error unzipping '$src' to '$dest'!. Method: System.IO.Compression.ZipFile, Exception: $($_.Exception.Message)"
         }
     }
-} Else {
+}
+Else {
     # Check if PSCX is installed
     $list = Get-Module -ListAvailable
 
     If (-Not ($list -match "PSCX")) {
         Fail-Json -obj $result -message "PowerShellCommunityExtensions PowerShell Module (PSCX) is required for non-'.zip' compressed archive types."
-    } Else {
+    }
+    Else {
         $result.pscx_status = "present"
     }
 
@@ -160,10 +168,11 @@ If ($ext -eq ".zip" -And $recurse -eq $false -And -Not $password) {
     }
 
     If ($recurse) {
-        Get-ChildItem -LiteralPath $dest -recurse | Where-Object {$pcx_extensions -contains $_.extension} | ForEach-Object {
+        Get-ChildItem -LiteralPath $dest -recurse | Where-Object { $pcx_extensions -contains $_.extension } | ForEach-Object {
             Try {
                 Expand-Archive -Path $_.FullName -Force @expand_params
-            } Catch {
+            }
+            Catch {
                 Fail-Json -obj $result -message "Error recursively expanding '$src' to '$dest'! Msg: $($_.Exception.Message)"
             }
             If ($delete_archive) {
@@ -176,10 +185,11 @@ If ($ext -eq ".zip" -And $recurse -eq $false -And -Not $password) {
     $result.changed = $true
 }
 
-If ($delete_archive){
+If ($delete_archive) {
     try {
         Remove-Item -LiteralPath $src -Recurse -Force -WhatIf:$check_mode
-    } catch {
+    }
+    catch {
         Fail-Json -obj $result -message "failed to delete archive at '$src': $($_.Exception.Message)"
     }
     $result.removed = $true
