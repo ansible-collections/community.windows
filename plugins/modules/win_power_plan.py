@@ -12,6 +12,7 @@ description:
   - This module will change the power plan of a Windows system to the defined string.
   - Windows defaults to C(balanced) which will cause CPU throttling. In some cases it can be preferable
     to change the mode to C(high performance) to increase CPU performance.
+  - One of I(name) or I(guid) must be provided.
 options:
   name:
     description:
@@ -19,7 +20,14 @@ options:
       - The power plan must already be present on the system.
       - Commonly there will be options for C(balanced) and C(high performance).
     type: str
-    required: yes
+    required: false
+  guid:
+    description:
+      - String value that indicates the desired power plan.
+      - The power plan must already be present on the system.
+    type: str
+    required: false
+
 author:
   - Noah Sparks (@nwsparks)
 '''
@@ -28,6 +36,10 @@ EXAMPLES = r'''
 - name: Change power plan to high performance
   community.windows.win_power_plan:
     name: high performance
+
+- name: Change power plan to high performance
+  community.windows.win_power_plan:
+    guid: 8c5e7fda-e8bf-4a96-9a85-a6e23a8c635c
 '''
 
 RETURN = r'''
