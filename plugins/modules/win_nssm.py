@@ -145,7 +145,7 @@ seealso:
   - module: ansible.windows.win_service
 notes:
   - The service will NOT be started after its creation when C(state=present).
-  - Once the service is created, you can use the M(ansible.windowswin_service) module to start it or configure
+  - Once the service is created, you can use the M(ansible.windows.win_service) module to start it or configure
     some additionals properties, such as its startup type, dependencies, service account, and so on.
 author:
   - Adam Keech (@smadam813)
