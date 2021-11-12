@@ -261,7 +261,10 @@ foreach ($disk in $disks) {
                             else {
                                 $volPath = ($vol.Path.TrimStart("\\?\")).TrimEnd("\")
                                 $BlockSize = (
-                                    Get-CimInstance -Query "SELECT BlockSize FROM Win32_Volume WHERE DeviceID like '%$volPath%'" -ErrorAction SilentlyContinue | Select-Object BlockSize).BlockSize
+                                    Get-CimInstance `
+                                    -Query "SELECT BlockSize FROM Win32_Volume WHERE DeviceID like '%$volPath%'" `
+                                    -ErrorAction SilentlyContinue `
+                                    | Select-Object BlockSize).BlockSize
                                 $volume_info.allocation_unit_size = $BlockSize
                             }
                             $partition_info.volumes += $volume_info
