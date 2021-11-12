@@ -46,7 +46,8 @@ $result = @{
 # Search disks
 try {
     $disks = Get-Disk
-} catch {
+}
+catch {
     Fail-Json -obj $result -message "Failed to search the disks on the target: $($_.Exception.Message)"
 }
 
@@ -133,7 +134,8 @@ foreach ($disk in $disks) {
         $win32_disk_drive = Get-CimInstance -ClassName Win32_DiskDrive -ErrorAction SilentlyContinue | Where-Object {
             if ($_.SerialNumber) {
                 $_.SerialNumber -eq $disk.SerialNumber
-            } elseif ($disk.UniqueIdFormat -eq 'Vendor Specific') {
+            }
+            elseif ($disk.UniqueIdFormat -eq 'Vendor Specific') {
                 $_.PNPDeviceID -eq $disk.UniqueId.split(':')[0]
             }
         }
@@ -233,7 +235,8 @@ foreach ($disk in $disks) {
                 if ($disks.PartitionStyle -eq "GPT") {
                     $partition_info.gpt_type = $part.GptType
                     $partition_info.no_default_driveletter = $part.NoDefaultDriveLetter
-                } elseif ($disks.PartitionStyle -eq "MBR") {
+                }
+                elseif ($disks.PartitionStyle -eq "MBR") {
                     $partition_info.mbr_type = $part.MbrType
                     $partition_info.active = $part.IsActive
                 }
@@ -254,7 +257,8 @@ foreach ($disk in $disks) {
                             }
                             if ([System.Environment]::OSVersion.Version.Major -ge 10) {
                                 $volume_info.allocation_unit_size = $vol.AllocationUnitSize
-                            } else {
+                            }
+                            else {
                                 $volPath = ($vol.Path.TrimStart("\\?\")).TrimEnd("\")
                                 $BlockSize = (
                                     Get-CimInstance -Query "SELECT BlockSize FROM Win32_Volume WHERE DeviceID like '%$volPath%'" -ErrorAction SilentlyContinue | Select-Object BlockSize).BlockSize
