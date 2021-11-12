@@ -49,11 +49,14 @@ try {
 } catch {
     Fail-Json -obj $result -message "Failed to search the disks on the target: $($_.Exception.Message)"
 }
+
 foreach ($disk in $disks) {
     $disk_info = @{}
     if ("physical_disk" -in $module.Params.filter) {
+
         $pdisk = Get-PhysicalDisk -ErrorAction SilentlyContinue | Where-Object {
             $_.DeviceId -eq $disk.Number
+
         }
         if ($pdisk) {
             $disk_info["physical_disk"] += @{
@@ -213,9 +216,9 @@ foreach ($disk in $disks) {
     if ("partitions" -in $module.Params.filter -or "volumes" -in $module.Params.filter) {
         $parts = Get-Partition -DiskNumber $($disk.Number) -ErrorAction SilentlyContinue
         if ($parts) {
-            $disk_info["partitions"]  += @()
+            $disk_info["partitions"] += @()
             foreach ($part in $parts) {
-                $partition_info  = @{
+                $partition_info = @{
                     number = $part.PartitionNumber
                     size = $part.Size
                     type = $part.Type
@@ -237,9 +240,9 @@ foreach ($disk in $disks) {
                 if ("volumes" -in $module.Params.filter) {
                     $vols = Get-Volume -Partition $part -ErrorAction SilentlyContinue
                     if ($vols) {
-                        $partition_info["volumes"]  += @()
+                        $partition_info["volumes"] += @()
                         foreach ($vol in $vols) {
-                            $volume_info  = @{
+                            $volume_info = @{
                                 size = $vol.Size
                                 size_remaining = $vol.SizeRemaining
                                 type = $vol.FileSystem
@@ -254,11 +257,11 @@ foreach ($disk in $disks) {
                             } else {
                                 $volPath = ($vol.Path.TrimStart("\\?\")).TrimEnd("\")
                                 $BlockSize = (
-                                    Get-CimInstance -Query "SELECT BlockSize FROM Win32_Volume WHERE DeviceID like '%$volPath%'" -ErrorAction SilentlyContinue
-                                    | Select-Object BlockSize).BlockSize
+                                    Get-CimInstance -Query "SELECT BlockSize FROM Win32_Volume WHERE DeviceID like '%$volPath%'" `
+                                    -ErrorAction SilentlyContinue | Select-Object BlockSize).BlockSize
                                 $volume_info.allocation_unit_size = $BlockSize
                             }
-                            $partition_info.volumes  += $volume_info
+                            $partition_info.volumes += $volume_info
                         }
                     }
                 }
