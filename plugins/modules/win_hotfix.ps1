@@ -82,6 +82,7 @@ Function Get-HotfixMetadataFromName($name) {
 
 Function Get-HotfixMetadataFromFile($extract_path) {
     # MSU contents https://support.microsoft.com/en-us/help/934307/description-of-the-windows-update-standalone-installer-in-windows
+    $metadata = @()
     $metadata_path = Get-ChildItem -LiteralPath $extract_path | Where-Object { $_.Extension -eq ".xml" }
     if ($null -eq $metadata_path) {
         Fail-Json $result "failed to get metadata xml inside MSU file, cannot get hotfix metadata required for this task"
@@ -115,7 +116,7 @@ Function Get-HotfixMetadataFromFile($extract_path) {
         }
     }
 
-    $metadata = [hashtable]@{
+    $metadata += [pscustomobject]@{
         path = $cab_file
         name = $dism_package_info.PackageName
         state = $dism_package_info.PackageState
@@ -223,8 +224,9 @@ if ($state -eq "absent") {
         } elseif ($hotfix_metadata.state -ne "Installed") {
             if (-not $check_mode) {
                 try {
-228                     $install_result = foreach($path in $hotfix_metadata.path) {Add-WindowsPackage -Online -PackagePath $path -NoRestart
-229                    }
+                     $install_result = @()
+                     $install_result += foreach($path in $hotfix_metadata.path) {Add-WindowsPackage -Online -PackagePath $path -NoRestart
+                    }
                 } catch {
                     Fail-Json $result "failed to add windows package from path $($hotfix_metadata.path): $($_.Exception.Message)"
                 }
