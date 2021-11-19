@@ -203,7 +203,7 @@ If ($state -eq 'present') {
             try {
                 Set-ADAccountPassword -Identity $user_guid -Reset:$true -Confirm:$false -NewPassword $secure_password -WhatIf:$check_mode @extra_args
             }catch{
-                Fail-Json $result "Failed to set password on account"
+               Fail-Json $result "Failed to set password on account: $($_.Exception.Message)"
             }
             $user_obj = Get-ADUser -Identity $user_guid -Properties * @extra_args
             $result.password_updated = $true
