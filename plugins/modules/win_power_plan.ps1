@@ -8,11 +8,11 @@
 
 $spec = @{
     options = @{
-        name = @{ type = "str";}
-        guid = @{ type = "str";}
+        name = @{ type = "str"; }
+        guid = @{ type = "str"; }
     }
     required_one_of = @(
-        ,@('name', 'guid')
+        , @('name', 'guid')
     )
     supports_check_mode = $true
 }
