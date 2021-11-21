@@ -12,8 +12,8 @@ $spec = @{
         guid = @{ type = "str";}
     }
     required_one_of = @(
-     ,@('name', 'guid')
-   )
+        ,@('name', 'guid')
+    )
     supports_check_mode = $true
 }
 $module = [Ansible.Basic.AnsibleModule]::Create($args, $spec)
@@ -101,12 +101,13 @@ Function Get-PlanName {
         }
 
         return [System.Runtime.InteropServices.Marshal]::PtrToStringUni($buffer)
-    } finally {
+    }
+    finally {
         [System.Runtime.InteropServices.Marshal]::FreeHGlobal($buffer)
     }
 }
 
-Function Get-PowerPlans {
+Function Get-PowerPlan {
     $plans = @{}
 
     $i = 0
@@ -119,7 +120,8 @@ Function Get-PowerPlans {
         if ($res -eq 259) {
             # 259 == ERROR_NO_MORE_ITEMS, there are no more power plans to enumerate
             break
-        } elseif ($res -notin @(0, 234)) {
+        }
+        elseif ($res -notin @(0, 234)) {
             # 0 == ERROR_SUCCESS and 234 == ERROR_MORE_DATA
             $err_msg = Get-LastWin32ErrorMessage -ErrorCode $res
             $module.FailJson("Failed to get buffer size on local power schemes at index $i - $err_msg")
@@ -133,12 +135,14 @@ Function Get-PowerPlans {
             if ($res -eq 259) {
                 # Server 2008 does not return 259 in the first call above so we do an additional check here
                 break
-            } elseif ($res -notin @(0, 234, 259)) {
+            }
+            elseif ($res -notin @(0, 234, 259)) {
                 $err_msg = Get-LastWin32ErrorMessage -ErrorCode $res
                 $module.FailJson("Failed to enumerate local power schemes at index $i - $err_msg")
             }
             $scheme_guid = [System.Runtime.InteropServices.Marshal]::PtrToStructure($buffer, [Type][Guid])
-        } finally {
+        }
+        finally {
             [System.Runtime.InteropServices.Marshal]::FreeHGlobal($buffer)
         }
         $scheme_name = Get-PlanName -Plan $scheme_guid
@@ -160,7 +164,8 @@ Function Get-ActivePowerPlan {
 
     try {
         $active_guid = [System.Runtime.InteropServices.Marshal]::PtrToStructure($buffer, [Type][Guid])
-    } finally {
+    }
+    finally {
         [Ansible.WinPowerPlan.NativeMethods]::LocalFree($buffer) > $null
     }
 
@@ -168,7 +173,7 @@ Function Get-ActivePowerPlan {
 }
 
 Function Set-ActivePowerPlan {
-    [CmdletBinding(SupportsShouldProcess=$true)]
+    [CmdletBinding(SupportsShouldProcess = $true)]
     param([Guid]$Plan)
 
     $res = 0
@@ -183,7 +188,7 @@ Function Set-ActivePowerPlan {
 }
 
 # Get all local power plans and the current active plan
-$plans = Get-PowerPlans
+$plans = Get-PowerPlan
 $active_plan = Get-ActivePowerPlan
 $module.Result.all_available_plans = @{}
 foreach ($plan_info in $plans.GetEnumerator()) {
@@ -193,18 +198,18 @@ foreach ($plan_info in $plans.GetEnumerator()) {
 if ($null -ne $name -and $name -notin $plans.Keys) {
     $module.FailJson("Defined power_plan: ($name) is not available")
 }
-if ($null -ne $guid -and $guid -notin $plans.Values){
+if ($null -ne $guid -and $guid -notin $plans.Values) {
     $module.FailJson("Defined power_plan: ($guid) is not available")
 }
-if ($null -ne $name){
+if ($null -ne $name) {
     $plan_guid = $plans.$name
     $is_active = $active_plan -eq $plans.$name
 }
-if ($null -ne $guid){
+if ($null -ne $guid) {
     $plan_guid = $guid
     $name = $plans.GetEnumerator() | ForEach-Object {
         $name = $_.Key
-        if ($Plans.Item($name) -eq $plan_guid){
+        if ($Plans.Item($name) -eq $plan_guid) {
             $name
         }
     }
