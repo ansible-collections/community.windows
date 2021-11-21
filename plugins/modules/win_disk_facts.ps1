@@ -3,7 +3,6 @@
 # Copyright: (c) 2017, Marc Tschapek <marc.tschapek@itelligence.de>
 # GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 
-#Requires -Module Ansible.ModuleUtils.Legacy
 #AnsibleRequires -CSharpUtil Ansible.Basic
 #AnsibleRequires -OSVersion 6.2
 
@@ -32,23 +31,20 @@ function Test-Admin {
 
 # Check admin rights
 if (-not (Test-Admin)) {
-    Fail-Json -obj @{} -message "Module was not started with elevated rights"
+    $module.FailJson("Module was not started with elevated rights")
 }
 
+
 # Create a new result object
-$result = @{
-    changed = $false
-    ansible_facts = @{
-        ansible_disks = @()
-    }
-}
+$module.Result.changed = $false
+$module.Result.ansible_facts = @{ansible_disks = @()}
 
 # Search disks
 try {
     $disks = Get-Disk
 }
 catch {
-    Fail-Json -obj $result -message "Failed to search the disks on the target: $($_.Exception.Message)"
+    $module.FailJson("Failed to search the disks on the target: $($_.Exception.Message)", $_)
 }
 
 foreach ($disk in $disks) {
@@ -274,11 +270,11 @@ foreach ($disk in $disks) {
             }
         }
     }
-    $result.ansible_facts.ansible_disks += $disk_info
+    $module.Result.ansible_facts.ansible_disks += $disk_info
 }
 
 # Sort by disk number property
-$result.ansible_facts.ansible_disks = @() + ($result.ansible_facts.ansible_disks | Sort-Object -Property { $_.Number })
+$module.Result.ansible_facts.ansible_disks = @() + ($module.Result.ansible_facts.ansible_disks | Sort-Object -Property { $_.Number })
 
 # Return result
-Exit-Json -obj $result
+$module.ExitJson()
