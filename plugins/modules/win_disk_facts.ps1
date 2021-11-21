@@ -37,7 +37,7 @@ if (-not (Test-Admin)) {
 
 # Create a new result object
 $module.Result.changed = $false
-$module.Result.ansible_facts = @{ansible_disks = @()}
+$module.Result.ansible_facts = @{ ansible_disks = @() }
 
 # Search disks
 try {
