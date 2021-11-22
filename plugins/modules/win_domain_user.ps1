@@ -28,16 +28,16 @@ Function Test-Credential {
         # following errors indicate the creds are correct but the user was
         # unable to log on for other reasons, which we don't care about
         $success_codes = @(
-            0x0000052F,  # ERROR_ACCOUNT_RESTRICTION
-            0x00000530,  # ERROR_INVALID_LOGON_HOURS
-            0x00000531,  # ERROR_INVALID_WORKSTATION
+            0x0000052F, # ERROR_ACCOUNT_RESTRICTION
+            0x00000530, # ERROR_INVALID_LOGON_HOURS
+            0x00000531, # ERROR_INVALID_WORKSTATION
             0x00000569  # ERROR_LOGON_TYPE_GRANTED
         )
         $failed_codes = @(
-            0x0000052E,  # ERROR_LOGON_FAILURE
-            0x00000532,  # ERROR_PASSWORD_EXPIRED
-            0x00000773,  # ERROR_PASSWORD_MUST_CHANGE
-            0x00000533   # ERROR_ACCOUNT_DISABLED
+            0x0000052E, # ERROR_LOGON_FAILURE
+            0x00000532, # ERROR_PASSWORD_EXPIRED
+            0x00000773, # ERROR_PASSWORD_MUST_CHANGE
+            0x00000533  # ERROR_ACCOUNT_DISABLED
         )
 
         if ($_.Exception.NativeErrorCode -in $failed_codes) {
