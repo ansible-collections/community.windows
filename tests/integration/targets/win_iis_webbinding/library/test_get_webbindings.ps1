@@ -14,7 +14,7 @@ $port = Get-AnsibleParam $params -name "port" -type int -default '80'
 $ip = Get-AnsibleParam $params -name "ip" -default '*'
 
 $result = @{
-  changed = $false
+    changed = $false
 }
 function New-BindingInfo {
     $ht = @{
@@ -29,12 +29,10 @@ function New-BindingInfo {
     }
 
     #handle sslflag support
-    If ([version][System.Environment]::OSVersion.Version -lt [version]'6.2')
-    {
+    If ([version][System.Environment]::OSVersion.Version -lt [version]'6.2') {
         $ht.sslFlags = 'not supported'
     }
-    Else
-    {
+    Else {
         $ht.sslFlags = [int]$args[0].sslFlags
     }
 
@@ -50,15 +48,14 @@ function Get-SingleWebBinding {
     }
     Catch {
         # 2k8r2 throws this error when you run get-webbinding with no bindings in iis
-        If (-not $_.Exception.Message.CompareTo('Cannot process argument because the value of argument "obj" is null. Change the value of argument "obj" to a non-null value'))
-        {
+        $msg = 'Cannot process argument because the value of argument "obj" is null. Change the value of argument "obj" to a non-null value'
+        If (-not $_.Exception.Message.CompareTo($msg)) {
             Throw $_.Exception.Message
         }
         Else { return }
     }
 
-    Foreach ($binding in $site_bindings)
-    {
+    Foreach ($binding in $site_bindings) {
         $splits = $binding.bindingInformation -split ':'
 
         if (
@@ -66,8 +63,7 @@ function Get-SingleWebBinding {
             $args[0].ipaddress -eq $splits[0] -and
             $args[0].port -eq $splits[1] -and
             $args[0].hostheader -eq $splits[2]
-        )
-        {
+        ) {
             Return $binding
         }
     }
@@ -82,12 +78,10 @@ $binding_parameters = @{
 }
 
 # insert host header to search if specified, otherwise it will return * (all bindings matching protocol/ip)
-If ($host_header)
-{
+If ($host_header) {
     $binding_parameters.HostHeader = $host_header
 }
-Else
-{
+Else {
     $binding_parameters.HostHeader = [string]::Empty
 }
 
@@ -99,8 +93,7 @@ Catch {
     Fail-Json -obj $result -message "Failed to retrieve bindings with Get-SingleWebBinding - $($_.Exception.Message)"
 }
 
-If ($current_bindings)
-{
+If ($current_bindings) {
     Try {
         $binding_info = New-BindingInfo $current_bindings
     }

@@ -7,75 +7,75 @@
 #AnsibleRequires -CSharpUtil Ansible.AccessToken
 
 $type = @{
-    guid    = [Func[[Object], [System.Guid]]] {
+    guid = [Func[[Object], [System.Guid]]] {
         [System.Guid]::ParseExact($args[0].Trim([char[]]'}{').Replace('-', ''), 'N')
     }
     version = [Func[[Object], [System.Version]]] {
         [System.Version]::Parse($args[0])
     }
-    int64   = [Func[[Object], [System.Int64]]] {
+    int64 = [Func[[Object], [System.Int64]]] {
         [System.Int64]::Parse($args[0])
     }
-    double  = [Func[[Object], [System.Double]]] {
+    double = [Func[[Object], [System.Double]]] {
         [System.Double]::Parse($args[0])
     }
 }
 
 $pssc_options = @{
-    guid                                      = @{ type = $type.guid }
-    schema_version                            = @{ type = $type.version }
-    author                                    = @{ type = 'str' }
-    description                               = @{ type = 'str' }
-    company_name                              = @{ type = 'str' }
-    copyright                                 = @{ type = 'str' }
-    session_type                              = @{ type = 'str' ; choices = @('default', 'empty', 'restricted_remote_server') }
-    transcript_directory                      = @{ type = 'path' }
-    run_as_virtual_account                    = @{ type = 'bool' }
-    run_as_virtual_account_groups             = @{ type = 'list' ; elements = 'str' }
-    mount_user_drive                          = @{ type = 'bool' }
-    user_drive_maximum_size                   = @{ type = $type.int64 }
-    group_managed_service_account             = @{ type = 'str' }
-    scripts_to_process                        = @{ type = 'list' ; elements = 'str' }
-    role_definitions                          = @{ type = 'dict' }
-    required_groups                           = @{ type = 'dict' }
-    language_mode                             = @{ type = 'str' ; choices = @('no_language', 'restricted_language', 'constrained_language', 'full_language') }
-    execution_policy                          = @{ type = 'str' ; choices = @('default', 'remote_signed', 'restricted', 'undefined', 'unrestricted') }
-    powershell_version                        = @{ type = $type.version }
-    modules_to_import                         = @{ type = 'list' ; elements = 'raw' }
-    visible_aliases                           = @{ type = 'list' ; elements = 'str' }
-    visible_cmdlets                           = @{ type = 'list' ; elements = 'raw' }
-    visible_functions                         = @{ type = 'list' ; elements = 'raw' }
-    visible_external_commands                 = @{ type = 'list' ; elements = 'str' }
-    alias_definitions                         = @{ type = 'dict' }
-    function_definitions                      = @{ type = 'dict' }
-    variable_definitions                      = @{ type = 'list' ; elements = 'dict' }
-    environment_variables                     = @{ type = 'dict' }
-    types_to_process                          = @{ type = 'list' ; elements = 'path' }
-    formats_to_process                        = @{ type = 'list' ; elements = 'path' }
-    assemblies_to_load                        = @{ type = 'list' ; elements = 'str' }
+    guid = @{ type = $type.guid }
+    schema_version = @{ type = $type.version }
+    author = @{ type = 'str' }
+    description = @{ type = 'str' }
+    company_name = @{ type = 'str' }
+    copyright = @{ type = 'str' }
+    session_type = @{ type = 'str' ; choices = @('default', 'empty', 'restricted_remote_server') }
+    transcript_directory = @{ type = 'path' }
+    run_as_virtual_account = @{ type = 'bool' }
+    run_as_virtual_account_groups = @{ type = 'list' ; elements = 'str' }
+    mount_user_drive = @{ type = 'bool' }
+    user_drive_maximum_size = @{ type = $type.int64 }
+    group_managed_service_account = @{ type = 'str' }
+    scripts_to_process = @{ type = 'list' ; elements = 'str' }
+    role_definitions = @{ type = 'dict' }
+    required_groups = @{ type = 'dict' }
+    language_mode = @{ type = 'str' ; choices = @('no_language', 'restricted_language', 'constrained_language', 'full_language') }
+    execution_policy = @{ type = 'str' ; choices = @('default', 'remote_signed', 'restricted', 'undefined', 'unrestricted') }
+    powershell_version = @{ type = $type.version }
+    modules_to_import = @{ type = 'list' ; elements = 'raw' }
+    visible_aliases = @{ type = 'list' ; elements = 'str' }
+    visible_cmdlets = @{ type = 'list' ; elements = 'raw' }
+    visible_functions = @{ type = 'list' ; elements = 'raw' }
+    visible_external_commands = @{ type = 'list' ; elements = 'str' }
+    alias_definitions = @{ type = 'dict' }
+    function_definitions = @{ type = 'dict' }
+    variable_definitions = @{ type = 'list' ; elements = 'dict' }
+    environment_variables = @{ type = 'dict' }
+    types_to_process = @{ type = 'list' ; elements = 'path' }
+    formats_to_process = @{ type = 'list' ; elements = 'path' }
+    assemblies_to_load = @{ type = 'list' ; elements = 'str' }
 }
 
 $session_configuration_options = @{
-    name                                      = @{ type = 'str' ; required = $true }
-    processor_architecure                     = @{ type = 'str' ; choices = @('amd64', 'x86') }
-    access_mode                               = @{ type = 'str' ; choices = @('disabled', 'local', 'remote') }
-    use_shared_process                        = @{ type = 'bool' }
-    thread_apartment_state                    = @{ type = 'str' ; choices = @('mta', 'sta') }
-    thread_options                            = @{ type = 'str' ; choices = @('default', 'reuse_thread', 'use_current_thread', 'use_new_thread') }
-    startup_script                            = @{ type = 'path' }
+    name = @{ type = 'str' ; required = $true }
+    processor_architecure = @{ type = 'str' ; choices = @('amd64', 'x86') }
+    access_mode = @{ type = 'str' ; choices = @('disabled', 'local', 'remote') }
+    use_shared_process = @{ type = 'bool' }
+    thread_apartment_state = @{ type = 'str' ; choices = @('mta', 'sta') }
+    thread_options = @{ type = 'str' ; choices = @('default', 'reuse_thread', 'use_current_thread', 'use_new_thread') }
+    startup_script = @{ type = 'path' }
     maximum_received_data_size_per_command_mb = @{ type = $type.double }
-    maximum_received_object_size_mb           = @{ type = $type.double }
-    security_descriptor_sddl                  = @{ type = 'str' }
-    run_as_credential_username                = @{ type = 'str' }
-    run_as_credential_password                = @{ type = 'str' ; no_log = $true }
+    maximum_received_object_size_mb = @{ type = $type.double }
+    security_descriptor_sddl = @{ type = 'str' }
+    run_as_credential_username = @{ type = 'str' }
+    run_as_credential_password = @{ type = 'str' ; no_log = $true }
 }
 
 $behavior_options = @{
-    state                                     = @{ type = 'str' ; choices = @('present', 'absent') ; default = 'present' }
-    lenient_config_fields                     = @{ type = 'list' ; elements = 'str' ; default = @('guid', 'author', 'company_name', 'copyright', 'description') }
-    async_timeout                             = @{ type = 'int' ; default = 300 }
-    async_poll                                = @{ type = 'int' ; default = 1 }
-<#
+    state = @{ type = 'str' ; choices = @('present', 'absent') ; default = 'present' }
+    lenient_config_fields = @{ type = 'list' ; elements = 'str' ; default = @('guid', 'author', 'company_name', 'copyright', 'description') }
+    async_timeout = @{ type = 'int' ; default = 300 }
+    async_poll = @{ type = 'int' ; default = 1 }
+    <#
     # TODO: possible future enhancement to wait for existing connections to finish
     # Existing connections can be found with:
     # Get-WSManInstance -ComputerName localhost -ResourceURI shell -Enumerate
@@ -90,7 +90,7 @@ $behavior_options = @{
 $spec = @{
     options = $pssc_options + $session_configuration_options + $behavior_options
     required_together = @(
-        ,@('run_as_credential_username', 'run_as_credential_password')
+        , @('run_as_credential_username', 'run_as_credential_password')
     )
     supports_check_mode = $true
 }
@@ -109,9 +109,9 @@ function Import-PowerShellDataFileLegacy {
     #>
     [CmdletBinding()]
     [OutputType([hashtable])]
-    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidUsingInvokeExpression','', Justification='Required to process PS data file')]
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidUsingInvokeExpression', '', Justification = 'Required to process PS data file')]
     param(
-        [Parameter(Mandatory=$true)]
+        [Parameter(Mandatory = $true)]
         [Alias('Path')]
         [String]
         $LiteralPath
@@ -120,8 +120,8 @@ function Import-PowerShellDataFileLegacy {
     End {
         $astloader = [System.Management.Automation.Language.Parser]::ParseFile($LiteralPath, [ref] $null , [ref] $null)
         $ht = $astloader.Find({ param($ast)
-             $ast -is [System.Management.Automation.Language.HashtableAst]
-        }, $false)
+                $ast -is [System.Management.Automation.Language.HashtableAst]
+            }, $false)
 
         if (-not $ht) {
             throw "Invalid PowerShell Data File."
@@ -143,7 +143,7 @@ function ConvertFrom-SnakeCase {
     [CmdletBinding()]
     [OutputType([String])]
     param(
-        [Parameter(Mandatory=$true, ValueFromPipeline=$true)]
+        [Parameter(Mandatory = $true, ValueFromPipeline = $true)]
         [String]
         $SnakedString
     )
@@ -153,15 +153,15 @@ function ConvertFrom-SnakeCase {
     }
 }
 
-function ConvertFrom-AnsibleOptions {
+function ConvertFrom-AnsibleOption {
     [CmdletBinding()]
     [OutputType([System.Collections.IDictionary])]
     param(
-        [Parameter(Mandatory=$true)]
+        [Parameter(Mandatory = $true)]
         [System.Collections.IDictionary]
         $Params ,
 
-        [Parameter(Mandatory=$true)]
+        [Parameter(Mandatory = $true)]
         [hashtable]
         $OptionSet
     )
@@ -207,7 +207,7 @@ function Write-GeneratedSessionConfiguration {
     [CmdletBinding()]
     [OutputType([System.IO.FileInfo])]
     param(
-        [Parameter(Mandatory=$true)]
+        [Parameter(Mandatory = $true)]
         [System.Collections.IDictionary]
         $ParameterSet ,
 
@@ -259,15 +259,15 @@ function Compare-ConfigFile {
     [CmdletBinding()]
     [OutputType([bool])]
     param(
-        [Parameter(Mandatory=$true, ValueFromPipelineByPropertyName=$true)]
+        [Parameter(Mandatory = $true, ValueFromPipelineByPropertyName = $true)]
         [System.IO.FileInfo]
         $ConfigFilePath ,
 
-        [Parameter(Mandatory=$true)]
+        [Parameter(Mandatory = $true)]
         [System.IO.FileInfo]
         $NewConfigFile ,
 
-        [Parameter(Mandatory=$true)]
+        [Parameter(Mandatory = $true)]
         [System.Collections.IDictionary]
         $Params ,
 
@@ -279,8 +279,8 @@ function Compare-ConfigFile {
     Process {
         $desired_config = $NewConfigFile.FullName
 
-        $existing_content   = Import-PowerShellDataFile -LiteralPath $ConfigFilePath.FullName
-        $desired_content    = Import-PowerShellDataFile -LiteralPath $desired_config
+        $existing_content = Import-PowerShellDataFile -LiteralPath $ConfigFilePath.FullName
+        $desired_content = Import-PowerShellDataFile -LiteralPath $desired_config
 
         $regen = $false
         foreach ($ignorable_param in $UseExistingIfMissing) {
@@ -304,8 +304,8 @@ function Compare-ConfigFile {
 
         # re-write/import the existing one too to get a pristine version
         # this will account for unimporant case differences, comments, whitespace, etc.
-        $pristine_config    = Write-GeneratedSessionConfiguration -ParameterSet $existing_content
-        $existing_content   = Get-Content -Raw -LiteralPath $pristine_config
+        $pristine_config = Write-GeneratedSessionConfiguration -ParameterSet $existing_content
+        $existing_content = Get-Content -Raw -LiteralPath $pristine_config
 
         # with all this de/serializing out of the way we can just do a simple case-sensitive string compare
         $desired_content -ceq $existing_content
@@ -328,21 +328,21 @@ function Compare-SessionOption {
     [CmdletBinding()]
     [OutputType([bool])]
     param(
-        [Parameter(Mandatory=$true)]
+        [Parameter(Mandatory = $true)]
         [System.Collections.IDictionary]
         $DesiredOptions ,
 
-        [Parameter(Mandatory=$true)]
+        [Parameter(Mandatory = $true)]
         [Object]
         $ExistingOptions
     )
 
     End {
         $optnamer = @{
-            ThreadApartmentState                    = 'pssessionthreadapartmentstate'
-            ThreadOptions                           = 'pssessionthreadoptions'
-            MaximumReceivedDataSizePerCommandMb     = 'PSMaximumReceivedDataSizePerCommandMB'
-            MaximumReceivedObjectSizeMb             = 'PSMaximumReceivedObjectSizeMB'
+            ThreadApartmentState = 'pssessionthreadapartmentstate'
+            ThreadOptions = 'pssessionthreadoptions'
+            MaximumReceivedDataSizePerCommandMb = 'PSMaximumReceivedDataSizePerCommandMB'
+            MaximumReceivedObjectSizeMb = 'PSMaximumReceivedObjectSizeMB'
         } | Add-Member -MemberType ScriptMethod -Name GetValueOrKey -Value {
             param($key)
 
@@ -442,13 +442,13 @@ function Compare-SessionOption {
 # }
 
 $PSDefaultParameterValues = @{
-    '*-PSSessionConfiguration:Force'        = $true
-    'ConvertFrom-AnsibleOptions:Params'     = $module.Params
-    'Wait-WinRMConnection:Module'           = $module
+    '*-PSSessionConfiguration:Force' = $true
+    'ConvertFrom-AnsibleOption:Params' = $module.Params
+    'Wait-WinRMConnection:Module' = $module
 }
 
-$opt_pssc       = ConvertFrom-AnsibleOptions -OptionSet $pssc_options
-$opt_session    = ConvertFrom-AnsibleOptions -OptionSet $session_configuration_options
+$opt_pssc = ConvertFrom-AnsibleOption -OptionSet $pssc_options
+$opt_session = ConvertFrom-AnsibleOption -OptionSet $session_configuration_options
 
 $existing = Get-PSSessionConfiguration -Name $opt_session.Name -ErrorAction SilentlyContinue
 
@@ -501,7 +501,7 @@ try {
         $username = $cred.Username
         $domain = $null
         if ($username.Contains('\')) {
-            $domain,$username = $username.Split('\')
+            $domain, $username = $username.Split('\')
         }
         try {
             $handle = [Ansible.AccessToken.TokenUtil]::LogonUser($username, $domain, $cred.GetNetworkCredential().Password, 'Network', 'Default')

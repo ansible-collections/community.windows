@@ -29,7 +29,7 @@ function Convert-ObjectToSnakeCase {
     #>
     [CmdletBinding()]
     param(
-        [Parameter(Mandatory=$true,ValueFromPipeline=$true)]
+        [Parameter(Mandatory = $true, ValueFromPipeline = $true)]
         [OutputType([System.Collections.Specialized.OrderedDictionary])]
         [Object]
         $InputObject ,
@@ -103,7 +103,7 @@ function ConvertTo-SerializableModuleInfo {
     #>
     [CmdletBinding()]
     param(
-        [Parameter(Mandatory=$true, ValueFromPipeline=$true)]
+        [Parameter(Mandatory = $true, ValueFromPipeline = $true)]
         [Object]
         $InputObject ,
 
@@ -141,12 +141,17 @@ function ConvertTo-SerializableModuleInfo {
 
             switch -Regex ($pName) {
                 '^PrivateData$' {
-                    if ($InputObject.ModuleType -notin ([System.Management.Automation.ModuleType]::Script, [System.Management.Automation.ModuleType]::Manifest)) {
-                         $safeVal = $pValue | ConvertTo-Json -Depth 1 | ConvertFrom-Json
-                         @{
+                    if (
+                        $InputObject.ModuleType -notin @(
+                            [System.Management.Automation.ModuleType]::Script,
+                            [System.Management.Automation.ModuleType]::Manifest
+                        )
+                    ) {
+                        $safeVal = $pValue | ConvertTo-Json -Depth 1 | ConvertFrom-Json
+                        @{
                             Name = $pName
                             Expression = { $safeVal }.GetNewClosure()
-                         }
+                        }
                     }
                     else {
                         $pName
@@ -160,14 +165,14 @@ function ConvertTo-SerializableModuleInfo {
                         @{
                             Name = $pName
                             Expression = {
-                                @(,($pValue | ConvertTo-SerializableModuleInfo | Convert-ObjectToSnakeCase -NoRecurse))
+                                @(, ($pValue | ConvertTo-SerializableModuleInfo | Convert-ObjectToSnakeCase -NoRecurse))
                             }.GetNewClosure()
                         }
                     }
                     else {
                         $pName
                     }
-            break
+                    break
                 }
                 'Version$' {
                     @{
@@ -175,11 +180,11 @@ function ConvertTo-SerializableModuleInfo {
                         Expression = { $pValue.ToString() }.GetNewClosure()
                     }
                     break
-                 }
+                }
                 '^Exported' {
                     @{
                         Name = $pName
-                        Expression = { @(,$pValue.Keys) }.GetNewClosure()
+                        Expression = { @(, $pValue.Keys) }.GetNewClosure()
                     }
                     break
                 }
@@ -219,7 +224,7 @@ function Add-ModuleRepositoryInfo {
     #>
     [CmdletBinding()]
     param(
-        [Parameter(Mandatory=$true, ValueFromPipeline=$true)]
+        [Parameter(Mandatory = $true, ValueFromPipeline = $true)]
         [System.Object]
         $InputObject ,
 
@@ -280,7 +285,8 @@ function Add-ModuleRepositoryInfo {
 
         $members = @{}
         $wantedProperties | ForEach-Object -Process {
-            if (-not $InputObject.$_) { # if the fields are present in both places, let's prefer what's sent in
+            if (-not $InputObject.$_) {
+                # if the fields are present in both places, let's prefer what's sent in
                 $members[$_] = $installed.$_
             }
         }
@@ -291,9 +297,9 @@ function Add-ModuleRepositoryInfo {
 
 $module.Result.modules = @(
     Get-Module -ListAvailable -Name $module.Params.name |
-    Add-ModuleRepositoryInfo -RepositoryName $module.Params.repository |
-    ConvertTo-SerializableModuleInfo |
-    Convert-ObjectToSnakeCase -NoRecurse
+        Add-ModuleRepositoryInfo -RepositoryName $module.Params.repository |
+        ConvertTo-SerializableModuleInfo |
+        Convert-ObjectToSnakeCase -NoRecurse
 )
 
 $module.ExitJson()

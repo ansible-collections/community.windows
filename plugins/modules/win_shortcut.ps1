@@ -10,16 +10,16 @@
 
 $spec = @{
     options = @{
-        src = @{ type='str' }
-        dest = @{ type='path'; required=$true }
-        state = @{ type='str'; default='present'; choices=@( 'absent', 'present' ) }
-        arguments = @{ type='str'; aliases=@( 'args' ) }
-        directory = @{ type='path' }
-        hotkey = @{ type='str'; no_log=$false }
-        icon = @{ type='path' }
-        description = @{ type='str' }
-        windowstyle = @{ type='str'; choices=@( 'maximized', 'minimized', 'normal' ) }
-        run_as_admin = @{ type='bool'; default=$false }
+        src = @{ type = 'str' }
+        dest = @{ type = 'path'; required = $true }
+        state = @{ type = 'str'; default = 'present'; choices = @( 'absent', 'present' ) }
+        arguments = @{ type = 'str'; aliases = @( 'args' ) }
+        directory = @{ type = 'path' }
+        hotkey = @{ type = 'str'; no_log = $false }
+        icon = @{ type = 'path' }
+        description = @{ type = 'str' }
+        windowstyle = @{ type = 'str'; choices = @( 'maximized', 'minimized', 'normal' ) }
+        run_as_admin = @{ type = 'bool'; default = $false }
     }
     supports_check_mode = $true
 }
@@ -249,16 +249,19 @@ If ($state -eq "absent") {
         # If the shortcut exists, try to remove it
         Try {
             Remove-Item -LiteralPath $dest -WhatIf:$module.CheckMode
-        } Catch {
+        }
+        Catch {
             # Report removal failure
             $module.FailJson("Failed to remove shortcut '$dest'. ($($_.Exception.Message))", $_)
         }
         # Report removal success
         $module.Result.changed = $true
-    } Else {
+    }
+    Else {
         # Nothing to report, everything is fine already
     }
-} ElseIf ($state -eq "present") {
+}
+ElseIf ($state -eq "present") {
     # Create an in-memory object based on the existing shortcut (if any)
     $Shell = New-Object -ComObject ("WScript.Shell")
     $ShortCut = $Shell.CreateShortcut($dest)
@@ -296,7 +299,8 @@ If ($state -eq "absent") {
                     $module.Result.changed = $true
                     $ShortCut.TargetPath = $src
                 }
-            } else {
+            }
+            else {
                 $module.Result.changed = $true
                 $ShortCut.TargetPath = $src
             }
@@ -340,7 +344,8 @@ If ($state -eq "absent") {
             $ShortCut.WindowStyle = $windowstyles.$windowstyle
         }
         $module.Result.windowstyle = $windowstyleids[$ShortCut.WindowStyle]
-    } else {
+    }
+    else {
         # URL Shortcut, just compare the TargetPath
         if (($null -ne $src) -and ($ShortCut.TargetPath -ne $src)) {
             $module.Result.changed = $true
@@ -353,7 +358,8 @@ If ($state -eq "absent") {
     If (($module.Result.changed -eq $true) -and ($module.CheckMode -ne $true)) {
         Try {
             $ShortCut.Save()
-        } Catch {
+        }
+        Catch {
             $module.FailJson("Failed to create shortcut '$dest'. ($($_.Exception.Message))", $_)
         }
     }
@@ -364,7 +370,8 @@ If ($state -eq "absent") {
         if ($run_as_admin -and (-not $flags.HasFlag([Ansible.Shortcut.ShellLinkFlags]::RunAsUser))) {
             [Ansible.Shortcut.ShellLink]::SetFlags($dest, ($flags -bor [Ansible.Shortcut.ShellLinkFlags]::RunAsUser))
             $module.Result.changed = $true
-        } elseif (-not $run_as_admin -and ($flags.HasFlag([Ansible.Shortcut.ShellLinkFlags]::RunAsUser))) {
+        }
+        elseif (-not $run_as_admin -and ($flags.HasFlag([Ansible.Shortcut.ShellLinkFlags]::RunAsUser))) {
             [Ansible.Shortcut.ShellLink]::SetFlags($dest, ($flags -bxor [Ansible.Shortcut.ShellLinkFlags]::RunAsUser))
             $module.Result.changed = $true
         }

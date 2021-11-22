@@ -39,13 +39,13 @@ $spec = @{
     }
 
     mutually_exclusive = @(
-       @('required_version', 'minimum_version'),
-       @('required_version', 'maximum_version')
-   )
+        @('required_version', 'minimum_version'),
+        @('required_version', 'maximum_version')
+    )
 
-   required_together = @(
-       ,@('source_username', 'source_password')
-   )
+    required_together = @(
+        , @('source_username', 'source_password')
+    )
 }
 
 $module = [Ansible.Basic.AnsibleModule]::Create($args, $spec)
@@ -61,20 +61,20 @@ if ([System.Net.SecurityProtocolType].GetMember("Tls12").Count -gt 0) {
 }
 [System.Net.ServicePointManager]::SecurityProtocol = $security_protocols
 
-function Get-SplattableParameters {
-    [CmdletBinding(DefaultParameterSetName='All')]
+function Get-SplattableParameter {
+    [CmdletBinding(DefaultParameterSetName = 'All')]
     [OutputType([hashtable])]
     param(
-        [Parameter(Mandatory=$true)]
+        [Parameter(Mandatory = $true)]
         [Ansible.Basic.AnsibleModule]
         $Module ,
 
-        [Parameter(ParameterSetName='ForCommand')]
+        [Parameter(ParameterSetName = 'ForCommand')]
         [Alias('For')]
         [String]
         $ForCommand ,
 
-        [Parameter(ParameterSetName='WithCommand', ValueFromPipeline=$true)]
+        [Parameter(ParameterSetName = 'WithCommand', ValueFromPipeline = $true)]
         [Alias('Command')]
         [System.Management.Automation.CommandInfo]
         $WithCommand
@@ -115,7 +115,7 @@ function Get-SplattableParameters {
             'source_password' {
                 $key = 'Credential'
                 $secure = ConvertTo-SecureString -String $value -AsPlainText -Force
-                $value = New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList $Module.Params.source_username,$secure
+                $value = New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList $Module.Params.source_username, $secure
             }
             '*_version' {
                 if ($Module.Params.state -eq 'latest') {
@@ -135,12 +135,12 @@ function Get-SplattableParameters {
     }
 }
 
-$pGet,$pUninstall,$pFind,$pInstall = Get-Command -Name @(
-     'Get-InstalledScript'
-    ,'Uninstall-Script'
-    ,'Find-Script'
-    ,'Install-Script'
-) | Get-SplattableParameters -Module $module
+$pGet, $pUninstall, $pFind, $pInstall = Get-Command -Name @(
+    'Get-InstalledScript'
+    , 'Uninstall-Script'
+    , 'Find-Script'
+    , 'Install-Script'
+) | Get-SplattableParameter -Module $module
 
 $existing = Get-InstalledScript @pGet -ErrorAction SilentlyContinue
 $existing = if ($existing) {
@@ -163,7 +163,8 @@ if ($state -eq 'absent') {
         }
     }
 }
-else { # state is 'present' or 'latest'
+else {
+    # state is 'present' or 'latest'
     try {
         $remote = Find-Script @pFind -ErrorAction Stop
     }

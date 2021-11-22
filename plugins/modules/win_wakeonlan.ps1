@@ -7,9 +7,9 @@
 
 $spec = @{
     options = @{
-        mac = @{ type='str'; required=$true }
-        broadcast = @{ type='str'; default='255.255.255.255' }
-        port = @{ type='int'; default=7 }
+        mac = @{ type = 'str'; required = $true }
+        broadcast = @{ type = 'str'; default = '255.255.255.255' }
+        port = @{ type = 'int'; default = 7 }
     }
     supports_check_mode = $true
 }
@@ -37,8 +37,8 @@ if ($mac.Length -ne 12) {
 
 # Create payload for magic packet
 # TODO: Catch possible conversion errors
-$target = 0,2,4,6,8,10 | ForEach-Object { [convert]::ToByte($mac.Substring($_, 2), 16) }
-$data = (,[byte]255 * 6) + ($target * 20)
+$target = 0, 2, 4, 6, 8, 10 | ForEach-Object { [convert]::ToByte($mac.Substring($_, 2), 16) }
+$data = (, [byte]255 * 6) + ($target * 20)
 
 # Broadcast payload to network
 $udpclient = new-Object System.Net.Sockets.UdpClient
