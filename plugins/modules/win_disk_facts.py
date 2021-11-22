@@ -27,6 +27,7 @@ options:
     elements: str
     choices: [ physical_disk, virtual_disk, win32_disk_drive, partitions, volumes ]
     default: [ physical_disk, virtual_disk, win32_disk_drive, partitions, volumes ]
+    version_added: 1.9.0
 '''
 
 EXAMPLES = r'''
