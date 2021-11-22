@@ -1,0 +1,3 @@
+---
+minor_changes:
+  - win_power_plan - Added ``guid`` option to specify plan by a unique identifier - https://github.com/ansible-collections/community.windows/issues/310

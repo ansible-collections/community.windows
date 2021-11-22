@@ -8,14 +8,18 @@
 
 $spec = @{
     options = @{
-        name = @{ type = "str"; required = $true }
+        name = @{ type = "str"; }
+        guid = @{ type = "str"; }
     }
+    required_one_of = @(
+        , @('name', 'guid')
+    )
     supports_check_mode = $true
 }
 $module = [Ansible.Basic.AnsibleModule]::Create($args, $spec)
 
 $name = $module.Params.name
-
+$guid = $module.Params.guid
 $module.Result.power_plan_name = $name
 $module.Result.power_plan_enabled = $null
 $module.Result.all_available_plans = $null
@@ -191,11 +195,27 @@ foreach ($plan_info in $plans.GetEnumerator()) {
     $module.Result.all_available_plans.($plan_info.Key) = $plan_info.Value -eq $active_plan
 }
 
-if ($name -notin $plans.Keys) {
+if ($null -ne $name -and $name -notin $plans.Keys) {
     $module.FailJson("Defined power_plan: ($name) is not available")
 }
-$plan_guid = $plans.$name
-$is_active = $active_plan -eq $plans.$name
+if ($null -ne $guid -and $guid -notin $plans.Values) {
+    $module.FailJson("Defined power_plan: ($guid) is not available")
+}
+if ($null -ne $name) {
+    $plan_guid = $plans.$name
+    $is_active = $active_plan -eq $plans.$name
+}
+if ($null -ne $guid) {
+    $plan_guid = $guid
+    $name = $plans.GetEnumerator() | ForEach-Object {
+        $name = $_.Key
+        if ($Plans.Item($name) -eq $plan_guid) {
+            $name
+        }
+    }
+    $is_active = $active_plan -eq $plans.$name
+}
+
 $module.Result.power_plan_enabled = $is_active
 
 if (-not $is_active) {
@@ -209,4 +229,3 @@ if (-not $is_active) {
 }
 
 $module.ExitJson()
-
