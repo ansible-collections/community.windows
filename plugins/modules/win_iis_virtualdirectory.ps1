@@ -12,88 +12,91 @@ $name = Get-AnsibleParam -obj $params -name "name" -type "str" -failifempty $tru
 $site = Get-AnsibleParam -obj $params -name "site" -type "str" -failifempty $true
 $application = Get-AnsibleParam -obj $params -name "application" -type "str"
 $physical_path = Get-AnsibleParam -obj $params -name "physical_path" -type "str"
-$state = Get-AnsibleParam -obj $params -name "state" -type "str" -default "present" -validateset "absent","present"
+$state = Get-AnsibleParam -obj $params -name "state" -type "str" -default "present" -validateset "absent", "present"
 
 # Ensure WebAdministration module is loaded
 if ($null -eq (Get-Module "WebAdministration" -ErrorAction SilentlyContinue)) {
-  Import-Module WebAdministration
+    Import-Module WebAdministration
 }
 
 # Result
 $result = @{
-  directory = @{}
-  changed = $false
+    directory = @{}
+    changed = $false
 };
 
 # Construct path
-$directory_path = if($application) {
-  "IIS:\Sites\$($site)\$($application)\$($name)"
-} else {
-  "IIS:\Sites\$($site)\$($name)"
+$directory_path = if ($application) {
+    "IIS:\Sites\$($site)\$($application)\$($name)"
+}
+else {
+    "IIS:\Sites\$($site)\$($name)"
 }
 
 # Directory info
-$directory = if($application) {
-  Get-WebVirtualDirectory -Site $site -Name $name -Application $application
-} else {
-  Get-WebVirtualDirectory -Site $site -Name $name
+$directory = if ($application) {
+    Get-WebVirtualDirectory -Site $site -Name $name -Application $application
+}
+else {
+    Get-WebVirtualDirectory -Site $site -Name $name
 }
 
 try {
-  # Add directory
-  If(($state -eq 'present') -and (-not $directory)) {
-    If (-not $physical_path) {
-      Fail-Json -obj $result -message "missing required arguments: physical_path"
-    }
-    If (-not (Test-Path -LiteralPath $physical_path)) {
-      Fail-Json -obj $result -message "specified folder must already exist: physical_path"
-    }
+    # Add directory
+    If (($state -eq 'present') -and (-not $directory)) {
+        If (-not $physical_path) {
+            Fail-Json -obj $result -message "missing required arguments: physical_path"
+        }
+        If (-not (Test-Path -LiteralPath $physical_path)) {
+            Fail-Json -obj $result -message "specified folder must already exist: physical_path"
+        }
 
-    $directory_parameters = @{
-      Site = $site
-      Name = $name
-      PhysicalPath = $physical_path
-    }
+        $directory_parameters = @{
+            Site = $site
+            Name = $name
+            PhysicalPath = $physical_path
+        }
 
-    If ($application) {
-      $directory_parameters.Application = $application
-    }
+        If ($application) {
+            $directory_parameters.Application = $application
+        }
 
-    $directory = New-WebVirtualDirectory @directory_parameters -Force
-    $result.changed = $true
-  }
-
-  # Remove directory
-  If ($state -eq 'absent' -and $directory) {
-    Remove-Item -LiteralPath $directory_path -Recurse -Force
-    $result.changed = $true
-  }
-
-  $directory = Get-WebVirtualDirectory -Site $site -Name $name
-  If($directory) {
-
-    # Change Physical Path if needed
-    if($physical_path) {
-      If (-not (Test-Path -LiteralPath $physical_path)) {
-        Fail-Json -obj $result -message "specified folder must already exist: physical_path"
-      }
-
-      $vdir_folder = Get-Item -LiteralPath $directory.PhysicalPath
-      $folder = Get-Item -LiteralPath $physical_path
-      If($folder.FullName -ne $vdir_folder.FullName) {
-        Set-ItemProperty -LiteralPath $directory_path -name physicalPath -value $physical_path
+        $directory = New-WebVirtualDirectory @directory_parameters -Force
         $result.changed = $true
-      }
     }
-  }
-} catch {
-  Fail-Json $result $_.Exception.Message
+
+    # Remove directory
+    If ($state -eq 'absent' -and $directory) {
+        Remove-Item -LiteralPath $directory_path -Recurse -Force
+        $result.changed = $true
+    }
+
+    $directory = Get-WebVirtualDirectory -Site $site -Name $name
+    If ($directory) {
+
+        # Change Physical Path if needed
+        if ($physical_path) {
+            If (-not (Test-Path -LiteralPath $physical_path)) {
+                Fail-Json -obj $result -message "specified folder must already exist: physical_path"
+            }
+
+            $vdir_folder = Get-Item -LiteralPath $directory.PhysicalPath
+            $folder = Get-Item -LiteralPath $physical_path
+            If ($folder.FullName -ne $vdir_folder.FullName) {
+                Set-ItemProperty -LiteralPath $directory_path -name physicalPath -value $physical_path
+                $result.changed = $true
+            }
+        }
+    }
+}
+catch {
+    Fail-Json $result $_.Exception.Message
 }
 
 # Result
 $directory = Get-WebVirtualDirectory -Site $site -Name $name
 $result.directory = @{
-  PhysicalPath = $directory.PhysicalPath
+    PhysicalPath = $directory.PhysicalPath
 }
 
 Exit-Json -obj $result

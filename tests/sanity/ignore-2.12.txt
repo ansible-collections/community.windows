@@ -1,5 +1,4 @@
 plugins/modules/win_audit_rule.ps1 pslint:PSCustomUseLiteralPath
-plugins/modules/win_pagefile.ps1 pslint:PSUseSupportsShouldProcess
 plugins/modules/win_rabbitmq_plugin.ps1 pslint:PSAvoidUsingInvokeExpression
 plugins/modules/win_region.ps1 pslint:PSAvoidUsingEmptyCatchBlock # Keep
 plugins/modules/win_regmerge.ps1 pslint:PSCustomUseLiteralPath

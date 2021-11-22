@@ -5,20 +5,18 @@
 
 #Requires -Module Ansible.ModuleUtils.Legacy
 
-function Get-EnabledPlugins($rabbitmq_plugins_cmd)
-{
+function Get-EnabledPlugin($rabbitmq_plugins_cmd) {
     $list_plugins_cmd = "$rabbitmq_plugins_cmd list -E -m"
     try {
-        $enabled_plugins = @(Invoke-Expression "& $list_plugins_cmd" | Where-Object { $_  })
-        return ,$enabled_plugins
+        $enabled_plugins = @(Invoke-Expression "& $list_plugins_cmd" | Where-Object { $_ })
+        return , $enabled_plugins
     }
     catch {
         Fail-Json -obj $result -message "Can't execute `"$($list_plugins_cmd)`": $($_.Exception.Message)"
     }
 }
 
-function Enable-Plugin($rabbitmq_plugins_cmd, $plugin_name)
-{
+function Enable-Plugin($rabbitmq_plugins_cmd, $plugin_name) {
     $enable_plugin_cmd = "$rabbitmq_plugins_cmd enable $plugin_name"
     try {
         Invoke-Expression "& $enable_plugin_cmd"
@@ -28,8 +26,7 @@ function Enable-Plugin($rabbitmq_plugins_cmd, $plugin_name)
     }
 }
 
-function Disable-Plugin($rabbitmq_plugins_cmd, $plugin_name)
-{
+function Disable-Plugin($rabbitmq_plugins_cmd, $plugin_name) {
     $enable_plugin_cmd = "$rabbitmq_plugins_cmd disable $plugin_name"
     try {
         Invoke-Expression "& $enable_plugin_cmd"
@@ -39,14 +36,14 @@ function Disable-Plugin($rabbitmq_plugins_cmd, $plugin_name)
     }
 }
 
-function Get-RabbitmqPathFromRegistry
-{
+function Get-RabbitmqPathFromRegistry {
     $reg64Path = "HKLM:\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall\RabbitMQ"
     $reg32Path = "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\RabbitMQ"
 
     if (Test-Path -LiteralPath $reg64Path) {
         $regPath = $reg64Path
-    } elseif (Test-Path -LiteralPath $reg32Path) {
+    }
+    elseif (Test-Path -LiteralPath $reg32Path) {
         $regPath = $reg32Path
     }
 
@@ -57,8 +54,7 @@ function Get-RabbitmqPathFromRegistry
     }
 }
 
-function Get-RabbitmqBinPath($installation_path)
-{
+function Get-RabbitmqBinPath($installation_path) {
     $result = Join-Path -Path $installation_path -ChildPath 'bin'
     if (Test-Path -LiteralPath $result) {
         return $result
@@ -84,7 +80,7 @@ $diff_support = Get-AnsibleParam -obj $params -name "_ansible_diff" -type "bool"
 
 $names = Get-AnsibleParam -obj $params -name "names" -type "str" -failifempty $true -aliases "name"
 $new_only = Get-AnsibleParam -obj $params -name "new_only" -type "bool" -default $false
-$state = Get-AnsibleParam -obj $params -name "state" -type "str" -default "enabled" -validateset "enabled","disabled"
+$state = Get-AnsibleParam -obj $params -name "state" -type "str" -default "enabled" -validateset "enabled", "disabled"
 $prefix = Get-AnsibleParam -obj $params -name "prefix" -type "str"
 
 if ($diff_support) {
@@ -99,7 +95,8 @@ if ($prefix) {
     if (-not $rabbitmq_bin_path) {
         Fail-Json -obj $result -message "No binary folder in prefix `"$($prefix)`""
     }
-} else {
+}
+else {
     $rabbitmq_reg_path = Get-RabbitmqPathFromRegistry
     if ($rabbitmq_reg_path) {
         $rabbitmq_bin_path = Get-RabbitmqBinPath -installation_path $rabbitmq_reg_path
@@ -108,14 +105,15 @@ if ($prefix) {
 
 if ($rabbitmq_bin_path) {
     $rabbitmq_plugins_cmd = "'$(Join-Path -Path $rabbitmq_bin_path -ChildPath "rabbitmq-plugins")'"
-} else {
+}
+else {
     $rabbitmq_plugins_cmd = "rabbitmq-plugins"
 }
 
-$enabled_plugins = Get-EnabledPlugins -rabbitmq_plugins_cmd $rabbitmq_plugins_cmd
+$enabled_plugins = Get-EnabledPlugin -rabbitmq_plugins_cmd $rabbitmq_plugins_cmd
 
 if ($state -eq "enabled") {
-    $plugins_to_enable = $plugins | Where-Object {-not ($enabled_plugins -contains $_)}
+    $plugins_to_enable = $plugins | Where-Object { -not ($enabled_plugins -contains $_) }
     foreach ($plugin in $plugins_to_enable) {
         if (-not $check_mode) {
             Enable-Plugin -rabbitmq_plugins_cmd $rabbitmq_plugins_cmd -plugin_name $plugin
@@ -128,7 +126,7 @@ if ($state -eq "enabled") {
     }
 
     if (-not $new_only) {
-        $plugins_to_disable = $enabled_plugins | Where-Object {-not ($plugins -contains $_)}
+        $plugins_to_disable = $enabled_plugins | Where-Object { -not ($plugins -contains $_) }
         foreach ($plugin in $plugins_to_disable) {
             if (-not $check_mode) {
                 Disable-Plugin -rabbitmq_plugins_cmd $rabbitmq_plugins_cmd -plugin_name $plugin
@@ -140,8 +138,9 @@ if ($state -eq "enabled") {
             $result.changed = $true
         }
     }
-} else {
-    $plugins_to_disable = $enabled_plugins | Where-Object {$plugins -contains $_}
+}
+else {
+    $plugins_to_disable = $enabled_plugins | Where-Object { $plugins -contains $_ }
     foreach ($plugin in $plugins_to_disable) {
         if (-not $check_mode) {
             Disable-Plugin -rabbitmq_plugins_cmd $rabbitmq_plugins_cmd -plugin_name $plugin

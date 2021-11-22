@@ -20,7 +20,7 @@ function Get-EventLogDetail {
     $log_details = @{}
     $log_details.name = $LogName
     $log_details.exists = $false
-    $log = Get-EventLog -List | Where-Object {$_.Log -eq $LogName}
+    $log = Get-EventLog -List | Where-Object { $_.Log -eq $LogName }
 
     if ($log) {
         $log_details.exists = $true
@@ -102,7 +102,7 @@ function ConvertTo-MaximumSize {
     }
 
     $size_upper = $Size.ToUpper()
-    $size_numeric = [Double]$Size.Substring(0, $Size.Length -2)
+    $size_numeric = [Double]$Size.Substring(0, $Size.Length - 2)
 
     if ($size_upper.EndsWith("GB")) {
         $size_bytes = $size_numeric * 1GB
@@ -130,13 +130,13 @@ $params = Parse-Args $args -supports_check_mode $true
 $check_mode = Get-AnsibleParam -obj $params -name "_ansible_check_mode" -type "bool" -default $false
 
 $name = Get-AnsibleParam -obj $params -name "name" -type "str" -failifempty $true
-$state = Get-AnsibleParam -obj $params -name "state" -type "str" -default "present" -validateset "present","clear","absent"
+$state = Get-AnsibleParam -obj $params -name "state" -type "str" -default "present" -validateset "present", "clear", "absent"
 $sources = Get-AnsibleParam -obj $params -name "sources" -type "list"
 $category_file = Get-AnsibleParam -obj $params -name "category_file" -type "path"
 $message_file = Get-AnsibleParam -obj $params -name "message_file" -type "path"
 $parameter_file = Get-AnsibleParam -obj $params -name "parameter_file" -type "path"
 $maximum_size = Get-AnsibleParam -obj $params -name "maximum_size" -type "str"
-$overflow_action = Get-AnsibleParam -obj $params -name "overflow_action" -type "str" -validateset "OverwriteOlder","OverwriteAsNeeded","DoNotOverwrite"
+$overflow_action = Get-AnsibleParam -obj $params -name "overflow_action" -type "str" -validateset "OverwriteOlder", "OverwriteAsNeeded", "DoNotOverwrite"
 $retention_days = Get-AnsibleParam -obj $params -name "retention_days" -type "int"
 
 $result = @{

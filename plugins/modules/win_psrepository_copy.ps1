@@ -61,7 +61,7 @@ function Select-Wildcard {
     [CmdletBinding()]
     [OutputType([object])]
     param(
-        [Parameter(Mandatory=$true, ValueFromPipeline=$true)]
+        [Parameter(Mandatory = $true, ValueFromPipeline = $true)]
         [object]
         $InputObject ,
 
