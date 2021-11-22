@@ -16,17 +16,19 @@ description:
 options:
   name:
     description:
-      - String value that indicates the desired power plan.
+      - String value that indicates the desired power plan by name.
       - The power plan must already be present on the system.
       - Commonly there will be options for C(balanced) and C(high performance).
     type: str
     required: false
   guid:
     description:
-      - String value that indicates the desired power plan.
+      - String value that indicates the desired power plan by guid.
       - The power plan must already be present on the system.
+      - For out of box guids see U(https://docs.microsoft.com/en-us/windows/win32/power/power-policy-settings).
     type: str
     required: false
+    version_added: 1.9.0
 
 author:
   - Noah Sparks (@nwsparks)
