@@ -47,7 +47,7 @@ try {
         If (-not $physical_path) {
             Fail-Json -obj $result -message "missing required arguments: physical_path"
         }
-        If (-not (Test-Path -LiteralPath $physical_path)) {
+        If (![System.IO.File]::Exists($physical_path)) {
             Fail-Json -obj $result -message "specified folder must already exist: physical_path"
         }
 
