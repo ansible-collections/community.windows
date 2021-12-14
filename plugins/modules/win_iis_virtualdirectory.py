@@ -37,6 +37,23 @@ options:
       - The physical path to the folder in which the new virtual directory is created.
       - The specified folder must already exist.
     type: str
+  connect_as:
+    description:
+    - The type of authentication to use for the virtual directory. Either C(pass_through) or C(specific_user)
+    - If C(pass_through), IIS will use the identity of the user or application pool identity to access the physical path.
+    - If C(specific_user), IIS will use the credentials provided in I(username) and I(password) to access the physical path.
+    type: str
+    choices: [pass_through, specific_user]
+  username:
+    description:
+    - Specifies the user name of an account that can access configuration files and content for the virtual directory.
+    - Required when I(connect_as) is set to C(specific_user).
+    type: str
+  password:
+    description:
+    - The password associated with I(username).
+    - Required when I(connect_as) is set to C(specific_user).
+    type: str
 seealso:
 - module: community.windows.win_iis_webapplication
 - module: community.windows.win_iis_webapppool
