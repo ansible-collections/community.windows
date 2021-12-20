@@ -87,7 +87,6 @@ $domain_server = Get-AnsibleParam -obj $params -name "domain_server" -type "str"
 
 # User account parameters
 $name = Get-AnsibleParam -obj $params -name "name" -type "str" -failifempty $true
-$identity = Get-AnsibleParam -obj $params -name "identity" -type "str" -default $name
 $description = Get-AnsibleParam -obj $params -name "description" -type "str"
 $password = Get-AnsibleParam -obj $params -name "password" -type "str"
 $password_expired = Get-AnsibleParam -obj $params -name "password_expired" -type "bool"
@@ -99,6 +98,9 @@ $enabled = Get-AnsibleParam -obj $params -name "enabled" -type "bool" -default $
 $path = Get-AnsibleParam -obj $params -name "path" -type "str"
 $upn = Get-AnsibleParam -obj $params -name "upn" -type "str"
 $sam_account_name = Get-AnsibleParam -obj $params -name "sam_account_name" -type "str"
+$identity = Get-AnsibleParam -obj $params -name "identity" -type "str" -default $sam_account_name
+
+if ($null -eq $identity) { $identity = $name }
 
 # User informational parameters
 $user_info = @{
