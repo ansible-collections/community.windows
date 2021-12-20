@@ -13,6 +13,9 @@ $site = Get-AnsibleParam -obj $params -name "site" -type "str" -failifempty $tru
 $application = Get-AnsibleParam -obj $params -name "application" -type "str"
 $physical_path = Get-AnsibleParam -obj $params -name "physical_path" -type "str"
 $state = Get-AnsibleParam -obj $params -name "state" -type "str" -default "present" -validateset "absent", "present"
+$connect_as = Get-AnsibleParam -obj $params -name 'connect_as' -type 'str' -validateset 'specific_user', 'pass_through'
+$username = Get-AnsibleParam -obj $params -name "username" -type "str" -failifempty ($connect_as -eq 'specific_user')
+$password = Get-AnsibleParam -obj $params -name "password" -type "str" -failifempty ($connect_as -eq 'specific_user')
 
 # Ensure WebAdministration module is loaded
 if ($null -eq (Get-Module "WebAdministration" -ErrorAction SilentlyContinue)) {
@@ -71,7 +74,13 @@ try {
         $result.changed = $true
     }
 
-    $directory = Get-WebVirtualDirectory -Site $site -Name $name
+    $directory = if ($application) {
+        Get-WebVirtualDirectory -Site $site -Name $name -Application $application
+    }
+    else {
+        Get-WebVirtualDirectory -Site $site -Name $name
+    }
+
     If ($directory) {
 
         # Change Physical Path if needed
@@ -87,6 +96,28 @@ try {
                 $result.changed = $true
             }
         }
+
+        # Change username or password if needed
+        if ($connect_as -eq 'pass_through') {
+            if ($directory.username -ne '') {
+                Clear-ItemProperty -LiteralPath $directory_path -Name 'userName'
+                $result.changed = $true
+            }
+            if ($directory.password -ne '') {
+                Clear-ItemProperty -LiteralPath $directory_path -Name 'password'
+                $result.changed = $true
+            }
+        }
+        elseif ($connect_as -eq 'specific_user') {
+            if ($directory.username -ne $username) {
+                Set-ItemProperty -LiteralPath $directory_path -Name 'userName' -Value $username
+                $result.changed = $true
+            }
+            if ($directory.password -ne $password) {
+                Set-ItemProperty -LiteralPath $directory_path -Name 'password' -Value $password
+                $result.changed = $true
+            }
+        }
     }
 }
 catch {
@@ -94,7 +125,13 @@ catch {
 }
 
 # Result
-$directory = Get-WebVirtualDirectory -Site $site -Name $name
+$directory = if ($application) {
+    Get-WebVirtualDirectory -Site $site -Name $name -Application $application
+}
+else {
+    Get-WebVirtualDirectory -Site $site -Name $name
+}
+
 $result.directory = @{
     PhysicalPath = $directory.PhysicalPath
 }
