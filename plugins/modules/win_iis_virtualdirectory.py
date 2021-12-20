@@ -44,16 +44,19 @@ options:
     - If C(specific_user), IIS will use the credentials provided in I(username) and I(password) to access the physical path.
     type: str
     choices: [pass_through, specific_user]
+    version_added: 1.9.0
   username:
     description:
     - Specifies the user name of an account that can access configuration files and content for the virtual directory.
     - Required when I(connect_as) is set to C(specific_user).
     type: str
+    version_added: 1.9.0
   password:
     description:
     - The password associated with I(username).
     - Required when I(connect_as) is set to C(specific_user).
     type: str
+    version_added: 1.9.0
 seealso:
 - module: community.windows.win_iis_webapplication
 - module: community.windows.win_iis_webapppool
