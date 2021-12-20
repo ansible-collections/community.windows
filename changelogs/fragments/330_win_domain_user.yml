@@ -1,4 +1,0 @@
----
-bugfixes:
-  - win_domain_user - Module now reports user created and changed properly - https://github.com/ansible-collections/community.windows/issues/316
-  - win_domain_user - Module now properly captures and reports bad password - https://github.com/ansible-collections/community.windows/issues/316

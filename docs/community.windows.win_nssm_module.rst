@@ -404,7 +404,7 @@ Notes
 
 .. note::
    - The service will NOT be started after its creation when ``state=present``.
-   - Once the service is created, you can use the :ref:`ansible.windowswin_service <ansible.windowswin_service_module>` module to start it or configure some additionals properties, such as its startup type, dependencies, service account, and so on.
+   - Once the service is created, you can use the :ref:`ansible.windows.win_service <ansible.windows.win_service_module>` module to start it or configure some additionals properties, such as its startup type, dependencies, service account, and so on.
 
 
 See Also

@@ -27,6 +27,46 @@ The below requirements are needed on the host that executes this module.
 - Windows 8.1 / Windows 2012 (NT 6.2)
 
 
+Parameters
+----------
+
+.. raw:: html
+
+    <table  border=0 cellpadding=0 class="documentation-table">
+        <tr>
+            <th colspan="1">Parameter</th>
+            <th>Choices/<font color="blue">Defaults</font></th>
+            <th width="100%">Comments</th>
+        </tr>
+            <tr>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>filter</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">list</span>
+                         / <span style="color: purple">elements=string</span>
+                    </div>
+                    <div style="font-style: italic; font-size: small; color: darkgreen">added in 1.9.0</div>
+                </td>
+                <td>
+                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                    <li><div style="color: blue"><b>physical_disk</b>&nbsp;&larr;</div></li>
+                                    <li><div style="color: blue"><b>virtual_disk</b>&nbsp;&larr;</div></li>
+                                    <li><div style="color: blue"><b>win32_disk_drive</b>&nbsp;&larr;</div></li>
+                                    <li><div style="color: blue"><b>partitions</b>&nbsp;&larr;</div></li>
+                                    <li><div style="color: blue"><b>volumes</b>&nbsp;&larr;</div></li>
+                        </ul>
+                        <b>Default:</b><br/><div style="color: blue">["physical_disk", "virtual_disk", "win32_disk_drive", "partitions", "volumes"]</div>
+                </td>
+                <td>
+                        <div>Allows to filter returned facts by type of disk information.</div>
+                        <div>If volumes are selected partitions will be returned as well.</div>
+                </td>
+            </tr>
+    </table>
+    <br/>
+
 
 Notes
 -----
@@ -66,6 +106,12 @@ Examples
     - name: Output second disk serial number
       debug:
         var: ansible_facts.disks[1].serial_number
+
+    - name: get disk physical_disk and partition facts on the target
+      win_disk_facts:
+        filter:
+          - physical_disk
+          - partitions
 
 
 Returned Facts

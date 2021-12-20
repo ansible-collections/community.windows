@@ -50,6 +50,28 @@ Parameters
             <tr>
                 <td colspan="1">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>connect_as</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                    </div>
+                    <div style="font-style: italic; font-size: small; color: darkgreen">added in 1.9.0</div>
+                </td>
+                <td>
+                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                    <li>pass_through</li>
+                                    <li>specific_user</li>
+                        </ul>
+                </td>
+                <td>
+                        <div>The type of authentication to use for the virtual directory. Either <code>pass_through</code> or <code>specific_user</code></div>
+                        <div>If <code>pass_through</code>, IIS will use the identity of the user or application pool identity to access the physical path.</div>
+                        <div>If <code>specific_user</code>, IIS will use the credentials provided in <em>username</em> and <em>password</em> to access the physical path.</div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>name</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
@@ -61,6 +83,23 @@ Parameters
                 </td>
                 <td>
                         <div>The name of the virtual directory to create or remove.</div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>password</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                    </div>
+                    <div style="font-style: italic; font-size: small; color: darkgreen">added in 1.9.0</div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>The password associated with <em>username</em>.</div>
+                        <div>Required when <em>connect_as</em> is set to <code>specific_user</code>.</div>
                 </td>
             </tr>
             <tr>
@@ -113,6 +152,23 @@ Parameters
                 <td>
                         <div>Whether to add or remove the specified virtual directory.</div>
                         <div>Removing will remove the virtual directory and all under it (Recursively).</div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>username</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                    </div>
+                    <div style="font-style: italic; font-size: small; color: darkgreen">added in 1.9.0</div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>Specifies the user name of an account that can access configuration files and content for the virtual directory.</div>
+                        <div>Required when <em>connect_as</em> is set to <code>specific_user</code>.</div>
                 </td>
             </tr>
     </table>

@@ -5,13 +5,32 @@ Community Windows Release Notes
 .. contents:: Topics
 
 
-v1.8.0
+v1.9.0
 ======
 
 Release Summary
 ---------------
 
-- Release summary for v1.8.0
+- Release summary for v1.9.0
+
+Minor Changes
+-------------
+
+- win_disk_facts - Added ``filter`` option to filter returned facts by type of disk information - https://github.com/ansible-collections/community.windows/issues/33
+- win_disk_facts - Converted from ``#Requires -Module Ansible.ModuleUtils.Legacy`` to ``#AnsibleRequires -CSharpUtil Ansible.Basic``
+- win_iis_virtualdirectory - Added the ``connect_as``, ``username``, and ``password`` options to control the virtual directory authentication - https://github.com/ansible-collections/community.windows/issues/346
+- win_power_plan - Added ``guid`` option to specify plan by a unique identifier - https://github.com/ansible-collections/community.windows/issues/310
+
+Bugfixes
+--------
+
+- win_domain_user - Module now properly captures and reports bad password - https://github.com/ansible-collections/community.windows/issues/316
+- win_domain_user - Module now reports user created and changed properly - https://github.com/ansible-collections/community.windows/issues/316
+- win_domain_user - The AD user's existing identity is searched using their sAMAccountName name preferentially and falls back to the provided name property instead - https://github.com/ansible-collections/community.windows/issues/344
+- win_iis_virtualdirectory - Fixed an issue where virtual directory information could not be obtained correctly when the parameter ``application`` was set
+
+v1.8.0
+======
 
 Minor Changes
 -------------

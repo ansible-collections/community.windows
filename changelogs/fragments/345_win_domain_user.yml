@@ -1,3 +1,0 @@
----
-bugfixes:
-  - win_domain_user - The AD user's existing identity is searched using their sAMAccountName name preferentially and falls back to the provided name property instead - https://github.com/ansible-collections/community.windows/issues/344
