@@ -153,7 +153,7 @@ Parameters
                 <td>
                         <div>The target that identifies the server or servers that the credential is to be used for.</div>
                         <div>If the value can be a NetBIOS name, DNS server name, DNS host name suffix with a wildcard character (<code>*</code>), a NetBIOS of DNS domain name that contains a wildcard character sequence, or an asterisk.</div>
-                        <div>See <code>TargetName</code> in <a href='https://docs.microsoft.com/en-us/windows/desktop/api/wincred/ns-wincred-_credentiala'>https://docs.microsoft.com/en-us/windows/desktop/api/wincred/ns-wincred-_credentiala</a> for more details on what this value can be.</div>
+                        <div>See <code>TargetName</code> in <a href='https://docs.microsoft.com/en-us/windows/win32/api/wincred/ns-wincred-credentiala'>https://docs.microsoft.com/en-us/windows/win32/api/wincred/ns-wincred-credentiala</a> for more details on what this value can be.</div>
                         <div>This is used with <em>type</em> to produce a unique credential.</div>
                 </td>
             </tr>
