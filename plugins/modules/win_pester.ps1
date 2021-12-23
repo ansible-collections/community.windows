@@ -69,29 +69,28 @@ If ((-not (Get-Module -Name $Pester -ErrorAction SilentlyContinue | Where-Object
 
 #Prepare Invoke-Pester parameters depending of the Pester's version.
 #Invoke-Pester output deactivation behave differently depending on the Pester's version
-if($module.Result.pester_version -ge "5.0.0"){
-    # TODO: pester conffiguration object
-}
+$Configuration = @{ }
 elseIf ($module.Result.pester_version -ge "4.0.0") {
     $Parameters = @{
         "show" = "none"
-        "PassThru" = $True
     }
 }
 else {
     $Parameters = @{
         "quiet" = $True
-        "PassThru" = $True
     }
 }
 
+$Configuration.Run.PassThru = $Parameters.PassThru = $True
+$Configuration.Output.Verbosity = "None"
+
 if ($tags.count) {
-    $Parameters.Tag = $tags
+    $Configuration.Filter.Tag = $Parameters.Tag = $tags
 }
 
 if ($output_file) {
-    $Parameters.OutputFile = $output_file
-    $Parameters.OutputFormat = $output_format
+    $Configuration.TestResult.OutputPath = $Parameters.OutputFile = $output_file
+    $Configuration.TestResult.OutputFormat = $Parameters.OutputFormat = $output_format
 }
 
 # Run Pester tests
@@ -108,9 +107,6 @@ If (Test-Path -LiteralPath $path -PathType Leaf) {
     if ($module.CheckMode) {
         $module.Result.output = "Run pester test in the file: $path$test_parameters_check_mode_msg"
     }
-    else {
-        $module.Result.output = Invoke-Pester @Parameters
-    }
 }
 else {
     $Parameters.Script = $path
@@ -118,11 +114,19 @@ else {
     if ($module.CheckMode) {
         $module.Result.output = "Run Pester test(s): $path"
     }
-    else {
-        $module.Result.output = Invoke-Pester @Parameters
-    }
 }
 
-$module.Result.changed = $true
+$InvokeParams = $Parameters
+if($module.Result.pester_version -ge "5.0.0"){
+    #Use pester Advanced conffiguration object as legacy parameters will be deprecated/removed soon.
+    $Configuration.Run.Path = $Path
+    $InvokeParams = @{ Configuration = New-PesterConfiguration $Configuration }    
+}
+
+if(-not $module.CheckMode){
+    $module.Result.output = Invoke-Pester @InvokeParams
+    $module.Result.changed = $true
+}
+
 
 $module.ExitJson()
