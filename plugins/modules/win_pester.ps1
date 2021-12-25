@@ -69,16 +69,12 @@ If ((-not (Get-Module -Name $Pester -ErrorAction SilentlyContinue | Where-Object
 
 #Prepare Invoke-Pester parameters depending of the Pester's version.
 #Invoke-Pester output deactivation behave differently depending on the Pester's version
-$Configuration = @{ }
+$Parameters = $Configuration = @{ }
 elseIf ($module.Result.pester_version -ge "4.0.0") {
-    $Parameters = @{
-        "show" = "none"
-    }
+    $Parameters.show = "none"
 }
 else {
-    $Parameters = @{
-        "quiet" = $True
-    }
+    $Parameters.quiet = $True 
 }
 
 $Configuration.Run.PassThru = $Parameters.PassThru = $True
