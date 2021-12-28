@@ -74,7 +74,7 @@ elseIf ($module.Result.pester_version -ge "4.0.0") {
     $Parameters.show = "none"
 }
 else {
-    $Parameters.quiet = $True 
+    $Parameters.quiet = $True
 }
 
 $Configuration.Run.PassThru = $Parameters.PassThru = $True
@@ -113,16 +113,15 @@ else {
 }
 
 $InvokeParams = $Parameters
-if($module.Result.pester_version -ge "5.0.0"){
+if ($module.Result.pester_version -ge "5.0.0") {
     #Use pester Advanced conffiguration object as legacy parameters will be deprecated/removed soon.
     $Configuration.Run.Path = $Path
-    $InvokeParams = @{ Configuration = New-PesterConfiguration $Configuration }    
+    $InvokeParams = @{ Configuration = New-PesterConfiguration $Configuration }
 }
 
-if(-not $module.CheckMode){
+if (-not $module.CheckMode) {
     $module.Result.output = Invoke-Pester @InvokeParams
     $module.Result.changed = $true
 }
-
 
 $module.ExitJson()
