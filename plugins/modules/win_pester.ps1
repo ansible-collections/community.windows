@@ -75,7 +75,7 @@ $Configuration = @{
     Output = @{}
     TestResult = @{}
     Filter = @{}
- }
+}
 If ($module.Result.pester_version -ge "4.0.0") {
     $Parameters.show = "none"
 }
