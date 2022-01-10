@@ -16,7 +16,7 @@ community.windows.laps_password
 
 Synopsis
 --------
-- This lookup returns the LAPS password set for a server from the Active Directory database.
+- This lookup returns the LAPS password set for a server from Active Directory.
 - See https://github.com/jborean93/ansible-lookup-laps_password for more information around installing pre-requisites and testing.
 
 
