@@ -4,17 +4,14 @@
     name: ansible-tester
   register: rename_host
 
-- name: Reboot
+- name: Reboot after changing hostname
   ansible.windows.win_reboot:
   when: rename_host.reboot_required
 
-- name: Ensure AD/DNS roles are installed
+- name: Ensure the ActiveDirectory module is installed
   ansible.windows.win_feature:
     name:
-      - AD-Domain-Services
-      - DNS
-    include_management_tools: true
-    include_sub_features: true
+    - RSAT-AD-PowerShell
     state: present
 
 - name: Ensure domain is present
@@ -23,67 +20,42 @@
     safe_mode_password: password123!
   register: ensure_domain
 
-- name: Reboot
+- name: Reboot after domain promotion
   ansible.windows.win_reboot:
-  when: ensure_domain.changed
+  when: ensure_domain.reboot_required
 
-- name: Try Import-Module
-  ansible.windows.win_shell: |
-    whoami
-    try{Import-Module ActiveDirectory}
-    catch{
-      start-sleep -seconds 10
-      Import-Module ActiveDirectory
-    }
-  ignore_errors: true
-  register: import_test
-
-- name: Reboot Again
-  ansible.windows.win_reboot:
-  when: import_test is failed
-
-- name: Wait for ADWS
-  community.windows.win_wait_for_process:
-    process_name_exact: Microsoft.ActiveDirectory.WebServices
-    timeout: 120
-    sleep: 5
-    process_min_count: 1
-
-- name: Try Import Again
-  block:
-    - name: Try Import-Module
-      ansible.windows.win_shell: |
-        whoami
-        try{Import-Module ActiveDirectory}
-        catch{
-          start-sleep -seconds 5
-          Import-Module ActiveDirectory
-        }
-      register: import_test2
-  rescue:
-    - name: Try Import-Module
-      ansible.windows.win_shell: C:\Windows\system32\WindowsPowerShell\v1.0\Modules\ActiveDirectory\ActiveDirectory.psd1
-      register: import_test3
-
-- name: Wait for ADWS
-  community.windows.win_wait_for_process:
-    process_name_exact: Microsoft.ActiveDirectory.WebServices
-    timeout: 120
-    sleep: 5
-    process_min_count: 1
-
-- name: Try Import Again
-  block:
-    - name: Try Import-Module
-      ansible.windows.win_shell: |
-        whoami
-        try{Import-Module ActiveDirectory}
-        catch{
-          start-sleep -seconds 5
-          Import-Module ActiveDirectory
-        }
-      register: import_test2
-  rescue:
-    - name: Try Import-Module
-      ansible.windows.win_shell: C:\Windows\system32\WindowsPowerShell\v1.0\Modules\ActiveDirectory\ActiveDirectory.psd1
-      register: import_test3
+# While usually win_reboot waits until it is fully done before continuing I've seen Server 2019 in CI still waiting
+# for things to initialise. By tested if ADWS is available with a simple check we can ensure the host is at least
+# ready to test AD. Typically I've found it takes about 60 retries so doubling it should cover even an absolute worst
+# case.
+- name: Post reboot test for ADWS to come online
+  ansible.windows.win_powershell:
+    parameters:
+      Delay: 5
+      Retries: 120
+    script: |
+      [CmdletBinding()]
+      param (
+          [int]$Delay,
+          [int]$Retries
+      )
+      $Ansible.Changed = $false
+      $attempts = 0
+      $err = $null
+      while ($true) {
+          $attempts++
+          try {
+              Get-ADRootDSE -ErrorAction Stop
+              break
+          }
+          catch {
+              if ($attempts -eq $Retries) {
+                  throw
+              }
+              Start-Sleep -Seconds $Delay
+          }
+      }
+      $attempts
+  become: yes
+  become_method: runas
+  become_user: SYSTEM
