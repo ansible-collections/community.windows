@@ -59,6 +59,18 @@ options:
     description:
       - Name of the custom repository to use.
     type: str
+  username:
+    description:
+      - Username to authenticate against private repository.
+    type: str
+    required: no
+    version_added: '1.10.0'
+  password:
+    description:
+      - Password to authenticate against private repository.
+    type: str
+    required: no
+    version_added: '1.10.0'
   url:
     description:
       - URL of the custom repository to register.
@@ -114,6 +126,14 @@ EXAMPLES = r'''
   community.windows.win_psmodule:
     name: PowerShellModule
     repository: MyRepository
+    state: present
+
+- name: Add a PowerShell module from a specific repository with credentials
+  win_psmodule:
+    name: PowerShellModule
+    repository: MyRepository
+    username: repo_username
+    password: repo_password
     state: present
 
 - name: Remove a PowerShell module

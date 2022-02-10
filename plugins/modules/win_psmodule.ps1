@@ -16,6 +16,8 @@ $required_version = Get-AnsibleParam -obj $params -name "required_version" -type
 $minimum_version = Get-AnsibleParam -obj $params -name "minimum_version" -type "str"
 $maximum_version = Get-AnsibleParam -obj $params -name "maximum_version" -type "str"
 $repo = Get-AnsibleParam -obj $params -name "repository" -type "str"
+$repo_user = Get-AnsibleParam -obj $params -name "username" -type "str"
+$repo_pass = Get-AnsibleParam -obj $params -name "password" -type "str"
 $url = Get-AnsibleParam -obj $params -name "url" -type str
 $state = Get-AnsibleParam -obj $params -name "state" -type "str" -default "present" -validateset "present", "absent", "latest"
 $allow_clobber = Get-AnsibleParam -obj $params -name "allow_clobber" -type "bool" -default $false
@@ -206,6 +208,7 @@ Function Install-PsModule {
         [String]$MinimumVersion,
         [String]$MaximumVersion,
         [String]$Repository,
+        [System.Management.Automation.PSCredential]$Credential = [System.Management.Automation.PSCredential]::Empty,
         [Bool]$AllowClobber,
         [Bool]$SkipPublisherCheck,
         [Bool]$AllowPrerelease,
@@ -232,7 +235,7 @@ Function Install-PsModule {
             }
 
             [String[]]$ParametersNames = @("RequiredVersion", "MinimumVersion", "MaximumVersion", "AllowPrerelease",
-                "AllowClobber", "SkipPublisherCheck", "Repository")
+                "AllowClobber", "SkipPublisherCheck", "Repository", "Credential")
 
             $ht = Add-DefinedParameter -Hashtable $ht -ParametersNames $ParametersNames
 
@@ -303,6 +306,7 @@ Function Find-LatestPsModule {
         [Parameter(Mandatory = $true)]
         [String]$Name,
         [String]$Repository,
+        [System.Management.Automation.PSCredential]$Credential = [System.Management.Automation.PSCredential]::Empty,
         [Bool]$AllowPrerelease,
         [Bool]$CheckMode
     )
@@ -312,7 +316,7 @@ Function Find-LatestPsModule {
             Name = $Name
         }
 
-        [String[]]$ParametersNames = @("AllowPrerelease", "Repository")
+        [String[]]$ParametersNames = @("AllowPrerelease", "Repository", "Credential")
 
         $ht = Add-DefinedParameter -Hashtable $ht -ParametersNames $ParametersNames
 
@@ -446,6 +450,10 @@ if ( $repo -and (-not $url) ) {
 
 }
 
+if ($repo_user -and $repo_pass ) {
+    $repo_credential = New-Object -TypeName PSCredential ($repo_user, ($repo_pass | ConvertTo-SecureString -AsPlainText -Force))
+}
+
 if ( ($allow_clobber -or $allow_prerelease -or $skip_publisher_check -or
         $required_version -or $minimum_version -or $maximum_version) ) {
     # Update the PowerShellGet and PackageManagement modules.
@@ -474,6 +482,7 @@ if ($state -eq "present") {
             SkipPublisherCheck = $skip_publisher_check
             AllowPrerelease = $allow_prerelease
             CheckMode = $check_mode
+            Credential = $repo_credential
         }
         Install-PsModule @ht
     }
@@ -501,6 +510,7 @@ elseif ( $state -eq "latest") {
         AllowPrerelease = $allow_prerelease
         Repository = $repo
         CheckMode = $check_mode
+        Credential = $repo_credential
     }
 
     $LatestVersion = Find-LatestPsModule @ht
@@ -517,6 +527,7 @@ elseif ( $state -eq "latest") {
             SkipPublisherCheck = $skip_publisher_check
             AllowPrerelease = $allow_prerelease
             CheckMode = $check_mode
+            Credential = $repo_credential
         }
         Install-PsModule @ht
     }
