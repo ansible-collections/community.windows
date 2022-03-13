@@ -4,6 +4,7 @@
 
 #Requires -Module Ansible.ModuleUtils.Legacy
 #AnsibleRequires -CSharpUtil Ansible.AccessToken
+#AnsibleRequires -CSharpUtil Ansible.Basic
 
 Function Test-Credential {
     param(
@@ -55,75 +56,135 @@ Function Test-Credential {
     }
 }
 
+$spec = @{
+    options = @{
+        name = @{ type = 'str'; required = $true }
+        state = @{
+            type = "str"
+            choices = @('present', 'absent', 'query')
+            default = "present"
+        }
+        domain_username = @{ type = 'str' }
+        domain_password = @{ type = 'str'; no_log = $true }
+        domain_server = @{ type = 'str' }
+        groups_action = @{
+            type = 'str'
+            choices = @('add', 'remove', 'replace')
+            default = 'replace'
+        }
+        spn_action = @{
+            type = 'str'
+            choices = @('add', 'remove', 'replace')
+            default = 'replace'
+        }
+        spn = @{
+            type = 'list'
+            elements = 'str'
+            aliases = @('spns')
+        }
+        description = @{ type = 'str' }
+        password = @{ type = 'str'; no_log = $true }
+        password_expired = @{ type = 'bool' }
+        password_never_expires = @{ type = 'bool' }
+        user_cannot_change_password = @{ type = 'bool' }
+        account_locked = @{ type = 'bool' }
+        groups = @{ type = 'list'; elements = 'str' }
+        enabled = @{ type = 'bool'; default = $true }
+        path = @{ type = 'str' }
+        upn = @{ type = 'str' }
+        sam_account_name = @{ type = 'str' }
+        identity = @{ type = 'str' }
+        firstname = @{ type = 'str' }
+        surname = @{ type = 'str'; aliases = @('lastname') }
+        company = @{ type = 'str' }
+        email = @{ type = 'str' }
+        street = @{ type = 'str' }
+        city = @{ type = 'str' }
+        state_province = @{ type = 'str' }
+        postal_code = @{ type = 'str' }
+        country = @{ type = 'str' }
+        attributes = @{ type = 'raw' }
+        delegates = @{
+            type='list'
+            elements='str'
+            aliases = @('principals_allowed_to_delegate')
+        }
+        update_password = @{
+            type = 'str'
+            choices = @('always', 'on_create', 'when_changed')
+            default = 'always'
+        }
+    }
+    supports_check_mode = $true
+}
+
+$module = [Ansible.Basic.AnsibleModule]::Create($args, $spec)
+$check_mode = $module.CheckMode
+
+$module.Result.created = $false
+$module.Result.password_updated = $false
+
 try {
     Import-Module ActiveDirectory
-}
-catch {
+} catch {
     $msg = -join @(
         "Failed to import ActiveDirectory PowerShell module. This module should be run on a domain controller, "
         "and the ActiveDirectory module must be available."
     )
-    Fail-Json $result $msg
+    $module.FailJson($msg, $_)
 }
-
-$result = @{
-    changed = $false
-    created = $false
-    password_updated = $false
-}
-
-$ErrorActionPreference = "Stop"
-
-$params = Parse-Args $args -supports_check_mode $true
-$check_mode = Get-AnsibleParam -obj $params -name "_ansible_check_mode" -default $false
 
 # Module control parameters
-$state = Get-AnsibleParam -obj $params -name "state" -type "str" -default "present" -validateset "present", "absent", "query"
-$update_password = Get-AnsibleParam -obj $params -name "update_password" -type "str" -default "always" -validateset "always", "on_create", "when_changed"
-$groups_action = Get-AnsibleParam -obj $params -name "groups_action" -type "str" -default "replace" -validateset "add", "remove", "replace"
-$domain_username = Get-AnsibleParam -obj $params -name "domain_username" -type "str"
-$domain_password = Get-AnsibleParam -obj $params -name "domain_password" -type "str" -failifempty ($null -ne $domain_username)
-$domain_server = Get-AnsibleParam -obj $params -name "domain_server" -type "str"
+$state = $module.Params.state
+$update_password = $module.Params.update_password
+$groups_action = $module.Params.groups_action
+$domain_username = $module.Params.domain_username
+$domain_password = $module.Params.domain_password
+$domain_server = $module.Params.domain_server
 
 # User account parameters
-$name = Get-AnsibleParam -obj $params -name "name" -type "str" -failifempty $true
-$description = Get-AnsibleParam -obj $params -name "description" -type "str"
-$password = Get-AnsibleParam -obj $params -name "password" -type "str"
-$password_expired = Get-AnsibleParam -obj $params -name "password_expired" -type "bool"
-$password_never_expires = Get-AnsibleParam -obj $params -name "password_never_expires" -type "bool"
-$user_cannot_change_password = Get-AnsibleParam -obj $params -name "user_cannot_change_password" -type "bool"
-$account_locked = Get-AnsibleParam -obj $params -name "account_locked" -type "bool"
-$groups = Get-AnsibleParam -obj $params -name "groups" -type "list"
-$enabled = Get-AnsibleParam -obj $params -name "enabled" -type "bool" -default $true
-$path = Get-AnsibleParam -obj $params -name "path" -type "str"
-$upn = Get-AnsibleParam -obj $params -name "upn" -type "str"
-$sam_account_name = Get-AnsibleParam -obj $params -name "sam_account_name" -type "str"
-$identity = Get-AnsibleParam -obj $params -name "identity" -type "str" -default $sam_account_name
+$name = $module.Params.name
+$description = $module.Params.description
+$password = $module.Params.password
+$password_expired = $module.Params.password_expired
+$password_never_expires = $module.Params.password_never_expires
+$user_cannot_change_password = $module.Params.user_cannot_change_password
+$account_locked = $module.Params.account_locked
+$groups = $module.Params.groups
+$enabled = $module.Params.enabled
+$path = $module.Params.path
+$upn = $module.Params.upn
+$spn = $module.Params.spn
+$spn_action = $module.Params.spn_action
+$sam_account_name = $module.Params.sam_account_name
+$delegates = $module.Params.delegates
+$identity = $module.Params.identity
 
 if ($null -eq $identity) { $identity = $name }
 
 # User informational parameters
 $user_info = @{
-    GivenName = Get-AnsibleParam -obj $params -name "firstname" -type "str"
-    Surname = Get-AnsibleParam -obj $params -name "surname" -type "str"
-    Company = Get-AnsibleParam -obj $params -name "company" -type "str"
-    EmailAddress = Get-AnsibleParam -obj $params -name "email" -type "str"
-    StreetAddress = Get-AnsibleParam -obj $params -name "street" -type "str"
-    City = Get-AnsibleParam -obj $params -name "city" -type "str"
-    State = Get-AnsibleParam -obj $params -name "state_province" -type "str"
-    PostalCode = Get-AnsibleParam -obj $params -name "postal_code" -type "str"
-    Country = Get-AnsibleParam -obj $params -name "country" -type "str"
+    GivenName     = $module.Params.firstname
+    Surname       = $module.Params.surname
+    Company       = $module.Params.company
+    EmailAddress  = $module.Params.email
+    StreetAddress = $module.Params.street
+    City          = $module.Params.city
+    State         = $module.Params.state_province
+    PostalCode    = $module.Params.postal_code
+    Country       = $module.Params.country
 }
 
 # Additional attributes
-$attributes = Get-AnsibleParam -obj $params -name "attributes"
+$attributes = $module.Params.attributes
 
 # Parameter validation
 If ($null -ne $account_locked -and $account_locked) {
-    Fail-Json $result "account_locked must be set to 'no' if provided"
+    $module.FailJson("account_locked must be set to 'no' if provided")
 }
+
 If (($null -ne $password_expired) -and ($null -ne $password_never_expires)) {
-    Fail-Json $result "password_expired and password_never_expires are mutually exclusive but have both been set"
+    $module.FailJson("password_expired and password_never_expires are mutually exclusive but have both been set")
 }
 
 $extra_args = @{}
@@ -139,9 +200,10 @@ if ($null -ne $domain_server) {
 Function Get-PrincipalGroup {
     Param ($identity, $args_extra)
     try {
-        $groups = Get-ADPrincipalGroupMembership -Identity $identity @args_extra -ErrorAction Stop
-    }
-    catch {
+        $groups = Get-ADPrincipalGroupMembership `
+        -Identity $identity @args_extra `
+        -ErrorAction Stop
+    } catch {
         Add-Warning -obj $result -message "Failed to enumerate user groups but continuing on.: $($_.Exception.Message)"
         return @()
     }
@@ -153,10 +215,11 @@ Function Get-PrincipalGroup {
 }
 
 try {
-    $user_obj = Get-ADUser -Identity $identity -Properties ('*', 'msDS-PrincipalName') @extra_args
+    $user_obj = Get-ADUser `
+        -Identity $identity `
+        -Properties ('*', 'msDS-PrincipalName') @extra_args
     $user_guid = $user_obj.ObjectGUID
-}
-catch [Microsoft.ActiveDirectory.Management.ADIdentityNotFoundException] {
+} catch [Microsoft.ActiveDirectory.Management.ADIdentityNotFoundException] {
     $user_obj = $null
     $user_guid = $null
 }
@@ -182,10 +245,10 @@ If ($state -eq 'present') {
         $user_obj = New-ADUser @create_args -WhatIf:$check_mode -PassThru @extra_args
         $user_guid = $user_obj.ObjectGUID
         $new_user = $true
-        $result.created = $true
-        $result.changed = $true
+        $module.Result.created = $true
+        $module.Result.changed = $true
         If ($check_mode) {
-            Exit-Json $result
+            $module.ExitJson()
         }
         $user_obj = Get-ADUser -Identity $user_guid -Properties ('*', 'msDS-PrincipalName') @extra_args
     }
@@ -214,14 +277,18 @@ If ($state -eq 'present') {
         If ($set_new_credentials) {
             $secure_password = ConvertTo-SecureString $password -AsPlainText -Force
             try {
-                Set-ADAccountPassword -Identity $user_guid -Reset:$true -Confirm:$false -NewPassword $secure_password -WhatIf:$check_mode @extra_args
+                Set-ADAccountPassword -Identity $user_guid `
+                    -Reset:$true `
+                    -Confirm:$false `
+                    -NewPassword $secure_password `
+                    -WhatIf:$check_mode @extra_args
             }
             catch {
                 Fail-Json $result "Failed to set password on account: $($_.Exception.Message)"
             }
             $user_obj = Get-ADUser -Identity $user_guid -Properties * @extra_args
-            $result.password_updated = $true
-            $result.changed = $true
+            $module.Result.password_updated = $true
+            $module.Result.changed = $true
         }
     }
 
@@ -229,44 +296,103 @@ If ($state -eq 'present') {
     If (($null -ne $password_never_expires) -and ($password_never_expires -ne $user_obj.PasswordNeverExpires)) {
         Set-ADUser -Identity $user_guid -PasswordNeverExpires $password_never_expires -WhatIf:$check_mode @extra_args
         $user_obj = Get-ADUser -Identity $user_guid -Properties * @extra_args
-        $result.changed = $true
+        $module.Result.changed = $true
     }
     If (($null -ne $password_expired) -and ($password_expired -ne $user_obj.PasswordExpired)) {
         Set-ADUser -Identity $user_guid -ChangePasswordAtLogon $password_expired -WhatIf:$check_mode @extra_args
         $user_obj = Get-ADUser -Identity $user_guid -Properties * @extra_args
-        $result.changed = $true
+        $module.Result.changed = $true
     }
     If (($null -ne $user_cannot_change_password) -and ($user_cannot_change_password -ne $user_obj.CannotChangePassword)) {
         Set-ADUser -Identity $user_guid -CannotChangePassword $user_cannot_change_password -WhatIf:$check_mode @extra_args
         $user_obj = Get-ADUser -Identity $user_guid -Properties * @extra_args
-        $result.changed = $true
+        $module.Result.changed = $true
     }
 
     # Assign other account settings
     If (($null -ne $upn) -and ($upn -ne $user_obj.UserPrincipalName)) {
         Set-ADUser -Identity $user_guid -UserPrincipalName $upn -WhatIf:$check_mode @extra_args
         $user_obj = Get-ADUser -Identity $user_guid -Properties * @extra_args
-        $result.changed = $true
+        $module.Result.changed = $true
     }
     If (($null -ne $sam_account_name) -and ($sam_account_name -ne $user_obj.SamAccountName)) {
         Set-ADUser -Identity $user_guid -SamAccountName $sam_account_name -WhatIf:$check_mode @extra_args
         $user_obj = Get-ADUser -Identity $user_guid -Properties * @extra_args
-        $result.changed = $true
+        $module.Result.changed = $true
     }
     If (($null -ne $description) -and ($description -ne $user_obj.Description)) {
         Set-ADUser -Identity $user_guid -description $description -WhatIf:$check_mode @extra_args
         $user_obj = Get-ADUser -Identity $user_guid -Properties * @extra_args
-        $result.changed = $true
+        $module.Result.changed = $true
     }
     If ($enabled -ne $user_obj.Enabled) {
         Set-ADUser -Identity $user_guid -Enabled $enabled -WhatIf:$check_mode @extra_args
         $user_obj = Get-ADUser -Identity $user_guid -Properties * @extra_args
-        $result.changed = $true
+        $module.Result.changed = $true
     }
     If ((-not $account_locked) -and ($user_obj.LockedOut -eq $true)) {
         Unlock-ADAccount -Identity $user_guid -WhatIf:$check_mode @extra_args
         $user_obj = Get-ADUser -Identity $user_guid -Properties * @extra_args
-        $result.changed = $true
+        $module.Result.changed = $true
+    }
+    If ($delegates) {
+        if(Compare-Object $delegates $user_obj.PrincipalsAllowedToDelegateToAccount) {
+            Set-ADUser -Identity $user_guid -PrincipalsAllowedToDelegateToAccount $delegates
+            $user_obj = Get-ADUser -Identity $user_guid -Properties * @extra_args
+            $module.Result.changed = $true
+        }
+    }
+
+    # configure service principal names
+    if ($null -ne $spn) {
+        $current_spn = [Array]$user_obj.ServicePrincipalNames
+        $desired_spn = [Array]$spn
+        $spn_diff = @()
+
+        # generate a diff
+        $desired_spn | ForEach-Object {
+            if ($current_spn -contains $_) {
+                $spn_diff += $_
+            }
+        }
+
+        try {
+            switch ($spn_action) {
+                "add" {
+                    # the current spn list does not have any spn's in the desired list
+                    if (-not $spn_diff) {
+                        Set-ADUser `
+                            -Identity $user_guid `
+                            -ServicePrincipalNames @{Add=$(($spn | ForEach-Object{"$($_)"}))} `
+                            -WhatIf:$check_mode @extra_args
+                        $module.Result.changed = $true
+                    }
+                }
+                "remove" {
+                    # the current spn list does not have any differences
+                    # that means we can remove the desired list
+                    if ($spn_diff) {
+                        Set-ADUser `
+                            -Identity $user_guid `
+                            -ServicePrincipalNames @{Remove=$(($spn | ForEach-Object{"$($_)"}))} `
+                            -WhatIf:$check_mode @extra_args
+                        $module.Result.changed = $true
+                    }
+                }
+                "replace" {
+                    # the current and desired spn lists do not match
+                    if(Compare-Object $current_spn $desired_spn) {
+                        Set-ADUser `
+                            -Identity $user_guid `
+                            -ServicePrincipalNames @{Replace=$(($spn | ForEach-Object{"$($_)"}))} `
+                            -WhatIf:$check_mode @extra_args
+                        $module.Result.changed = $true
+                    }
+                }
+            }
+        } catch {
+            $module.FailJson("Failed to run operation", $_)
+        }
     }
 
     # Set user information
@@ -279,7 +405,7 @@ If ($state -eq 'present') {
             $set_args = $extra_args.Clone()
             $set_args.$key = $value
             Set-ADUser -Identity $user_guid -WhatIf:$check_mode @set_args
-            $result.changed = $true
+            $module.Result.changed = $true
             $user_obj = Get-ADUser -Identity $user_guid -Properties * @extra_args
         }
     }
@@ -287,6 +413,7 @@ If ($state -eq 'present') {
     # Set additional attributes
     $set_args = $extra_args.Clone()
     $run_change = $false
+
     if ($null -ne $attributes) {
         $add_attributes = @{}
         $replace_attributes = @{}
@@ -317,13 +444,12 @@ If ($state -eq 'present') {
 
     if ($run_change) {
         Set-ADUser -Identity $user_guid -WhatIf:$check_mode @set_args
-        $result.changed = $true
+        $module.Result.changed = $true
         $user_obj = Get-ADUser -Identity $user_guid -Properties * @extra_args
     }
 
-
     # Configure group assignment
-    If ($null -ne $groups) {
+    if ($null -ne $groups) {
         $group_list = $groups
 
         $groups = @()
@@ -339,7 +465,7 @@ If ($state -eq 'present') {
                     If (-not ($assigned_groups -Contains $group)) {
                         Add-ADGroupMember -Identity $group -Members $user_guid -WhatIf:$check_mode @extra_args
                         $user_obj = Get-ADUser -Identity $user_guid -Properties * @extra_args
-                        $result.changed = $true
+                        $module.Result.changed = $true
                     }
                 }
             }
@@ -348,7 +474,7 @@ If ($state -eq 'present') {
                     If ($assigned_groups -Contains $group) {
                         Remove-ADGroupMember -Identity $group -Members $user_guid -Confirm:$false -WhatIf:$check_mode @extra_args
                         $user_obj = Get-ADUser -Identity $user_guid -Properties * @extra_args
-                        $result.changed = $true
+                        $module.Result.changed = $true
                     }
                 }
             }
@@ -357,27 +483,26 @@ If ($state -eq 'present') {
                     If (($group -ne $user_obj.PrimaryGroup) -and -not ($groups -Contains $group)) {
                         Remove-ADGroupMember -Identity $group -Members $user_guid -Confirm:$false -WhatIf:$check_mode @extra_args
                         $user_obj = Get-ADUser -Identity $user_guid -Properties * @extra_args
-                        $result.changed = $true
+                        $module.Result.changed = $true
                     }
                 }
                 Foreach ($group in $groups) {
                     If (-not ($assigned_groups -Contains $group)) {
                         Add-ADGroupMember -Identity $group -Members $user_guid -WhatIf:$check_mode @extra_args
                         $user_obj = Get-ADUser -Identity $user_guid -Properties * @extra_args
-                        $result.changed = $true
+                        $module.Result.changed = $true
                     }
                 }
             }
         }
     }
-}
-ElseIf ($state -eq 'absent') {
+} elseif ($state -eq 'absent') {
     # Ensure user does not exist
     If ($user_obj) {
         Remove-ADUser $user_obj -Confirm:$false -WhatIf:$check_mode @extra_args
-        $result.changed = $true
-        If ($check_mode) {
-            Exit-Json $result
+        $module.Result.changed = $true
+        if ($check_mode) {
+            $module.ExitJson()
         }
         $user_obj = $null
     }
@@ -385,34 +510,35 @@ ElseIf ($state -eq 'absent') {
 
 If ($user_obj) {
     $user_obj = Get-ADUser -Identity $user_guid -Properties * @extra_args
-    $result.name = $user_obj.Name
-    $result.firstname = $user_obj.GivenName
-    $result.surname = $user_obj.Surname
-    $result.enabled = $user_obj.Enabled
-    $result.company = $user_obj.Company
-    $result.street = $user_obj.StreetAddress
-    $result.email = $user_obj.EmailAddress
-    $result.city = $user_obj.City
-    $result.state_province = $user_obj.State
-    $result.country = $user_obj.Country
-    $result.postal_code = $user_obj.PostalCode
-    $result.distinguished_name = $user_obj.DistinguishedName
-    $result.description = $user_obj.Description
-    $result.password_expired = $user_obj.PasswordExpired
-    $result.password_never_expires = $user_obj.PasswordNeverExpires
-    $result.user_cannot_change_password = $user_obj.CannotChangePassword
-    $result.account_locked = $user_obj.LockedOut
-    $result.sid = [string]$user_obj.SID
-    $result.upn = $user_obj.UserPrincipalName
-    $result.sam_account_name = $user_obj.SamAccountName
-    $result.groups = Get-PrincipalGroup $user_guid $extra_args
-    $result.msg = "User '$name' is present"
-    $result.state = "present"
-}
-Else {
-    $result.name = $name
-    $result.msg = "User '$name' is absent"
-    $result.state = "absent"
+    $module.Result.name = $user_obj.Name
+    $module.Result.firstname = $user_obj.GivenName
+    $module.Result.surname = $user_obj.Surname
+    $module.Result.enabled = $user_obj.Enabled
+    $module.Result.company = $user_obj.Company
+    $module.Result.street = $user_obj.StreetAddress
+    $module.Result.email = $user_obj.EmailAddress
+    $module.Result.city = $user_obj.City
+    $module.Result.state_province = $user_obj.State
+    $module.Result.country = $user_obj.Country
+    $module.Result.postal_code = $user_obj.PostalCode
+    $module.Result.distinguished_name = $user_obj.DistinguishedName
+    $module.Result.description = $user_obj.Description
+    $module.Result.password_expired = $user_obj.PasswordExpired
+    $module.Result.password_never_expires = $user_obj.PasswordNeverExpires
+    $module.Result.user_cannot_change_password = $user_obj.CannotChangePassword
+    $module.Result.account_locked = $user_obj.LockedOut
+    $module.Result.delegates = $user_obj.PrincipalsAllowedToDelegateToAccount
+    $module.Result.sid = [string]$user_obj.SID
+    $module.Result.spn = [Array]$user_obj.ServicePrincipalNames
+    $module.Result.upn = $user_obj.UserPrincipalName
+    $module.Result.sam_account_name = $user_obj.SamAccountName
+    $module.Result.groups = Get-PrincipalGroup $user_guid $extra_args
+    $module.Result.msg = "User '$name' is present"
+    $module.Result.state = "present"
+} else {
+    $module.Result.name = $name
+    $module.Result.msg = "User '$name' is absent"
+    $module.Result.state = "absent"
 }
 
-Exit-Json $result
+$module.ExitJson()

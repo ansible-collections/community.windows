@@ -42,7 +42,7 @@ options:
       - Note that there is not a way to lock an account as an administrator.
       - Accounts are locked due to user actions; as an admin, you may only unlock a locked account.
       - If you wish to administratively disable an account, set I(enabled) to C(no).
-    choices: [ no ]
+    type: bool
   description:
     description:
       - Description of the user
@@ -55,12 +55,29 @@ options:
         I(groups_action=replace).
       - Note that users cannot be removed from their principal group (for example, "Domain Users").
     type: list
+    elements: str
   groups_action:
     description:
       - If C(add), the user is added to each group in I(groups) where not already a member.
       - If C(remove), the user is removed from each group in I(groups).
       - If C(replace), the user is added as a member of each group in
         I(groups) and removed from any other groups.
+    type: str
+    choices: [ add, remove, replace ]
+    default: replace
+  spn:
+    description:
+      - Specifies the service principal name(s) for the account. This parameter sets the
+        ServicePrincipalNames property of the account. The LDAP display name (ldapDisplayName)
+        for this property is servicePrincipalName.
+    type: list
+    elements: str
+    aliases: [ spns ]
+  spn_action:
+    description:
+      - If C(add), the SPNs are added to the user.
+      - If C(remove), the SPNs are removed from the user.
+      - If C(replace), the defined set of SPN's overwrite the current set of SPNs.
     type: str
     choices: [ add, remove, replace ]
     default: replace
@@ -103,6 +120,7 @@ options:
     description:
       - Configures the user's last name (surname).
     type: str
+    aliases: [ lastname ]
   company:
     description:
       - Configures the user's company name.
@@ -157,13 +175,22 @@ options:
         be updated - you must delete (e.g., C(state=absent)) the user and
         then re-add the user with the appropriate path.
     type: str
+  delegates:
+    description:
+      - Specifies an array of principal objects. This parameter sets the
+        msDS-AllowedToActOnBehalfOfOtherIdentity attribute of a computer account
+        object.
+      - Must be specified as a distinguished name C(CN=bob,CN=Users,DC=ansible,DC=test)
+    type: list
+    elements: str
+    aliases: [ principals_allowed_to_delegate ]
   attributes:
     description:
       - A dict of custom LDAP attributes to set on the user.
       - This can be used to set custom attributes that are not exposed as module
         parameters, e.g. C(telephoneNumber).
       - See the examples on how to format this parameter.
-    type: str
+    type: raw
   domain_username:
     description:
     - The username to use when interacting with AD.
@@ -199,11 +226,12 @@ seealso:
 - module: community.windows.win_user_profile
 author:
     - Nick Chandler (@nwchandler)
+    - Joe Zollo (@zollo)
 '''
 
 EXAMPLES = r'''
 - name: Ensure user bob is present with address information
-  community.windows.win_domain_user:
+  win_domain_user:
     name: bob
     firstname: Bob
     surname: Smith
@@ -221,7 +249,7 @@ EXAMPLES = r'''
       telephoneNumber: 555-123456
 
 - name: Ensure user bob is created and use custom credentials to create the user
-  community.windows.win_domain_user:
+  win_domain_user:
     name: bob
     firstname: Bob
     surname: Smith
@@ -232,7 +260,7 @@ EXAMPLES = r'''
     domain_server: domain@DOMAIN.COM
 
 - name: Ensure user bob is present in OU ou=test,dc=domain,dc=local
-  community.windows.win_domain_user:
+  win_domain_user:
     name: bob
     password: B0bP4ssw0rd
     state: present
@@ -241,9 +269,24 @@ EXAMPLES = r'''
       - Domain Admins
 
 - name: Ensure user bob is absent
-  community.windows.win_domain_user:
+  win_domain_user:
     name: bob
     state: absent
+
+- name: Ensure user bob has spn's defined
+  win_domain_user:
+    name: bob
+    spn_action: replace
+    spn:
+      - MSSQLSvc/us99db-svr95:1433
+      - MSSQLSvc/us99db-svr95.vmware.com:1433
+
+- name: Ensure user bob has spn added
+  win_domain_user:
+    name: bob
+    spn_action: add
+    spn:
+      - MSSQLSvc/us99db-svr95:2433
 '''
 
 RETURN = r'''
@@ -272,6 +315,14 @@ country:
     returned: always
     type: str
     sample: US
+delegates:
+    description: Principals allowed to delegate
+    returned: always
+    type: list
+    elements: str
+    sample:
+      - CN=bob,CN=Users,DC=ansible,DC=test
+      - CN=geoff,CN=Users,DC=ansible,DC=test
 description:
     description: A description of the account
     returned: always
@@ -332,6 +383,13 @@ sid:
     returned: always
     type: str
     sample: S-1-5-21-2752426336-228313920-2202711348-1175
+spn:
+    description: The service principal names
+    returned: always
+    type: list
+    sample:
+      - HTTPSvc/ws1intel-svc1
+      - HTTPSvc/ws1intel-svc1.vmware.com
 state:
     description: The state of the user account
     returned: always

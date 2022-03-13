@@ -1,8 +1,7 @@
 ---
-
-- name: Create Jane(check_mode)
+- name: Create Justi (check_mode)
   community.windows.win_domain_user:
-    name: Jane
+    name: Justi
     password: J@n3P4ssw0rd#
     state: present
     update_password: on_create
@@ -16,8 +15,13 @@
   check_mode: true
 
 - name: Sanity check on Check Mode
-  win_shell: |
-    Get-AdUser -Identity Jane
+  ansible.windows.win_powershell:
+    script: |
+      try {
+        Get-AdUser -Identity Justi
+        $Ansible.Failed = $true
+      } catch {
+        $Ansible.Failed = $false
+      }
   register: sanity_check
-  failed_when: "'NotFound' not in sanity_check.stderr"
   changed_when: false
