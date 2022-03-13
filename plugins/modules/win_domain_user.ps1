@@ -161,19 +161,21 @@ $sam_account_name = $module.Params.sam_account_name
 $delegates = $module.Params.delegates
 $identity = $module.Params.identity
 
-if ($null -eq $identity) { $identity = $name }
+if ($null -eq $identity) {
+    $identity = $name
+}
 
 # User informational parameters
 $user_info = @{
-    GivenName     = $module.Params.firstname
-    Surname       = $module.Params.surname
-    Company       = $module.Params.company
-    EmailAddress  = $module.Params.email
+    GivenName = $module.Params.firstname
+    Surname = $module.Params.surname
+    Company = $module.Params.company
+    EmailAddress = $module.Params.email
     StreetAddress = $module.Params.street
-    City          = $module.Params.city
-    State         = $module.Params.state_province
-    PostalCode    = $module.Params.postal_code
-    Country       = $module.Params.country
+    City = $module.Params.city
+    State= $module.Params.state_province
+    PostalCode= $module.Params.postal_code
+    Country= $module.Params.country
 }
 
 # Additional attributes
@@ -367,7 +369,7 @@ If ($state -eq 'present') {
                     if (-not $spn_diff) {
                         Set-ADUser `
                             -Identity $user_guid `
-                            -ServicePrincipalNames @{Add=$(($spn | ForEach-Object{"$($_)"}))} `
+                            -ServicePrincipalNames @{ Add=$(($spn | ForEach-Object{"$($_)"})) } `
                             -WhatIf:$check_mode @extra_args
                         $module.Result.changed = $true
                     }
@@ -378,7 +380,7 @@ If ($state -eq 'present') {
                     if ($spn_diff) {
                         Set-ADUser `
                             -Identity $user_guid `
-                            -ServicePrincipalNames @{Remove=$(($spn | ForEach-Object{"$($_)"}))} `
+                            -ServicePrincipalNames @{ Remove=$(($spn | ForEach-Object{"$($_)"})) } `
                             -WhatIf:$check_mode @extra_args
                         $module.Result.changed = $true
                     }
@@ -388,7 +390,7 @@ If ($state -eq 'present') {
                     if(Compare-Object $current_spn $desired_spn) {
                         Set-ADUser `
                             -Identity $user_guid `
-                            -ServicePrincipalNames @{Replace=$(($spn | ForEach-Object{"$($_)"}))} `
+                            -ServicePrincipalNames @{ Replace=$(($spn | ForEach-Object{"$($_)"})) } `
                             -WhatIf:$check_mode @extra_args
                         $module.Result.changed = $true
                     }
