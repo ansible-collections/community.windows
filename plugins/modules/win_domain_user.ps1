@@ -105,8 +105,8 @@ $spec = @{
         country = @{ type = 'str' }
         attributes = @{ type = 'raw' }
         delegates = @{
-            type='list'
-            elements='str'
+            type = 'list'
+            elements = 'str'
             aliases = @('principals_allowed_to_delegate')
         }
         update_password = @{
@@ -126,7 +126,8 @@ $module.Result.password_updated = $false
 
 try {
     Import-Module ActiveDirectory
-} catch {
+}
+catch {
     $msg = -join @(
         "Failed to import ActiveDirectory PowerShell module. This module should be run on a domain controller, "
         "and the ActiveDirectory module must be available."
@@ -193,6 +194,7 @@ if ($null -ne $domain_username) {
     $credential = New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList $domain_username, $domain_password
     $extra_args.Credential = $credential
 }
+
 if ($null -ne $domain_server) {
     $extra_args.Server = $domain_server
 }
@@ -201,9 +203,10 @@ Function Get-PrincipalGroup {
     Param ($identity, $args_extra)
     try {
         $groups = Get-ADPrincipalGroupMembership `
-        -Identity $identity @args_extra `
-        -ErrorAction Stop
-    } catch {
+            -Identity $identity @args_extra `
+            -ErrorAction Stop
+    }
+    catch {
         Add-Warning -obj $result -message "Failed to enumerate user groups but continuing on.: $($_.Exception.Message)"
         return @()
     }
@@ -219,7 +222,8 @@ try {
         -Identity $identity `
         -Properties ('*', 'msDS-PrincipalName') @extra_args
     $user_guid = $user_obj.ObjectGUID
-} catch [Microsoft.ActiveDirectory.Management.ADIdentityNotFoundException] {
+}
+catch [Microsoft.ActiveDirectory.Management.ADIdentityNotFoundException] {
     $user_obj = $null
     $user_guid = $null
 }
@@ -336,7 +340,7 @@ If ($state -eq 'present') {
         $module.Result.changed = $true
     }
     If ($delegates) {
-        if(Compare-Object $delegates $user_obj.PrincipalsAllowedToDelegateToAccount) {
+        if (Compare-Object $delegates $user_obj.PrincipalsAllowedToDelegateToAccount) {
             Set-ADUser -Identity $user_guid -PrincipalsAllowedToDelegateToAccount $delegates
             $user_obj = Get-ADUser -Identity $user_guid -Properties * @extra_args
             $module.Result.changed = $true
@@ -390,8 +394,9 @@ If ($state -eq 'present') {
                     }
                 }
             }
-        } catch {
-            $module.FailJson("Failed to run operation", $_)
+        }
+        catch {
+            $module.FailJson("Failed to $spn_action SPN(s)", $_)
         }
     }
 
@@ -496,7 +501,8 @@ If ($state -eq 'present') {
             }
         }
     }
-} elseif ($state -eq 'absent') {
+}
+elseif ($state -eq 'absent') {
     # Ensure user does not exist
     If ($user_obj) {
         Remove-ADUser $user_obj -Confirm:$false -WhatIf:$check_mode @extra_args
@@ -535,7 +541,8 @@ If ($user_obj) {
     $module.Result.groups = Get-PrincipalGroup $user_guid $extra_args
     $module.Result.msg = "User '$name' is present"
     $module.Result.state = "present"
-} else {
+}
+else {
     $module.Result.name = $name
     $module.Result.msg = "User '$name' is absent"
     $module.Result.state = "absent"
