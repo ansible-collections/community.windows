@@ -369,7 +369,7 @@ If ($state -eq 'present') {
                     if (-not $spn_diff) {
                         Set-ADUser `
                             -Identity $user_guid `
-                            -ServicePrincipalNames @{ Add=$(($spn | ForEach-Object{ "$($_)" })) } `
+                            -ServicePrincipalNames @{ Add = $(($spn | ForEach-Object { "$($_)" } )) } `
                             -WhatIf:$check_mode @extra_args
                         $module.Result.changed = $true
                     }
@@ -380,7 +380,7 @@ If ($state -eq 'present') {
                     if ($spn_diff) {
                         Set-ADUser `
                             -Identity $user_guid `
-                            -ServicePrincipalNames @{ Remove=$(($spn | ForEach-Object{ "$($_)" })) } `
+                            -ServicePrincipalNames @{ Remove = $(($spn | ForEach-Object { "$($_)" } )) } `
                             -WhatIf:$check_mode @extra_args
                         $module.Result.changed = $true
                     }
@@ -390,7 +390,7 @@ If ($state -eq 'present') {
                     if(Compare-Object $current_spn $desired_spn) {
                         Set-ADUser `
                             -Identity $user_guid `
-                            -ServicePrincipalNames @{ Replace=$(($spn | ForEach-Object{ "$($_)" })) } `
+                            -ServicePrincipalNames @{ Replace = $(($spn | ForEach-Object { "$($_)" } )) } `
                             -WhatIf:$check_mode @extra_args
                         $module.Result.changed = $true
                     }
