@@ -1,0 +1,82 @@
+---
+# Setup
+- name: Ensure MIME type is present
+  win_iis_mimetype:
+    extension: .csg
+    mime_type: text/plain
+
+- name: Ensure MIME type is present
+  win_iis_mimetype:
+    extension: .csg2
+    mime_type: text/unique
+
+# Testing Extension matches MIME Type
+- name: Get Mime Type Info
+  win_iis_mimetype_info:
+    extension: .csg
+  register: test1
+
+- name: Assert MIME type
+  assert:
+    that: "'text/plain' in {{ test1 | json_query('mimetypes[*].mime_type[]') }}"
+
+# Testing MIME type matches Extension
+- name: Get Extension of MIME type
+  win_iis_mimetype_info:
+    mime_type: text/unique
+  register: test2
+
+- name: Assert that MIME type extension matches
+  assert:
+    that: "'.csg2' in {{ test2 | json_query('mimetypes[*].extension[]') }}"
+
+# Test both extensions are seen in all results
+- name: Get all results
+  win_iis_mimetype_info:
+  register: test3
+
+- name: Assert that extensions was found
+  assert:
+    that:
+      - "'.csg' in {{ test3 | json_query('mimetypes[*].extension[]') }}"
+      - "'.csg2' in {{ test3 | json_query('mimetypes[*].extension[]') }}"
+
+# Setup Custom Site Test
+- name: Ensure MIME type is present with custom site
+  win_iis_mimetype:
+    extension: .csg3
+    mime_type: text/very-unique
+    path: IIS:\sites\Default Web Site
+
+# Test extension is found in custom site
+- name: Get all results from custom site
+  win_iis_mimetype_info:
+    path: IIS:\sites\Default Web Site
+  register: test4
+
+- name: Assert extension
+  assert:
+    that:
+      - "'.csg3' in {{ test4 | json_query('mimetypes[*].extension[]') }}"
+
+# Testing Extension matches MIME Type
+- name: Get Mime Type details from extension
+  win_iis_mimetype_info:
+    extension: .csg3
+    path: IIS:\sites\Default Web Site
+  register: test5
+
+- name: Assert MIME type
+  assert:
+    that: "'text/very-unique' in {{ test5 | json_query('mimetypes[*].mime_type[]') }}"
+
+# Testing MIME type matches Extension in custom site
+- name: Get Extension of MIME type
+  win_iis_mimetype_info:
+    mime_type: text/very-unique
+    path: IIS:\sites\Default Web Site
+  register: test6
+
+- name: Assert extension
+  assert:
+    that: "'.csg3' in {{ test6 | json_query('mimetypes[*].extension[]') }}"

@@ -1,0 +1,4 @@
+---
+dependencies:
+  - setup_iis
+  - setup_remote_tmp_dir

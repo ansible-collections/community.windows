@@ -1,0 +1,13 @@
+---
+- name: Ensure IIS is installed
+  ansible.windows.win_feature:
+    name:
+      - Web-Server
+    include_management_tools: true
+    include_sub_features: true
+    state: present
+  register: feature
+
+- name: Reboot
+  ansible.windows.win_reboot:
+  when: feature is changed

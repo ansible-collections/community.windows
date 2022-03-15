@@ -1,0 +1,97 @@
+---
+- name: Ensure MIME type is present
+  win_iis_mimetype:
+    extension: .tst2
+    mime_type: text/plain
+  register: test1
+  failed_when: test1 is not changed
+
+- name: Ensure MIME type is changed
+  win_iis_mimetype:
+    extension: .tst2
+    mime_type: text/xml
+  register: test2
+  failed_when: test2 is not changed
+
+- name: Ensure MIME type is not changed (idempotence check)
+  win_iis_mimetype:
+    extension: .tst2
+    mime_type: text/xml
+  register: test3
+  failed_when: test3 is changed
+
+- name: Ensure MIME type is absent
+  win_iis_mimetype:
+    extension: .tst2
+    state: absent
+  register: test4
+  failed_when: test4 is not changed
+
+- name: Ensure MIME type is absent (idempotence check)
+  win_iis_mimetype:
+    extension: .tst2
+    state: absent
+  register: test5
+  failed_when: test5 is changed
+
+- name: Ensure MIME type is present with custom site
+  win_iis_mimetype:
+    extension: .tst2
+    mime_type: text/plain
+    path: IIS:\sites\Default Web Site
+  register: test6
+  failed_when: test6 is not changed
+
+- name: Ensure MIME type is changed with custom site
+  win_iis_mimetype:
+    extension: .tst2
+    mime_type: text/xml
+    path: IIS:\sites\Default Web Site
+  register: test7
+  failed_when: test7 is not changed
+
+- name: Ensure MIME type is not changed with custom site (idempotence check)
+  win_iis_mimetype:
+    extension: .tst2
+    mime_type: text/xml
+    path: IIS:\sites\Default Web Site
+  register: test8
+  failed_when: test8 is changed
+
+- name: Ensure MIME type is absent with custom site
+  win_iis_mimetype:
+    extension: .tst2
+    state: absent
+    path: IIS:\sites\Default Web Site
+  register: test9
+  failed_when: test9 is not changed
+
+- name: Ensure MIME type is absent with custom site (idempotence check)
+  win_iis_mimetype:
+    extension: .tst2
+    state: absent
+    path: IIS:\sites\Default Web Site
+  register: test10
+  failed_when: test10 is changed
+
+# Test invalid params handling
+- name: Ensure MIME type is present | Missing .
+  win_iis_mimetype:
+    extension: tst2
+    mime_type: text/plain
+  register: test1
+  failed_when: test1 is not changed
+
+- name: Ensure MIME is not changed | Invalid Backslash
+  win_iis_mimetype:
+    extension: tst2
+    mime_type: text\plain
+  register: test3
+  failed_when: test3 is changed
+
+- name: Ensure MIME type is absent | Missing .
+  win_iis_mimetype:
+    extension: tst2
+    state: absent
+  register: test4
+  failed_when: test4 is not changed
