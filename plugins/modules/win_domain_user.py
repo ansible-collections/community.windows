@@ -55,6 +55,7 @@ options:
         I(groups_action=replace).
       - Note that users cannot be removed from their principal group (for example, "Domain Users").
     type: list
+    elements: str
   groups_action:
     description:
       - If C(add), the user is added to each group in I(groups) where not already a member.

@@ -27,7 +27,7 @@ options:
   port:
     description:
       - The port to bind to / use for the new site.
-    type: str
+    type: int
     default: 80
   ip:
     description:
