@@ -33,6 +33,7 @@ options:
       - When C(category_file), C(message_file) and/or C(parameter_file) are specified,
         these values are applied across all sources.
     type: list
+    elements: str
   category_file:
     description:
       - For one or more sources specified, the path to a custom category resource file.

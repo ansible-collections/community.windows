@@ -5,7 +5,7 @@ from __future__ import (absolute_import, division, print_function)
 __metaclass__ = type
 
 DOCUMENTATION = '''
-lookup: laps_password
+name: laps_password
 author: Jordan Borean (@jborean93)
 short_description: Retrieves the LAPS password for a server.
 description:
