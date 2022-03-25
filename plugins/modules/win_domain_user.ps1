@@ -387,7 +387,7 @@ If ($state -eq 'present') {
                 }
                 "replace" {
                     # the current and desired spn lists do not match
-                    if(Compare-Object $current_spn $desired_spn) {
+                    if (Compare-Object $current_spn $desired_spn) {
                         Set-ADUser `
                             -Identity $user_guid `
                             -ServicePrincipalNames @{ Replace = $(($spn | ForEach-Object { "$($_)" } )) } `
