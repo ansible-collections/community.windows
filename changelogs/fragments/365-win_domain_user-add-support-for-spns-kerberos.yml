@@ -1,0 +1,4 @@
+minor_changes:
+- win_domain_user - Add support for managing service prinicpal names via the ``spn`` param
+  and principals allowed to delegate via the ``delegates`` param
+  (https://github.com/ansible-collections/community.windows/pull/365)

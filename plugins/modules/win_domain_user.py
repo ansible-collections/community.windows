@@ -180,7 +180,7 @@ options:
       - Specifies an array of principal objects. This parameter sets the
         msDS-AllowedToActOnBehalfOfOtherIdentity attribute of a computer account
         object.
-      - Must be specified as a distinguished name C(CN=bob,CN=Users,DC=ansible,DC=test)
+      - Must be specified as a distinguished name C(CN=shenetworks,CN=Users,DC=ansible,DC=test)
     type: list
     elements: str
     aliases: [ principals_allowed_to_delegate ]
@@ -273,18 +273,32 @@ EXAMPLES = r'''
     name: bob
     state: absent
 
-- name: Ensure user bob has spn's defined
+- name: Ensure user has spn's defined
   win_domain_user:
-    name: bob
-    spn_action: replace
+    name: liz.kenyon
     spn:
       - MSSQLSvc/us99db-svr95:1433
       - MSSQLSvc/us99db-svr95.vmware.com:1433
 
-- name: Ensure user bob has spn added
+- name: Ensure user has spn added
   win_domain_user:
-    name: bob
+    name: liz.kenyon
     spn_action: add
+    spn:
+      - MSSQLSvc/us99db-svr95:2433
+
+- name: Ensure user is created with delegates and spn's defined
+  win_domain_user:
+    name: shmemmmy
+    password: The3rubberducki33!
+    state: present
+    groups:
+      - Domain Admins
+      - Enterprise Admins
+    delegates:
+      - CN=shenetworks,CN=Users,DC=ansible,DC=test
+      - CN=mk.ai,CN=Users,DC=ansible,DC=test
+      - CN=jessiedotjs,CN=Users,DC=ansible,DC=test
     spn:
       - MSSQLSvc/us99db-svr95:2433
 '''
@@ -321,7 +335,7 @@ delegates:
     type: list
     elements: str
     sample:
-      - CN=bob,CN=Users,DC=ansible,DC=test
+      - CN=svc.tech.unicorn,CN=Users,DC=ansible,DC=test
       - CN=geoff,CN=Users,DC=ansible,DC=test
 description:
     description: A description of the account
