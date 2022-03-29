@@ -43,6 +43,29 @@ $redirect_serial = Get-AnsibleParam -obj $params -name "redirect_serial" -type "
 $redirect_pnp = Get-AnsibleParam -obj $params -name "redirect_pnp" -type "bool"
 
 
+Function ConvertTo-Sid {
+    [OutputType([string])]
+    [CmdletBinding()]
+    param (
+        [Parameter(Mandatory, ValueFromPipeline)]
+        [string[]]
+        $InputObject
+    )
+
+    process {
+        foreach ($user in $InputObject) {
+            # RDS uses the UPN format with the builtin domain but Convert-ToSID tries to look this up as a domain.
+            # Ensure the input value is in the Netlogon format to ensure BUILTIN is resolved properly
+            if ($user.EndsWith("@builtin", [System.StringComparison]::OrdinalIgnoreCase)) {
+                $user = "BUILTIN\$($user.Substring(0, $user.Length - 8))"
+            }
+
+            Convert-ToSID -account_name $user
+        }
+    }
+}
+
+
 function Get-CAP([string] $name) {
     $cap_path = "RDS:\GatewayServer\CAP\$name"
     $cap = @{
@@ -68,12 +91,12 @@ function Get-CAP([string] $name) {
     $cap.UserGroups = @(
         Get-ChildItem -LiteralPath "$cap_path\UserGroups" |
             Select-Object -ExpandProperty Name |
-            ForEach-Object { Convert-FromSID -sid (Convert-ToSID -account_name $_) }
+            ForEach-Object { Convert-FromSID -sid (ConvertTo-Sid -InputObject $_) }
     )
     $cap.ComputerGroups = @(
         Get-ChildItem -LiteralPath "$cap_path\ComputerGroups" |
             Select-Object -ExpandProperty Name |
-            ForEach-Object { Convert-FromSID -sid (Convert-ToSID -account_name $_) }
+            ForEach-Object { Convert-FromSID -sid (ConvertTo-Sid -InputObject $_) }
     )
 
     return $cap
@@ -121,7 +144,7 @@ if ($null -ne $user_groups) {
     $user_groups = $user_groups | ForEach-Object {
         $group = $_
         # Test that the group is resolvable on the local machine
-        $sid = Convert-ToSID -account_name $group
+        $sid = ConvertTo-Sid -InputObject $group
         if (!$sid) {
             Fail-Json -obj $result -message "$group is not a valid user group on the host machine or domain"
         }
@@ -137,7 +160,7 @@ if ($null -ne $computer_groups) {
     $computer_groups = $computer_groups | ForEach-Object {
         $group = $_
         # Test that the group is resolvable on the local machine
-        $sid = Convert-ToSID -account_name $group
+        $sid = ConvertTo-Sid -InputObject $group
         if (!$sid) {
             Fail-Json -obj $result -message "$group is not a valid computer group on the host machine or domain"
         }
