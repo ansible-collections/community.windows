@@ -26,6 +26,29 @@ $user_groups = Get-AnsibleParam -obj $params -name "user_groups" -type "list"
 $allowed_ports = Get-AnsibleParam -obj $params -name "allowed_ports" -type "list"
 
 
+Function ConvertTo-Sid {
+    [OutputType([string])]
+    [CmdletBinding()]
+    param (
+        [Parameter(Mandatory, ValueFromPipeline)]
+        [string[]]
+        $InputObject
+    )
+
+    process {
+        foreach ($user in $InputObject) {
+            # RDS uses the UPN format with the builtin domain but Convert-ToSID tries to look this up as a domain.
+            # Ensure the input value is in the Netlogon format to ensure BUILTIN is resolved properly
+            if ($user.EndsWith("@builtin", [System.StringComparison]::OrdinalIgnoreCase)) {
+                $user = "BUILTIN\$($user.Substring(0, $user.Length - 8))"
+            }
+
+            Convert-ToSID -account_name $user
+        }
+    }
+}
+
+
 function Get-RAP([string] $name) {
     $rap_path = "RDS:\GatewayServer\RAP\$name"
     $rap = @{
@@ -40,7 +63,7 @@ function Get-RAP([string] $name) {
 
     # Convert computer group name from UPN to Down-Level Logon format
     if ($rap.ComputerGroupType -ne 2) {
-        $rap.ComputerGroup = Convert-FromSID -sid (Convert-ToSID -account_name $rap.ComputerGroup)
+        $rap.ComputerGroup = Convert-FromSID -sid (ConvertTo-SID -InputObject $rap.ComputerGroup)
     }
 
     # Convert multiple choices values
@@ -58,7 +81,7 @@ function Get-RAP([string] $name) {
     $rap.UserGroups = @(
         Get-ChildItem -LiteralPath "$rap_path\UserGroups" |
             Select-Object -ExpandProperty Name |
-            ForEach-Object { Convert-FromSID -sid (Convert-ToSID -account_name $_) }
+            ForEach-Object { Convert-FromSID -sid (ConvertTo-Sid -InputObject $_) }
     )
 
     return $rap
@@ -106,7 +129,7 @@ if ($null -ne $user_groups) {
     $user_groups = $user_groups | ForEach-Object {
         $group = $_
         # Test that the group is resolvable on the local machine
-        $sid = Convert-ToSID -account_name $group
+        $sid = ConvertTo-Sid -InputObject $group
         if (!$sid) {
             Fail-Json -obj $result -message "$group is not a valid user group on the host machine or domain."
         }
@@ -125,7 +148,7 @@ elseif ($computer_group_type -eq "rdg_group" -and -not (Test-Path -LiteralPath "
     Fail-Json -obj $result -message "$computer_group is not a valid gateway managed computer group"
 }
 elseif ($computer_group_type -eq "ad_network_resource_group") {
-    $sid = Convert-ToSID -account_name $computer_group
+    $sid = ConvertTo-Sid -InputObject $computer_group
     if (!$sid) {
         Fail-Json -obj $result -message "$computer_group is not a valid computer group on the host machine or domain."
     }
