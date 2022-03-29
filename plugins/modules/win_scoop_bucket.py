@@ -58,3 +58,16 @@ EXAMPLES = r'''
     name: my-bucket
     repo: https://github.com/example/my-bucket
 '''
+
+RETURN = r'''
+rc:
+    description: The result code of the scoop action
+    returned: always
+    type: int
+    sample: 0
+stdout:
+    description: The raw output from the scoop action
+    returned: on failure or when verbosity is greater than 1
+    type: str
+    sample: The test bucket was added successfully.
+'''
