@@ -42,7 +42,7 @@ options:
       - Note that there is not a way to lock an account as an administrator.
       - Accounts are locked due to user actions; as an admin, you may only unlock a locked account.
       - If you wish to administratively disable an account, set I(enabled) to C(no).
-    choices: [ no ]
+    type: bool
   description:
     description:
       - Description of the user
@@ -65,6 +65,24 @@ options:
     type: str
     choices: [ add, remove, replace ]
     default: replace
+  spn:
+    description:
+      - Specifies the service principal name(s) for the account. This parameter sets the
+        ServicePrincipalNames property of the account. The LDAP display name (ldapDisplayName)
+        for this property is servicePrincipalName.
+    type: list
+    elements: str
+    aliases: [ spns ]
+    version_added: 1.10.0
+  spn_action:
+    description:
+      - If C(add), the SPNs are added to the user.
+      - If C(remove), the SPNs are removed from the user.
+      - If C(replace), the defined set of SPN's overwrite the current set of SPNs.
+    type: str
+    choices: [ add, remove, replace ]
+    default: replace
+    version_added: 1.10.0
   password:
     description:
       - Optionally set the user's password to this (plain text) value.
@@ -104,6 +122,7 @@ options:
     description:
       - Configures the user's last name (surname).
     type: str
+    aliases: [ lastname ]
   company:
     description:
       - Configures the user's company name.
@@ -158,13 +177,23 @@ options:
         be updated - you must delete (e.g., C(state=absent)) the user and
         then re-add the user with the appropriate path.
     type: str
+  delegates:
+    description:
+      - Specifies an array of principal objects. This parameter sets the
+        msDS-AllowedToActOnBehalfOfOtherIdentity attribute of a computer account
+        object.
+      - Must be specified as a distinguished name C(CN=shenetworks,CN=Users,DC=ansible,DC=test)
+    type: list
+    elements: str
+    aliases: [ principals_allowed_to_delegate ]
+    version_added: 1.10.0
   attributes:
     description:
       - A dict of custom LDAP attributes to set on the user.
       - This can be used to set custom attributes that are not exposed as module
         parameters, e.g. C(telephoneNumber).
       - See the examples on how to format this parameter.
-    type: str
+    type: dict
   domain_username:
     description:
     - The username to use when interacting with AD.
@@ -200,6 +229,7 @@ seealso:
 - module: community.windows.win_user_profile
 author:
     - Nick Chandler (@nwchandler)
+    - Joe Zollo (@zollo)
 '''
 
 EXAMPLES = r'''
@@ -245,6 +275,35 @@ EXAMPLES = r'''
   community.windows.win_domain_user:
     name: bob
     state: absent
+
+- name: Ensure user has spn's defined
+  community.windows.win_domain_user:
+    name: liz.kenyon
+    spn:
+      - MSSQLSvc/us99db-svr95:1433
+      - MSSQLSvc/us99db-svr95.vmware.com:1433
+
+- name: Ensure user has spn added
+  community.windows.win_domain_user:
+    name: liz.kenyon
+    spn_action: add
+    spn:
+      - MSSQLSvc/us99db-svr95:2433
+
+- name: Ensure user is created with delegates and spn's defined
+  community.windows.win_domain_user:
+    name: shmemmmy
+    password: The3rubberducki33!
+    state: present
+    groups:
+      - Domain Admins
+      - Enterprise Admins
+    delegates:
+      - CN=shenetworks,CN=Users,DC=ansible,DC=test
+      - CN=mk.ai,CN=Users,DC=ansible,DC=test
+      - CN=jessiedotjs,CN=Users,DC=ansible,DC=test
+    spn:
+      - MSSQLSvc/us99db-svr95:2433
 '''
 
 RETURN = r'''
@@ -273,6 +332,15 @@ country:
     returned: always
     type: str
     sample: US
+delegates:
+    description: Principals allowed to delegate
+    returned: always
+    type: list
+    elements: str
+    sample:
+      - CN=svc.tech.unicorn,CN=Users,DC=ansible,DC=test
+      - CN=geoff,CN=Users,DC=ansible,DC=test
+    version_added: 1.10.0
 description:
     description: A description of the account
     returned: always
@@ -333,6 +401,14 @@ sid:
     returned: always
     type: str
     sample: S-1-5-21-2752426336-228313920-2202711348-1175
+spn:
+    description: The service principal names
+    returned: always
+    type: list
+    sample:
+      - HTTPSvc/ws1intel-svc1
+      - HTTPSvc/ws1intel-svc1.vmware.com
+    version_added: 1.10.0
 state:
     description: The state of the user account
     returned: always
