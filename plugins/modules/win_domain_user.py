@@ -73,6 +73,7 @@ options:
     type: list
     elements: str
     aliases: [ spns ]
+    version_added: 1.10.0
   spn_action:
     description:
       - If C(add), the SPNs are added to the user.
@@ -81,6 +82,7 @@ options:
     type: str
     choices: [ add, remove, replace ]
     default: replace
+    version_added: 1.10.0
   password:
     description:
       - Optionally set the user's password to this (plain text) value.
@@ -184,13 +186,14 @@ options:
     type: list
     elements: str
     aliases: [ principals_allowed_to_delegate ]
+    version_added: 1.10.0
   attributes:
     description:
       - A dict of custom LDAP attributes to set on the user.
       - This can be used to set custom attributes that are not exposed as module
         parameters, e.g. C(telephoneNumber).
       - See the examples on how to format this parameter.
-    type: raw
+    type: dict
   domain_username:
     description:
     - The username to use when interacting with AD.
@@ -231,7 +234,7 @@ author:
 
 EXAMPLES = r'''
 - name: Ensure user bob is present with address information
-  win_domain_user:
+  community.windows.win_domain_user:
     name: bob
     firstname: Bob
     surname: Smith
@@ -249,7 +252,7 @@ EXAMPLES = r'''
       telephoneNumber: 555-123456
 
 - name: Ensure user bob is created and use custom credentials to create the user
-  win_domain_user:
+  community.windows.win_domain_user:
     name: bob
     firstname: Bob
     surname: Smith
@@ -260,7 +263,7 @@ EXAMPLES = r'''
     domain_server: domain@DOMAIN.COM
 
 - name: Ensure user bob is present in OU ou=test,dc=domain,dc=local
-  win_domain_user:
+  community.windows.win_domain_user:
     name: bob
     password: B0bP4ssw0rd
     state: present
@@ -269,26 +272,26 @@ EXAMPLES = r'''
       - Domain Admins
 
 - name: Ensure user bob is absent
-  win_domain_user:
+  community.windows.win_domain_user:
     name: bob
     state: absent
 
 - name: Ensure user has spn's defined
-  win_domain_user:
+  community.windows.win_domain_user:
     name: liz.kenyon
     spn:
       - MSSQLSvc/us99db-svr95:1433
       - MSSQLSvc/us99db-svr95.vmware.com:1433
 
 - name: Ensure user has spn added
-  win_domain_user:
+  community.windows.win_domain_user:
     name: liz.kenyon
     spn_action: add
     spn:
       - MSSQLSvc/us99db-svr95:2433
 
 - name: Ensure user is created with delegates and spn's defined
-  win_domain_user:
+  community.windows.win_domain_user:
     name: shmemmmy
     password: The3rubberducki33!
     state: present
@@ -337,6 +340,7 @@ delegates:
     sample:
       - CN=svc.tech.unicorn,CN=Users,DC=ansible,DC=test
       - CN=geoff,CN=Users,DC=ansible,DC=test
+    versoin_added: 1.10.0
 description:
     description: A description of the account
     returned: always
@@ -404,6 +408,7 @@ spn:
     sample:
       - HTTPSvc/ws1intel-svc1
       - HTTPSvc/ws1intel-svc1.vmware.com
+    version_added: 1.10.0
 state:
     description: The state of the user account
     returned: always

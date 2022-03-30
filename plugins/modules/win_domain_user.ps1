@@ -2,7 +2,6 @@
 
 # GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 
-#Requires -Module Ansible.ModuleUtils.Legacy
 #AnsibleRequires -CSharpUtil Ansible.AccessToken
 #AnsibleRequires -CSharpUtil Ansible.Basic
 
@@ -103,7 +102,7 @@ $spec = @{
         state_province = @{ type = 'str' }
         postal_code = @{ type = 'str' }
         country = @{ type = 'str' }
-        attributes = @{ type = 'raw' }
+        attributes = @{ type = 'dict' }
         delegates = @{
             type = 'list'
             elements = 'str'
@@ -115,6 +114,9 @@ $spec = @{
             default = 'always'
         }
     }
+    required_together = @(
+        , @("domain_username", "domain_password")
+    )
     supports_check_mode = $true
 }
 
@@ -128,10 +130,7 @@ try {
     Import-Module ActiveDirectory
 }
 catch {
-    $msg = -join @(
-        "Failed to import ActiveDirectory PowerShell module. This module should be run on a domain controller, "
-        "and the ActiveDirectory module must be available."
-    )
+    $msg = "Failed to import ActiveDirectory PowerShell module."
     $module.FailJson($msg, $_)
 }
 
@@ -290,7 +289,7 @@ If ($state -eq 'present') {
                     -WhatIf:$check_mode @extra_args
             }
             catch {
-                Fail-Json $result "Failed to set password on account: $($_.Exception.Message)"
+                $module.FailJson("Failed to set password on account: $($_.Exception.Message)", $_)
             }
             $user_obj = Get-ADUser -Identity $user_guid -Properties * @extra_args
             $module.Result.password_updated = $true
