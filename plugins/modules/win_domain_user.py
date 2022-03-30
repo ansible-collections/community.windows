@@ -340,7 +340,7 @@ delegates:
     sample:
       - CN=svc.tech.unicorn,CN=Users,DC=ansible,DC=test
       - CN=geoff,CN=Users,DC=ansible,DC=test
-    versoin_added: 1.10.0
+    version_added: 1.10.0
 description:
     description: A description of the account
     returned: always

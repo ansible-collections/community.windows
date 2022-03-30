@@ -230,9 +230,6 @@ catch [Microsoft.ActiveDirectory.Management.ADIdentityNotFoundException] {
 }
 
 If ($state -eq 'present') {
-    # Ensure user exists
-    $new_user = $false
-
     # If the account does not exist, create it
     If (-not $user_obj) {
         $create_args = @{}
@@ -247,9 +244,11 @@ If ($state -eq 'present') {
         If ($null -ne $sam_account_name) {
             $create_args.SamAccountName = $sam_account_name
         }
+        if ($null -ne $password) {
+            $create_args.AccountPassword = ConvertTo-SecureString $password -AsPlainText -Force
+        }
         $user_obj = New-ADUser @create_args -WhatIf:$check_mode -PassThru @extra_args
         $user_guid = $user_obj.ObjectGUID
-        $new_user = $true
         $module.Result.created = $true
         $module.Result.changed = $true
         If ($check_mode) {
@@ -257,13 +256,10 @@ If ($state -eq 'present') {
         }
         $user_obj = Get-ADUser -Identity $user_guid -Properties ('*', 'msDS-PrincipalName') @extra_args
     }
-
-    If ($password) {
+    ElseIf ($password) {
         # Don't unnecessary check for working credentials.
         # Set the password if we need to.
-        # For new_users there is also no difference between always and when_changed
-        # so we don't need to differentiate between this two states.
-        If ($new_user -or ($update_password -eq "always")) {
+        If ($update_password -eq "always") {
             $set_new_credentials = $true
         }
         elseif ($update_password -eq "when_changed") {
@@ -424,7 +420,7 @@ If ($state -eq 'present') {
         $add_attributes = @{}
         $replace_attributes = @{}
         foreach ($attribute in $attributes.GetEnumerator()) {
-            $attribute_name = $attribute.Name
+            $attribute_name = $attribute.Key
             $attribute_value = $attribute.Value
 
             $valid_property = [bool]($user_obj.PSobject.Properties.name -eq $attribute_name)
