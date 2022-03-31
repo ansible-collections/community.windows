@@ -270,6 +270,26 @@ Parameters
                 </td>
             </tr>
             <tr>
+            <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>groups_ignore_nonexistent</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                    </div>
+                </td>
+                <td>
+                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                    <li><div style="color: blue"><b>yes</b>&nbsp;&larr;</div></li>
+                                    <li>no</li>
+                        </ul>
+                </td>
+                <td>
+                        <div>If <code>yes</code>, a warning message will occur if a group assignment is attempted on a group that does not exist.</div>
+                        <div>If <code>no</code>, the module will produce a fail condition if a group assignment is attempted on a group that does not exist.</div>
+                </td>
+            </tr>
+            <tr>
                 <td colspan="1">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>identity</b>
