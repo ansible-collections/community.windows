@@ -275,7 +275,7 @@ Parameters
                     <b>groups_ignore_nonexistent</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
-                        <span style="color: purple">string</span>
+                        <span style="color: purple">boolean</span>
                     </div>
                 </td>
                 <td>
