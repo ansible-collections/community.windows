@@ -65,6 +65,11 @@ options:
     type: str
     choices: [ add, remove, replace ]
     default: replace
+  groups_ignore_nonexistent:
+    description:
+      - C(yes) will issue warning if attempting to add an AD Security Group that does not exist.
+      - C(no) will cause failure if attempting to add an AD Security Group that does not exist.
+    type: bool
   spn:
     description:
       - Specifies the service principal name(s) for the account. This parameter sets the
