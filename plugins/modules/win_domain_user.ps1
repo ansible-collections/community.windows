@@ -88,6 +88,7 @@ $spec = @{
         user_cannot_change_password = @{ type = 'bool' }
         account_locked = @{ type = 'bool' }
         groups = @{ type = 'list'; elements = 'str' }
+        groups_ignore_nonexistent = @{ type = 'bool'; default = $true }
         enabled = @{ type = 'bool'; default = $true }
         path = @{ type = 'str' }
         upn = @{ type = 'str' }
@@ -151,6 +152,7 @@ $password_never_expires = $module.Params.password_never_expires
 $user_cannot_change_password = $module.Params.user_cannot_change_password
 $account_locked = $module.Params.account_locked
 $groups = $module.Params.groups
+$groups_ignore_nonexistent = module.Params.groups_ignore_nonexistent
 $enabled = $module.Params.enabled
 $path = $module.Params.path
 $upn = $module.Params.upn
@@ -455,9 +457,21 @@ If ($state -eq 'present') {
         $group_list = $groups
 
         $groups = @()
-        Foreach ($group in $group_list) {
-            $groups += (Get-ADGroup -Identity $group @extra_args).DistinguishedName
+        If ($groups_ignore_nonexistent) {
+            Foreach ($group in $group_list) {
+                try {
+                    $groups += (Get-ADGroup -Identity $group @extra_args).DistinguishedName
+                } catch {
+                    Add-Warning -obj $result -message "Failed to locate group $($group) but continuing on.: $($_.Exception.Message)"
+                    Continue
+                }
+            }
+        } else {
+            Foreach ($group in $group_list) {
+                $groups += (Get-ADGroup -Identity $group @extra_args).DistinguishedName
+            }
         }
+
 
         $assigned_groups = Get-PrincipalGroup $user_guid $extra_args
 
