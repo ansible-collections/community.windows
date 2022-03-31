@@ -472,7 +472,6 @@ If ($state -eq 'present') {
             }
         }
 
-
         $assigned_groups = Get-PrincipalGroup $user_guid $extra_args
 
         switch ($groups_action) {
