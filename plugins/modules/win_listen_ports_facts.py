@@ -27,7 +27,7 @@ options:
       - Filter for the state of the TCP ports that will be recopilated.
       - Supports multiple states (Bound, Closed, CloseWait, Closing, DeleteTCB,
         Established, FinWait1, FinWait2, LastAck, Listen, SynReceived, SynSent
-        and TimeWait).
+        and TimeWait), that can be used alone or combined.
     type: list
     elements: str
     default: [ Listen ]
