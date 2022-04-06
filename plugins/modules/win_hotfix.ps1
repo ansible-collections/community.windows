@@ -87,15 +87,16 @@ Function Get-HotfixMetadataFromName($name) {
 
 Function Get-HotfixMetadataFromFile($extract_path) {
     # MSU contents https://support.microsoft.com/en-us/help/934307/description-of-the-windows-update-standalone-installer-in-windows
+    $metadata = @()
     $metadata_path = Get-ChildItem -LiteralPath $extract_path | Where-Object { $_.Extension -eq ".xml" }
     if ($null -eq $metadata_path) {
         Fail-Json $result "failed to get metadata xml inside MSU file, cannot get hotfix metadata required for this task"
     }
     [xml]$xml = Get-Content -LiteralPath $metadata_path.FullName
 
-    $cab_source_filename = $xml.unattend.servicing.package.source.GetAttribute("location")
-    $cab_source_filename = Split-Path -Path $cab_source_filename -Leaf
-    $cab_file = Join-Path -Path $extract_path -ChildPath $cab_source_filename
+   $xml.unattend.servicing.package.source.location | ForEach-Object {
+        $cab_source_filename = Split-Path -Path $_ -Leaf
+        $cab_file = Join-Path -Path $extract_path -ChildPath $cab_source_filename
 
     try {
         $dism_package_info = Get-WindowsPackage -Online -PackagePath $cab_file
@@ -123,7 +124,7 @@ Function Get-HotfixMetadataFromFile($extract_path) {
         }
     }
 
-    $metadata = @{
+    $metadata += [pscustomobject]@{
         path = $cab_file
         name = $dism_package_info.PackageName
         state = $dism_package_info.PackageState
@@ -132,7 +133,7 @@ Function Get-HotfixMetadataFromFile($extract_path) {
 
     return $metadata
 }
-
+}
 Function Get-HotfixMetadataFromKB($kb) {
     # I really hate doing it this way
     $packages = Get-WindowsPackage -Online
@@ -247,6 +248,10 @@ else {
         elseif ($hotfix_metadata.state -ne "Installed") {
             if (-not $check_mode) {
                 try {
+                     $install_result = @()
+                     $install_result += foreach($path in $hotfix_metadata.path) {Add-WindowsPackage -Online -PackagePath $path -NoRestart
+                    }
+                } catch {
                     $install_result = Add-WindowsPackage -Online -PackagePath $hotfix_metadata.path -NoRestart
                 }
                 catch {
