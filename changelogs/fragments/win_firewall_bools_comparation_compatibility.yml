@@ -1,2 +1,0 @@
-bugfixes:
-- win_firewall - Fix GpoBoolean/Boolean comparation(windows versions compatibility increase)

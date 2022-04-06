@@ -1,0 +1,90 @@
+---
+- name: check if we can run the tests
+  ansible.windows.win_shell: |
+    $osVersion = [Version](Get-Item -LiteralPath "$env:SystemRoot\System32\kernel32.dll").VersionInfo.ProductVersion
+    $osVersion -ge [Version]"6.2"
+  register: run_test
+  changed_when: False
+
+- name: Run on Server 2012 and higher
+  when: run_test.stdout | trim | bool
+  block:
+  - name: ensure IIS features are installed
+    ansible.windows.win_feature:
+      name: Web-Server
+      state: present
+      include_management_tools: True
+    register: feature_install
+
+  - name: reboot after feature install
+    ansible.windows.win_reboot:
+    when: feature_install.reboot_required
+
+    # may be possible that copy corrupts the file
+  - name: Get iis configuration checksum
+    ansible.windows.win_stat:
+      path: C:\Windows\System32\inetsrv\config\applicationHost.config
+      checksum_algorithm: sha1
+    register: stat_result
+
+  - name: take a copy of the original iis configuration
+    ansible.windows.win_copy:
+      src: C:\Windows\System32\inetsrv\config\applicationHost.config
+      dest: '{{ remote_tmp_dir }}\applicationHost.config'
+      remote_src: yes
+    register: copy_result
+
+  - assert:
+      that:
+        - "stat_result.stat.checksum == copy_result.checksum"
+
+  # Tests
+  - name: run tests on hosts that support it
+    include_tasks: tests.yml
+
+  always:
+  # Cleanup
+  - name: remove test virtual directory
+    win_iis_virtualdirectory:
+      state: absent
+      site: "{{ test_site_name }}"
+      name: "{{ test_vdir_name }}"
+
+  - name: remove test application
+    win_iis_webapplication:
+      name: "{{ test_app_name }}"
+      site: "{{ test_site_name }}"
+      state: absent
+
+  - name: remove test site
+    win_iis_website:
+      name: "{{ test_site_name }}"
+      state: absent
+
+  - name: delete test application temporary directory
+    win_file:
+      path: "{{ test_app_tmp_dir.path }}"
+      state: absent
+
+  - name: restore iis configuration
+    ansible.windows.win_copy:
+      src: '{{ remote_tmp_dir }}\applicationHost.config'
+      dest: C:\Windows\System32\inetsrv\config\applicationHost.config
+      remote_src: yes
+    register: copy_result
+
+  - assert:
+      that:
+        - "stat_result.stat.checksum == copy_result.checksum"
+
+  - name: remove IIS feature if it was installed
+    ansible.windows.win_feature:
+      name: Web-Server
+      state: absent
+      include_management_tools: True
+    when: feature_install is changed
+    register: feature_uninstall
+
+  - name: reboot after removing IIS features
+    ansible.windows.win_reboot:
+    when: feature_uninstall.reboot_required | default(False)

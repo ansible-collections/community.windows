@@ -5,6 +5,59 @@ Community Windows Release Notes
 .. contents:: Topics
 
 
+v1.9.0
+======
+
+Release Summary
+---------------
+
+- Release summary for v1.9.0
+
+Minor Changes
+-------------
+
+- win_disk_facts - Added ``filter`` option to filter returned facts by type of disk information - https://github.com/ansible-collections/community.windows/issues/33
+- win_disk_facts - Converted from ``#Requires -Module Ansible.ModuleUtils.Legacy`` to ``#AnsibleRequires -CSharpUtil Ansible.Basic``
+- win_iis_virtualdirectory - Added the ``connect_as``, ``username``, and ``password`` options to control the virtual directory authentication - https://github.com/ansible-collections/community.windows/issues/346
+- win_power_plan - Added ``guid`` option to specify plan by a unique identifier - https://github.com/ansible-collections/community.windows/issues/310
+
+Bugfixes
+--------
+
+- win_domain_user - Module now properly captures and reports bad password - https://github.com/ansible-collections/community.windows/issues/316
+- win_domain_user - Module now reports user created and changed properly - https://github.com/ansible-collections/community.windows/issues/316
+- win_domain_user - The AD user's existing identity is searched using their sAMAccountName name preferentially and falls back to the provided name property instead - https://github.com/ansible-collections/community.windows/issues/344
+- win_iis_virtualdirectory - Fixed an issue where virtual directory information could not be obtained correctly when the parameter ``application`` was set
+
+v1.8.0
+======
+
+Minor Changes
+-------------
+
+- win_nssm - Added ``username`` as an alias for ``user``
+- win_nssm - Remove deprecation for ``state``, ``dependencies``, ``user``, ``password``, ``start_mode``
+- win_nssm - Support gMSA accounts for ``user``
+
+Bugfixes
+--------
+
+- win_audit_rule - Fix exception when trying to change a rule on a hidden or protected system file - https://github.com/ansible-collections/community.windows/issues/17
+- win_firewall - Fix GpoBoolean/Boolean comparation(windows versions compatibility increase)
+- win_nssm - Perform better user comparison checks for idempotency
+- win_pssession_configuration - the associated action plugin detects check mode using a method that isn't always accurate (https://github.com/ansible-collections/community.windows/pull/318).
+- win_region - Fix conflicts with existing ``LIB`` environment variable
+- win_scheduled_task - Fix conflicts with existing ``LIB`` environment variable
+- win_scheduled_task_stat - Fix conflicts with existing ``LIB`` environment variable
+- win_scoop_bucket - Ensure no extra data is sent to the controller resulting in a junk output warning
+- win_xml - Do not show warnings for normal operations - https://github.com/ansible-collections/community.windows/issues/205
+- win_xml - Fix removal operation when running with higher verbosities - https://github.com/ansible-collections/community.windows/issues/275
+
+New Modules
+-----------
+
+- win_domain_ou - Manage Active Directory Organizational Units
+
 v1.7.0
 ======
 

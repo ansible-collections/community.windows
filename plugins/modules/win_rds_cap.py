@@ -72,10 +72,12 @@ options:
       - A list of user groups that is allowed to connect to the Remote Gateway server.
       - Required when a new CAP is created.
     type: list
+    elements: str
   computer_groups:
     description:
       - A list of computer groups that is allowed to connect to the Remote Gateway server.
     type: list
+    elements: str
   redirect_clipboard:
     description:
       - Allow clipboard redirection.

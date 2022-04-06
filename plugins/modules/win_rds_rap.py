@@ -39,11 +39,13 @@ options:
         A user must belong to one of these groups to access the RD Gateway server.
       - Required when a new RAP is created.
     type: list
+    elements: str
   allowed_ports:
     description:
       - List of port numbers through which connections are allowed for this policy.
       - To allow connections through any port, specify 'any'.
     type: list
+    elements: str
   computer_group_type:
     description:
       - 'The computer group type:'

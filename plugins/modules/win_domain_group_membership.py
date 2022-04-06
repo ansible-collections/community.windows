@@ -24,6 +24,7 @@ options:
       - For computers, you must add "$" after the name; for example, to add "Mycomputer" to a group, use "Mycomputer$" as the member.
       - If the member object is part of another domain in a multi-domain forest, you must add the domain and "\" in front of the name.
     type: list
+    elements: str
     required: yes
   state:
     description:

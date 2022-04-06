@@ -1,0 +1,27 @@
+---
+- name: Create Justi (check_mode)
+  community.windows.win_domain_user:
+    name: Justi
+    password: J@n3P4ssw0rd#
+    state: present
+    update_password: on_create
+    account_locked: false
+    password_never_expires: false
+    enabled: true
+  register: new_user_check_mode
+  failed_when:
+    - not new_user_check_mode.changed
+    - not new_user_check_mode.created
+  check_mode: true
+
+- name: Sanity check on Check Mode
+  ansible.windows.win_powershell:
+    script: |
+      try {
+        Get-AdUser -Identity Justi
+        $Ansible.Failed = $true
+      } catch {
+        $Ansible.Failed = $false
+      }
+  register: sanity_check
+  changed_when: false

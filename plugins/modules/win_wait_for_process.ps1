@@ -9,16 +9,16 @@
 
 $spec = @{
     options = @{
-        process_name_exact = @{ type='list'; elements='str' }
-        process_name_pattern = @{ type='str' }
-        pid = @{ type='int'; default=0 }
-        owner = @{ type='str' }
-        sleep = @{ type='int'; default=1 }
-        pre_wait_delay = @{ type='int'; default=0 }
-        post_wait_delay = @{ type='int'; default=0 }
-        process_min_count = @{ type='int'; default=1 }
-        state = @{ type='str'; default='present'; choices=@( 'absent', 'present' ) }
-        timeout = @{ type='int'; default=300 }
+        process_name_exact = @{ type = 'list'; elements = 'str' }
+        process_name_pattern = @{ type = 'str' }
+        pid = @{ type = 'int'; default = 0 }
+        owner = @{ type = 'str' }
+        sleep = @{ type = 'int'; default = 1 }
+        pre_wait_delay = @{ type = 'int'; default = 0 }
+        post_wait_delay = @{ type = 'int'; default = 0 }
+        process_min_count = @{ type = 'int'; default = 1 }
+        state = @{ type = 'str'; default = 'present'; choices = @( 'absent', 'present' ) }
+        timeout = @{ type = 'int'; default = 300 }
     }
     mutually_exclusive = @(
         @( 'pid', 'process_name_exact' ),
@@ -26,7 +26,7 @@ $spec = @{
         @( 'process_name_exact', 'process_name_pattern' )
     )
     required_one_of = @(
-        ,@( 'owner', 'pid', 'process_name_exact', 'process_name_pattern' )
+        , @( 'owner', 'pid', 'process_name_exact', 'process_name_pattern' )
     )
     supports_check_mode = $true
 }
@@ -61,7 +61,7 @@ if ($owner -and ("IncludeUserName" -notin (Get-Command -Name Get-Process).Parame
     $module.FailJson("This version of Powershell does not support filtering processes by 'owner'.")
 }
 
-Function Get-FilteredProcesses {
+Function Get-FilteredProcess {
     [cmdletbinding()]
     Param(
         [String]
@@ -77,7 +77,8 @@ Function Get-FilteredProcesses {
     try {
         $Processes = Get-Process -IncludeUserName
         $SupportsUserNames = $true
-    } catch [System.Management.Automation.ParameterBindingException] {
+    }
+    catch [System.Management.Automation.ParameterBindingException] {
         $Processes = Get-Process
         $SupportsUserNames = $false
     }
@@ -107,19 +108,22 @@ Function Get-FilteredProcesses {
         if ($Owner) {
             if (-not $Process.UserName) {
                 continue
-            } elseif ((Convert-ToSID($Owner)) -ne (Convert-ToSID($Process.UserName))) {  # NOTE: This is rather expensive
+            }
+            elseif ((Convert-ToSID($Owner)) -ne (Convert-ToSID($Process.UserName))) {
+                # NOTE: This is rather expensive
                 continue
             }
         }
 
         if ($SupportsUserNames -eq $true) {
             $FilteredProcesses += @{ name = $Process.ProcessName; pid = $Process.Id; owner = $Process.UserName }
-        } else {
+        }
+        else {
             $FilteredProcesses += @{ name = $Process.ProcessName; pid = $Process.Id }
         }
     }
 
-    return ,$FilteredProcesses
+    return , $FilteredProcesses
 }
 
 $module_start = Get-Date
@@ -130,7 +134,7 @@ if ($state -eq "present" ) {
     # Wait for a process to start
     do {
 
-        $Processes = Get-FilteredProcesses -Owner $owner -ProcessNameExact $process_name_exact -ProcessNamePattern $process_name_pattern -ProcessId $process_id
+        $Processes = Get-FilteredProcess -Owner $owner -ProcessNameExact $process_name_exact -ProcessNamePattern $process_name_pattern -ProcessId $process_id
         $module.Result.matched_processes = $Processes
 
         if ($Processes.count -ge $process_min_count) {
@@ -146,17 +150,19 @@ if ($state -eq "present" ) {
 
     } while ($true)
 
-} elseif ($state -eq "absent") {
+}
+elseif ($state -eq "absent") {
 
     # Wait for a process to stop
-    $Processes = Get-FilteredProcesses -Owner $owner -ProcessNameExact $process_name_exact -ProcessNamePattern $process_name_pattern -ProcessId $process_id
+    $Processes = Get-FilteredProcess -Owner $owner -ProcessNameExact $process_name_exact -ProcessNamePattern $process_name_pattern -ProcessId $process_id
     $module.Result.matched_processes = $Processes
 
     if ($Processes.count -gt 0 ) {
         try {
             # This may randomly fail when used on specially protected processes (think: svchost)
             Wait-Process -Id $Processes.pid -Timeout $timeout
-        } catch [System.TimeoutException] {
+        }
+        catch [System.TimeoutException] {
             $module.Result.elapsed = ((Get-Date) - $module_start).TotalSeconds
             $module.FailJson("Timeout while waiting for process(es) to stop")
         }

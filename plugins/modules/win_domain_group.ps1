@@ -16,12 +16,12 @@ $display_name = Get-AnsibleParam -obj $params -name "display_name" -type "str"
 $domain_username = Get-AnsibleParam -obj $params -name "domain_username" -type "str"
 $domain_password = Get-AnsibleParam -obj $params -name "domain_password" -type "str" -failifempty ($null -ne $domain_username)
 $description = Get-AnsibleParam -obj $params -name "description" -type "str"
-$category = Get-AnsibleParam -obj $params -name "category" -type "str" -validateset "distribution","security"
-$scope = Get-AnsibleParam -obj $params -name "scope" -type "str" -validateset "domainlocal","global","universal"
+$category = Get-AnsibleParam -obj $params -name "category" -type "str" -validateset "distribution", "security"
+$scope = Get-AnsibleParam -obj $params -name "scope" -type "str" -validateset "domainlocal", "global", "universal"
 $managed_by = Get-AnsibleParam -obj $params -name "managed_by" -type "str"
 $attributes = Get-AnsibleParam -obj $params -name "attributes"
-$organizational_unit = Get-AnsibleParam -obj $params -name "organizational_unit" -type "str" -aliases "ou","path"
-$state = Get-AnsibleParam -obj $params -name "state" -type "str" -default "present" -validateset "present","absent"
+$organizational_unit = Get-AnsibleParam -obj $params -name "organizational_unit" -type "str" -aliases "ou", "path"
+$state = Get-AnsibleParam -obj $params -name "state" -type "str" -default "present" -validateset "present", "absent"
 $protect = Get-AnsibleParam -obj $params -name "protect" -type "bool"
 $ignore_protection = Get-AnsibleParam -obj $params -name "ignore_protection" -type "bool" -default $false
 $domain_server = Get-AnsibleParam -obj $params -name "domain_server" -type "str"
@@ -52,22 +52,30 @@ if ($null -ne $domain_server) {
 
 try {
     $group = Get-ADGroup -Identity $name -Properties * @extra_args
-} catch [Microsoft.ActiveDirectory.Management.ADIdentityNotFoundException] {
+}
+catch [Microsoft.ActiveDirectory.Management.ADIdentityNotFoundException] {
     $group = $null
-} catch {
+}
+catch {
     Fail-Json $result "failed to retrieve initial details for group $($name): $($_.Exception.Message)"
 }
 if ($state -eq "absent") {
     if ($null -ne $group) {
         if ($group.ProtectedFromAccidentalDeletion -eq $true -and $ignore_protection -eq $true) {
             $group = $group | Set-ADObject -ProtectedFromAccidentalDeletion $false -WhatIf:$check_mode -PassThru @extra_args
-        } elseif ($group.ProtectedFromAccidentalDeletion -eq $true -and $ignore_protection -eq $false) {
-            Fail-Json $result "cannot delete group $name when ProtectedFromAccidentalDeletion is turned on, run this module with ignore_protection=true to override this"
+        }
+        elseif ($group.ProtectedFromAccidentalDeletion -eq $true -and $ignore_protection -eq $false) {
+            $msg = -join @(
+                "cannot delete group $name when ProtectedFromAccidentalDeletion is turned on, "
+                "run this module with ignore_protection=true to override this"
+            )
+            Fail-Json $result $msg
         }
 
         try {
             $group | Remove-ADGroup -Confirm:$false -WhatIf:$check_mode @extra_args
-        } catch {
+        }
+        catch {
             Fail-Json $result "failed to remove group $($name): $($_.Exception.Message)"
         }
 
@@ -76,12 +84,14 @@ if ($state -eq "absent") {
             $result.diff.prepared = "-[$name]"
         }
     }
-} else {
+}
+else {
     # validate that path is an actual path
     if ($null -ne $organizational_unit) {
         try {
             Get-ADObject -Identity $organizational_unit @extra_args | Out-Null
-        } catch [Microsoft.ActiveDirectory.Management.ADIdentityNotFoundException] {
+        }
+        catch [Microsoft.ActiveDirectory.Management.ADIdentityNotFoundException] {
             Fail-Json $result "the group path $organizational_unit does not exist, please specify a valid LDAP path"
         }
     }
@@ -94,21 +104,28 @@ if ($state -eq "absent") {
         # change the path of the group
         if ($null -ne $organizational_unit) {
             $group_cn = $group.CN
-            $existing_path = $group.DistinguishedName -replace "^CN=$group_cn,",''
+            $existing_path = $group.DistinguishedName -replace "^CN=$group_cn,", ''
             if ($existing_path -ne $organizational_unit) {
                 $protection_disabled = $false
                 if ($group.ProtectedFromAccidentalDeletion -eq $true -and $ignore_protection -eq $true) {
                     $group | Set-ADObject -ProtectedFromAccidentalDeletion $false -WhatIf:$check_mode -PassThru @extra_args | Out-Null
                     $protection_disabled = $true
-                } elseif ($group.ProtectedFromAccidentalDeletion -eq $true -and $ignore_protection -eq $false) {
-                    Fail-Json $result "cannot move group $name when ProtectedFromAccidentalDeletion is turned on, run this module with ignore_protection=true to override this"
+                }
+                elseif ($group.ProtectedFromAccidentalDeletion -eq $true -and $ignore_protection -eq $false) {
+                    $msg = -join @(
+                        "cannot move group $name when ProtectedFromAccidentalDeletion is turned on, "
+                        "run this module with ignore_protection=true to override this"
+                    )
+                    Fail-Json $result $msg
                 }
 
                 try {
                     $group = $group | Move-ADObject -Targetpath $organizational_unit -WhatIf:$check_mode -PassThru @extra_args
-                } catch {
+                }
+                catch {
                     Fail-Json $result "failed to move group from $existing_path to $($organizational_unit): $($_.Exception.Message)"
-                } finally {
+                }
+                finally {
                     if ($protection_disabled -eq $true) {
                         $group | Set-ADObject -ProtectedFromAccidentalDeletion $true -WhatIf:$check_mode -PassThru @extra_args | Out-Null
                     }
@@ -138,10 +155,12 @@ if ($state -eq "absent") {
                 if ($group.GroupScope -eq "global" -and $scope -eq "domainlocal") {
                     $set_args.GroupScope = "Universal"
                     $extra_scope_change = $scope
-                } elseif ($group.GroupScope -eq "domainlocal" -and $scope -eq "global") {
+                }
+                elseif ($group.GroupScope -eq "domainlocal" -and $scope -eq "global") {
                     $set_args.GroupScope = "Universal"
                     $extra_scope_change = $scope
-                } else {
+                }
+                else {
                     $set_args.GroupScope = $scope
                 }
                 $run_change = $true
@@ -172,13 +191,16 @@ if ($state -eq "absent") {
                 $set_args.ManagedBy = $managed_by
                 $run_change = $true
                 $diff_text += "+ManagedBy = $managed_by`n"
-            } else {
+            }
+            else {
                 try {
                     $managed_by_object = Get-ADGroup -Identity $managed_by @extra_args
-                } catch [Microsoft.ActiveDirectory.Management.ADIdentityNotFoundException] {
+                }
+                catch [Microsoft.ActiveDirectory.Management.ADIdentityNotFoundException] {
                     try {
                         $managed_by_object = Get-ADUser -Identity $managed_by @extra_args
-                    } catch [Microsoft.ActiveDirectory.Management.ADIdentityNotFoundException] {
+                    }
+                    catch [Microsoft.ActiveDirectory.Management.ADIdentityNotFoundException] {
                         Fail-Json $result "failed to find managed_by user or group $managed_by to be used for comparison"
                     }
                 }
@@ -205,7 +227,8 @@ if ($state -eq "absent") {
                         $replace_attributes.$attribute_name = $attribute_value
                         $diff_text += "-$attribute_name = $existing_value`n+$attribute_name = $attribute_value`n"
                     }
-                } else {
+                }
+                else {
                     $add_attributes.$attribute_name = $attribute_value
                     $diff_text += "+$attribute_name = $attribute_value`n"
                 }
@@ -223,7 +246,8 @@ if ($state -eq "absent") {
         if ($run_change) {
             try {
                 $group = $group | Set-ADGroup -WhatIf:$check_mode -PassThru @set_args
-            } catch {
+            }
+            catch {
                 Fail-Json $result "failed to change group $($name): $($_.Exception.Message)"
             }
             $result.changed = $true
@@ -231,7 +255,8 @@ if ($state -eq "absent") {
             if ($null -ne $extra_scope_change) {
                 try {
                     $group = $group | Set-ADGroup -GroupScope $extra_scope_change -WhatIf:$check_mode -PassThru @extra_args
-                } catch {
+                }
+                catch {
                     Fail-Json $result "failed to change scope of group $name to $($scope): $($_.Exception.Message)"
                 }
             }
@@ -241,7 +266,8 @@ if ($state -eq "absent") {
         if ($result.changed -eq $false) {
             $diff_text = $null
         }
-    } else {
+    }
+    else {
         # validate if scope is set
         if ($null -eq $scope) {
             Fail-Json $result "scope must be set when state=present and the group doesn't exist"
@@ -286,7 +312,8 @@ if ($state -eq "absent") {
 
         try {
             $group = New-AdGroup -WhatIf:$check_mode -PassThru @add_args
-        } catch {
+        }
+        catch {
             Fail-Json $result "failed to create group $($name): $($_.Exception.Message)"
         }
         $result.changed = $true

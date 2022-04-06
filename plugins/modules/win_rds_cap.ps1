@@ -18,11 +18,18 @@ $check_mode = Get-AnsibleParam -obj $params -name "_ansible_check_mode" -type "b
 $diff_mode = Get-AnsibleParam -obj $params -name "_ansible_diff" -type "bool" -default $false
 
 $name = Get-AnsibleParam -obj $params -name "name" -type "str" -failifempty $true
-$state = Get-AnsibleParam -obj $params -name "state" -type "str" -default "present" -validateset "absent","present","enabled","disabled"
+$state = Get-AnsibleParam -obj $params -name "state" -type "str" -default "present" -validateset "absent", "present", "enabled", "disabled"
 $auth_method = Get-AnsibleParam -obj $params -name "auth_method" -type "str" -validateset $auth_methods_set
 $order = Get-AnsibleParam -obj $params -name "order" -type "int"
 $session_timeout = Get-AnsibleParam -obj $params -name "session_timeout" -type "int"
-$session_timeout_action = Get-AnsibleParam -obj $params -name "session_timeout_action" -type "str" -default "disconnect" -validateset $session_timeout_actions_set
+$session_timeout_action_params = @{
+    obj = $params
+    name = "session_timeout_action"
+    type = "str"
+    default = "disconnect"
+    validateset = $session_timeout_actions_set
+}
+$session_timeout_action = Get-AnsibleParam @session_timeout_action_params
 $idle_timeout = Get-AnsibleParam -obj $params -name "idle_timeout" -type "int"
 $allow_only_sdrts_servers = Get-AnsibleParam -obj $params -name "allow_only_sdrts_servers" -type "bool"
 $user_groups = Get-AnsibleParam -obj $params -name "user_groups" -type "list"
@@ -36,6 +43,29 @@ $redirect_serial = Get-AnsibleParam -obj $params -name "redirect_serial" -type "
 $redirect_pnp = Get-AnsibleParam -obj $params -name "redirect_pnp" -type "bool"
 
 
+Function ConvertTo-Sid {
+    [OutputType([string])]
+    [CmdletBinding()]
+    param (
+        [Parameter(Mandatory, ValueFromPipeline)]
+        [string[]]
+        $InputObject
+    )
+
+    process {
+        foreach ($user in $InputObject) {
+            # RDS uses the UPN format with the builtin domain but Convert-ToSID tries to look this up as a domain.
+            # Ensure the input value is in the Netlogon format to ensure BUILTIN is resolved properly
+            if ($user.EndsWith("@builtin", [System.StringComparison]::OrdinalIgnoreCase)) {
+                $user = "BUILTIN\$($user.Substring(0, $user.Length - 8))"
+            }
+
+            Convert-ToSID -account_name $user
+        }
+    }
+}
+
+
 function Get-CAP([string] $name) {
     $cap_path = "RDS:\GatewayServer\CAP\$name"
     $cap = @{
@@ -43,7 +73,7 @@ function Get-CAP([string] $name) {
     }
 
     # Fetch CAP properties
-    Get-ChildItem -LiteralPath $cap_path | ForEach-Object { $cap.Add($_.Name,$_.CurrentValue) }
+    Get-ChildItem -LiteralPath $cap_path | ForEach-Object { $cap.Add($_.Name, $_.CurrentValue) }
     # Convert boolean values
     $cap.Enabled = $cap.Status -eq 1
     $cap.Remove("Status")
@@ -61,25 +91,25 @@ function Get-CAP([string] $name) {
     $cap.UserGroups = @(
         Get-ChildItem -LiteralPath "$cap_path\UserGroups" |
             Select-Object -ExpandProperty Name |
-            ForEach-Object { Convert-FromSID -sid (Convert-ToSID -account_name $_) }
+            ForEach-Object { Convert-FromSID -sid (ConvertTo-Sid -InputObject $_) }
     )
     $cap.ComputerGroups = @(
         Get-ChildItem -LiteralPath "$cap_path\ComputerGroups" |
             Select-Object -ExpandProperty Name |
-            ForEach-Object { Convert-FromSID -sid (Convert-ToSID -account_name $_) }
+            ForEach-Object { Convert-FromSID -sid (ConvertTo-Sid -InputObject $_) }
     )
 
     return $cap
 }
 
 function Set-CAPPropertyValue {
-    [CmdletBinding(SupportsShouldProcess=$true)]
+    [CmdletBinding(SupportsShouldProcess = $true)]
     param (
-        [Parameter(Mandatory=$true)]
+        [Parameter(Mandatory = $true)]
         [string] $name,
-        [Parameter(Mandatory=$true)]
+        [Parameter(Mandatory = $true)]
         [string] $property,
-        [Parameter(Mandatory=$true)]
+        [Parameter(Mandatory = $true)]
         $value,
         [Parameter()]
         $resultobj = @{}
@@ -89,13 +119,14 @@ function Set-CAPPropertyValue {
 
     try {
         Set-Item -LiteralPath "$cap_path\$property" -Value $value -ErrorAction Stop
-    } catch {
+    }
+    catch {
         Fail-Json -obj $resultobj -message "Failed to set property $property of CAP ${name}: $($_.Exception.Message)"
     }
 }
 
 $result = @{
-  changed = $false
+    changed = $false
 }
 $diff_text = $null
 
@@ -113,7 +144,7 @@ if ($null -ne $user_groups) {
     $user_groups = $user_groups | ForEach-Object {
         $group = $_
         # Test that the group is resolvable on the local machine
-        $sid = Convert-ToSID -account_name $group
+        $sid = ConvertTo-Sid -InputObject $group
         if (!$sid) {
             Fail-Json -obj $result -message "$group is not a valid user group on the host machine or domain"
         }
@@ -129,7 +160,7 @@ if ($null -ne $computer_groups) {
     $computer_groups = $computer_groups | ForEach-Object {
         $group = $_
         # Test that the group is resolvable on the local machine
-        $sid = Convert-ToSID -account_name $group
+        $sid = ConvertTo-Sid -InputObject $group
         if (!$sid) {
             Fail-Json -obj $result -message "$group is not a valid computer group on the host machine or domain"
         }
@@ -159,7 +190,8 @@ if ($state -eq 'absent') {
         $diff_text += "-[$name]"
         $result.changed = $true
     }
-} else {
+}
+else {
     $diff_text_added_prefix = ''
     if (-not $cap_exist) {
         if ($null -eq $user_groups) {
@@ -177,7 +209,13 @@ if ($state -eq 'absent') {
                 Name = $name
                 UserGroupNames = $user_groups -join ';'
             }
-            $return = Invoke-CimMethod -Namespace Root\CIMV2\TerminalServices -ClassName Win32_TSGatewayConnectionAuthorizationPolicy -MethodName Create -Arguments $CapArgs
+            $cimParams = @{
+                Namespace = "Root\CIMV2\TerminalServices"
+                ClassName = "Win32_TSGatewayConnectionAuthorizationPolicy"
+                MethodName = "Create"
+                Arguments = $CapArgs
+            }
+            $return = Invoke-CimMethod @cimParams
             if ($return.ReturnValue -ne 0) {
                 Fail-Json -obj $result -message "Failed to create CAP $name (code: $($return.ReturnValue))"
             }
@@ -192,7 +230,7 @@ if ($state -eq 'absent') {
     $diff_text += "$diff_text_added_prefix[$name]`n"
 
     # We cannot configure a CAP that was created above in check mode as it won't actually exist
-    if($cap_exist) {
+    if ($cap_exist) {
         $cap = Get-CAP -Name $name
         $wmi_cap = Get-CimInstance -ClassName Win32_TSGatewayConnectionAuthorizationPolicy -Namespace Root\CIMv2\TerminalServices -Filter "name='$($name)'"
 
@@ -207,15 +245,26 @@ if ($state -eq 'absent') {
 
         if ($null -ne $auth_method -and $auth_method -ne $cap.AuthMethod) {
             $diff_text += "-AuthMethod = $($cap.AuthMethod)`n+AuthMethod = $auth_method`n"
-            Set-CAPPropertyValue -Name $name -Property AuthMethod -Value ([array]::IndexOf($auth_methods_set, $auth_method)) -ResultObj $result -WhatIf:$check_mode
+            $set_params = @{
+                Name = $name
+                Property = "AuthMethod"
+                Value = ([array]::IndexOf($auth_methods_set, $auth_method))
+                ResultObj = $result
+                WhatIf = $check_mode
+            }
+            Set-CAPPropertyValue @set_params
             $result.changed = $true
         }
 
         if ($null -ne $order -and $order -ne $cap.EvaluationOrder) {
             # Order cannot be greater than the total number of existing CAPs (InvalidArgument exception)
-            $cap_count =  (Get-ChildItem -LiteralPath "RDS:\GatewayServer\CAP").Count
-            if($order -gt $cap_count) {
-                Add-Warning -obj $result -message "Given value '$order' for parameter 'order' is greater than the number of existing CAPs. The actual order will be capped to '$cap_count'."
+            $cap_count = (Get-ChildItem -LiteralPath "RDS:\GatewayServer\CAP").Count
+            if ($order -gt $cap_count) {
+                $msg = -join @(
+                    "Given value '$order' for parameter 'order' is greater than the number of existing CAPs. "
+                    "The actual order will be capped to '$cap_count'."
+                )
+                Add-Warning -obj $result -message $msg
                 $order = $cap_count
             }
 
@@ -231,7 +280,8 @@ if ($state -eq 'absent') {
                     -SessionTimeoutAction ([array]::IndexOf($session_timeout_actions_set, $session_timeout_action)) `
                     -ErrorAction Stop `
                     -WhatIf:$check_mode
-            } catch {
+            }
+            catch {
                 Fail-Json -obj $result -message "Failed to set property ComputerGroupType of RAP ${name}: $($_.Exception.Message)"
             }
 
@@ -287,7 +337,7 @@ if ($state -eq 'absent') {
             $groups_to_add = @($user_groups | Where-Object { $cap.UserGroups -notcontains $_ })
 
             $user_groups_diff = $null
-            foreach($group in $groups_to_add) {
+            foreach ($group in $groups_to_add) {
                 if (-not $check_mode) {
                     $return = $wmi_cap | Invoke-CimMethod -MethodName AddUserGroupNames -Arguments @{ UserGroupNames = $group }
                     if ($return.ReturnValue -ne 0) {
@@ -298,7 +348,7 @@ if ($state -eq 'absent') {
                 $result.changed = $true
             }
 
-            foreach($group in $groups_to_remove) {
+            foreach ($group in $groups_to_remove) {
                 if (-not $check_mode) {
                     $return = $wmi_cap | Invoke-CimMethod -MethodName RemoveUserGroupNames -Arguments @{ UserGroupNames = $group }
                     if ($return.ReturnValue -ne 0) {
@@ -309,7 +359,7 @@ if ($state -eq 'absent') {
                 $result.changed = $true
             }
 
-            if($user_groups_diff) {
+            if ($user_groups_diff) {
                 $diff_text += "~UserGroups`n$user_groups_diff"
             }
         }
@@ -319,7 +369,7 @@ if ($state -eq 'absent') {
             $groups_to_add = @($computer_groups | Where-Object { $cap.ComputerGroups -notcontains $_ })
 
             $computer_groups_diff = $null
-            foreach($group in $groups_to_add) {
+            foreach ($group in $groups_to_add) {
                 if (-not $check_mode) {
                     $return = $wmi_cap | Invoke-CimMethod -MethodName AddComputerGroupNames -Arguments @{ ComputerGroupNames = $group }
                     if ($return.ReturnValue -ne 0) {
@@ -330,7 +380,7 @@ if ($state -eq 'absent') {
                 $result.changed = $true
             }
 
-            foreach($group in $groups_to_remove) {
+            foreach ($group in $groups_to_remove) {
                 if (-not $check_mode) {
                     $return = $wmi_cap | Invoke-CimMethod -MethodName RemoveComputerGroupNames -Arguments @{ ComputerGroupNames = $group }
                     if ($return.ReturnValue -ne 0) {
@@ -341,7 +391,7 @@ if ($state -eq 'absent') {
                 $result.changed = $true
             }
 
-            if($computer_groups_diff) {
+            if ($computer_groups_diff) {
                 $diff_text += "~ComputerGroups`n$computer_groups_diff"
             }
         }

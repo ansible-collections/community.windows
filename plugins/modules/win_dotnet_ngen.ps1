@@ -16,7 +16,7 @@ $result = @{
     changed = $false
 }
 
-Function Invoke-Ngen($architecture="") {
+Function Invoke-Ngen($architecture = "") {
     $cmd = "$($env:windir)\Microsoft.NET\Framework$($architecture)\v4.0.30319\ngen.exe"
 
     if (Test-Path -LiteralPath $cmd) {
@@ -26,10 +26,12 @@ Function Invoke-Ngen($architecture="") {
                 rc = 0
                 stdout = "check mode output for $cmd $arguments"
             }
-        } else {
+        }
+        else {
             try {
                 $ngen_result = Run-Command -command "$cmd $arguments"
-            } catch {
+            }
+            catch {
                 Fail-Json -obj $result -message "failed to execute '$cmd $arguments': $($_.Exception.Message)"
             }
         }
@@ -42,10 +44,12 @@ Function Invoke-Ngen($architecture="") {
                 rc = 0
                 stdout = "check mode output for $cmd $arguments"
             }
-        } else {
+        }
+        else {
             try {
                 $executed_queued_items = Run-Command -command "$cmd $arguments"
-            } catch {
+            }
+            catch {
                 Fail-Json -obj $result -message "failed to execute '$cmd $arguments': $($_.Exception.Message)"
             }
         }

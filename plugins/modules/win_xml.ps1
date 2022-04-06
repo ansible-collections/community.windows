@@ -25,14 +25,15 @@ function Copy-Xml($dest, $src, $xmlorig) {
                 $newnode = $xmlorig.CreateElement($childnode.get_Name(), $xmlorig.get_DocumentElement().get_NamespaceURI())
                 Copy-Xml -dest $newnode -src $childnode -xmlorig $xmlorig
                 $dest.AppendChild($newnode) | Out-Null
-            } elseif ($childnode.get_NodeType() -eq "Text") {
+            }
+            elseif ($childnode.get_NodeType() -eq "Text") {
                 $dest.set_InnerText($childnode.get_InnerText())
             }
         }
     }
 }
 
-function Compare-XmlDocs($actual, $expected) {
+function Compare-XmlDoc($actual, $expected) {
     if ($actual.get_Name() -ne $expected.get_Name()) {
         throw "Actual name not same as expected: actual=" + $actual.get_Name() + ", expected=" + $expected.get_Name()
     }
@@ -43,7 +44,7 @@ function Compare-XmlDocs($actual, $expected) {
             if ($actual.get_Attributes().Count -ne $expected.get_Attributes().Count) {
                 throw "attribute mismatch for actual=" + $actual.get_Name()
             }
-            for ($i=0;$i -lt $expected.get_Attributes().Count; $i =$i+1) {
+            for ($i = 0; $i -lt $expected.get_Attributes().Count; $i = $i + 1) {
                 if ($expected.get_Attributes()[$i].get_Name() -ne $actual.get_Attributes()[$i].get_Name()) {
                     throw "attribute name mismatch for actual=" + $actual.get_Name()
                 }
@@ -59,20 +60,20 @@ function Compare-XmlDocs($actual, $expected) {
     }
 
     ##children
-    if ($expected.get_ChildNodes().Count -ne $actual.get_ChildNodes().Count)  {
+    if ($expected.get_ChildNodes().Count -ne $actual.get_ChildNodes().Count) {
         throw "child node mismatch. for actual=" + $actual.get_Name()
     }
 
-    for ($i=0;$i -lt $expected.get_ChildNodes().Count; $i =$i+1) {
+    for ($i = 0; $i -lt $expected.get_ChildNodes().Count; $i = $i + 1) {
         if (-not $actual.get_ChildNodes()[$i]) {
             throw "actual missing child nodes. for actual=" + $actual.get_Name()
         }
-        Compare-XmlDocs $expected.get_ChildNodes()[$i] $actual.get_ChildNodes()[$i]
+        Compare-XmlDoc $expected.get_ChildNodes()[$i] $actual.get_ChildNodes()[$i]
     }
 
     if ($expected.get_InnerText()) {
         if ($expected.get_InnerText() -ne $actual.get_InnerText()) {
-           throw "inner text mismatch for actual=" + $actual.get_Name()
+            throw "inner text mismatch for actual=" + $actual.get_Name()
         }
     }
     elseif ($actual.get_InnerText()) {
@@ -91,7 +92,8 @@ function Save-ChangedXml($xmlorig, $result, $message, $check_mode, $backup) {
         }
         $xmlorig.Save($dest)
         $result.msg = $message
-    } else {
+    }
+    else {
         $result.msg += " check mode"
     }
 }
@@ -115,7 +117,7 @@ $result = @{
     changed = $false
 }
 
-If (-Not (Test-Path -LiteralPath $dest -PathType Leaf)){
+If (-Not (Test-Path -LiteralPath $dest -PathType Leaf)) {
     Fail-Json $result "Specified path $dest does not exist or is not a file."
 }
 
@@ -139,7 +141,7 @@ $nodeListCount = $nodeList.get_Count()
 if ($count) {
     $result.count = $nodeListCount
     if (-not $fragment) {
-       Exit-Json $result
+        Exit-Json $result
     }
 }
 ## Exit early if xpath did not match any nodes
@@ -153,21 +155,32 @@ $result.msg = "not changed"
 
 if ($type -eq "element") {
     if ($state -eq "absent") {
+
+        $removals = [System.Collections.Generic.List[String]]@()
+
         foreach ($node in $nodeList) {
             # there are some nodes that match xpath, delete without comparing them to fragment
             if (-Not $check_mode) {
-                $removedNode = $node.get_ParentNode().RemoveChild($node)
+                [void]$node.get_ParentNode().RemoveChild($node)
                 $changed = $true
-                if ($debug) {
-                    $result.removed += $result.removed + $removedNode.get_OuterXml()
-                }
+            }
+
+            if ($debug) {
+                $removals.Add($node.get_OuterXml())
             }
         }
-    } else { # state -eq 'present'
+
+        if ($removals) {
+            $result.removed = $removals -join ", "
+        }
+    }
+    else {
+        # state -eq 'present'
         $xmlfragment = $null
         Try {
             $xmlfragment = [xml]$fragment
-        } Catch {
+        }
+        Catch {
             Fail-Json $result "Failed to parse fragment as XML: $($_.Exception.Message)"
         }
 
@@ -181,22 +194,18 @@ if ($type -eq "element") {
             $elements = $node.get_ChildNodes()
             [bool]$present = $false
             [bool]$changed = $false
-            $element_count = $elements.get_Count()
-            $nstatus = "node: " + $node.get_Value() + " element: " + $elements.get_OuterXml() + " Element count is $element_count"
-            Add-Warning $result $nstatus
             if ($elements.get_Count()) {
                 if ($debug) {
                     $err = @()
-                    $result.err = {$err}.Invoke()
+                    $result.err = { $err }.Invoke()
                 }
                 foreach ($element in $elements) {
-                    $estatus = "element is " + $element.get_OuterXml()
-                    Add-Warning $result $estatus
                     try {
-                        Compare-XmlDocs $candidate $element
+                        Compare-XmlDoc $candidate $element
                         $present = $true
                         break
-                    } catch {
+                    }
+                    catch {
                         if ($debug) {
                             $result.err.Add($_.Exception.ToString())
                         }
@@ -210,14 +219,16 @@ if ($type -eq "element") {
             }
         }
     }
-} elseif ($type -eq "text") {
+}
+elseif ($type -eq "text") {
     foreach ($node in $nodeList) {
         if ($node.get_InnerText() -ne $fragment) {
             $node.set_InnerText($fragment)
             $changed = $true
         }
     }
-} elseif ($type -eq "attribute") {
+}
+elseif ($type -eq "attribute") {
     foreach ($node in $nodeList) {
         if ($state -eq 'present') {
             if ($node.NodeType -eq 'Attribute') {
@@ -226,9 +237,12 @@ if ($type -eq "element") {
                     $node.Value = $fragment
                     $changed = $true
                 }
-            } else { # assume NodeType is Element
+            }
+            else {
+                # assume NodeType is Element
                 if (!$node.HasAttribute($attribute) -or ($node.$attribute -ne $fragment)) {
-                    if (!$node.HasAttribute($attribute)) { # add attribute to Element if missing
+                    if (!$node.HasAttribute($attribute)) {
+                        # add attribute to Element if missing
                         $node.SetAttributeNode($attribute, $xmlorig.get_DocumentElement().get_NamespaceURI())
                     }
                     #set the attribute into the element
@@ -236,19 +250,24 @@ if ($type -eq "element") {
                     $changed = $true
                 }
             }
-        } elseif ($state -eq 'absent') {
+        }
+        elseif ($state -eq 'absent') {
             if ($node.NodeType -eq 'Attribute') {
                 $attrNode = [System.Xml.XmlAttribute]$node
                 $parent = $attrNode.OwnerElement
                 $parent.RemoveAttribute($attribute)
                 $changed = $true
-            } else { # element node processing
-                if ($node.Name -eq $attribute ) { # note not caring about the state of 'fragment' at this point
-                   $node.RemoveAttribute($attribute)
-                   $changed = $true
+            }
+            else {
+                # element node processing
+                if ($node.Name -eq $attribute ) {
+                    # note not caring about the state of 'fragment' at this point
+                    $node.RemoveAttribute($attribute)
+                    $changed = $true
                 }
             }
-        } else {
+        }
+        else {
             Add-Warning $result "Unexpected state when processing attribute $($attribute), add was $add, state was $state"
         }
     }
@@ -256,7 +275,8 @@ if ($type -eq "element") {
 if ($changed) {
     if ($state -eq "absent") {
         $summary = "$type removed"
-    } else {
+    }
+    else {
         $summary = "$type changed"
     }
     Save-ChangedXml -xmlorig $xmlorig -result $result -message $summary -check_mode $check_mode -backup $backup

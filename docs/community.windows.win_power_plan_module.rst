@@ -18,6 +18,7 @@ Synopsis
 --------
 - This module will change the power plan of a Windows system to the defined string.
 - Windows defaults to ``balanced`` which will cause CPU throttling. In some cases it can be preferable to change the mode to ``high performance`` to increase CPU performance.
+- One of *name* or *guid* must be provided.
 
 
 
@@ -36,17 +37,34 @@ Parameters
             <tr>
                 <td colspan="1">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>guid</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                    </div>
+                    <div style="font-style: italic; font-size: small; color: darkgreen">added in 1.9.0</div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>String value that indicates the desired power plan by guid.</div>
+                        <div>The power plan must already be present on the system.</div>
+                        <div>For out of box guids see <a href='https://docs.microsoft.com/en-us/windows/win32/power/power-policy-settings'>https://docs.microsoft.com/en-us/windows/win32/power/power-policy-settings</a>.</div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>name</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
                         <span style="color: purple">string</span>
-                         / <span style="color: red">required</span>
                     </div>
                 </td>
                 <td>
                 </td>
                 <td>
-                        <div>String value that indicates the desired power plan.</div>
+                        <div>String value that indicates the desired power plan by name.</div>
                         <div>The power plan must already be present on the system.</div>
                         <div>Commonly there will be options for <code>balanced</code> and <code>high performance</code>.</div>
                 </td>
@@ -65,6 +83,10 @@ Examples
     - name: Change power plan to high performance
       community.windows.win_power_plan:
         name: high performance
+
+    - name: Change power plan to high performance
+      community.windows.win_power_plan:
+        guid: 8c5e7fda-e8bf-4a96-9a85-a6e23a8c635c
 
 
 

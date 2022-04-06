@@ -63,6 +63,18 @@ options:
     type: str
     required: no
     version_added: 1.1.0
+  username:
+    description:
+      - Username to authenticate against private repository.
+    type: str
+    required: no
+    version_added: '1.10.0'
+  password:
+    description:
+      - Password to authenticate against private repository.
+    type: str
+    required: no
+    version_added: '1.10.0'
 requirements:
   - PowerShell Module L(PowerShellGet >= 1.6.0,https://www.powershellgallery.com/packages/PowerShellGet/)
   - PowerShell Module L(PackageManagement >= 1.1.7,https://www.powershellgallery.com/packages/PackageManagement/)
@@ -127,6 +139,14 @@ EXAMPLES = r'''
     source_location: https://myrepo.example/module/feed
     publish_location: https://myrepo.example/api/module/publish
     force: True
+
+- name: Register a PowerShell repository with credentials
+  community.windows.win_psrepository:
+    name: MyRepository
+    source_location: https://myrepo.com
+    state: present
+    username: repo_username
+    password: repo_password
 '''
 
 RETURN = '''

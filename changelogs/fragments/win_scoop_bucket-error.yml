@@ -1,0 +1,2 @@
+bugfixes:
+- win_scoop_bucket - Fix handling of output and errors from each scoop command

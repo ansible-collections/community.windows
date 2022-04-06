@@ -26,9 +26,9 @@ $spec = @{
         @('identity', 'search_scope')
     )
     required_one_of = @(
-        ,@('filter', 'identity', 'ldap_filter')
+        , @('filter', 'identity', 'ldap_filter')
     )
-    required_together = @(,@('domain_username', 'domain_password'))
+    required_together = @(, @('domain_username', 'domain_password'))
 }
 
 $module = [Ansible.Basic.AnsibleModule]::Create($args, $spec)
@@ -106,7 +106,7 @@ namespace Ansible.WinDomainObjectInfo
 Function ConvertTo-OutputValue {
     [CmdletBinding()]
     Param (
-        [Parameter(Mandatory=$true)]
+        [Parameter(Mandatory = $true)]
         [AllowNull()]
         [Object]
         $InputObject
@@ -121,25 +121,30 @@ Function ConvertTo-OutputValue {
         # Try and map the SID to the account name, this may fail if the SID is invalid or not mappable.
         try {
             $sidInfo.Name = $InputObject.Translate([System.Security.Principal.NTAccount]).Value
-        } catch [System.Security.Principal.IdentityNotMappedException] {
+        }
+        catch [System.Security.Principal.IdentityNotMappedException] {
             $sidInfo.Name = $null
         }
 
         $sidInfo
-    } elseif ($InputObject -is [Byte[]]) {
+    }
+    elseif ($InputObject -is [Byte[]]) {
         # Syntax: Octet String - By default will serialize as a list of decimal values per byte, instead return a
         # Base64 string as Ansible can easily parse that.
         [System.Convert]::ToBase64String($InputObject)
-    } elseif ($InputObject -is [DateTime]) {
+    }
+    elseif ($InputObject -is [DateTime]) {
         # Syntax: UTC Coded Time - .NET DateTimes serialized as in the form "Date(FILETIME)" which isn't easily
         # parsable by Ansible, instead return as an ISO 8601 string in the UTC timezone.
         [TimeZoneInfo]::ConvertTimeToUtc($InputObject).ToString("o")
-    } elseif ($InputObject -is [System.Security.AccessControl.ObjectSecurity]) {
+    }
+    elseif ($InputObject -is [System.Security.AccessControl.ObjectSecurity]) {
         # Complex object which isn't easily serializable. Instead we should just return the SDDL string. If a user
         # needs to parse this then they really need to reprocess the SDDL string and process their results on another
         # win_shell task.
         $InputObject.GetSecurityDescriptorSddlForm(([System.Security.AccessControl.AccessControlSections]::All))
-    } else {
+    }
+    else {
         # Syntax: (All Others) - The default serialization handling of other syntaxes are fine, don't do anything.
         $InputObject
     }
@@ -170,9 +175,11 @@ $getParams = @{
 
 if ($filter) {
     $getParams.Filter = $filter
-} elseif ($identity) {
+}
+elseif ($identity) {
     $getParams.Identity = $identity
-} elseif ($ldapFilter) {
+}
+elseif ($ldapFilter) {
     $getParams.LDAPFilter = $ldapFilter
 }
 
@@ -182,7 +189,7 @@ if ($null -ne $searchBase) {
 }
 
 if ($searchScope) {
-    $getParams.SearchScope = switch($searchScope) {
+    $getParams.SearchScope = switch ($searchScope) {
         base { 'Base' }
         one_level { 'OneLevel' }
         subtree { 'Subtree' }
@@ -198,12 +205,14 @@ try {
     $null = $ps.AddCommand('Select-Object').AddParameter('Property', @('DistinguishedName', 'ObjectGUID'))
 
     $foundGuids = @($ps.Invoke())
-} catch {
+}
+catch {
     # Because we ran in a pipeline we can't catch ADIdentityNotFoundException. Instead just get the base exception and
     # do the error checking on that.
     if ($_.Exception.GetBaseException() -is [Microsoft.ActiveDirectory.Management.ADIdentityNotFoundException]) {
         $foundGuids = @()
-    } else {
+    }
+    else {
         # The exception is from the .Invoke() call, compare on the InnerException which was what was actually raised by
         # the pipeline.
         $innerException = $_.Exception.InnerException.InnerException
@@ -213,7 +222,8 @@ try {
             $msg += "Try using the module with auth as Kerberos with credential delegation or CredSSP, become, or "
             $msg += "defining the domain_username and domain_password module parameters."
             $module.FailJson($msg, $innerException)
-        } else {
+        }
+        else {
             throw $innerException
         }
     }
@@ -224,48 +234,51 @@ if ($properties) {
     $getParams.Properties = $properties
 }
 $module.Result.objects = @(foreach ($adId in $foundGuids) {
-    try {
-        $adObject = Get-ADObject @commonParams @getParams -Identity $adId.ObjectGUID
-    } catch {
-        $msg = "Failed to retrieve properties for AD Object '$($adId.DistinguishedName)': $($_.Exception.Message)"
-        $module.Warn($msg)
-        continue
-    }
-
-    $propertyNames = $adObject.PropertyNames
-    $propertyNames += ($properties | Where-Object { $_ -ne '*' })
-
-    # Now process each property to an easy to represent string
-    $filteredObject = [Ordered]@{}
-    foreach ($name in ($propertyNames | Sort-Object)) {
-        # In the case of explicit properties that were asked for but weren't set, Get-ADObject won't actually return
-        # the property so this is a defensive check against that scenario.
-        if (-not $adObject.PSObject.Properties.Name.Contains($name)) {
-            $filteredObject.$name = $null
+        try {
+            $adObject = Get-ADObject @commonParams @getParams -Identity $adId.ObjectGUID
+        }
+        catch {
+            $msg = "Failed to retrieve properties for AD Object '$($adId.DistinguishedName)': $($_.Exception.Message)"
+            $module.Warn($msg)
             continue
         }
 
-        $value = $adObject.$name
-        if ($value -is [Microsoft.ActiveDirectory.Management.ADPropertyValueCollection]) {
-            $value = foreach ($v in $value) {
-                ConvertTo-OutputValue -InputObject $v
+        $propertyNames = $adObject.PropertyNames
+        $propertyNames += ($properties | Where-Object { $_ -ne '*' })
+
+        # Now process each property to an easy to represent string
+        $filteredObject = [Ordered]@{}
+        foreach ($name in ($propertyNames | Sort-Object)) {
+            # In the case of explicit properties that were asked for but weren't set, Get-ADObject won't actually return
+            # the property so this is a defensive check against that scenario.
+            if (-not $adObject.PSObject.Properties.Name.Contains($name)) {
+                $filteredObject.$name = $null
+                continue
             }
-        } else {
-            $value = ConvertTo-OutputValue -InputObject $value
-        }
-        $filteredObject.$name = $value
 
-        # For these 2 properties, add an _AnsibleFlags attribute which contains the enum strings that are set.
-        if ($name -eq 'sAMAccountType') {
-            $enumValue = [Ansible.WinDomainObjectInfo.sAMAccountType]$value
-            $filteredObject.'sAMAccountType_AnsibleFlags' = $enumValue.ToString() -split ', '
-        } elseif ($name -eq 'userAccountControl') {
-            $enumValue = [Ansible.WinDomainObjectInfo.UserAccountControl]$value
-            $filteredObject.'userAccountControl_AnsibleFlags' = $enumValue.ToString() -split ', '
-        }
-    }
+            $value = $adObject.$name
+            if ($value -is [Microsoft.ActiveDirectory.Management.ADPropertyValueCollection]) {
+                $value = foreach ($v in $value) {
+                    ConvertTo-OutputValue -InputObject $v
+                }
+            }
+            else {
+                $value = ConvertTo-OutputValue -InputObject $value
+            }
+            $filteredObject.$name = $value
 
-    $filteredObject
-})
+            # For these 2 properties, add an _AnsibleFlags attribute which contains the enum strings that are set.
+            if ($name -eq 'sAMAccountType') {
+                $enumValue = [Ansible.WinDomainObjectInfo.sAMAccountType]$value
+                $filteredObject.'sAMAccountType_AnsibleFlags' = $enumValue.ToString() -split ', '
+            }
+            elseif ($name -eq 'userAccountControl') {
+                $enumValue = [Ansible.WinDomainObjectInfo.UserAccountControl]$value
+                $filteredObject.'userAccountControl_AnsibleFlags' = $enumValue.ToString() -split ', '
+            }
+        }
+
+        $filteredObject
+    })
 
 $module.ExitJson()

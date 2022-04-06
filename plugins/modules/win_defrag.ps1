@@ -9,11 +9,11 @@
 
 $spec = @{
     options = @{
-        include_volumes = @{ type='list'; elements='str' }
-        exclude_volumes = @{ type='list'; elements='str' }
-        freespace_consolidation = @{ type='bool'; default=$false }
-        priority = @{ type='str'; default='low'; choices=@( 'low', 'normal') }
-        parallel = @{ type='bool'; default=$false }
+        include_volumes = @{ type = 'list'; elements = 'str' }
+        exclude_volumes = @{ type = 'list'; elements = 'str' }
+        freespace_consolidation = @{ type = 'bool'; default = $false }
+        priority = @{ type = 'str'; default = 'low'; choices = @( 'low', 'normal') }
+        parallel = @{ type = 'bool'; default = $false }
     }
     supports_check_mode = $true
 }
@@ -40,11 +40,13 @@ if ($include_volumes) {
     foreach ($volume in $include_volumes) {
         if ($volume.Length -eq 1) {
             $arguments += "$($volume):"
-        } else {
+        }
+        else {
             $arguments += $volume
         }
     }
-} else {
+}
+else {
     $arguments += "/C"
 }
 
@@ -53,7 +55,8 @@ if ($exclude_volumes) {
     foreach ($volume in $exclude_volumes) {
         if ($volume.Length -eq 1) {
             $arguments += "$($volume):"
-        } else {
+        }
+        else {
             $arguments += $volume
         }
     }
@@ -61,7 +64,8 @@ if ($exclude_volumes) {
 
 if ($module.CheckMode) {
     $arguments += "/A"
-} elseif ($freespace_consolidation) {
+}
+elseif ($freespace_consolidation) {
     $arguments += "/X"
 }
 

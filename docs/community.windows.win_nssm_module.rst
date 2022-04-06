@@ -205,7 +205,6 @@ Parameters
                 </td>
                 <td>
                         <div>Service dependencies that has to be started to trigger startup, separated by comma.</div>
-                        <div>DEPRECATED, will be removed in a major release after <code>2021-07-01</code>, please use the <span class='module'>ansible.windows.win_service</span> module instead.</div>
                 </td>
             </tr>
             <tr>
@@ -283,7 +282,7 @@ Parameters
                 </td>
                 <td>
                         <div>Password to be used for service startup.</div>
-                        <div>DEPRECATED, will be removed in a major release after <code>2021-07-01</code>, please use the <span class='module'>ansible.windows.win_service</span> module instead.</div>
+                        <div>This is not required for the well known service accounts and group managed service accounts.</div>
                 </td>
             </tr>
             <tr>
@@ -308,7 +307,6 @@ Parameters
                         <div><code>delayed</code> causes a delayed but automatic start after boot.</div>
                         <div><code>manual</code> means that the service will start only when another service needs it.</div>
                         <div><code>disabled</code> means that the service will stay off, regardless if it is needed or not.</div>
-                        <div>DEPRECATED, will be removed in a major release after <code>2021-07-01</code>, please use the <span class='module'>ansible.windows.win_service</span> module instead.</div>
                 </td>
             </tr>
             <tr>
@@ -331,7 +329,6 @@ Parameters
                 </td>
                 <td>
                         <div>State of the service on the system.</div>
-                        <div>Values <code>started</code>, <code>stopped</code>, and <code>restarted</code> are deprecated and will be removed on a major release after <code>2021-07-01</code>. Please use the <span class='module'>ansible.windows.win_service</span> module instead to start, stop or restart the service.</div>
                 </td>
             </tr>
             <tr>
@@ -367,7 +364,7 @@ Parameters
             <tr>
                 <td colspan="1">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>user</b>
+                    <b>username</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
                         <span style="color: purple">string</span>
@@ -377,7 +374,9 @@ Parameters
                 </td>
                 <td>
                         <div>User to be used for service startup.</div>
-                        <div>DEPRECATED, will be removed in a major release after <code>2021-07-01</code>, please use the <span class='module'>ansible.windows.win_service</span> module instead.</div>
+                        <div>Group managed service accounts must end with <code>$</code>.</div>
+                        <div>Before <code>1.8.0</code>, this parameter was just <code>user</code>.</div>
+                        <div style="font-size: small; color: darkgreen"><br/>aliases: user</div>
                 </td>
             </tr>
             <tr>
@@ -405,7 +404,7 @@ Notes
 
 .. note::
    - The service will NOT be started after its creation when ``state=present``.
-   - Once the service is created, you can use the :ref:`ansible.windowswin_service <ansible.windowswin_service_module>` module to start it or configure some additionals properties, such as its startup type, dependencies, service account, and so on.
+   - Once the service is created, you can use the :ref:`ansible.windows.win_service <ansible.windows.win_service_module>` module to start it or configure some additionals properties, such as its startup type, dependencies, service account, and so on.
 
 
 See Also

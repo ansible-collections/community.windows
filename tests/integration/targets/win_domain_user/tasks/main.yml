@@ -1,0 +1,18 @@
+---
+- name: Remove Users
+  win_domain_user:
+    name: "{{ item }}"
+    state: absent
+  loop:
+    - justi
+    - hana
+    - katie
+
+- name: Run Test Suite 1
+  import_tasks: test1.yml
+
+- name: Run Test Suite 2
+  import_tasks: test2.yml
+
+- name: Run Check Mode Tests
+  import_tasks: check_mode_test.yml

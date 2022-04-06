@@ -24,12 +24,13 @@ $check_mode = Get-AnsibleParam -obj $params -name "_ansible_check_mode" -type "b
 $diff_mode = Get-AnsibleParam -obj $params -name "_ansible_diff" -type "bool" -default $false
 
 $name = Get-AnsibleParam -obj $params -name "name" -type "str" -failifempty $true
-$state = Get-AnsibleParam -obj $params -name "state" -type "str" -default "present" -validateset "present","absent","started","stopped","restarted" -resultobj $result
+$state_options = "present", "absent", "started", "stopped", "restarted"
+$state = Get-AnsibleParam -obj $params -name "state" -type "str" -default "present" -validateset $state_options -resultobj $result
 $display_name = Get-AnsibleParam -obj $params -name 'display_name' -type 'str'
 $description = Get-AnsibleParam -obj $params -name 'description' -type 'str'
 
 $application = Get-AnsibleParam -obj $params -name "application" -type "path"
-$appDirectory  = Get-AnsibleParam -obj $params -name "working_directory" -aliases "app_directory","chdir" -type "path"
+$appDirectory = Get-AnsibleParam -obj $params -name "working_directory" -aliases "app_directory", "chdir" -type "path"
 $appParameters = Get-AnsibleParam -obj $params -name "app_parameters"
 $appArguments = Get-AnsibleParam -obj $params -name "arguments" -aliases "app_parameters_free_form"
 
@@ -41,14 +42,14 @@ $executable = Get-AnsibleParam -obj $params -name "executable" -type "path" -def
 $app_env = Get-AnsibleParam -obj $params -name "app_environment" -type "dict"
 
 $app_rotate_bytes = Get-AnsibleParam -obj $params -name "app_rotate_bytes" -type "int" -default 104858
-$app_rotate_online = Get-AnsibleParam -obj $params -name "app_rotate_online" -type "int" -default 0 -validateset 0,1
+$app_rotate_online = Get-AnsibleParam -obj $params -name "app_rotate_online" -type "int" -default 0 -validateset 0, 1
 $app_stop_method_console = Get-AnsibleParam -obj $params -name "app_stop_method_console" -type "int"
-$app_stop_method_skip = Get-AnsibleParam -obj $params -name "app_stop_method_skip" -type "int" -validateset 1,2,3,4,5,6,7,8,9,10,11,12,13,14,15
+$app_stop_method_skip = Get-AnsibleParam -obj $params -name "app_stop_method_skip" -type "int" -validateset 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15
 
 # Deprecated options, will be removed in a major release after 2021-07-01.
 $startMode = Get-AnsibleParam -obj $params -name "start_mode" -type "str" -default "auto" -validateset $start_modes_map.Keys -resultobj $result
 $dependencies = Get-AnsibleParam -obj $params -name "dependencies" -type "list"
-$user = Get-AnsibleParam -obj $params -name "user" -type "str"
+$user = Get-AnsibleParam -obj $params -name "username" -type "str" -aliases "user"
 $password = Get-AnsibleParam -obj $params -name "password" -type "str"
 
 $result = @{
@@ -59,7 +60,7 @@ $diff_text = $null
 function Invoke-NssmCommand {
     [CmdletBinding()]
     param(
-        [Parameter(Mandatory=$true,ValueFromRemainingArguments=$true)]
+        [Parameter(Mandatory = $true, ValueFromRemainingArguments = $true)]
         [string[]]$arguments
     )
 
@@ -74,7 +75,7 @@ function Invoke-NssmCommand {
 function Get-NssmServiceStatus {
     [CmdletBinding()]
     param(
-        [Parameter(Mandatory=$true)]
+        [Parameter(Mandatory = $true)]
         [string]$service
     )
 
@@ -84,17 +85,17 @@ function Get-NssmServiceStatus {
 function Get-NssmServiceParameter {
     [CmdletBinding()]
     param(
-        [Parameter(Mandatory=$true)]
+        [Parameter(Mandatory = $true)]
         [string]$service,
-        [Parameter(Mandatory=$true)]
+        [Parameter(Mandatory = $true)]
         [Alias("param")]
         [string]$parameter,
-        [Parameter(Mandatory=$false)]
+        [Parameter(Mandatory = $false)]
         [string]$subparameter
     )
 
     $arguments = @("get", $service, $parameter)
-    if($subparameter -ne "") {
+    if ($subparameter -ne "") {
         $arguments += $subparameter
     }
     return Invoke-NssmCommand -arguments $arguments
@@ -103,11 +104,11 @@ function Get-NssmServiceParameter {
 function Set-NssmServiceParameter {
     [CmdletBinding()]
     param(
-        [Parameter(Mandatory=$true)]
+        [Parameter(Mandatory = $true)]
         [string]$service,
-        [Parameter(Mandatory=$true)]
+        [Parameter(Mandatory = $true)]
         [string]$parameter,
-        [Parameter(Mandatory=$true,ValueFromRemainingArguments=$true)]
+        [Parameter(Mandatory = $true, ValueFromRemainingArguments = $true)]
         [Alias("value")]
         [string[]]$arguments
     )
@@ -118,9 +119,9 @@ function Set-NssmServiceParameter {
 function Reset-NssmServiceParameter {
     [CmdletBinding()]
     param(
-        [Parameter(Mandatory=$true)]
+        [Parameter(Mandatory = $true)]
         [string]$service,
-        [Parameter(Mandatory=$true)]
+        [Parameter(Mandatory = $true)]
         [Alias("param")]
         [string]$parameter
     )
@@ -143,25 +144,25 @@ function Update-NssmServiceParameter {
     the current value is equal to the desired value. Usefull when 'nssm get' doesn't return
     the same value as 'nssm set' takes in argument, like for the ObjectName parameter.
     #>
-    [CmdletBinding(SupportsShouldProcess=$true)]
+    [CmdletBinding(SupportsShouldProcess = $true)]
     param(
-        [Parameter(Mandatory=$true)]
+        [Parameter(Mandatory = $true)]
         [string]$service,
 
-        [Parameter(Mandatory=$true)]
+        [Parameter(Mandatory = $true)]
         [string]$parameter,
 
-        [Parameter(Mandatory=$true,ValueFromRemainingArguments=$true)]
+        [Parameter(Mandatory = $true, ValueFromRemainingArguments = $true)]
         [AllowEmptyString()]
         [AllowNull()]
         [Alias("value")]
         [string[]]$arguments,
 
         [Parameter()]
-        [scriptblock]$compare = {param($actual,$expected) @(Compare-Object -ReferenceObject $actual -DifferenceObject $expected).Length -eq 0}
+        [scriptblock]$compare = { param($actual, $expected) @(Compare-Object -ReferenceObject $actual -DifferenceObject $expected).Length -eq 0 }
     )
 
-    if($null -eq $arguments) { return }
+    if ($null -eq $arguments) { return }
     $arguments = @($arguments | Where-Object { $_ -ne '' })
 
     $nssm_result = Get-NssmServiceParameter -service $service -parameter $parameter
@@ -174,9 +175,9 @@ function Update-NssmServiceParameter {
 
     $current_values = @($nssm_result.stdout.split("`n`r") | Where-Object { $_ -ne '' })
 
-    if (-not $compare.Invoke($current_values,$arguments)) {
+    if (-not $compare.Invoke($current_values, $arguments)) {
         if ($PSCmdlet.ShouldProcess($service, "Update '$parameter' parameter")) {
-            if($arguments.Count -gt 0) {
+            if ($arguments.Count -gt 0) {
                 $nssm_result = Set-NssmServiceParameter -service $service -parameter $parameter -arguments $arguments
             }
             else {
@@ -196,10 +197,10 @@ function Update-NssmServiceParameter {
     }
 }
 
-function Test-NssmServiceExists {
+function Test-NssmServiceExist {
     [CmdletBinding()]
     param(
-        [Parameter(Mandatory=$true)]
+        [Parameter(Mandatory = $true)]
         [string]$service
     )
 
@@ -209,7 +210,7 @@ function Test-NssmServiceExists {
 function Invoke-NssmStart {
     [CmdletBinding()]
     param(
-        [Parameter(Mandatory=$true)]
+        [Parameter(Mandatory = $true)]
         [string]$service
     )
 
@@ -225,7 +226,7 @@ function Invoke-NssmStart {
 function Invoke-NssmStop {
     [CmdletBinding()]
     param(
-        [Parameter(Mandatory=$true)]
+        [Parameter(Mandatory = $true)]
         [string]$service
     )
 
@@ -239,9 +240,9 @@ function Invoke-NssmStop {
 }
 
 function Start-NssmService {
-    [CmdletBinding(SupportsShouldProcess=$true)]
+    [CmdletBinding(SupportsShouldProcess = $true)]
     param(
-        [Parameter(Mandatory=$true)]
+        [Parameter(Mandatory = $true)]
         [string]$service
     )
 
@@ -272,9 +273,9 @@ function Start-NssmService {
 }
 
 function Stop-NssmService {
-    [CmdletBinding(SupportsShouldProcess=$true)]
+    [CmdletBinding(SupportsShouldProcess = $true)]
     param(
-        [Parameter(Mandatory=$true)]
+        [Parameter(Mandatory = $true)]
         [string]$service
     )
 
@@ -299,10 +300,10 @@ function Stop-NssmService {
 function Add-DepByDate {
     [CmdletBinding()]
     param(
-        [Parameter(Mandatory=$true)]
+        [Parameter(Mandatory = $true)]
         [String]$Message,
 
-        [Parameter(Mandatory=$true)]
+        [Parameter(Mandatory = $true)]
         [String]$Date
     )
 
@@ -314,6 +315,68 @@ function Add-DepByDate {
         msg = $Message
         date = $Date
         collection_name = "community.windows"
+    }
+}
+
+Function ConvertTo-NormalizedUser {
+    [CmdletBinding()]
+    param (
+        [Parameter(Mandatory = $true)]
+        [String]$InputObject
+    )
+
+    $systemSid = [System.Security.Principal.SecurityIdentifier]'S-1-5-18'
+
+    # Try to get the SID from the raw value or with LocalSystem (what services consider to be SYSTEM).
+    try {
+        $sid = New-Object -TypeName System.Security.Principal.SecurityIdentifier -ArgumentList $InputObject
+    }
+    catch [ArgumentException] {
+        if ($InputObject -eq "LocalSystem") {
+            $sid = $systemSid
+        }
+    }
+
+    if (-not $sid) {
+        $candidates = @(if ($InputObject.Contains('\')) {
+                $nameSplit = $InputObject.Split('\', 2)
+
+                if ($nameSplit[0] -eq '.') {
+                    # If the domain portion is . try using the hostname then falling back to just the username.
+                    # Usually the hostname just works except when running on a DC where it's a domain account
+                    # where looking up just the username should work.
+                    , @($env:COMPUTERNAME, $nameSplit[1])
+                    $nameSplit[1]
+                }
+                else {
+                    , $nameSplit
+                }
+            }
+            else {
+                $InputObject
+            })
+
+        $sid = for ($i = 0; $i -lt $candidates.Length; $i++) {
+            $candidate = $candidates[$i]
+            $ntAccount = New-Object -TypeName System.Security.Principal.NTAccount -ArgumentList $candidate
+            try {
+                $ntAccount.Translate([System.Security.Principal.SecurityIdentifier])
+                break
+            }
+            catch [System.Security.Principal.IdentityNotMappedException] {
+                if ($i -eq ($candidates.Length - 1)) {
+                    throw
+                }
+                continue
+            }
+        }
+    }
+
+    if ($sid -eq $systemSid) {
+        "LocalSystem"
+    }
+    else {
+        $sid.Translate([System.Security.Principal.NTAccount]).Value
     }
 }
 
@@ -334,7 +397,7 @@ if ($null -ne $appParameters) {
     }
 
     # Convert dict-as-string form to list
-    $escapedAppParameters = $appParameters.TrimStart("@").TrimStart("{").TrimEnd("}").Replace("; ","`n").Replace("\","\\")
+    $escapedAppParameters = $appParameters.TrimStart("@").TrimStart("{").TrimEnd("}").Replace("; ", "`n").Replace("\", "\\")
     $appParametersHash = ConvertFrom-StringData -StringData $escapedAppParameters
 
     $appParamsArray = @()
@@ -349,42 +412,6 @@ if ($null -ne $appParameters) {
     # The rest of the code should use only the new $appArguments variable
 }
 
-if ($state -in @("started","stopped","restarted")) {
-    $dep = @{
-        Message = "The values 'started', 'stopped', and 'restarted' for 'state' will be removed soon, use the win_service module to start or stop the service instead"
-        Date = "2022-07-01"
-    }
-    Add-DepByDate @dep
-}
-if ($params.ContainsKey('start_mode')) {
-    $dep = @{
-        Message = "The parameter 'start_mode' will be removed soon, use the win_service module instead"
-        Date = "2022-07-01"
-    }
-    Add-DepByDate @dep
-}
-if ($null -ne $dependencies) {
-    $dep = @{
-        Message = "The parameter 'dependencies' will be removed soon, use the win_service module instead"
-        Date = "2022-07-01"
-    }
-    Add-DepByDate @dep
-}
-if ($null -ne $user) {
-    $dep = @{
-        Message = "The parameter 'user' will be removed soon, use the win_service module instead"
-        Date = "2022-07-01"
-    }
-    Add-DepByDate @dep
-}
-if ($null -ne $password) {
-    $dep = @{
-        Message = "The parameter 'password' will be removed soon, use the win_service module instead"
-        Date = "2022-07-01"
-    }
-    Add-DepByDate @dep
-}
-
 if ($state -ne 'absent') {
     if ($null -eq $application) {
         Fail-Json -obj $result -message "The application parameter must be defined when the state is not absent."
@@ -394,21 +421,40 @@ if ($state -ne 'absent') {
         Fail-Json -obj $result -message "The application specified ""$application"" does not exist on the host."
     }
 
-    if($null -eq $appDirectory) {
+    if ($null -eq $appDirectory) {
         $appDirectory = (Get-Item -LiteralPath $application).DirectoryName
     }
 
-    if ($user -and -not $password) {
-        Fail-Json -obj $result -message "User without password is informed for service ""$name"""
+    if ($user) {
+        $user = ConvertTo-NormalizedUser -InputObject $user
+        if (
+            $user -in @(
+                (ConvertTo-NormalizedUser -InputObject 'S-1-5-18'), # SYSTEM
+                (ConvertTo-NormalizedUser -InputObject 'S-1-5-19'), # LOCAL SERVICE
+                (ConvertTo-NormalizedUser -InputObject 'S-1-5-20') # NETWORK SERVICE
+            )
+        ) {
+            # These accounts have no password (NSSM expects nothing)
+            $password = ""
+        }
+        elseif ($user.EndsWith('$')) {
+            # While a gMSA doesn't have a password NSSM will fail with no password so we set a dummy value. The service
+            # still starts up properly with this so SCManager handles this nicely.
+            $password = "gsma_password"
+        }
+        elseif (-not $password) {
+            # Any other account requires a password here.
+            Fail-Json -obj $result -message "User without password is informed for service ""$name"""
+        }
     }
 }
 
 
-$service_exists = Test-NssmServiceExists -service $name
+$service_exists = Test-NssmServiceExist -service $name
 
 if ($state -eq 'absent') {
     if ($service_exists) {
-        if(-not $check_mode) {
+        if (-not $check_mode) {
             if ((Get-Service -Name $name).Status -ne "Stopped") {
                 $nssm_result = Invoke-NssmStop -service $name
             }
@@ -426,10 +472,11 @@ if ($state -eq 'absent') {
         $result.changed_by = "remove_service"
         $result.changed = $true
     }
-} else {
+}
+else {
     $diff_text_added_prefix = ''
     if (-not $service_exists) {
-        if(-not $check_mode) {
+        if (-not $check_mode) {
             $nssm_result = Invoke-NssmCommand -arguments @("install", $name, $application)
 
             if ($nssm_result.rc -ne 0) {
@@ -465,7 +512,8 @@ if ($state -eq 'absent') {
             $singleLineParams = ""
             if ($appArguments -is [array]) {
                 $singleLineParams = Argv-ToString -arguments $appArguments
-            } else {
+            }
+            else {
                 $singleLineParams = $appArguments.ToString()
             }
 
@@ -482,15 +530,15 @@ if ($state -eq 'absent') {
         # set app environment, only do this for now when explicitly requested by caller to
         # avoid breaking playbooks which use another / custom scheme for configuring app_env
         if ($null -ne $app_env) {
-          # note: convert app_env dictionary to list of strings in the form key=value and pass that a long as value
-          $app_env_str = $app_env.GetEnumerator() | ForEach-Object { "$($_.Name)=$($_.Value)" }
+            # note: convert app_env dictionary to list of strings in the form key=value and pass that a long as value
+            $app_env_str = $app_env.GetEnumerator() | ForEach-Object { "$($_.Name)=$($_.Value)" }
 
-          # note: this is important here to make an empty envvar set working properly (in the sense that appenv is reset)
-          if ($null -eq $app_env_str) {
-            $app_env_str = ''
-          }
+            # note: this is important here to make an empty envvar set working properly (in the sense that appenv is reset)
+            if ($null -eq $app_env_str) {
+                $app_env_str = ''
+            }
 
-          Update-NssmServiceParameter -parameter "AppEnvironmentExtra" -value $app_env_str @common_params
+            Update-NssmServiceParameter -parameter "AppEnvironmentExtra" -value $app_env_str @common_params
         }
 
         ###
@@ -514,37 +562,34 @@ if ($state -eq 'absent') {
         #minimum size before rotating
         Update-NssmServiceParameter -parameter "AppRotateBytes" -value $app_rotate_bytes @common_params
 
-
-        ############## DEPRECATED block since 2.8. Remove in 2.12 ##############
         Update-NssmServiceParameter -parameter "DependOnService" -arguments $dependencies @common_params
         if ($user) {
-            $fullUser = $user
-            if (-Not($user.contains("@")) -And ($user.Split("\").count -eq 1)) {
-                $fullUser = ".\" + $user
-            }
-
             # Use custom compare callback to test only the username (and not the password)
-            Update-NssmServiceParameter -parameter "ObjectName" -arguments @($fullUser, $password) -compare {param($actual,$expected) $actual[0] -eq $expected[0]} @common_params
+            Update-NssmServiceParameter -parameter "ObjectName" -arguments @($user, $password) -compare {
+                param($actual, $expected)
+
+                $actualUser = ConvertTo-NormalizedUser -InputObject $actual[0]
+                $expectedUser = ConvertTo-NormalizedUser -InputObject $expected[0]
+
+                $actualUser -eq $expectedUser
+            } @common_params
         }
         $mappedMode = $start_modes_map.$startMode
         Update-NssmServiceParameter -parameter "Start" -value $mappedMode @common_params
-        if ($state -in "stopped","restarted") {
+        if ($state -in "stopped", "restarted") {
             Stop-NssmService @common_params
         }
 
-        if($state -in "started","restarted") {
+        if ($state -in "started", "restarted") {
             Start-NssmService @common_params
         }
-        ########################################################################
 
         # Added per users` requests
-        if ($null -ne $app_stop_method_console)
-        {
+        if ($null -ne $app_stop_method_console) {
             Update-NssmServiceParameter -parameter "AppStopMethodConsole" -value $app_stop_method_console @common_params
         }
 
-        if ($null -ne $app_stop_method_skip)
-        {
+        if ($null -ne $app_stop_method_skip) {
             Update-NssmServiceParameter -parameter "AppStopMethodSkip" -value $app_stop_method_skip @common_params
         }
     }

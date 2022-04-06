@@ -2,24 +2,31 @@
 
 # GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 
-#Requires -Module Ansible.ModuleUtils.Legacy
+#AnsibleRequires -PowerShell Ansible.ModuleUtils.AddType
+#AnsibleRequires -CSharpUtil Ansible.Basic
 
-$params = Parse-Args -arguments $args -supports_check_mode $true
-$check_mode = Get-AnsibleParam -obj $params "_ansible_check_mode" -type 'bool' -default $false
-$_remote_tmp = Get-AnsibleParam $params "_ansible_remote_tmp" -type "path" -default $env:TMP
-
-$location = Get-AnsibleParam -obj $params -name 'location' -type 'str'
-$format = Get-AnsibleParam -obj $params -name 'format' -type 'str'
-$unicode_language = Get-AnsibleParam -obj $params -name 'unicode_language' -type 'str'
-$copy_settings = Get-AnsibleParam -obj $params -name 'copy_settings' -type 'bool' -default $false
-
-$result = @{
-    changed = $false
-    restart_required = $false
+$spec = @{
+    options = @{
+        location = @{ type = "str" }
+        format = @{ type = "str" }
+        unicode_language = @{ type = "str" }
+        copy_settings = @{ type = "bool"; default = $false }
+    }
+    supports_check_mode = $true
 }
+$module = [Ansible.Basic.AnsibleModule]::Create($args, $spec)
+
+$check_mode = $module.CheckMode
+
+$location = $module.Params.location
+$format = $module.Params.format
+$unicode_language = $module.Params.unicode_language
+$copy_settings = $module.Params.copy_settings
+
+$module.Result.restart_required = $false
 
 # This is used to get the format values based on the LCType enum based through. When running Vista/7/2008/200R2
-$lctype_util = @"
+Add-CSharpType -AnsibleModule $module -References @'
 using System;
 using System.Text;
 using System.Runtime.InteropServices;
@@ -125,11 +132,7 @@ namespace Ansible.WinRegion {
         }
     }
 }
-"@
-$original_tmp = $env:TMP
-$env:TMP = $_remote_tmp
-Add-Type -TypeDefinition $lctype_util
-$env:TMP = $original_tmp
+'@
 
 
 Function Get-LastWin32ExceptionMessage {
@@ -149,11 +152,12 @@ Function Get-SystemLocaleName {
         if ($res -eq 0) {
             $err_code = [System.Runtime.InteropServices.Marshal]::GetLastWin32Error()
             $msg = Get-LastWin32ExceptionMessage -Error $err_code
-            Fail-Json -obj $result -message "Failed to get system locale: $msg"
+            $module.FailJson("Failed to get system locale: $msg")
         }
 
         $system_locale = [System.Runtime.InteropServices.Marshal]::PtrToStringUni($ptr)
-    } finally {
+    }
+    finally {
         [System.Runtime.InteropServices.Marshal]::FreeHGlobal($ptr)
     }
 
@@ -170,33 +174,36 @@ Function Get-UserLocaleName {
         if ($res -eq 0) {
             $err_code = [System.Runtime.InteropServices.Marshal]::GetLastWin32Error()
             $msg = Get-LastWin32ExceptionMessage -Error $err_code
-            Fail-Json -obj $result -message "Failed to get user locale: $msg"
+            $module.FailJson("Failed to get user locale: $msg")
         }
 
         $user_locale = [System.Runtime.InteropServices.Marshal]::PtrToStringUni($ptr)
-    } finally {
+    }
+    finally {
         [System.Runtime.InteropServices.Marshal]::FreeHGlobal($ptr)
     }
 
     return $user_locale
 }
 
-Function Get-ValidGeoIds($cultures) {
-   $geo_ids = @()
-   foreach($culture in $cultures) {
-       try {
-           $geo_id = [System.Globalization.RegionInfo]$culture.Name
-           $geo_ids += $geo_id.GeoId
-       } catch {}
-   }
-   $geo_ids
+Function Get-ValidGeoId($cultures) {
+    $geo_ids = @()
+    foreach ($culture in $cultures) {
+        try {
+            $geo_id = [System.Globalization.RegionInfo]$culture.Name
+            $geo_ids += $geo_id.GeoId
+        }
+        catch {}
+    }
+    $geo_ids
 }
 
 Function Test-RegistryProperty($reg_key, $property) {
     $type = Get-ItemProperty -LiteralPath $reg_key -Name $property -ErrorAction SilentlyContinue
     if ($null -eq $type) {
         $false
-    } else {
+    }
+    else {
         $true
     }
 }
@@ -205,7 +212,7 @@ Function Copy-RegistryKey($source, $target) {
     # Using Copy-Item -Recurse is giving me weird results, doing it recursively
     Copy-Item -LiteralPath $source -Destination $target -WhatIf:$check_mode
 
-    foreach($key in Get-ChildItem -LiteralPath $source) {
+    foreach ($key in Get-ChildItem -LiteralPath $source) {
         $sourceKey = "$source\$($key.PSChildName)"
         $targetKey = (Get-Item -LiteralPath $source).PSChildName
         Copy-RegistryKey -source "$sourceKey" -target "$target\$targetKey"
@@ -266,7 +273,7 @@ Function Set-UserLocale($culture) {
     }
 
     $properties = Get-ItemProperty -LiteralPath $reg_key
-    foreach($property in $properties.PSObject.Properties) {
+    foreach ($property in $properties.PSObject.Properties) {
         if (Test-RegistryProperty -reg_key $reg_key -property $property.Name) {
             $name = $property.Name
             $old_value = $property.Value
@@ -274,7 +281,7 @@ Function Set-UserLocale($culture) {
 
             if ($new_value -ne $old_value) {
                 Set-ItemProperty -LiteralPath $reg_key -Name $name -Value $new_value -WhatIf:$check_mode
-                $result.changed = $true
+                $module.Result.changed = $true
             }
         }
     }
@@ -286,8 +293,8 @@ Function Set-SystemLocaleLegacy($unicode_language) {
     $wanted_language_value = '{0:x4}' -f ([System.Globalization.CultureInfo]$unicode_language).LCID
     if ($current_language_value -ne $wanted_language_value) {
         Set-ItemProperty -LiteralPath 'HKLM:\SYSTEM\CurrentControlSet\Control\Nls\Language' -Name 'Default' -Value $wanted_language_value -WhatIf:$check_mode
-        $result.changed = $true
-        $result.restart_required = $true
+        $module.Result.changed = $true
+        $module.Result.restart_required = $true
     }
 
     # This reads from the non registry (Default) key, the extra prop called (Default) see below for more details
@@ -302,8 +309,8 @@ Function Set-SystemLocaleLegacy($unicode_language) {
             $key = $hive.OpenSubKey("SYSTEM\CurrentControlSet\Control\Nls\Locale", $true)
             $key.SetValue("(Default)", $wanted_locale_value, [Microsoft.Win32.RegistryValueKind]::String)
         }
-        $result.changed = $true
-        $result.restart_required = $true
+        $module.Result.changed = $true
+        $module.Result.restart_required = $true
     }
 
     $codepage_path = 'HKLM:\SYSTEM\CurrentControlSet\Control\Nls\CodePage'
@@ -319,42 +326,43 @@ Function Set-SystemLocaleLegacy($unicode_language) {
 
     if ($current_a_cp -ne $wanted_a_cp) {
         Set-ItemProperty -LiteralPath $codepage_path -Name 'ACP' -Value $wanted_a_cp -WhatIf:$check_mode
-        $result.changed = $true
-        $result.restart_required = $true
+        $module.Result.changed = $true
+        $module.Result.restart_required = $true
     }
     if ($current_oem_cp -ne $wanted_oem_cp) {
         Set-ItemProperty -LiteralPath $codepage_path -Name 'OEMCP' -Value $wanted_oem_cp -WhatIf:$check_mode
-        $result.changed = $true
-        $result.restart_required = $true
+        $module.Result.changed = $true
+        $module.Result.restart_required = $true
     }
     if ($current_mac_cp -ne $wanted_mac_cp) {
         Set-ItemProperty -LiteralPath $codepage_path -Name 'MACCP' -Value $wanted_mac_cp -WhatIf:$check_mode
-        $result.changed = $true
-        $result.restart_required = $true
+        $module.Result.changed = $true
+        $module.Result.restart_required = $true
     }
 }
 
 if ($null -eq $format -and $null -eq $location -and $null -eq $unicode_language) {
-    Fail-Json $result "An argument for 'format', 'location' or 'unicode_language' needs to be supplied"
-} else {
+    $module.FailJson("An argument for 'format', 'location' or 'unicode_language' needs to be supplied")
+}
+else {
     $valid_cultures = [System.Globalization.CultureInfo]::GetCultures('InstalledWin32Cultures')
-    $valid_geoids = Get-ValidGeoIds -cultures $valid_cultures
+    $valid_geoids = Get-ValidGeoId -cultures $valid_cultures
 
     if ($null -ne $location) {
         if ($valid_geoids -notcontains $location) {
-            Fail-Json $result "The argument location '$location' does not contain a valid Geo ID"
+            $module.FailJson("The argument location '$location' does not contain a valid Geo ID")
         }
     }
 
     if ($null -ne $format) {
         if ($valid_cultures.Name -notcontains $format) {
-            Fail-Json $result "The argument format '$format' does not contain a valid Culture Name"
+            $module.FailJson("The argument format '$format' does not contain a valid Culture Name")
         }
     }
 
     if ($null -ne $unicode_language) {
         if ($valid_cultures.Name -notcontains $unicode_language) {
-            Fail-Json $result "The argument unicode_language '$unicode_language' does not contain a valid Culture Name"
+            $module.FailJson("The argument unicode_language '$unicode_language' does not contain a valid Culture Name")
         }
     }
 }
@@ -368,13 +376,14 @@ if ($null -ne $location) {
             if (-not $check_mode) {
                 Set-WinHomeLocation -GeoId $location
             }
-            $result.changed = $true
+            $module.Result.changed = $true
         }
-    } else {
+    }
+    else {
         $current_location = (Get-ItemProperty -LiteralPath 'HKCU:\Control Panel\International\Geo').Nation
         if ($current_location -ne $location) {
             Set-ItemProperty -LiteralPath 'HKCU:\Control Panel\International\Geo' -Name 'Nation' -Value $location -WhatIf:$check_mode
-            $result.changed = $true
+            $module.Result.changed = $true
         }
     }
 }
@@ -384,7 +393,7 @@ if ($null -ne $format) {
     $current_format = Get-UserLocaleName
     if ($current_format -ne $format) {
         Set-UserLocale -culture $format
-        $result.changed = $true
+        $module.Result.changed = $true
     }
 }
 
@@ -396,15 +405,16 @@ if ($null -ne $unicode_language) {
             if (-not $check_mode) {
                 Set-WinSystemLocale -SystemLocale $unicode_language
             }
-            $result.changed = $true
-            $result.restart_required = $true
+            $module.Result.changed = $true
+            $module.Result.restart_required = $true
         }
-    } else {
+    }
+    else {
         Set-SystemLocaleLegacy -unicode_language $unicode_language
     }
 }
 
-if ($copy_settings -eq $true -and $result.changed -eq $true) {
+if ($copy_settings -eq $true -and $module.Result.changed -eq $true) {
     if (-not $check_mode) {
         New-PSDrive -Name HKU -PSProvider Registry -Root Registry::HKEY_USERS
 
@@ -428,7 +438,7 @@ if ($copy_settings -eq $true -and $result.changed -eq $true) {
 
         Remove-PSDrive HKU
     }
-    $result.changed = $true
+    $module.Result.changed = $true
 }
 
-Exit-Json $result
+$module.ExitJson()

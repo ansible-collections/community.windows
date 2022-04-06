@@ -7,51 +7,44 @@
 
 $ErrorActionPreference = "Stop"
 
-Function Find-Command
-{
+Function Find-InstalledCommand {
     [CmdletBinding()]
     param(
-      [Parameter(Mandatory=$true, Position=0)] [string] $command
+        [Parameter(Mandatory = $true, Position = 0)] [string] $command
     )
     $installed = get-command $command -erroraction Ignore
     write-verbose "$installed"
-    if ($installed)
-    {
+    if ($installed) {
         return $installed
     }
     return $null
 }
 
-Function Find-WebPiCmd
-{
+Function Find-WebPiCmd {
     [CmdletBinding()]
     param()
-    $p = Find-Command "webpicmd.exe"
-    if ($null -ne $p)
-    {
+    $p = Find-InstalledCommand "webpicmd.exe"
+    if ($null -ne $p) {
         return $p
     }
-    $a = Find-Command "c:\programdata\chocolatey\bin\webpicmd.exe"
-    if ($null -ne $a)
-    {
+    $a = Find-InstalledCommand "c:\programdata\chocolatey\bin\webpicmd.exe"
+    if ($null -ne $a) {
         return $a
     }
     Throw "webpicmd.exe is not installed. It must be installed (use chocolatey)"
 }
 
-Function Test-IsInstalledFromWebPI
-{
+Function Test-IsInstalledFromWebPI {
     [CmdletBinding()]
 
     param(
-        [Parameter(Mandatory=$true, Position=0)]
+        [Parameter(Mandatory = $true, Position = 0)]
         [string]$package
     )
 
     $results = &$executable /list /listoption:installed
 
-    if ($LastExitCode -ne 0)
-    {
+    if ($LastExitCode -ne 0) {
         $result.webpicmd_error_cmd = $cmd
         $result.webpicmd_error_log = "$results"
 
@@ -59,27 +52,24 @@ Function Test-IsInstalledFromWebPI
     }
     Write-Verbose "$results"
 
-    if ($results -match "^$package\s+")
-    {
+    if ($results -match "^$package\s+") {
         return $true
     }
 
     return $false
 }
 
-Function Install-WithWebPICmd
-{
+Function Install-WithWebPICmd {
     [CmdletBinding()]
 
     param(
-        [Parameter(Mandatory=$true, Position=0)]
+        [Parameter(Mandatory = $true, Position = 0)]
         [string]$package
     )
 
     $results = &$executable /install /products:$package /accepteula /suppressreboot
 
-    if ($LastExitCode -ne 0)
-    {
+    if ($LastExitCode -ne 0) {
         $result.webpicmd_error_cmd = $cmd
         $result.webpicmd_error_log = "$results"
         Throw "Error installing $package"
@@ -87,8 +77,7 @@ Function Install-WithWebPICmd
 
     write-verbose "$results"
 
-    if ($results -match "Install of Products: SUCCESS")
-    {
+    if ($results -match "Install of Products: SUCCESS") {
         $result.changed = $true
     }
 }
@@ -108,6 +97,7 @@ Try {
     }
 
     Exit-Json $result
-} Catch {
-     Fail-Json $result $_.Exception.Message
+}
+Catch {
+    Fail-Json $result $_.Exception.Message
 }

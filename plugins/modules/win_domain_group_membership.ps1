@@ -17,7 +17,7 @@ $check_mode = Get-AnsibleParam -obj $params -name "_ansible_check_mode" -type "b
 $diff_mode = Get-AnsibleParam -obj $params -name "_ansible_diff" -type "bool" -default $false
 
 # Module control parameters
-$state = Get-AnsibleParam -obj $params -name "state" -type "str" -default "present" -validateset "present","absent","pure"
+$state = Get-AnsibleParam -obj $params -name "state" -type "str" -default "present" -validateset "present", "absent", "pure"
 $domain_username = Get-AnsibleParam -obj $params -name "domain_username" -type "str"
 $domain_password = Get-AnsibleParam -obj $params -name "domain_password" -type "str" -failifempty ($null -ne $domain_username)
 $domain_server = Get-AnsibleParam -obj $params -name "domain_server" -type "str"
@@ -57,7 +57,7 @@ $pure_members = [System.Collections.Generic.List`1[String]]@()
 
 foreach ($member in $members) {
     $extra_member_args = $extra_args.Clone()
-    if ($member -match "\\"){
+    if ($member -match "\\") {
         $extra_member_args.Server = $member.Split("\")[0]
         $member = $member.Split("\")[1]
     }
@@ -82,7 +82,8 @@ foreach ($member in $members) {
         Add-ADPrincipalGroupMembership -Identity $group_member -MemberOf $ADGroup -WhatIf:$check_mode @extra_member_args
         $result.added.Add($group_member.SamAccountName)
         $result.changed = $true
-    } elseif ($state -eq "absent" -and $user_in_group) {
+    }
+    elseif ($state -eq "absent" -and $user_in_group) {
         Remove-ADPrincipalGroupMembership -Identity $group_member -MemberOf $ADGroup -WhatIf:$check_mode -Confirm:$False @extra_member_args
         $result.removed.Add($group_member.SamAccountName)
         $result.changed = $true
@@ -114,7 +115,8 @@ $final_members = Get-ADObject -LDAPFilter $filter -Properties sAMAccountName, ob
 
 if ($final_members) {
     $result.members = [Array]$final_members.SamAccountName
-} else {
+}
+else {
     $result.members = @()
 }
 
@@ -122,7 +124,8 @@ if ($diff_mode -and $result.changed) {
     $result.diff.before = $members_before.SamAccountName | Out-String
     if (!$check_mode) {
         $result.diff.after = [Array]$final_members.SamAccountName | Out-String
-    } else {
+    }
+    else {
         $after = [System.Collections.Generic.List`1[String]]$result.members
         $result.removed | ForEach-Object { $after.Remove($_) > $null }
         $after.AddRange($result.added)

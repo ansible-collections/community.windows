@@ -7,7 +7,8 @@
 
 #Requires -Module Ansible.ModuleUtils.Legacy
 
-[System.Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseDeclaredVarsMoreThanAssignments', '', Justification='Some vars are referenced via Get-Variable')]
+[System.Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseDeclaredVarsMoreThanAssignments', '',
+    Justification = 'Some vars are referenced via Get-Variable')]
 param() # param() is needed for attribute to take effect.
 
 # win_psrepository (Windows PowerShell repositories Additions/Removals/Updates)
@@ -24,8 +25,10 @@ $state = Get-AnsibleParam -obj $params -name "state" -type "str" -default "prese
 $installation_policy = Get-AnsibleParam -obj $params -name "installation_policy" -type "str" -validateset "trusted", "untrusted"
 $force = Get-AnsibleParam -obj $params -name "force" -type "bool" -default $false
 $proxy = Get-AnsibleParam -obj $params -name "proxy" -type "str" -failifempty $false
+$repo_user = Get-AnsibleParam -obj $params -name "username" -type "str"
+$repo_pass = Get-AnsibleParam -obj $params -name "password" -type "str"
 
-$result = @{"changed" = $false}
+$result = @{"changed" = $false }
 
 # Enable TLS1.1/TLS1.2 if they're available but disabled (eg. .NET 4.5)
 $security_protocols = [System.Net.ServicePointManager]::SecurityProtocol -bor [System.Net.SecurityProtocolType]::SystemDefault
@@ -55,14 +58,18 @@ if ($proxy) {
     $repository_params.Proxy = $Proxy
 }
 
+if ($repo_user -and $repo_pass ) {
+    $repository_params.Credential = New-Object -TypeName PSCredential ($repo_user, ($repo_pass | ConvertTo-SecureString -AsPlainText -Force))
+}
+
 function Resolve-LocationParameter {
     [CmdletBinding()]
     param(
-        [Parameter(Mandatory=$true)]
+        [Parameter(Mandatory = $true)]
         [string[]]
         $Name ,
 
-        [Parameter(Mandatory=$true)]
+        [Parameter(Mandatory = $true)]
         [hashtable]
         $Splatter
     )
@@ -72,7 +79,7 @@ function Resolve-LocationParameter {
             $val = Get-Variable -Name $param -ValueOnly -ErrorAction SilentlyContinue
             if ($val) {
                 if ($val -as [uri]) {
-                    $Splatter[$param.Replace('_','')] = $val -as [uri]
+                    $Splatter[$param.Replace('_', '')] = $val -as [uri]
                 }
                 else {
                     Fail-Json -obj $result -Message "'$param' must be a valid URI."
@@ -82,7 +89,7 @@ function Resolve-LocationParameter {
     }
 }
 
-Resolve-LocationParameter -Name source_location,publish_location,script_source_location,script_publish_location -Splatter $repository_params
+Resolve-LocationParameter -Name source_location, publish_location, script_source_location, script_publish_location -Splatter $repository_params
 
 if (-not $repository_params.SourceLocation -and $state -eq 'present' -and ($force -or -not $Repo)) {
     Fail-Json -obj $result -message "'source_location' is required when registering a new repository or using force with 'state' == 'present'."
@@ -129,6 +136,12 @@ if ($Repo) {
     if ($force -or $repository_params.ScriptPublishLocation) {
         if ($repository_params.ScriptPublishLocation -ne $Repo.ScriptPublishLocation) {
             $changed_properties.ScriptPublishLocation = $repository_params.ScriptPublishLocation
+        }
+    }
+
+    if ($changed_properties.Count -gt 0) {
+        if ($repository_params.Credential) {
+            $changed_properties.Credential = $repository_params.Credential
         }
     }
 }

@@ -3,21 +3,66 @@
 # Copyright: (c) 2017, Ansible Project
 # GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 
+#AnsibleRequires -PowerShell Ansible.ModuleUtils.AddType
+#AnsibleRequires -CSharpUtil Ansible.Basic
 #Requires -Module Ansible.ModuleUtils.CamelConversion
-#Requires -Module Ansible.ModuleUtils.Legacy
-#Requires -Module Ansible.ModuleUtils.SID
 
-$params = Parse-Args -arguments $args -supports_check_mode $true
-$_remote_tmp = Get-AnsibleParam $params "_ansible_remote_tmp" -type "path" -default $env:TMP
+$spec = @{
+    options = @{
+        path = @{ type = "str"; default = "\" }
+        name = @{ type = "str" }
+    }
+    supports_check_mode = $true
+}
+$module = [Ansible.Basic.AnsibleModule]::Create($args, $spec)
 
-$path = Get-AnsibleParam -obj $params -name "path" -type "str" -default "\"
-$name = Get-AnsibleParam -obj $params -name "name" -type "str"
+$path = $module.Params.path
+$name = $module.Params.name
 
-$result = @{
-    changed = $false
+Function ConvertTo-NormalizedUser {
+    [CmdletBinding()]
+    param (
+        [Parameter(Mandatory = $true)]
+        [String]$InputObject
+    )
+
+    $candidates = @(if ($InputObject.Contains('\')) {
+            $nameSplit = $InputObject.Split('\', 2)
+
+            if ($nameSplit[0] -eq '.') {
+                # If the domain portion is . try using the hostname then falling back to just the username.
+                # Usually the hostname just works except when running on a DC where it's a domain account
+                # where looking up just the username should work.
+                , @($env:COMPUTERNAME, $nameSplit[1])
+                $nameSplit[1]
+            }
+            else {
+                , $nameSplit
+            }
+        }
+        else {
+            $InputObject
+        })
+
+    $sid = for ($i = 0; $i -lt $candidates.Length; $i++) {
+        $candidate = $candidates[$i]
+        $ntAccount = New-Object -TypeName System.Security.Principal.NTAccount -ArgumentList $candidate
+        try {
+            $ntAccount.Translate([System.Security.Principal.SecurityIdentifier])
+            break
+        }
+        catch [System.Security.Principal.IdentityNotMappedException] {
+            if ($i -eq ($candidates.Length - 1)) {
+                throw
+            }
+            continue
+        }
+    }
+
+    $sid.Translate([System.Security.Principal.NTAccount]).Value
 }
 
-$task_enums = @"
+Add-CSharpType -AnsibleModule $module -References @'
 public enum TASK_ACTION_TYPE
 {
     TASK_ACTION_EXEC          = 0,
@@ -77,26 +122,22 @@ public enum TASK_SESSION_STATE_CHANGE_TYPE
     TASK_SESSION_LOCK	    = 7,
     TASK_SESSION_UNLOCK	    = 8
 }
-"@
-
-$original_tmp = $env:TMP
-$env:TMP = $_remote_tmp
-Add-Type -TypeDefinition $task_enums
-$env:TMP = $original_tmp
+'@
 
 Function Get-PropertyValue($task_property, $com, $property) {
     $raw_value = $com.$property
 
     if ($null -eq $raw_value) {
         return $null
-    } elseif ($raw_value.GetType().Name -eq "__ComObject") {
+    }
+    elseif ($raw_value.GetType().Name -eq "__ComObject") {
         $com_values = @{}
         Get-Member -InputObject $raw_value -MemberType Property | ForEach-Object {
             $com_value = Get-PropertyValue -task_property $property -com $raw_value -property $_.Name
             $com_values.$($_.Name) = $com_value
         }
 
-        return ,$com_values
+        return , $com_values
     }
 
     switch ($property) {
@@ -220,7 +261,8 @@ Function Get-PropertyValue($task_property, $com, $property) {
         Type {
             if ($task_property -eq "actions") {
                 $value = [Enum]::ToObject([TASK_ACTION_TYPE], $raw_value).ToString()
-            } elseif ($task_property -eq "triggers") {
+            }
+            elseif ($task_property -eq "triggers") {
                 $value = [Enum]::ToObject([TASK_TRIGGER_TYPE2], $raw_value).ToString()
             }
             break
@@ -234,12 +276,10 @@ Function Get-PropertyValue($task_property, $com, $property) {
             break
         }
         UserId {
-            $sid = Convert-ToSID -account_name $raw_value
-            $value = Convert-FromSid -sid $sid
+            $value = ConvertTo-NormalizedUser -InputObject $raw_value
         }
         GroupId {
-            $sid = Convert-ToSID -account_name $raw_value
-            $value = Convert-FromSid -sid $sid
+            $value = ConvertTo-NormalizedUser -InputObject $raw_value
         }
         default {
             $value = $raw_value
@@ -247,25 +287,27 @@ Function Get-PropertyValue($task_property, $com, $property) {
         }
     }
 
-    return ,$value
+    return , $value
 }
 
 $service = New-Object -ComObject Schedule.Service
 try {
     $service.Connect()
-} catch {
-    Fail-Json -obj $result -message "failed to connect to the task scheduler service: $($_.Exception.Message)"
+}
+catch {
+    $module.FailJson("failed to connect to the task scheduler service: $($_.Exception.Message)", $_)
 }
 
 try {
     $task_folder = $service.GetFolder($path)
-    $result.folder_exists = $true
-} catch {
-    $result.folder_exists = $false
+    $module.Result.folder_exists = $true
+}
+catch {
+    $module.Result.folder_exists = $false
     if ($null -ne $name) {
-        $result.task_exists = $false
+        $module.Result.task_exists = $false
     }
-    Exit-Json -obj $result
+    $module.ExitJson()
 }
 
 $folder_tasks = $task_folder.GetTasks(1)
@@ -281,15 +323,15 @@ for ($i = 1; $i -le $folder_tasks.Count; $i++) {
         $task = $folder_tasks.Item($i)
     }
 }
-$result.folder_task_names = $folder_task_names
-$result.folder_task_count = $folder_task_count
+$module.Result.folder_task_names = $folder_task_names
+$module.Result.folder_task_count = $folder_task_count
 
 if ($null -ne $name) {
     if ($null -ne $task) {
-        $result.task_exists = $true
+        $module.Result.task_exists = $true
 
         # task state
-        $result.state = @{
+        $module.Result.state = @{
             last_run_time = (Get-Date $task.LastRunTime -Format s)
             last_task_result = $task.LastTaskResult
             next_run_time = (Get-Date $task.NextRunTime -Format s)
@@ -305,17 +347,17 @@ if ($null -ne $name) {
 
         foreach ($property in $properties) {
             $property_name = $property -replace "_"
-            $result.$property = @{}
+            $module.Result.$property = @{}
             $values = $task_definition.$property_name
             Get-Member -InputObject $values -MemberType Property | ForEach-Object {
                 if ($_.Name -notin $ignored_properties) {
-                    $result.$property.$($_.Name) = (Get-PropertyValue -task_property $property -com $values -property $_.Name)
+                    $module.Result.$property.$($_.Name) = (Get-PropertyValue -task_property $property -com $values -property $_.Name)
                 }
             }
         }
 
         foreach ($property in $collection_properties) {
-            $result.$property = @()
+            $module.Result.$property = @()
             $collection = $task_definition.$property
             $collection_count = $collection.Count
             for ($i = 1; $i -le $collection_count; $i++) {
@@ -336,14 +378,21 @@ if ($null -ne $name) {
                         }
                     }
                 }
-                $result.$property += $item_info
+                $module.Result.$property += $item_info
             }
         }
-    } else {
-        $result.task_exists = $false
+    }
+    else {
+        $module.Result.task_exists = $false
     }
 }
 
-$result = Convert-DictToSnakeCase -dict $result
+# Convert-DictToSnakeCase returns a Hashtable but Ansible.Basic expect a Dictionary. This is a hack until the snake
+# conversion code has been moved to this collection and updated to handle this.
+$new_result = [System.Collections.Generic.Dictionary[[String], [Object]]]@{}
+foreach ($kvp in (Convert-DictToSnakeCase -dict $module.Result).GetEnumerator()) {
+    $new_result[$kvp.Name] = $kvp.Value
+}
+$module.Result = $new_result
 
-Exit-Json -obj $result
+$module.ExitJson()
