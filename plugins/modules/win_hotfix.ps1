@@ -251,7 +251,7 @@ else {
                      $install_result = @()
                      $install_result += foreach($path in $hotfix_metadata.path) {Add-WindowsPackage -Online -PackagePath $path -NoRestart
                     }
-                } catch {
+                    } catch {
                     $install_result = Add-WindowsPackage -Online -PackagePath $hotfix_metadata.path -NoRestart
                 }
                 catch {
