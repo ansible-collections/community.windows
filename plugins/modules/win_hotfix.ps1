@@ -249,9 +249,7 @@ else {
             if (-not $check_mode) {
                 try {
                     $install_result = @()
-                    $install_result += foreach ($path in $hotfix_metadata.path) {
-                                   Add-WindowsPackage -Online -PackagePath $path -NoRestart
-                                   }
+                    $install_result += Foreach ($path in $hotfix_metadata.path) { Add-WindowsPackage -Online -PackagePath $path -NoRestart }
                 }
                 catch {
                     Fail-Json $result "failed to add windows package from path $($hotfix_metadata.path): $($_.Exception.Message)"
