@@ -134,6 +134,7 @@ Function Get-HotfixMetadataFromFile($extract_path) {
         return $metadata
     }
 }
+
 Function Get-HotfixMetadataFromKB($kb) {
     # I really hate doing it this way
     $packages = Get-WindowsPackage -Online
