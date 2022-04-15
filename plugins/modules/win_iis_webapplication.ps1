@@ -78,9 +78,8 @@ try {
                 Fail-Json $result "specified folder must already exist: path"
             }
 
-            $app_folder = Get-Item -LiteralPath $application.PhysicalPath
             $folder = Get-Item -LiteralPath $physical_path
-            if ($folder.FullName -ne $app_folder.FullName) {
+            if ($folder.FullName -ne $application.PhysicalPath) {
                 Set-ItemProperty -LiteralPath "IIS:\Sites\$($site)\$($name)" -name physicalPath -value $physical_path -WhatIf:$check_mode
                 $result.changed = $true
             }
