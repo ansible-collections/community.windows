@@ -65,6 +65,19 @@ options:
     type: str
     choices: [ add, remove, replace ]
     default: replace
+  groups_missing_behaviour:
+    description:
+    - Controls what happens when a group specified by C(groups) is an invalid group name.
+    - C(fail) is the default and will return an error any groups do not exist.
+    - C(ignore) will ignore any groups that does not exist.
+    - C(warn) will display a warning for any groups that do not exist but will continue without failing.
+    type: str
+    choices:
+    - fail
+    - ignore
+    - warn
+    default: fail
+    version_added: 1.10.0
   spn:
     description:
       - Specifies the service principal name(s) for the account. This parameter sets the

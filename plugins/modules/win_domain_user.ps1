@@ -88,6 +88,7 @@ $spec = @{
         user_cannot_change_password = @{ type = 'bool' }
         account_locked = @{ type = 'bool' }
         groups = @{ type = 'list'; elements = 'str' }
+        groups_missing_behaviour = @{ type = 'str'; choices = "fail", "ignore", "warn"; default = "fail" }
         enabled = @{ type = 'bool'; default = $true }
         path = @{ type = 'str' }
         upn = @{ type = 'str' }
@@ -151,6 +152,7 @@ $password_never_expires = $module.Params.password_never_expires
 $user_cannot_change_password = $module.Params.user_cannot_change_password
 $account_locked = $module.Params.account_locked
 $groups = $module.Params.groups
+$groups_missing_behaviour = $module.Params.groups_missing_behaviour
 $enabled = $module.Params.enabled
 $path = $module.Params.path
 $upn = $module.Params.upn
@@ -454,10 +456,21 @@ If ($state -eq 'present') {
     if ($null -ne $groups) {
         $group_list = $groups
 
-        $groups = @()
-        Foreach ($group in $group_list) {
-            $groups += (Get-ADGroup -Identity $group @extra_args).DistinguishedName
-        }
+        $groups = @(
+            Foreach ($group in $group_list) {
+                try {
+                    (Get-ADGroup -Identity $group @extra_args).DistinguishedName
+                }
+                catch {
+                    if ($groups_missing_behaviour -eq "fail") {
+                        $module.FailJson("Failed to locate group $($group): $($_.Exception.Message)", $_)
+                    }
+                    elseif ($groups_missing_behaviour -eq "warn") {
+                        $module.Warn("Failed to locate group $($group) but continuing on: $($_.Exception.Message)")
+                    }
+                }
+            }
+        )
 
         $assigned_groups = Get-PrincipalGroup $user_guid $extra_args
 
