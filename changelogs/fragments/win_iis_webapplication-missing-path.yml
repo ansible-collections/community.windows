@@ -1,0 +1,2 @@
+bugfixes:
+- win_iis_webapplication - Fix physical path check for broken configurations - https://github.com/ansible-collections/community.windows/pull/385
