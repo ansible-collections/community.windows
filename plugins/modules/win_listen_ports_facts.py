@@ -7,6 +7,7 @@
 DOCUMENTATION = r'''
 ---
 module: win_listen_ports_facts
+version_added: '1.10.0'
 short_description: Recopilates the facts of the listening ports of the machine
 description:
     - Recopilates the information of the TCP and UDP ports of the machine and
@@ -44,16 +45,16 @@ author:
 
 EXAMPLES = r'''
 - name: Recopilate ports facts
-  ansible.windows.win_listen_ports_facts:
+  community.windows.win_listen_ports_facts:
 
 - name: Retrieve only ports with Closing and Established states
-  ansible.windows.win_listen_ports_facts:
+  community.windows.win_listen_ports_facts:
     tcp_filter:
         - Closing
         - Established
 
 - name: Get ports facts with only the year within the date field
-  ansible.windows.win_listen_ports_facts:
+  community.windows.win_listen_ports_facts:
     date_format: '%Y'
 '''
 

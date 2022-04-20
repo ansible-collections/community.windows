@@ -30,7 +30,7 @@
   register: custom_state_date_run
   ignore_errors: True
 
-- name: Gather facts with multiple filters and custom date format
+- name: Gather facts with default filters and date format
   win_listen_ports_facts:
   register: default_run
   ignore_errors: True
