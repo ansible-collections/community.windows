@@ -26,9 +26,10 @@ $ansibleFacts = @{
 
 # Build an index of the processes based on the PID
 $processes = @{}
-Get-WmiObject -Class Win32_Process | ForEach-Object {
+Get-CimInstance -ClassName Win32_Process | ForEach-Object {
     $processes[[int]$_.ProcessId] = $_
 }
+
 
 # Format the given date with the same format as listen_port_facts stime (Date and time - abbreviated) by default, or
 # with the given format
@@ -52,10 +53,10 @@ function Build-Listener {
     )
 
     $process = $processes[[int]$listener.OwningProcess]
-    $process_owner = $process.GetOwner()
+    $process_owner = Invoke-CimMethod -InputObject $process -MethodName GetOwner
 
     $owner = $null
-    if ($null -ne $process_owner.User -and $null -ne $process_owner.Domain) { 
+    if ($null -ne $process_owner.User -and $null -ne $process_owner.Domain) {
         $owner = $process_owner.Domain + '\' + $process_owner.User
     }
 
@@ -65,7 +66,7 @@ function Build-Listener {
         pid = $listener.OwningProcess
         port = $listener.LocalPort
         protocol = $type
-        stime = Format-Date $process.ConvertToDateTime($process.CreationDate)
+        stime = Format-Date $process.CreationDate
         user = $owner
     }
 }
