@@ -26,8 +26,8 @@ $ansibleFacts = @{
 
 # Build an index of the processes based on the PID
 $processes = @{}
-Get-Process -IncludeUserName | ForEach-Object {
-    $processes[$_.Id] = $_
+Get-WmiObject -Class Win32_Process | ForEach-Object {
+    $processes[[int]$_.ProcessId] = $_
 }
 
 # Format the given date with the same format as listen_port_facts stime (Date and time - abbreviated) by default, or
@@ -51,14 +51,22 @@ function Build-Listener {
         $type
     )
 
+    $process = $processes[[int]$listener.OwningProcess]
+    $process_owner = $process.GetOwner()
+
+    $owner = $null
+    if ($null -ne $process_owner.User -and $null -ne $process_owner.Domain) { 
+        $owner = $process_owner.Domain + '\' + $process_owner.User
+    }
+
     return @{
         address = $listener.LocalAddress
-        name = $processes[[int]$listener.OwningProcess].ProcessName
+        name = $process.Name
         pid = $listener.OwningProcess
         port = $listener.LocalPort
         protocol = $type
-        stime = Format-Date $processes[[int]$listener.OwningProcess].StartTime
-        user = $processes[[int]$listener.OwningProcess].UserName
+        stime = Format-Date $process.ConvertToDateTime($process.CreationDate)
+        user = $owner
     }
 }
 
