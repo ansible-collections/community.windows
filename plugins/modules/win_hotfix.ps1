@@ -87,7 +87,6 @@ Function Get-HotfixMetadataFromName($name) {
 
 Function Get-HotfixMetadataFromFile($extract_path) {
     # MSU contents https://support.microsoft.com/en-us/help/934307/description-of-the-windows-update-standalone-installer-in-windows
-    $metadata = @()
     $metadata_path = Get-ChildItem -LiteralPath $extract_path | Where-Object { $_.Extension -eq ".xml" }
     if ($null -eq $metadata_path) {
         Fail-Json $result "failed to get metadata xml inside MSU file, cannot get hotfix metadata required for this task"
@@ -124,14 +123,12 @@ Function Get-HotfixMetadataFromFile($extract_path) {
             }
         }
 
-        $metadata += [pscustomobject]@{
+        [pscustomobject]@{
             path = $cab_file
             name = $dism_package_info.PackageName
             state = $dism_package_info.PackageState
             kb = $hotfix_kb
         }
-
-        return $metadata
     }
 }
 
@@ -238,8 +235,10 @@ else {
             }
         }
 
-        $result.identifier = $hotfix_metadata.name
-        $result.kb = $hotfix_metadata.kb
+        $result.identifiers = @($hotfix_metadata.name)
+        $result.identifier = $result.identifiers[0]
+        $result.kbs = @($hotfix_metadata.kb)
+        $result.kb = $result.kbs[0]
 
         # how do we want to deal with other states
         if ($hotfix_metadata.state -eq "InstallPending") {
@@ -249,13 +248,16 @@ else {
         elseif ($hotfix_metadata.state -ne "Installed") {
             if (-not $check_mode) {
                 try {
-                    $install_result = @()
-                    $install_result += Foreach ($path in $hotfix_metadata.path) { Add-WindowsPackage -Online -PackagePath $path -NoRestart }
+                    $install_result = @(
+                        Foreach ($path in $hotfix_metadata.path) {
+                            Add-WindowsPackage -Online -PackagePath $path -NoRestart
+                        }
+                    )
                 }
                 catch {
                     Fail-Json $result "failed to add windows package from path $($hotfix_metadata.path): $($_.Exception.Message)"
                 }
-                $result.reboot_required = $install_result.RestartNeeded
+                $result.reboot_required = [bool]($install_result.RestartNeeded -eq $true)
             }
             $result.changed = $true
         }
