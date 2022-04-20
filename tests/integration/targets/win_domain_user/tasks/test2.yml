@@ -97,6 +97,35 @@
   register: remove_spn_test_idempotent
   failed_when: remove_spn_test_idempotent is changed
 
+- name: Katie | Add to groups that are missing - fail
+  win_domain_user:
+    name: katie
+    state: present
+    groups:
+    - Missing Group
+  register: add_invalid_group_fail
+  failed_when: add_invalid_group_fail is success
+
+- name: Katie | Add to groups that are missing - warn
+  win_domain_user:
+    name: katie
+    state: present
+    groups:
+    - Missing Group
+    groups_missing_behaviour: warn
+  register: add_invalid_group_warn
+  failed_when: not add_invalid_group_warn.warnings[0].startswith("Failed to locate group Missing Group but continuing on")
+
+- name: Katie | Add to groups that are missing - ignore
+  win_domain_user:
+    name: katie
+    state: present
+    groups:
+    - Missing Group
+    groups_missing_behaviour: ignore
+  register: add_invalid_group_ignore
+  failed_when: (add_invalid_group_ignore.warnings | default([]) | length) != 0
+
 - name: Hana | Remove User
   win_domain_user:
     name: hana

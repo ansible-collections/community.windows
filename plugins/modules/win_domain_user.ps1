@@ -465,7 +465,7 @@ If ($state -eq 'present') {
                     if ($groups_missing_behaviour -eq "fail") {
                         $module.FailJson("Failed to locate group $($group): $($_.Exception.Message)", $_)
                     }
-                    elseif ($groups_action -eq "warn") {
+                    elseif ($groups_missing_behaviour -eq "warn") {
                         $module.Warn("Failed to locate group $($group) but continuing on: $($_.Exception.Message)")
                     }
                 }
