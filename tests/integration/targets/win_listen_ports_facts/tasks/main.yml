@@ -14,8 +14,8 @@
 - name: Gather facts with only some invalid tcp_filter states and null date format
   win_listen_ports_facts:
     tcp_filter:
-      - Bound
       - Listen
+      - Closed
       - Error
     date_format: null
   register: partial_invalid_state_date_run
@@ -24,8 +24,8 @@
 - name: Gather facts with multiple filters and custom date format
   win_listen_ports_facts:
     tcp_filter:
-      - Bound
       - Listen
+      - Closed
     date_format: yyyy
   register: custom_state_date_run
   ignore_errors: True

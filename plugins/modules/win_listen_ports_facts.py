@@ -28,7 +28,8 @@ options:
       - Filter for the state of the TCP ports that will be recopilated.
       - Supports multiple states (Bound, Closed, CloseWait, Closing, DeleteTCB,
         Established, FinWait1, FinWait2, LastAck, Listen, SynReceived, SynSent
-        and TimeWait), that can be used alone or combined.
+        and TimeWait), that can be used alone or combined. Note that the Bound
+        state is only available on PowerShell version 4.0 or later.
     type: list
     elements: str
     default: [ Listen ]
