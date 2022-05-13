@@ -1,3 +1,0 @@
-bugfixes:
-- win_rds_cap - Fix SID lookup with any account ending with the ``@builtin`` UPN suffix
-- win_rds_rap - Fix SID lookup with any account ending with the ``@builtin`` UPN suffix

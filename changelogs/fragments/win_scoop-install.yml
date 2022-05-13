@@ -1,2 +1,0 @@
-bugfixes:
-- win_scoop - Fix bootstrapping process to properly work when running as admin

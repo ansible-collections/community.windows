@@ -121,6 +121,22 @@ Parameters
             <tr>
                 <td colspan="1">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>password</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                    </div>
+                    <div style="font-style: italic; font-size: small; color: darkgreen">added in 1.10.0</div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>Password to authenticate against private repository.</div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>repository</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
@@ -205,6 +221,22 @@ Parameters
                         <div>DEPRECATED, will be removed in a major release after <code>2021-07-01</code>, please use the <span class='module'>community.windows.win_psrepository</span> module instead.</div>
                 </td>
             </tr>
+            <tr>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>username</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                    </div>
+                    <div style="font-style: italic; font-size: small; color: darkgreen">added in 1.10.0</div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>Username to authenticate against private repository.</div>
+                </td>
+            </tr>
     </table>
     <br/>
 
@@ -266,6 +298,14 @@ Examples
       community.windows.win_psmodule:
         name: PowerShellModule
         repository: MyRepository
+        state: present
+
+    - name: Add a PowerShell module from a specific repository with credentials
+      win_psmodule:
+        name: PowerShellModule
+        repository: MyRepository
+        username: repo_username
+        password: repo_password
         state: present
 
     - name: Remove a PowerShell module

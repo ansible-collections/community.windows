@@ -124,6 +124,49 @@ releases:
     - win_firewall_action.yml
     - win_psrepository-proxy.yml
     release_date: '2020-09-26'
+  1.10.0:
+    changes:
+      bugfixes:
+      - win_hotfix - Supports hotfixes that contain multiple updates inside the supplied
+        update msu - https://github.com/ansible-collections/community.windows/issues/284
+      - win_iis_webapplication - Fix physical path check for broken configurations
+        - https://github.com/ansible-collections/community.windows/pull/385
+      - win_rds_cap - Fix SID lookup with any account ending with the ``@builtin``
+        UPN suffix
+      - win_rds_rap - Fix SID lookup with any account ending with the ``@builtin``
+        UPN suffix
+      - win_region - Fix junk output when copying settings across users
+      - win_scoop - Fix bootstrapping process to properly work when running as admin
+      - win_scoop_bucket - Fix handling of output and errors from each scoop command
+      minor_changes:
+      - win_domain_user - Add support for managing service prinicpal names via the
+        ``spn`` param and principals allowed to delegate via the ``delegates`` param
+        (https://github.com/ansible-collections/community.windows/pull/365)
+      - win_domain_user - Added the ``groups_missing_behaviour`` option that controls
+        the behaviour when a group specified does not exist - https://github.com/ansible-collections/community.windows/pull/375
+      - win_hotfix - Added the ``identifiers`` and ``kbs`` return value that is always
+        a list of identifiers and kbs inside a hotfix
+      - win_psmodule - Add credential support for through the ``username`` and ``password``
+        options
+      - win_psrepository - Add credential support for through the ``username`` and
+        ``password`` options
+      release_summary: Release summary for v1.10.0
+    fragments:
+    - 365-win_domain_user-add-support-for-spns-kerberos.yml
+    - v1.10.0-release.yml
+    - win_domain_user-groups-missing.yml
+    - win_hotfix-multiple-msu.yml
+    - win_iis_webapplication-missing-path.yml
+    - win_psmodule-credentials.yml
+    - win_rds-sid.yml
+    - win_region-output.yml
+    - win_scoop-install.yml
+    - win_scoop_bucket-error.yml
+    modules:
+    - description: Recopilates the facts of the listening ports of the machine
+      name: win_listen_ports_facts
+      namespace: ''
+    release_date: '2022-05-13'
   1.2.0:
     changes:
       bugfixes:
@@ -317,8 +360,6 @@ releases:
         options to control the virtual directory authentication - https://github.com/ansible-collections/community.windows/issues/346
       - win_power_plan - Added ``guid`` option to specify plan by a unique identifier
         - https://github.com/ansible-collections/community.windows/issues/310
-      release_summary:
-      - Release summary for v1.9.0
     fragments:
     - 310_win_disk_facts.yml
     - 330_win_domain_user.yml

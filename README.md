@@ -68,6 +68,7 @@ Name | Description
 [community.windows.win_inet_proxy](https://github.com/ansible-collections/community.windows/blob/main/docs/community.windows.win_inet_proxy_module.rst)|Manages proxy settings for WinINet and Internet Explorer
 [community.windows.win_initialize_disk](https://github.com/ansible-collections/community.windows/blob/main/docs/community.windows.win_initialize_disk_module.rst)|Initializes disks on Windows Server
 [community.windows.win_lineinfile](https://github.com/ansible-collections/community.windows/blob/main/docs/community.windows.win_lineinfile_module.rst)|Ensure a particular line is in a file, or replace an existing line using a back-referenced regular expression
+[community.windows.win_listen_ports_facts](https://github.com/ansible-collections/community.windows/blob/main/docs/community.windows.win_listen_ports_facts_module.rst)|Recopilates the facts of the listening ports of the machine
 [community.windows.win_mapped_drive](https://github.com/ansible-collections/community.windows/blob/main/docs/community.windows.win_mapped_drive_module.rst)|Map network drives for users
 [community.windows.win_msg](https://github.com/ansible-collections/community.windows/blob/main/docs/community.windows.win_msg_module.rst)|Sends a message to logged in users on Windows hosts
 [community.windows.win_net_adapter_feature](https://github.com/ansible-collections/community.windows/blob/main/docs/community.windows.win_net_adapter_feature_module.rst)|Enable or disable certain network adapters.
