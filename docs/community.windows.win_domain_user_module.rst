@@ -38,12 +38,13 @@ Parameters
                     <b>account_locked</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
-                        <span style="color: purple">-</span>
+                        <span style="color: purple">boolean</span>
                     </div>
                 </td>
                 <td>
                         <ul style="margin: 0; padding: 0"><b>Choices:</b>
                                     <li>no</li>
+                                    <li>yes</li>
                         </ul>
                 </td>
                 <td>
@@ -59,7 +60,7 @@ Parameters
                     <b>attributes</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
-                        <span style="color: purple">string</span>
+                        <span style="color: purple">dictionary</span>
                     </div>
                 </td>
                 <td>
@@ -114,6 +115,25 @@ Parameters
                 <td>
                         <div>Configures the user&#x27;s country code.</div>
                         <div>Note that this is a two-character ISO 3166 code.</div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>delegates</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">list</span>
+                         / <span style="color: purple">elements=string</span>
+                    </div>
+                    <div style="font-style: italic; font-size: small; color: darkgreen">added in 1.10.0</div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>Specifies an array of principal objects. This parameter sets the msDS-AllowedToActOnBehalfOfOtherIdentity attribute of a computer account object.</div>
+                        <div>Must be specified as a distinguished name <code>CN=shenetworks,CN=Users,DC=ansible,DC=test</code></div>
+                        <div style="font-size: small; color: darkgreen"><br/>aliases: principals_allowed_to_delegate</div>
                 </td>
             </tr>
             <tr>
@@ -237,6 +257,7 @@ Parameters
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
                         <span style="color: purple">list</span>
+                         / <span style="color: purple">elements=string</span>
                     </div>
                 </td>
                 <td>
@@ -267,6 +288,30 @@ Parameters
                         <div>If <code>add</code>, the user is added to each group in <em>groups</em> where not already a member.</div>
                         <div>If <code>remove</code>, the user is removed from each group in <em>groups</em>.</div>
                         <div>If <code>replace</code>, the user is added as a member of each group in <em>groups</em> and removed from any other groups.</div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>groups_missing_behaviour</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                    </div>
+                    <div style="font-style: italic; font-size: small; color: darkgreen">added in 1.10.0</div>
+                </td>
+                <td>
+                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                    <li><div style="color: blue"><b>fail</b>&nbsp;&larr;</div></li>
+                                    <li>ignore</li>
+                                    <li>warn</li>
+                        </ul>
+                </td>
+                <td>
+                        <div>Controls what happens when a group specified by <code>groups</code> is an invalid group name.</div>
+                        <div><code>fail</code> is the default and will return an error any groups do not exist.</div>
+                        <div><code>ignore</code> will ignore any groups that does not exist.</div>
+                        <div><code>warn</code> will display a warning for any groups that do not exist but will continue without failing.</div>
                 </td>
             </tr>
             <tr>
@@ -412,6 +457,47 @@ Parameters
             <tr>
                 <td colspan="1">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>spn</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">list</span>
+                         / <span style="color: purple">elements=string</span>
+                    </div>
+                    <div style="font-style: italic; font-size: small; color: darkgreen">added in 1.10.0</div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>Specifies the service principal name(s) for the account. This parameter sets the ServicePrincipalNames property of the account. The LDAP display name (ldapDisplayName) for this property is servicePrincipalName.</div>
+                        <div style="font-size: small; color: darkgreen"><br/>aliases: spns</div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>spn_action</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                    </div>
+                    <div style="font-style: italic; font-size: small; color: darkgreen">added in 1.10.0</div>
+                </td>
+                <td>
+                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                    <li>add</li>
+                                    <li>remove</li>
+                                    <li><div style="color: blue"><b>replace</b>&nbsp;&larr;</div></li>
+                        </ul>
+                </td>
+                <td>
+                        <div>If <code>add</code>, the SPNs are added to the user.</div>
+                        <div>If <code>remove</code>, the SPNs are removed from the user.</div>
+                        <div>If <code>replace</code>, the defined set of SPN&#x27;s overwrite the current set of SPNs.</div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>state</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
@@ -474,6 +560,7 @@ Parameters
                 </td>
                 <td>
                         <div>Configures the user&#x27;s last name (surname).</div>
+                        <div style="font-size: small; color: darkgreen"><br/>aliases: lastname</div>
                 </td>
             </tr>
             <tr>
@@ -617,6 +704,35 @@ Examples
         name: bob
         state: absent
 
+    - name: Ensure user has spn's defined
+      community.windows.win_domain_user:
+        name: liz.kenyon
+        spn:
+          - MSSQLSvc/us99db-svr95:1433
+          - MSSQLSvc/us99db-svr95.vmware.com:1433
+
+    - name: Ensure user has spn added
+      community.windows.win_domain_user:
+        name: liz.kenyon
+        spn_action: add
+        spn:
+          - MSSQLSvc/us99db-svr95:2433
+
+    - name: Ensure user is created with delegates and spn's defined
+      community.windows.win_domain_user:
+        name: shmemmmy
+        password: The3rubberducki33!
+        state: present
+        groups:
+          - Domain Admins
+          - Enterprise Admins
+        delegates:
+          - CN=shenetworks,CN=Users,DC=ansible,DC=test
+          - CN=mk.ai,CN=Users,DC=ansible,DC=test
+          - CN=jessiedotjs,CN=Users,DC=ansible,DC=test
+        spn:
+          - MSSQLSvc/us99db-svr95:2433
+
 
 
 Return Values
@@ -727,6 +843,25 @@ Common return values are documented `here <https://docs.ansible.com/ansible/late
                     <br/>
                         <div style="font-size: smaller"><b>Sample:</b></div>
                         <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">True</div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="return-"></div>
+                    <b>delegates</b>
+                    <a class="ansibleOptionLink" href="#return-" title="Permalink to this return value"></a>
+                    <div style="font-size: small">
+                      <span style="color: purple">list</span>
+                       / <span style="color: purple">elements=string</span>
+                    </div>
+                    <div style="font-style: italic; font-size: small; color: darkgreen">added in 1.10.0</div>
+                </td>
+                <td>always</td>
+                <td>
+                            <div>Principals allowed to delegate</div>
+                    <br/>
+                        <div style="font-size: smaller"><b>Sample:</b></div>
+                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">[&#x27;CN=svc.tech.unicorn,CN=Users,DC=ansible,DC=test&#x27;, &#x27;CN=geoff,CN=Users,DC=ansible,DC=test&#x27;]</div>
                 </td>
             </tr>
             <tr>
@@ -952,6 +1087,24 @@ Common return values are documented `here <https://docs.ansible.com/ansible/late
             <tr>
                 <td colspan="1">
                     <div class="ansibleOptionAnchor" id="return-"></div>
+                    <b>spn</b>
+                    <a class="ansibleOptionLink" href="#return-" title="Permalink to this return value"></a>
+                    <div style="font-size: small">
+                      <span style="color: purple">list</span>
+                    </div>
+                    <div style="font-style: italic; font-size: small; color: darkgreen">added in 1.10.0</div>
+                </td>
+                <td>always</td>
+                <td>
+                            <div>The service principal names</div>
+                    <br/>
+                        <div style="font-size: smaller"><b>Sample:</b></div>
+                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">[&#x27;HTTPSvc/ws1intel-svc1&#x27;, &#x27;HTTPSvc/ws1intel-svc1.vmware.com&#x27;]</div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="return-"></div>
                     <b>state</b>
                     <a class="ansibleOptionLink" href="#return-" title="Permalink to this return value"></a>
                     <div style="font-size: small">
@@ -1061,3 +1214,4 @@ Authors
 ~~~~~~~
 
 - Nick Chandler (@nwchandler)
+- Joe Zollo (@zollo)

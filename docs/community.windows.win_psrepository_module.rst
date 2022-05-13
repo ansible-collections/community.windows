@@ -99,6 +99,22 @@ Parameters
             <tr>
                 <td colspan="1">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>password</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                    </div>
+                    <div style="font-style: italic; font-size: small; color: darkgreen">added in 1.10.0</div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>Password to authenticate against private repository.</div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>proxy</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
@@ -195,6 +211,22 @@ Parameters
                         <div>If <code>absent</code> a repository is removed.</div>
                 </td>
             </tr>
+            <tr>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>username</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                    </div>
+                    <div style="font-style: italic; font-size: small; color: darkgreen">added in 1.10.0</div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>Username to authenticate against private repository.</div>
+                </td>
+            </tr>
     </table>
     <br/>
 
@@ -270,6 +302,14 @@ Examples
         source_location: https://myrepo.example/module/feed
         publish_location: https://myrepo.example/api/module/publish
         force: True
+
+    - name: Register a PowerShell repository with credentials
+      community.windows.win_psrepository:
+        name: MyRepository
+        source_location: https://myrepo.com
+        state: present
+        username: repo_username
+        password: repo_password
 
 
 
