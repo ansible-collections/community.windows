@@ -1267,6 +1267,17 @@ Examples
         username: SYSTEM
         compatibility: 4
 
+    - name: Create task to run a PS script on Event define in subscription (Log, Origin and Event ID)
+      community.windows.win_scheduled_task:
+        name: TriggerTask
+        path: \Custom
+        actions:
+        - path: C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe
+          arguments: -ExecutionPolicy Unrestricted -NonInteractive -File C:\TestDir\Test.ps1
+        triggers:
+        - type: event
+          subscription: '<QueryList><Query Id="0" Path="System"><Select Path="System">*[System[Provider[@Name=''Microsoft-Windows-Power-Troubleshooter''] and EventID=1]]</Select></Query></QueryList>'
+        username: SYSTEM
 
 
 
