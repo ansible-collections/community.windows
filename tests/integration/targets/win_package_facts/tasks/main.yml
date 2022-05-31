@@ -1,0 +1,36 @@
+# This file is part of Ansible
+
+# Copyright: (c) 2022, DataDope (@datadope-io)
+# GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
+---
+- name: Gather facts with invalid gather_current_user and gather_external_users
+  win_package_facts:
+    gather_current_user: Error
+    gather_external_users: Error
+  register: invalid_var_run
+  ignore_errors: True
+
+- name: Gather facts with only one invalid parameter
+  win_package_facts:
+    gather_current_user: Error
+  register: partial_invalid_run
+  ignore_errors: True
+
+- name: Gather facts with gather_current_user disabled
+  win_package_facts:
+    gather_current_user: False
+  register: inverted_var_run
+  ignore_errors: True
+
+- name: Gather facts with default values
+  win_package_facts:
+  register: default_run
+  ignore_errors: True
+
+- assert:
+    that:
+    - invalid_var_run.failed is defined and invalid_var_run.failed
+    - partial_invalid_run.failed is defined and partial_invalid_run.failed
+    - inverted_var_run.failed is not defined or not inverted_var_run.failed
+    - default_run.failed is not defined or not default_run.failed
+    - packages is defined
