@@ -154,7 +154,7 @@ Please read and familiarize yourself with this document.
 ### Generating plugin docs
 
 Currently module documentation is generated manually using
-[add_docs.py](https://github.com/ansible-network/collection_prep/blob/master/add_docs.py). This should be run whenever
+[add_docs.py](https://github.com/ansible-network/collection_prep/blob/master/collection_prep/cmd/add_docs.py). This should be run whenever
 there are any major doc changes or additional plugins have been added to ensure a docpage is viewable online in this
 repo. The following commands will run the doc generator and create the updated doc pages under [docs](docs).
 
