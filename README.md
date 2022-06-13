@@ -135,7 +135,7 @@ collections:
 
 ## Contributing to this collection
 
-We welcome community contributions to this collection. If you find problems, please open an issue or create a PR against the [Community Windows collection repository](https://github.com/ansible-collections/community.windows). See [Contributing to Ansible-maintained collections](https://docs.ansible.com/ansible/devel/community/contributing_maintained_collections.html#contributing-maintained-collections) for details.
+Currently we welcome bugfixes or feature requests to plugins in this collection but no new modules or plugins will be accepted in this collection. If you find problems, please open an issue or create a PR against the [Community Windows collection repository](https://github.com/ansible-collections/community.windows). See [Contributing to Ansible-maintained collections](https://docs.ansible.com/ansible/devel/community/contributing_maintained_collections.html#contributing-maintained-collections) for details.
 
 See [Developing modules for Windows](https://docs.ansible.com/ansible/latest/dev_guide/developing_modules_general_windows.html#developing-modules-general-windows) for specifics on Windows modules.
 
