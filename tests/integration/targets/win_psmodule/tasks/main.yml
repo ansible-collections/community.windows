@@ -26,25 +26,9 @@
     - dep_repo_add.deprecations[0].date == '2021-07-01'
 
 ### licensed module checks
-
-- name: install module requiring license acceptance (no param, check mode)
-  win_psmodule:
-    name: ansible-licensed
-    state: present
-  register: install_licensed
-  check_mode: yes
-  ignore_errors: yes
-
-- name: get result of install package (check mode)
-  ansible.windows.win_shell: (Get-Module -ListAvailable -Name ansible-test1 | Measure-Object).Count
-  register: install_actual_check
-
-- name: assert install package (failure, check mode)
-  assert:
-    that:
-    - install_licensed is failed
-      #TODO (this PR): check for specific failure message
-    - install_actual_check.stdout | trim | int == 0
+# it is not known in check mode that a module requires
+# license acceptance, so we don't do check mode tests
+# for that scenario
 
 - name: install module requiring license acceptance (no param)
   win_psmodule:
@@ -53,33 +37,15 @@
   register: install_licensed
   ignore_errors: yes
 
-- name: get result of install package (check mode)
+- name: get result of install package
   ansible.windows.win_shell: (Get-Module -ListAvailable -Name ansible-test1 | Measure-Object).Count
   register: install_actual_check
 
-- name: assert install package (failure, check mode)
+- name: assert install package (failure)
   assert:
     that:
     - install_licensed is failed
       #TODO (this PR): check for specific failure message
-    - install_actual_check.stdout | trim | int == 0
-
-- name: install module requiring license acceptance (check mode)
-  win_psmodule:
-    name: ansible-licensed
-    state: present
-    accept_license: true
-  register: install_licensed
-  check_mode: yes
-
-- name: get result of install package (check mode)
-  ansible.windows.win_shell: (Get-Module -ListAvailable -Name ansible-test1 | Measure-Object).Count
-  register: install_actual_check
-
-- name: assert install package (check mode)
-  assert:
-    that:
-    - install_licensed is changed
     - install_actual_check.stdout | trim | int == 0
 
 - name: install module requiring license acceptance
