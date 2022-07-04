@@ -4,6 +4,7 @@ $template_path = $args[0]
 $template_manifest = Join-Path -Path $template_path -ChildPath template.psd1
 $template_script = Join-Path -Path $template_path -ChildPath template.psm1
 $template_nuspec = Join-Path -Path $template_path -ChildPath template.nuspec
+$template_license = Join-Path -Path $template_path -ChildPath license.txt
 $nuget_exe = Join-Path -Path $template_path -ChildPath nuget.exe
 $sign_cert = New-Object -TypeName System.Security.Cryptography.X509Certificates.X509Certificate2 -ArgumentList @(
     (Join-Path -Path $template_path -ChildPath sign.pfx),
@@ -32,8 +33,10 @@ foreach ($package in $packages) {
     }
     New-Item -Path $tmp_dir -ItemType Directory > $null
 
+    Copy-Item -LiteralPath $template_license -Destination $tmp_dir -Force
+
     try {
-        $ps_data = @()
+        $ps_data = @("LicenseUri = 'https://choosealicense.com/licenses/mit/'")
         $nuget_version = $package.version
         if ($package.ContainsKey("prerelease")) {
             $ps_data += "Prerelease = '$($package.prerelease)'"
