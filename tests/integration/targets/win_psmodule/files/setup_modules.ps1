@@ -14,14 +14,15 @@ $sign_cert = New-Object -TypeName System.Security.Cryptography.X509Certificates.
 )
 
 $packages = @(
-    @{ name = "ansible-test1"; version = "1.0.0"; repo = "PSRepo 1"; function = "Get-AnsibleTest1" },
-    @{ name = "ansible-test1"; version = "1.0.5"; repo = "PSRepo 1"; function = "Get-AnsibleTest1" },
-    @{ name = "ansible-test1"; version = "1.1.0"; repo = "PSRepo 1"; function = "Get-AnsibleTest1" },
-    @{ name = "ansible-test2"; version = "1.0.0"; repo = "PSRepo 1"; function = "Get-AnsibleTest2" },
-    @{ name = "ansible-test2"; version = "1.0.0"; repo = "PSRepo 2"; function = "Get-AnsibleTest2" },
-    @{ name = "ansible-test2"; version = "1.0.1"; repo = "PSRepo 1"; function = "Get-AnsibleTest2"; signed = $false },
-    @{ name = "ansible-test2"; version = "1.1.0"; prerelease = "beta1"; repo = "PSRepo 1"; function = "Get-AnsibleTest2" },
+    @{ name = "ansible-test1"; version = "1.0.0"; repo = "PSRepo 1"; function = "Get-AnsibleTest1" }
+    @{ name = "ansible-test1"; version = "1.0.5"; repo = "PSRepo 1"; function = "Get-AnsibleTest1" }
+    @{ name = "ansible-test1"; version = "1.1.0"; repo = "PSRepo 1"; function = "Get-AnsibleTest1" }
+    @{ name = "ansible-test2"; version = "1.0.0"; repo = "PSRepo 1"; function = "Get-AnsibleTest2" }
+    @{ name = "ansible-test2"; version = "1.0.0"; repo = "PSRepo 2"; function = "Get-AnsibleTest2" }
+    @{ name = "ansible-test2"; version = "1.0.1"; repo = "PSRepo 1"; function = "Get-AnsibleTest2"; signed = $false }
+    @{ name = "ansible-test2"; version = "1.1.0"; prerelease = "beta1"; repo = "PSRepo 1"; function = "Get-AnsibleTest2" }
     @{ name = "ansible-clobber"; version = "0.1.0"; repo = "PSRepo 1"; function = "Enable-PSTrace" }
+    @{ name = "ansible-licensed" ; version = "1.1.1"; repo = "PSRepo 1" ; require_license = $true; function = "Get-AnsibleTest1" }
 )
 
 foreach ($package in $packages) {
@@ -32,20 +33,21 @@ foreach ($package in $packages) {
     New-Item -Path $tmp_dir -ItemType Directory > $null
 
     try {
+        $ps_data = @()
+        $nuget_version = $package.version
         if ($package.ContainsKey("prerelease")) {
-            $ps_data = "Prerelease = '$($package.prerelease)'"
+            $ps_data += "Prerelease = '$($package.prerelease)'"
             $nuget_version = "$($package.version)-$($package.prerelease)"
         }
-        else {
-            $ps_data = ""
-            $nuget_version = $package.version
+        if ($package.ContainsKey("require_license")) {
+            $ps_data += "RequireLicenseAcceptance = `$$($package['require_license'])"
         }
 
         $manifest = [System.IO.File]::ReadAllText($template_manifest)
         $manifest = $manifest.Replace('--- NAME ---', $package.name).Replace('--- VERSION ---', $package.version)
         $manifest = $manifest.Replace('--- GUID ---', [Guid]::NewGuid()).Replace('--- FUNCTION ---', $package.function)
 
-        $manifest = $manifest.Replace('--- PS_DATA ---', $ps_data)
+        $manifest = $manifest.Replace('--- PS_DATA ---', $ps_data -join "`n")
         $manifest_path = Join-Path -Path $tmp_dir -ChildPath "$($package.name).psd1"
         Set-Content -Path $manifest_path -Value $manifest
 
