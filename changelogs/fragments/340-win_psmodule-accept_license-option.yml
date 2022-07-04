@@ -1,0 +1,3 @@
+---
+minor_changes:
+  - win_psmodule module - add ``accept_license`` option to allow for installing modules that require license acceptance (https://github.com/ansible-collections/community.windows/issues/340).
