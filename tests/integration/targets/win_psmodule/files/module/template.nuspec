@@ -6,6 +6,7 @@
     <authors>Ansible</authors>
     <owners>Ansible</owners>
     <requireLicenseAcceptance>--- LICACC ---</requireLicenseAcceptance>
+    <licenseUrl>https://choosealicense.com/licenses/mit/</licenseUrl>
     <description>Test for Ansible win_ps* modules</description>
     <releaseNotes></releaseNotes>
     <copyright>Copyright (c) 2019 Ansible, licensed under MIT.</copyright>
