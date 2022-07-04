@@ -23,7 +23,7 @@ $packages = @(
     @{ name = "ansible-test2"; version = "1.0.1"; repo = "PSRepo 1"; function = "Get-AnsibleTest2"; signed = $false }
     @{ name = "ansible-test2"; version = "1.1.0"; prerelease = "beta1"; repo = "PSRepo 1"; function = "Get-AnsibleTest2" }
     @{ name = "ansible-clobber"; version = "0.1.0"; repo = "PSRepo 1"; function = "Enable-PSTrace" }
-    @{ name = "ansible-licensed" ; version = "1.1.1"; repo = "PSRepo 1" ; require_license = $true; function = "Get-AnsibleTest1" }
+    @{ name = "ansible-licensed" ; version = "1.1.1"; repo = "PSRepo 1" ; require_license = $true; function = "Get-AnsibleLicensed" }
 )
 
 foreach ($package in $packages) {

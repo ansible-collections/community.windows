@@ -38,7 +38,7 @@
   ignore_errors: yes
 
 - name: get result of install package
-  ansible.windows.win_shell: (Get-Module -ListAvailable -Name ansible-test1 | Measure-Object).Count
+  ansible.windows.win_shell: (Get-Module -ListAvailable -Name ansible-licensed | Measure-Object).Count
   register: install_actual_check
 
 - name: assert install package (failure)
@@ -56,7 +56,7 @@
   register: install_licensed
 
 - name: get result of install package
-  ansible.windows.win_shell: Import-Module -Name ansible-test1; Get-AnsibleTest1 | ConvertTo-Json
+  ansible.windows.win_shell: Import-Module -Name ansible-licensed; Get-AnsibleLicensed | ConvertTo-Json
   register: install_actual
 
 - name: assert install package
@@ -73,7 +73,7 @@
   register: install_licensed
 
 - name: get result of install package (idempotence)
-  ansible.windows.win_shell: Import-Module -Name ansible-test1; Get-AnsibleTest1 | ConvertTo-Json
+  ansible.windows.win_shell: Import-Module -Name ansible-licensed; Get-AnsibleLicensed | ConvertTo-Json
   register: install_actual
 
 - name: assert install package (idempotence)
