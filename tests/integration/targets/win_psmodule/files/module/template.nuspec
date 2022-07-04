@@ -5,7 +5,7 @@
     <version>--- VERSION ---</version>
     <authors>Ansible</authors>
     <owners>Ansible</owners>
-    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <requireLicenseAcceptance>--- LICACC ---</requireLicenseAcceptance>
     <description>Test for Ansible win_ps* modules</description>
     <releaseNotes></releaseNotes>
     <copyright>Copyright (c) 2019 Ansible, licensed under MIT.</copyright>

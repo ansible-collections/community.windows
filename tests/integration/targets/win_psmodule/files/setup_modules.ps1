@@ -40,7 +40,7 @@ foreach ($package in $packages) {
             $nuget_version = "$($package.version)-$($package.prerelease)"
         }
         if ($package.ContainsKey("require_license")) {
-            $ps_data += "RequireLicenseAcceptance = `$$($package['require_license'])"
+            $ps_data += "RequireLicenseAcceptance = `$$($package.require_license)"
         }
 
         $manifest = [System.IO.File]::ReadAllText($template_manifest)
@@ -70,6 +70,7 @@ foreach ($package in $packages) {
         $nuspec = [System.IO.File]::ReadAllText($template_nuspec)
         $nuspec = $nuspec.Replace('--- NAME ---', $package.name).Replace('--- VERSION ---', $nuget_version)
         $nuspec = $nuspec.Replace('--- FUNCTION ---', $package.function)
+        $nuspec = $nuspec.Replace('--- LICACC ---', ($package.require_license -as [bool]).ToString().ToLower())
         Set-Content -Path (Join-Path -Path $tmp_dir -ChildPath "$($package.name).nuspec") -Value $nuspec
 
         &$nuget_exe pack "$tmp_dir\$($package.name).nuspec" -outputdirectory $tmp_dir
