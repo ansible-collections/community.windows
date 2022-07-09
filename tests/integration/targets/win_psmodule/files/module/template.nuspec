@@ -10,6 +10,6 @@
     <description>Test for Ansible win_ps* modules</description>
     <releaseNotes></releaseNotes>
     <copyright>Copyright (c) 2019 Ansible, licensed under MIT.</copyright>
-    <tags>PSModule PSIncludes_Function PSFunction_--- FUNCTION --- PSCommand_--- FUNCTION ---</tags>
+    <tags>PowerShellGetFormatVersion_2.0 PSModule PSIncludes_Function PSFunction_--- FUNCTION --- PSCommand_--- FUNCTION ---</tags>
   </metadata>
 </package>
