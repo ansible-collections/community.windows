@@ -45,7 +45,7 @@
   assert:
     that:
     - install_licensed is failed
-      #TODO (this PR): check for specific failure message
+    - '"License Acceptance is required for module" in install_licensed.msg'
     - install_actual_check.stdout | trim | int == 0
 
 - name: install module requiring license acceptance
