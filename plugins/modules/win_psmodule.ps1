@@ -23,10 +23,11 @@ $state = Get-AnsibleParam -obj $params -name "state" -type "str" -default "prese
 $allow_clobber = Get-AnsibleParam -obj $params -name "allow_clobber" -type "bool" -default $false
 $skip_publisher_check = Get-AnsibleParam -obj $params -name "skip_publisher_check" -type "bool" -default $false
 $allow_prerelease = Get-AnsibleParam -obj $params -name "allow_prerelease" -type "bool" -default $false
+$accept_license = Get-AnsibleParam -obj $params -name "accept_license" -type "bool" -default $false
 
-$result = @{changed = $false
-    output = ""
-    nuget_changed = $false
+$result = @{changed    = $false
+    output             = ""
+    nuget_changed      = $false
     repository_changed = $false
 }
 
@@ -64,13 +65,14 @@ Function Install-PrereqModule {
     Param(
         [Switch]$TestInstallationOnly,
         [bool]$AllowClobber,
-        [Bool]$CheckMode
+        [Bool]$CheckMode,
+        [bool]$AcceptLicense
     )
 
     # Those are minimum required versions of modules.
     $PrereqModules = @{
         PackageManagement = '1.1.7'
-        PowerShellGet = '1.6.0'
+        PowerShellGet     = '1.6.0'
     }
 
     [Bool]$PrereqModulesInstalled = $true
@@ -86,10 +88,11 @@ Function Install-PrereqModule {
             else {
                 try {
                     $install_params = @{
-                        Name = $Name
+                        Name           = $Name
                         MinimumVersion = $PrereqModules[$Name]
-                        Force = $true
-                        WhatIf = $CheckMode
+                        Force          = $true
+                        WhatIf         = $CheckMode
+                        AcceptLicense  = $AcceptLicense
                     }
                     $installCmd = Get-Command -Name Install-Module
                     if ($installCmd.Parameters.ContainsKey('SkipPublisherCheck')) {
@@ -132,7 +135,7 @@ Function Get-PsModule {
     )
 
     $ExistingModule = @{
-        Exists = $false
+        Exists  = $false
         Version = ""
     }
 
@@ -161,8 +164,8 @@ Function Get-PsModule {
         }
         elseif ( $MinimumVersion -and $MaximumVersion ) {
             $ReturnedModule = $ExistingModules |
-                Where-Object -FilterScript { $MinimumVersion -le $_.Version -and $MaximumVersion -ge $_.Version } |
-                Select-Object -First 1
+            Where-Object -FilterScript { $MinimumVersion -le $_.Version -and $MaximumVersion -ge $_.Version } |
+            Select-Object -First 1
         }
         elseif ( $MinimumVersion ) {
             $ReturnedModule = $ExistingModules | Where-Object -FilterScript { $MinimumVersion -le $_.Version } | Select-Object -First 1
@@ -212,14 +215,15 @@ Function Install-PsModule {
         [Bool]$AllowClobber,
         [Bool]$SkipPublisherCheck,
         [Bool]$AllowPrerelease,
-        [Bool]$CheckMode
+        [Bool]$CheckMode,
+        [Bool]$AcceptLicense
     )
 
     $getParams = @{
-        Name = $Name
+        Name            = $Name
         RequiredVersion = $RequiredVersion
-        MinimumVersion = $MinimumVersion
-        MaximumVersion = $MaximumVersion
+        MinimumVersion  = $MinimumVersion
+        MaximumVersion  = $MaximumVersion
     }
     $ExistingModuleBefore = Get-PsModule @getParams
 
@@ -229,9 +233,10 @@ Function Install-PsModule {
             Install-NugetProvider -CheckMode $CheckMode
 
             $ht = @{
-                Name = $Name
-                WhatIf = $CheckMode
-                Force = $true
+                Name          = $Name
+                WhatIf        = $CheckMode
+                Force         = $true
+                AcceptLicense = $AcceptLicense
             }
 
             [String[]]$ParametersNames = @("RequiredVersion", "MinimumVersion", "MaximumVersion", "AllowPrerelease",
@@ -267,9 +272,9 @@ Function Remove-PsModule {
     if (Get-Module -Listavailable | Where-Object { $_.name -eq $Name }) {
         try {
             $ht = @{
-                Name = $Name
+                Name    = $Name
                 Confirm = $false
-                Force = $true
+                Force   = $true
             }
 
             $ExistingModuleBefore = Get-PsModule -Name $Name -RequiredVersion $RequiredVersion -MinimumVersion $MinimumVersion -MaximumVersion $MaximumVersion
@@ -348,8 +353,8 @@ Function Install-Repository {
         "Use community.windows.win_psrepository to manage repos"
     )
     $result.deprecations += @{
-        msg = $msg
-        date = "2021-07-01"
+        msg             = $msg
+        date            = "2021-07-01"
         collection_name = "community.windows"
     }
     # Install NuGet provider if needed.
@@ -384,8 +389,8 @@ Function Remove-Repository {
         $result.deprecations = @()
     }
     $result.deprecations += @{
-        msg = "Removing a repo with this module is deprecated, use community.windows.win_psrepository to manage repos"
-        date = "2021-07-01"
+        msg             = "Removing a repo with this module is deprecated, use community.windows.win_psrepository to manage repos"
+        date            = "2021-07-01"
         collection_name = "community.windows"
     }
 
@@ -458,7 +463,7 @@ if ( ($allow_clobber -or $allow_prerelease -or $skip_publisher_check -or
         $required_version -or $minimum_version -or $maximum_version) ) {
     # Update the PowerShellGet and PackageManagement modules.
     # It's required to support AllowClobber, AllowPrerelease parameters.
-    Install-PrereqModule -AllowClobber $allow_clobber -CheckMode $check_mode
+    Install-PrereqModule -AllowClobber $allow_clobber -CheckMode $check_mode -AcceptLicense $accept_license
 }
 
 Import-Module -Name PackageManagement, PowerShellGet
@@ -473,16 +478,17 @@ if ($state -eq "present") {
 
     if ($name) {
         $ht = @{
-            Name = $name
-            RequiredVersion = $required_version
-            MinimumVersion = $minimum_version
-            MaximumVersion = $maximum_version
-            Repository = $repo
-            AllowClobber = $allow_clobber
+            Name               = $name
+            RequiredVersion    = $required_version
+            MinimumVersion     = $minimum_version
+            MaximumVersion     = $maximum_version
+            Repository         = $repo
+            AllowClobber       = $allow_clobber
             SkipPublisherCheck = $skip_publisher_check
-            AllowPrerelease = $allow_prerelease
-            CheckMode = $check_mode
-            Credential = $repo_credential
+            AllowPrerelease    = $allow_prerelease
+            CheckMode          = $check_mode
+            Credential         = $repo_credential
+            AcceptLicense      = $accept_license
         }
         Install-PsModule @ht
     }
@@ -494,11 +500,11 @@ elseif ($state -eq "absent") {
 
     if ($name) {
         $ht = @{
-            Name = $Name
-            CheckMode = $check_mode
+            Name            = $Name
+            CheckMode       = $check_mode
             RequiredVersion = $required_version
-            MinimumVersion = $minimum_version
-            MaximumVersion = $maximum_version
+            MinimumVersion  = $minimum_version
+            MaximumVersion  = $maximum_version
         }
         Remove-PsModule @ht
     }
@@ -506,11 +512,11 @@ elseif ($state -eq "absent") {
 elseif ( $state -eq "latest") {
 
     $ht = @{
-        Name = $Name
+        Name            = $Name
         AllowPrerelease = $allow_prerelease
-        Repository = $repo
-        CheckMode = $check_mode
-        Credential = $repo_credential
+        Repository      = $repo
+        CheckMode       = $check_mode
+        Credential      = $repo_credential
     }
 
     $LatestVersion = Find-LatestPsModule @ht
@@ -520,14 +526,15 @@ elseif ( $state -eq "latest") {
     if ( $LatestVersion.Version -ne $ExistingModule.Version ) {
 
         $ht = @{
-            Name = $Name
-            RequiredVersion = $LatestVersion
-            Repository = $repo
-            AllowClobber = $allow_clobber
+            Name               = $Name
+            RequiredVersion    = $LatestVersion
+            Repository         = $repo
+            AllowClobber       = $allow_clobber
             SkipPublisherCheck = $skip_publisher_check
-            AllowPrerelease = $allow_prerelease
-            CheckMode = $check_mode
-            Credential = $repo_credential
+            AllowPrerelease    = $allow_prerelease
+            CheckMode          = $check_mode
+            Credential         = $repo_credential
+            AcceptLicense      = $accept_license
         }
         Install-PsModule @ht
     }
