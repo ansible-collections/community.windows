@@ -76,6 +76,9 @@ options:
       - Accepts the module's license.
       - Required for modules that require license acceptance, since interactively answering the prompt is not possible.
       - Corresponds to the C(-AcceptLicense) parameter of C(Install-Module).
+      - >-
+        Installation of a module or a dependency that requires license acceptance cannot be detected in check mode,
+        but will cause a failure at runtime unless I(accept_license=true).
     type: bool
     required: no
     default: false
