@@ -23,6 +23,7 @@ $state = Get-AnsibleParam -obj $params -name "state" -type "str" -default "prese
 $allow_clobber = Get-AnsibleParam -obj $params -name "allow_clobber" -type "bool" -default $false
 $skip_publisher_check = Get-AnsibleParam -obj $params -name "skip_publisher_check" -type "bool" -default $false
 $allow_prerelease = Get-AnsibleParam -obj $params -name "allow_prerelease" -type "bool" -default $false
+$accept_license = Get-AnsibleParam -obj $params -name "accept_license" -type "bool" -default $false
 
 $result = @{changed = $false
     output = ""
@@ -64,7 +65,8 @@ Function Install-PrereqModule {
     Param(
         [Switch]$TestInstallationOnly,
         [bool]$AllowClobber,
-        [Bool]$CheckMode
+        [Bool]$CheckMode,
+        [bool]$AcceptLicense
     )
 
     # Those are minimum required versions of modules.
@@ -90,6 +92,7 @@ Function Install-PrereqModule {
                         MinimumVersion = $PrereqModules[$Name]
                         Force = $true
                         WhatIf = $CheckMode
+                        AcceptLicense = $AcceptLicense
                     }
                     $installCmd = Get-Command -Name Install-Module
                     if ($installCmd.Parameters.ContainsKey('SkipPublisherCheck')) {
@@ -212,7 +215,8 @@ Function Install-PsModule {
         [Bool]$AllowClobber,
         [Bool]$SkipPublisherCheck,
         [Bool]$AllowPrerelease,
-        [Bool]$CheckMode
+        [Bool]$CheckMode,
+        [Bool]$AcceptLicense
     )
 
     $getParams = @{
@@ -232,6 +236,7 @@ Function Install-PsModule {
                 Name = $Name
                 WhatIf = $CheckMode
                 Force = $true
+                AcceptLicense = $AcceptLicense
             }
 
             [String[]]$ParametersNames = @("RequiredVersion", "MinimumVersion", "MaximumVersion", "AllowPrerelease",
@@ -458,7 +463,7 @@ if ( ($allow_clobber -or $allow_prerelease -or $skip_publisher_check -or
         $required_version -or $minimum_version -or $maximum_version) ) {
     # Update the PowerShellGet and PackageManagement modules.
     # It's required to support AllowClobber, AllowPrerelease parameters.
-    Install-PrereqModule -AllowClobber $allow_clobber -CheckMode $check_mode
+    Install-PrereqModule -AllowClobber $allow_clobber -CheckMode $check_mode -AcceptLicense $accept_license
 }
 
 Import-Module -Name PackageManagement, PowerShellGet
@@ -483,6 +488,7 @@ if ($state -eq "present") {
             AllowPrerelease = $allow_prerelease
             CheckMode = $check_mode
             Credential = $repo_credential
+            AcceptLicense = $accept_license
         }
         Install-PsModule @ht
     }
@@ -528,6 +534,7 @@ elseif ( $state -eq "latest") {
             AllowPrerelease = $allow_prerelease
             CheckMode = $check_mode
             Credential = $repo_credential
+            AcceptLicense = $accept_license
         }
         Install-PsModule @ht
     }

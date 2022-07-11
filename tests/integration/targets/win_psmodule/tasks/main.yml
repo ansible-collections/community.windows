@@ -25,6 +25,65 @@
     - dep_repo_add.deprecations[0].msg == 'Adding a repo with this module is deprecated, the repository parameter should only be used to select a repo. Use community.windows.win_psrepository to manage repos'
     - dep_repo_add.deprecations[0].date == '2021-07-01'
 
+### licensed module checks
+# it is not known in check mode that a module requires
+# license acceptance, so we don't do check mode tests
+# for that scenario
+
+- name: install module requiring license acceptance (no param)
+  win_psmodule:
+    name: ansible-licensed
+    state: present
+  register: install_licensed
+  ignore_errors: yes
+
+- name: get result of install package
+  ansible.windows.win_shell: (Get-Module -ListAvailable -Name ansible-licensed | Measure-Object).Count
+  register: install_actual_check
+
+- name: assert install package (failure)
+  assert:
+    that:
+    - install_licensed is failed
+    - '"License Acceptance is required for module" in install_licensed.msg'
+    - install_actual_check.stdout | trim | int == 0
+
+- name: install module requiring license acceptance
+  win_psmodule:
+    name: ansible-licensed
+    state: present
+    accept_license: true
+  register: install_licensed
+
+- name: get result of install package
+  ansible.windows.win_shell: Import-Module -Name ansible-licensed; Get-AnsibleLicensed | ConvertTo-Json
+  register: install_actual
+
+- name: assert install package
+  assert:
+    that:
+    - install_licensed is changed
+    - install_actual.stdout | from_json == {"Name":"ansible-licensed","Version":"1.1.1","Repo":"PSRepo 1"}
+
+- name: install module requiring license acceptance (idempotence)
+  win_psmodule:
+    name: ansible-licensed
+    state: present
+    accept_license: true
+  register: install_licensed
+
+- name: get result of install package (idempotence)
+  ansible.windows.win_shell: Import-Module -Name ansible-licensed; Get-AnsibleLicensed | ConvertTo-Json
+  register: install_actual
+
+- name: assert install package (idempotence)
+  assert:
+    that:
+    - install_licensed is not changed
+    - install_actual.stdout | from_json == {"Name":"ansible-licensed","Version":"1.1.1","Repo":"PSRepo 1"}
+
+### end licensed module checks
+
 - name: install package (check mode)
   win_psmodule:
     name: ansible-test1

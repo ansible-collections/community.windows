@@ -71,6 +71,18 @@ options:
     type: str
     required: no
     version_added: '1.10.0'
+  accept_license:
+    description:
+      - Accepts the module's license.
+      - Required for modules that require license acceptance, since interactively answering the prompt is not possible.
+      - Corresponds to the C(-AcceptLicense) parameter of C(Install-Module).
+      - >-
+        Installation of a module or a dependency that requires license acceptance cannot be detected in check mode,
+        but will cause a failure at runtime unless I(accept_license=true).
+    type: bool
+    required: no
+    default: false
+    version_added: '1.11.0'
   url:
     description:
       - URL of the custom repository to register.
