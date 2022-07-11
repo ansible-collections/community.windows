@@ -210,7 +210,7 @@ Function Get-PrincipalGroup {
             -ErrorAction Stop
     }
     catch {
-        Add-Warning -obj $result -message "Failed to enumerate user groups but continuing on.: $($_.Exception.Message)"
+        $module.Warn("Failed to enumerate user groups but continuing on: $($_.Exception.Message)")
         return @()
     }
 
