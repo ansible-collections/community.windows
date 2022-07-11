@@ -158,6 +158,22 @@ To check whether it is installed, run <code class="code docutils literal notrans
 </thead>
 <tbody>
 <tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-accept_license"></div><p class="ansible-option-title" id="ansible-collections-community-windows-win-psmodule-module-parameter-accept-license"><strong>accept_license</strong></p>
+<a class="ansibleOptionLink" href="#parameter-accept_license" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
+<p><span class="ansible-option-versionadded">added in 1.11.0 of community.windows</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Accepts the module’s license.</p>
+<p>Required for modules that require license acceptance, since interactively answering the prompt is not possible.</p>
+<p>Corresponds to the <code class="docutils literal notranslate"><span class="pre">-AcceptLicense</span></code> parameter of <code class="docutils literal notranslate"><span class="pre">Install-Module</span></code>.</p>
+<p>Installation of a module or a dependency that requires license acceptance cannot be detected in check mode, but will cause a failure at runtime unless <em>accept_license=true</em>.</p>
+<p class="ansible-option-line"><span class="ansible-option-choices">Choices:</span></p>
+<ul class="simple">
+<li><p><span class="ansible-option-default-bold">no</span> <span class="ansible-option-default">← (default)</span></p></li>
+<li><p><span class="ansible-option-choices-entry">yes</span></p></li>
+</ul>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-allow_clobber"></div><p class="ansible-option-title" id="ansible-collections-community-windows-win-psmodule-module-parameter-allow-clobber"><strong>allow_clobber</strong></p>
 <a class="ansibleOptionLink" href="#parameter-allow_clobber" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
 </div></td>
@@ -169,7 +185,7 @@ To check whether it is installed, run <code class="code docutils literal notrans
 </ul>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-allow_prerelease"></div><p class="ansible-option-title" id="ansible-collections-community-windows-win-psmodule-module-parameter-allow-prerelease"><strong>allow_prerelease</strong></p>
 <a class="ansibleOptionLink" href="#parameter-allow_prerelease" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
 </div></td>
@@ -183,28 +199,28 @@ To check whether it is installed, run <code class="code docutils literal notrans
 </ul>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-maximum_version"></div><p class="ansible-option-title" id="ansible-collections-community-windows-win-psmodule-module-parameter-maximum-version"><strong>maximum_version</strong></p>
 <a class="ansibleOptionLink" href="#parameter-maximum_version" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>The maximum version of the PowerShell module that has to be installed.</p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-minimum_version"></div><p class="ansible-option-title" id="ansible-collections-community-windows-win-psmodule-module-parameter-minimum-version"><strong>minimum_version</strong></p>
 <a class="ansibleOptionLink" href="#parameter-minimum_version" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>The minimum version of the PowerShell module that has to be installed.</p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-name"></div><p class="ansible-option-title" id="ansible-collections-community-windows-win-psmodule-module-parameter-name"><strong>name</strong></p>
 <a class="ansibleOptionLink" href="#parameter-name" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span> / <span class="ansible-option-required">required</span></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>Name of the Windows PowerShell module that has to be installed.</p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-password"></div><p class="ansible-option-title" id="ansible-collections-community-windows-win-psmodule-module-parameter-password"><strong>password</strong></p>
 <a class="ansibleOptionLink" href="#parameter-password" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 <p><span class="ansible-option-versionadded">added in 1.10.0 of community.windows</span></p>
@@ -212,21 +228,21 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <td><div class="ansible-option-cell"><p>Password to authenticate against private repository.</p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-repository"></div><p class="ansible-option-title" id="ansible-collections-community-windows-win-psmodule-module-parameter-repository"><strong>repository</strong></p>
 <a class="ansibleOptionLink" href="#parameter-repository" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>Name of the custom repository to use.</p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-required_version"></div><p class="ansible-option-title" id="ansible-collections-community-windows-win-psmodule-module-parameter-required-version"><strong>required_version</strong></p>
 <a class="ansibleOptionLink" href="#parameter-required_version" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>The exact version of the PowerShell module that has to be installed.</p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-skip_publisher_check"></div><p class="ansible-option-title" id="ansible-collections-community-windows-win-psmodule-module-parameter-skip-publisher-check"><strong>skip_publisher_check</strong></p>
 <a class="ansibleOptionLink" href="#parameter-skip_publisher_check" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
 </div></td>
@@ -238,7 +254,7 @@ To check whether it is installed, run <code class="code docutils literal notrans
 </ul>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-state"></div><p class="ansible-option-title" id="ansible-collections-community-windows-win-psmodule-module-parameter-state"><strong>state</strong></p>
 <a class="ansibleOptionLink" href="#parameter-state" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
@@ -253,7 +269,7 @@ To check whether it is installed, run <code class="code docutils literal notrans
 </ul>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-url"></div><p class="ansible-option-title" id="ansible-collections-community-windows-win-psmodule-module-parameter-url"><strong>url</strong></p>
 <a class="ansibleOptionLink" href="#parameter-url" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
@@ -261,7 +277,7 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <p>DEPRECATED, will be removed in a major release after <code class="docutils literal notranslate"><span class="pre">2021-07-01</span></code>, please use the <a class="reference internal" href="win_psrepository_module.html#ansible-collections-community-windows-win-psrepository-module"><span class="std std-ref">community.windows.win_psrepository</span></a> module instead.</p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-username"></div><p class="ansible-option-title" id="ansible-collections-community-windows-win-psmodule-module-parameter-username"><strong>username</strong></p>
 <a class="ansibleOptionLink" href="#parameter-username" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 <p><span class="ansible-option-versionadded">added in 1.10.0 of community.windows</span></p>
