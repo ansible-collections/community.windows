@@ -1,0 +1,822 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>community.windows.win_psmodule_info module – Gather information about PowerShell Modules &mdash; Ansible collections  documentation</title>
+      <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/ansible.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/antsibull-minimal.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/rtd-ethical-ads.css" type="text/css" />
+    <link rel="shortcut icon" href="_static/images/Ansible-Mark-RGB_Black.svg"/>
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="community.windows.win_psrepository module – Adds, removes or updates a Windows PowerShell repository." href="win_psrepository_module.html" />
+    <link rel="prev" title="community.windows.win_psmodule module – Adds or removes a Windows PowerShell module" href="win_psmodule_module.html" /><!-- extra head elements for Ansible beyond RTD Sphinx Theme -->
+
+
+
+
+</head>
+
+<body class="wy-body-for-nav"><!-- extra body elements for Ansible beyond RTD Sphinx Theme -->
+
+<div class="DocSite-globalNav ansibleNav">
+  <ul>
+    <li><a href="https://www.ansible.com/ansiblefest" target="_blank">AnsibleFest</a></li>
+    <li><a href="https://www.ansible.com/tower" target="_blank">Products</a></li>
+    <li><a href="https://www.ansible.com/community" target="_blank">Community</a></li>
+    <li><a href="https://www.ansible.com/webinars-training" target="_blank">Webinars & Training</a></li>
+    <li><a href="https://www.ansible.com/blog" target="_blank">Blog</a></li>
+  </ul>
+</div>
+
+<a class="DocSite-nav" href="/" style="padding-bottom: 30px;">
+
+  <img class="DocSiteNav-logo"
+    src="../../../_static/images/Ansible-Mark-RGB_White.svg"
+    alt="Ansible Logo">
+  <div class="DocSiteNav-title">Ansible Collections Documentation</div>
+</a>
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../../index.html" class="icon icon-home"> Ansible collections
+          </a><!--- Based on https://github.com/rtfd/sphinx_rtd_theme/pull/438/files -->
+
+<div class="version">
+  
+    
+  
+</div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" class="st-default-search-input" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+  
+              <p class="caption" role="heading"><span class="caption-text">Collections:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../../index.html">Collection Index</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="../index.html">Collections in the Community Namespace</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="index.html">Community.Windows</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="index.html#description">Description</a></li>
+<li class="toctree-l4"><a class="reference internal" href="index.html#communication">Communication</a></li>
+<li class="toctree-l4 current"><a class="reference internal" href="index.html#plugin-index">Plugin Index</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Plugin indexes:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../index_lookup.html">Index of all Lookup Plugins</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../index_module.html">Index of all Modules</a></li>
+</ul>
+<!-- extra nav elements for Ansible beyond RTD Sphinx Theme -->
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">Ansible collections</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../../index.html">Collection Index</a> &raquo;</li>
+          <li><a href="../index.html">Collections in the Community Namespace</a> &raquo;</li>
+          <li><a href="index.html">Community.Windows</a> &raquo;</li>
+      <li>community.windows.win_psmodule_info module – Gather information about PowerShell Modules</li>
+      <li class="wy-breadcrumbs-aside">
+              <!-- User defined GitHub URL -->
+              <a href="https://github.com/ansible-collections/community.windows/edit/main/plugins/modules/win_psmodule_info.py?description=%23%23%23%23%23%20SUMMARY%0A%3C!—%20Your%20description%20here%20–%3E%0A%0A%0A%23%23%23%23%23%20ISSUE%20TYPE%0A-%20Docs%20Pull%20Request%0A%0A%2Blabel:%20docsite_pr" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+
+  
+           <div itemprop="articleBody">
+             
+  <span class="target" id="ansible-collections-community-windows-win-psmodule-info-module"></span><section id="community-windows-win-psmodule-info-module-gather-information-about-powershell-modules">
+<h1>community.windows.win_psmodule_info module – Gather information about PowerShell Modules<a class="headerlink" href="#community-windows-win-psmodule-info-module-gather-information-about-powershell-modules" title="Permalink to this heading"></a></h1>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/community/windows">community.windows collection</a> (version 1.11.0).</p>
+<p>You might already have this collection installed if you are using the <code class="docutils literal notranslate"><span class="pre">ansible</span></code> package.
+It is not included in <code class="docutils literal notranslate"><span class="pre">ansible-core</span></code>.
+To check whether it is installed, run <code class="code docutils literal notranslate"><span class="pre">ansible-galaxy</span> <span class="pre">collection</span> <span class="pre">list</span></code>.</p>
+<p>To install it, use: <code class="code docutils literal notranslate"><span class="pre">ansible-galaxy</span> <span class="pre">collection</span> <span class="pre">install</span> <span class="pre">community.windows</span></code>.</p>
+<p>To use it in a playbook, specify: <code class="code docutils literal notranslate"><span class="pre">community.windows.win_psmodule_info</span></code>.</p>
+</div>
+<div class="contents local topic" id="contents">
+<ul class="simple">
+<li><p><a class="reference internal" href="#synopsis" id="id1">Synopsis</a></p></li>
+<li><p><a class="reference internal" href="#requirements" id="id2">Requirements</a></p></li>
+<li><p><a class="reference internal" href="#parameters" id="id3">Parameters</a></p></li>
+<li><p><a class="reference internal" href="#see-also" id="id4">See Also</a></p></li>
+<li><p><a class="reference internal" href="#examples" id="id5">Examples</a></p></li>
+<li><p><a class="reference internal" href="#return-values" id="id6">Return Values</a></p></li>
+</ul>
+</div>
+<section id="synopsis">
+<h2><a class="toc-backref" href="#id1">Synopsis</a><a class="headerlink" href="#synopsis" title="Permalink to this heading"></a></h2>
+<ul class="simple">
+<li><p>Gather information about PowerShell Modules including information from PowerShellGet.</p></li>
+</ul>
+</section>
+<section id="requirements">
+<h2><a class="toc-backref" href="#id2">Requirements</a><a class="headerlink" href="#requirements" title="Permalink to this heading"></a></h2>
+<p>The below requirements are needed on the host that executes this module.</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">PowerShellGet</span></code> module</p></li>
+</ul>
+</section>
+<section id="parameters">
+<h2><a class="toc-backref" href="#id3">Parameters</a><a class="headerlink" href="#parameters" title="Permalink to this heading"></a></h2>
+<table class="colwidths-auto ansible-option-table docutils align-default" style="width: 100%">
+<thead>
+<tr class="row-odd"><th class="head"><p>Parameter</p></th>
+<th class="head"><p>Comments</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-name"></div><p class="ansible-option-title" id="ansible-collections-community-windows-win-psmodule-info-module-parameter-name"><strong>name</strong></p>
+<a class="ansibleOptionLink" href="#parameter-name" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>The name of the module to retrieve.</p>
+<p>Supports any wildcard pattern supported by <code class="docutils literal notranslate"><span class="pre">Get-Module</span></code>.</p>
+<p>If omitted then all modules will returned.</p>
+<p class="ansible-option-line"><span class="ansible-option-default-bold">Default:</span> <span class="ansible-option-default">“*”</span></p>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-repository"></div><p class="ansible-option-title" id="ansible-collections-community-windows-win-psmodule-info-module-parameter-repository"><strong>repository</strong></p>
+<a class="ansibleOptionLink" href="#parameter-repository" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>The name of the PSRepository the modules were installed from.</p>
+<p>This acts as a filter against the modules that would be returned based on the <em>name</em> option.</p>
+<p>Modules that were not installed from a repository will not be returned if this option is set.</p>
+<p>Only modules installed from a registered repository will be returned.</p>
+<p>If the repository was re-registered after module installation with a new <code class="docutils literal notranslate"><span class="pre">SourceLocation</span></code>, this will not match.</p>
+</div></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="see-also">
+<h2><a class="toc-backref" href="#id4">See Also</a><a class="headerlink" href="#see-also" title="Permalink to this heading"></a></h2>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<dl class="simple">
+<dt><a class="reference internal" href="win_psrepository_info_module.html#ansible-collections-community-windows-win-psrepository-info-module"><span class="std std-ref">community.windows.win_psrepository_info</span></a></dt><dd><p>The official documentation on the <strong>community.windows.win_psrepository_info</strong> module.</p>
+</dd>
+<dt><a class="reference internal" href="win_psscript_info_module.html#ansible-collections-community-windows-win-psscript-info-module"><span class="std std-ref">community.windows.win_psscript_info</span></a></dt><dd><p>The official documentation on the <strong>community.windows.win_psscript_info</strong> module.</p>
+</dd>
+</dl>
+</div>
+</section>
+<section id="examples">
+<h2><a class="toc-backref" href="#id5">Examples</a><a class="headerlink" href="#examples" title="Permalink to this heading"></a></h2>
+<div class="highlight-yaml+jinja notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Get info about all modules on the system</span><span class="w"></span>
+<span class="w">  </span><span class="nt">community.windows.win_psmodule_info</span><span class="p">:</span><span class="w"></span>
+
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Get info about the ScheduledTasks module</span><span class="w"></span>
+<span class="w">  </span><span class="nt">community.windows.win_psmodule_info</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ScheduledTasks</span><span class="w"></span>
+
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Get info about networking modules</span><span class="w"></span>
+<span class="w">  </span><span class="nt">community.windows.win_psmodule_info</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Net*</span><span class="w"></span>
+
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Get info about all modules installed from the PSGallery repository</span><span class="w"></span>
+<span class="w">  </span><span class="nt">community.windows.win_psmodule_info</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">PSGallery</span><span class="w"></span>
+<span class="w">  </span><span class="nt">register</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">gallery_modules</span><span class="w"></span>
+
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Update all modules retrieved from above example</span><span class="w"></span>
+<span class="w">  </span><span class="nt">community.windows.win_psmodule</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">item</span> <span class="cp">}}</span><span class="s">&quot;</span><span class="w"></span>
+<span class="w">    </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">latest</span><span class="w"></span>
+<span class="w">  </span><span class="nt">loop</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">gallery_modules.modules</span> <span class="o">|</span> <span class="nf">map</span><span class="o">(</span><span class="nv">attribute</span><span class="o">=</span><span class="nv">name</span><span class="o">)</span> <span class="cp">}}</span><span class="s">&quot;</span><span class="w"></span>
+
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Get info about all modules on the system</span><span class="w"></span>
+<span class="w">  </span><span class="nt">community.windows.win_psmodule_info</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">register</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">all_modules</span><span class="w"></span>
+
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Find modules installed from a repository that isn&#39;t registered now</span><span class="w"></span>
+<span class="w">  </span><span class="nt">set_fact</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">missing_repository_modules</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{{</span>
+      <span class="nv">all_modules</span>
+      <span class="o">|</span> <span class="nf">json_query</span><span class="o">(</span><span class="s1">&#39;modules[?repository!=null &amp;&amp; repository==repository_source_location].{name: name, version: version, repository: repository}&#39;</span><span class="o">)</span>
+      <span class="o">|</span> <span class="nf">list</span>
+    <span class="cp">}}</span><span class="s">&quot;</span><span class="w"></span>
+
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">debug</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">var</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">missing_repository_modules</span><span class="w"></span>
+</pre></div>
+</div>
+</section>
+<section id="return-values">
+<h2><a class="toc-backref" href="#id6">Return Values</a><a class="headerlink" href="#return-values" title="Permalink to this heading"></a></h2>
+<p>Common return values are documented <a class="reference external" href="https://docs.ansible.com/ansible/devel/reference_appendices/common_return_values.html#common-return-values" title="(in Ansible vdevel)"><span class="xref std std-ref">here</span></a>, the following are the fields unique to this module:</p>
+<table class="colwidths-auto ansible-option-table docutils align-default" style="width: 100%">
+<thead>
+<tr class="row-odd"><th class="head"><p>Key</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="return-modules"></div><p class="ansible-option-title" id="ansible-collections-community-windows-win-psmodule-info-module-return-modules"><strong>modules</strong></p>
+<a class="ansibleOptionLink" href="#return-modules" title="Permalink to this return value"></a><p class="ansible-option-type-line"><span class="ansible-option-type">list</span> / <span class="ansible-option-elements">elements=dictionary</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>A list of modules (or an empty list is there are none).</p>
+<p class="ansible-option-line"><span class="ansible-option-returned-bold">Returned:</span> always</p>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="return-modules/access_mode"></div><p class="ansible-option-title" id="ansible-collections-community-windows-win-psmodule-info-module-return-modules-access-mode"><strong>access_mode</strong></p>
+<a class="ansibleOptionLink" href="#return-modules/access_mode" title="Permalink to this return value"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+</div></td>
+<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>The module’s access mode. See <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.management.automation.moduleaccessmode">https://docs.microsoft.com/en-us/dotnet/api/system.management.automation.moduleaccessmode</a></p>
+<p class="ansible-option-line"><span class="ansible-option-returned-bold">Returned:</span> success</p>
+<p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> “ReadWrite”</p>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="return-modules/author"></div><p class="ansible-option-title" id="ansible-collections-community-windows-win-psmodule-info-module-return-modules-author"><strong>author</strong></p>
+<a class="ansibleOptionLink" href="#return-modules/author" title="Permalink to this return value"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+</div></td>
+<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>The author of the module.</p>
+<p class="ansible-option-line"><span class="ansible-option-returned-bold">Returned:</span> success</p>
+<p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> “Warren Frame”</p>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="return-modules/clr_version"></div><p class="ansible-option-title" id="ansible-collections-community-windows-win-psmodule-info-module-return-modules-clr-version"><strong>clr_version</strong></p>
+<a class="ansibleOptionLink" href="#return-modules/clr_version" title="Permalink to this return value"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+</div></td>
+<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>The CLR version of the module.</p>
+<p class="ansible-option-line"><span class="ansible-option-returned-bold">Returned:</span> success</p>
+<p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> “4.0”</p>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="return-modules/company_name"></div><p class="ansible-option-title" id="ansible-collections-community-windows-win-psmodule-info-module-return-modules-company-name"><strong>company_name</strong></p>
+<a class="ansibleOptionLink" href="#return-modules/company_name" title="Permalink to this return value"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+</div></td>
+<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>The company name of the module.</p>
+<p class="ansible-option-line"><span class="ansible-option-returned-bold">Returned:</span> success</p>
+<p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> “Microsoft Corporation”</p>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="return-modules/compatible_ps_editions"></div><p class="ansible-option-title" id="ansible-collections-community-windows-win-psmodule-info-module-return-modules-compatible-ps-editions"><strong>compatible_ps_editions</strong></p>
+<a class="ansibleOptionLink" href="#return-modules/compatible_ps_editions" title="Permalink to this return value"></a><p class="ansible-option-type-line"><span class="ansible-option-type">list</span> / <span class="ansible-option-elements">elements=string</span></p>
+</div></td>
+<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>The PS Editions the module is compatible with.</p>
+<p class="ansible-option-line"><span class="ansible-option-returned-bold">Returned:</span> success</p>
+<p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> [“Desktop”]</p>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="return-modules/copyright"></div><p class="ansible-option-title" id="ansible-collections-community-windows-win-psmodule-info-module-return-modules-copyright"><strong>copyright</strong></p>
+<a class="ansibleOptionLink" href="#return-modules/copyright" title="Permalink to this return value"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+</div></td>
+<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>The copyright of the module.</p>
+<p class="ansible-option-line"><span class="ansible-option-returned-bold">Returned:</span> success</p>
+<p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> “(c) 2016 Warren F. All rights reserved.”</p>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="return-modules/dependencies"></div><p class="ansible-option-title" id="ansible-collections-community-windows-win-psmodule-info-module-return-modules-dependencies"><strong>dependencies</strong></p>
+<a class="ansibleOptionLink" href="#return-modules/dependencies" title="Permalink to this return value"></a><p class="ansible-option-type-line"><span class="ansible-option-type">list</span> / <span class="ansible-option-elements">elements=string</span></p>
+</div></td>
+<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>The modules required by this module.</p>
+<p class="ansible-option-line"><span class="ansible-option-returned-bold">Returned:</span> success</p>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="return-modules/description"></div><p class="ansible-option-title" id="ansible-collections-community-windows-win-psmodule-info-module-return-modules-description"><strong>description</strong></p>
+<a class="ansibleOptionLink" href="#return-modules/description" title="Permalink to this return value"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+</div></td>
+<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>The description of the module.</p>
+<p class="ansible-option-line"><span class="ansible-option-returned-bold">Returned:</span> success</p>
+<p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> “Provides cmdlets to work with local users and local groups”</p>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="return-modules/dot_net_framework_version"></div><p class="ansible-option-title" id="ansible-collections-community-windows-win-psmodule-info-module-return-modules-dot-net-framework-version"><strong>dot_net_framework_version</strong></p>
+<a class="ansibleOptionLink" href="#return-modules/dot_net_framework_version" title="Permalink to this return value"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+</div></td>
+<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>The .Net Framework version of the module.</p>
+<p class="ansible-option-line"><span class="ansible-option-returned-bold">Returned:</span> success</p>
+<p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> “4.6.1”</p>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="return-modules/exported_aliases"></div><p class="ansible-option-title" id="ansible-collections-community-windows-win-psmodule-info-module-return-modules-exported-aliases"><strong>exported_aliases</strong></p>
+<a class="ansibleOptionLink" href="#return-modules/exported_aliases" title="Permalink to this return value"></a><p class="ansible-option-type-line"><span class="ansible-option-type">list</span> / <span class="ansible-option-elements">elements=string</span></p>
+</div></td>
+<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>The aliases exported from the module.</p>
+<p class="ansible-option-line"><span class="ansible-option-returned-bold">Returned:</span> success</p>
+<p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> [“glu”, “slu”]</p>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="return-modules/exported_cmdlets"></div><p class="ansible-option-title" id="ansible-collections-community-windows-win-psmodule-info-module-return-modules-exported-cmdlets"><strong>exported_cmdlets</strong></p>
+<a class="ansibleOptionLink" href="#return-modules/exported_cmdlets" title="Permalink to this return value"></a><p class="ansible-option-type-line"><span class="ansible-option-type">list</span> / <span class="ansible-option-elements">elements=string</span></p>
+</div></td>
+<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>The cmdlets exported from the module.</p>
+<p class="ansible-option-line"><span class="ansible-option-returned-bold">Returned:</span> success</p>
+<p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> [“Get-Certificate”, “Get-PfxData”]</p>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="return-modules/exported_commands"></div><p class="ansible-option-title" id="ansible-collections-community-windows-win-psmodule-info-module-return-modules-exported-commands"><strong>exported_commands</strong></p>
+<a class="ansibleOptionLink" href="#return-modules/exported_commands" title="Permalink to this return value"></a><p class="ansible-option-type-line"><span class="ansible-option-type">list</span> / <span class="ansible-option-elements">elements=string</span></p>
+</div></td>
+<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>All of the commands exported from the module. Includes functions, cmdlets, and aliases.</p>
+<p class="ansible-option-line"><span class="ansible-option-returned-bold">Returned:</span> success</p>
+<p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> [“glu”, “Get-LocalUser”]</p>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="return-modules/exported_dsc_resources"></div><p class="ansible-option-title" id="ansible-collections-community-windows-win-psmodule-info-module-return-modules-exported-dsc-resources"><strong>exported_dsc_resources</strong></p>
+<a class="ansibleOptionLink" href="#return-modules/exported_dsc_resources" title="Permalink to this return value"></a><p class="ansible-option-type-line"><span class="ansible-option-type">list</span> / <span class="ansible-option-elements">elements=string</span></p>
+</div></td>
+<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>The DSC resources exported from the module.</p>
+<p class="ansible-option-line"><span class="ansible-option-returned-bold">Returned:</span> success</p>
+<p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> [“xWebAppPool”, “xWebSite”]</p>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="return-modules/exported_format_files"></div><p class="ansible-option-title" id="ansible-collections-community-windows-win-psmodule-info-module-return-modules-exported-format-files"><strong>exported_format_files</strong></p>
+<a class="ansibleOptionLink" href="#return-modules/exported_format_files" title="Permalink to this return value"></a><p class="ansible-option-type-line"><span class="ansible-option-type">list</span> / <span class="ansible-option-elements">elements=path</span></p>
+</div></td>
+<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>The format files exported from the module.</p>
+<p class="ansible-option-line"><span class="ansible-option-returned-bold">Returned:</span> success</p>
+<p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> [“C:\\WINDOWS\\system32\\WindowsPowerShell\\v1.0\\Modules\\DnsClient\\DnsCmdlets.Format.ps1xml”, “C:\\WINDOWS\\system32\\WindowsPowerShell\\v1.0\\Modules\\DnsClient\\DnsConfig.Format.ps1xml”, “C:\\WINDOWS\\system32\\WindowsPowerShell\\v1.0\\Modules\\DnsClient\\DnsClientPSProvider.Format.ps1xml”]</p>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="return-modules/exported_functions"></div><p class="ansible-option-title" id="ansible-collections-community-windows-win-psmodule-info-module-return-modules-exported-functions"><strong>exported_functions</strong></p>
+<a class="ansibleOptionLink" href="#return-modules/exported_functions" title="Permalink to this return value"></a><p class="ansible-option-type-line"><span class="ansible-option-type">list</span> / <span class="ansible-option-elements">elements=string</span></p>
+</div></td>
+<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>The functions exported from the module.</p>
+<p class="ansible-option-line"><span class="ansible-option-returned-bold">Returned:</span> success</p>
+<p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> [“New-VirtualDisk”, “New-Volume”]</p>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="return-modules/exported_type_files"></div><p class="ansible-option-title" id="ansible-collections-community-windows-win-psmodule-info-module-return-modules-exported-type-files"><strong>exported_type_files</strong></p>
+<a class="ansibleOptionLink" href="#return-modules/exported_type_files" title="Permalink to this return value"></a><p class="ansible-option-type-line"><span class="ansible-option-type">list</span> / <span class="ansible-option-elements">elements=path</span></p>
+</div></td>
+<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>The type files exported from the module.</p>
+<p class="ansible-option-line"><span class="ansible-option-returned-bold">Returned:</span> success</p>
+<p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> [“C:\\WINDOWS\\system32\\WindowsPowerShell\\v1.0\\Modules\\DnsClient\\DnsCmdlets.Types.ps1xml”, “C:\\WINDOWS\\system32\\WindowsPowerShell\\v1.0\\Modules\\DnsClient\\DnsConfig.Types.ps1xml”, “C:\\WINDOWS\\system32\\WindowsPowerShell\\v1.0\\Modules\\DnsClient\\DnsClientPSProvider.Types.ps1xml”]</p>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="return-modules/exported_variables"></div><p class="ansible-option-title" id="ansible-collections-community-windows-win-psmodule-info-module-return-modules-exported-variables"><strong>exported_variables</strong></p>
+<a class="ansibleOptionLink" href="#return-modules/exported_variables" title="Permalink to this return value"></a><p class="ansible-option-type-line"><span class="ansible-option-type">list</span> / <span class="ansible-option-elements">elements=string</span></p>
+</div></td>
+<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>The variables exported from the module.</p>
+<p class="ansible-option-line"><span class="ansible-option-returned-bold">Returned:</span> success</p>
+<p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> [“GitPromptScriptBlock”]</p>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="return-modules/exported_workflows"></div><p class="ansible-option-title" id="ansible-collections-community-windows-win-psmodule-info-module-return-modules-exported-workflows"><strong>exported_workflows</strong></p>
+<a class="ansibleOptionLink" href="#return-modules/exported_workflows" title="Permalink to this return value"></a><p class="ansible-option-type-line"><span class="ansible-option-type">list</span> / <span class="ansible-option-elements">elements=string</span></p>
+</div></td>
+<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>The workflows exported from the module.</p>
+<p class="ansible-option-line"><span class="ansible-option-returned-bold">Returned:</span> success</p>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="return-modules/file_list"></div><p class="ansible-option-title" id="ansible-collections-community-windows-win-psmodule-info-module-return-modules-file-list"><strong>file_list</strong></p>
+<a class="ansibleOptionLink" href="#return-modules/file_list" title="Permalink to this return value"></a><p class="ansible-option-type-line"><span class="ansible-option-type">list</span> / <span class="ansible-option-elements">elements=path</span></p>
+</div></td>
+<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>The files included in the module.</p>
+<p class="ansible-option-line"><span class="ansible-option-returned-bold">Returned:</span> success</p>
+<p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> [“C:\\Program Files\\WindowsPowerShell\\Modules\\PowerShellGet\\1.6.0\\PSModule.psm1”, “C:\\Program Files\\WindowsPowerShell\\Modules\\PowerShellGet\\1.6.0\\PSGet.Format.ps1xml”, “C:\\Program Files\\WindowsPowerShell\\Modules\\PowerShellGet\\1.6.0\\PSGet.Resource.psd1”]</p>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="return-modules/guid"></div><p class="ansible-option-title" id="ansible-collections-community-windows-win-psmodule-info-module-return-modules-guid"><strong>guid</strong></p>
+<a class="ansibleOptionLink" href="#return-modules/guid" title="Permalink to this return value"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+</div></td>
+<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>The GUID of the module.</p>
+<p class="ansible-option-line"><span class="ansible-option-returned-bold">Returned:</span> success</p>
+<p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> “74c9fd30-734b-4c89-a8ae-7727ad21d1d5”</p>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="return-modules/help_info_uri"></div><p class="ansible-option-title" id="ansible-collections-community-windows-win-psmodule-info-module-return-modules-help-info-uri"><strong>help_info_uri</strong></p>
+<a class="ansibleOptionLink" href="#return-modules/help_info_uri" title="Permalink to this return value"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+</div></td>
+<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>The help info address of the module.</p>
+<p class="ansible-option-line"><span class="ansible-option-returned-bold">Returned:</span> success</p>
+<p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> “<a class="reference external" href="https://go.microsoft.com/fwlink/?linkid=390823">https://go.microsoft.com/fwlink/?linkid=390823</a>”</p>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="return-modules/icon_uri"></div><p class="ansible-option-title" id="ansible-collections-community-windows-win-psmodule-info-module-return-modules-icon-uri"><strong>icon_uri</strong></p>
+<a class="ansibleOptionLink" href="#return-modules/icon_uri" title="Permalink to this return value"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+</div></td>
+<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>The address of the icon of the module.</p>
+<p class="ansible-option-line"><span class="ansible-option-returned-bold">Returned:</span> success</p>
+<p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> “<a class="reference external" href="https://raw.githubusercontent.com/powershell/psscriptanalyzer/master/logo.png">https://raw.githubusercontent.com/powershell/psscriptanalyzer/master/logo.png</a>”</p>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="return-modules/installed_date"></div><p class="ansible-option-title" id="ansible-collections-community-windows-win-psmodule-info-module-return-modules-installed-date"><strong>installed_date</strong></p>
+<a class="ansibleOptionLink" href="#return-modules/installed_date" title="Permalink to this return value"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+</div></td>
+<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>The date the module was installed.</p>
+<p class="ansible-option-line"><span class="ansible-option-returned-bold">Returned:</span> success</p>
+<p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> “2018-02-14T17:55:34.9620740-05:00”</p>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="return-modules/installed_location"></div><p class="ansible-option-title" id="ansible-collections-community-windows-win-psmodule-info-module-return-modules-installed-location"><strong>installed_location</strong></p>
+<a class="ansibleOptionLink" href="#return-modules/installed_location" title="Permalink to this return value"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+</div></td>
+<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>The path where the module is installed.</p>
+<p>This should have the same value as <code class="docutils literal notranslate"><span class="pre">module_base</span></code> but only has a value when the module was installed via PowerShellGet.</p>
+<p class="ansible-option-line"><span class="ansible-option-returned-bold">Returned:</span> success</p>
+<p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> “C:\\Program Files\\WindowsPowerShell\\Modules\\posh-git\\0.7.1”</p>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="return-modules/license_uri"></div><p class="ansible-option-title" id="ansible-collections-community-windows-win-psmodule-info-module-return-modules-license-uri"><strong>license_uri</strong></p>
+<a class="ansibleOptionLink" href="#return-modules/license_uri" title="Permalink to this return value"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+</div></td>
+<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>The address of the license for the module.</p>
+<p class="ansible-option-line"><span class="ansible-option-returned-bold">Returned:</span> success</p>
+<p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> “<a class="reference external" href="https://github.com/PowerShell/xPendingReboot/blob/master/LICENSE">https://github.com/PowerShell/xPendingReboot/blob/master/LICENSE</a>”</p>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="return-modules/log_pipeline_execution_details"></div><p class="ansible-option-title" id="ansible-collections-community-windows-win-psmodule-info-module-return-modules-log-pipeline-execution-details"><strong>log_pipeline_execution_details</strong></p>
+<a class="ansibleOptionLink" href="#return-modules/log_pipeline_execution_details" title="Permalink to this return value"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
+</div></td>
+<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>Determines whether pipeline execution detail events should be logged.</p>
+<p class="ansible-option-line"><span class="ansible-option-returned-bold">Returned:</span> success</p>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="return-modules/module_base"></div><p class="ansible-option-title" id="ansible-collections-community-windows-win-psmodule-info-module-return-modules-module-base"><strong>module_base</strong></p>
+<a class="ansibleOptionLink" href="#return-modules/module_base" title="Permalink to this return value"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+</div></td>
+<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>The path that contains the module’s files.</p>
+<p class="ansible-option-line"><span class="ansible-option-returned-bold">Returned:</span> success</p>
+<p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> “C:\\WINDOWS\\system32\\WindowsPowerShell\\v1.0\\Modules\\PKI”</p>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="return-modules/module_list"></div><p class="ansible-option-title" id="ansible-collections-community-windows-win-psmodule-info-module-return-modules-module-list"><strong>module_list</strong></p>
+<a class="ansibleOptionLink" href="#return-modules/module_list" title="Permalink to this return value"></a><p class="ansible-option-type-line"><span class="ansible-option-type">list</span> / <span class="ansible-option-elements">elements=dictionary</span></p>
+</div></td>
+<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>A list of modules packaged with this module.</p>
+<p>This value is not often returned and the modules are not automatically processed.</p>
+<p class="ansible-option-line"><span class="ansible-option-returned-bold">Returned:</span> success</p>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="return-modules/module_list/guid"></div><p class="ansible-option-title" id="ansible-collections-community-windows-win-psmodule-info-module-return-modules-module-list-guid"><strong>guid</strong></p>
+<a class="ansibleOptionLink" href="#return-modules/module_list/guid" title="Permalink to this return value"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+</div></td>
+<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>The GUID of the module.</p>
+<p class="ansible-option-line"><span class="ansible-option-returned-bold">Returned:</span> success</p>
+<p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> “82fdb72c-ecc5-4dfd-b9d5-83cf6eb9067f”</p>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="return-modules/module_list/maximum_version"></div><p class="ansible-option-title" id="ansible-collections-community-windows-win-psmodule-info-module-return-modules-module-list-maximum-version"><strong>maximum_version</strong></p>
+<a class="ansibleOptionLink" href="#return-modules/module_list/maximum_version" title="Permalink to this return value"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+</div></td>
+<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>The maximum version of the module.</p>
+<p class="ansible-option-line"><span class="ansible-option-returned-bold">Returned:</span> success</p>
+<p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> “2.9”</p>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="return-modules/module_list/name"></div><p class="ansible-option-title" id="ansible-collections-community-windows-win-psmodule-info-module-return-modules-module-list-name"><strong>name</strong></p>
+<a class="ansibleOptionLink" href="#return-modules/module_list/name" title="Permalink to this return value"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+</div></td>
+<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>The name of the module.</p>
+<p>This may also be a path to the module file.</p>
+<p class="ansible-option-line"><span class="ansible-option-returned-bold">Returned:</span> success</p>
+<p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> “.\\WindowsUpdateLog.psm1”</p>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="return-modules/module_list/required_version"></div><p class="ansible-option-title" id="ansible-collections-community-windows-win-psmodule-info-module-return-modules-module-list-required-version"><strong>required_version</strong></p>
+<a class="ansibleOptionLink" href="#return-modules/module_list/required_version" title="Permalink to this return value"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+</div></td>
+<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>The exact version of the module required.</p>
+<p class="ansible-option-line"><span class="ansible-option-returned-bold">Returned:</span> success</p>
+<p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> “3.1.4”</p>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="return-modules/module_list/version"></div><p class="ansible-option-title" id="ansible-collections-community-windows-win-psmodule-info-module-return-modules-module-list-version"><strong>version</strong></p>
+<a class="ansibleOptionLink" href="#return-modules/module_list/version" title="Permalink to this return value"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+</div></td>
+<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>The minimum version of the module.</p>
+<p class="ansible-option-line"><span class="ansible-option-returned-bold">Returned:</span> success</p>
+<p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> “2.0”</p>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="return-modules/module_type"></div><p class="ansible-option-title" id="ansible-collections-community-windows-win-psmodule-info-module-return-modules-module-type"><strong>module_type</strong></p>
+<a class="ansibleOptionLink" href="#return-modules/module_type" title="Permalink to this return value"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+</div></td>
+<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>The module’s type. See <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.management.automation.moduletype">https://docs.microsoft.com/en-us/dotnet/api/system.management.automation.moduletype</a></p>
+<p class="ansible-option-line"><span class="ansible-option-returned-bold">Returned:</span> success</p>
+<p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> “Script”</p>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="return-modules/name"></div><p class="ansible-option-title" id="ansible-collections-community-windows-win-psmodule-info-module-return-modules-name"><strong>name</strong></p>
+<a class="ansibleOptionLink" href="#return-modules/name" title="Permalink to this return value"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+</div></td>
+<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>The name of the module.</p>
+<p class="ansible-option-line"><span class="ansible-option-returned-bold">Returned:</span> success</p>
+<p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> “PSReadLine”</p>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="return-modules/nested_modules"></div><p class="ansible-option-title" id="ansible-collections-community-windows-win-psmodule-info-module-return-modules-nested-modules"><strong>nested_modules</strong></p>
+<a class="ansibleOptionLink" href="#return-modules/nested_modules" title="Permalink to this return value"></a><p class="ansible-option-type-line"><span class="ansible-option-type">list</span> / <span class="ansible-option-elements">elements=dictionary</span></p>
+</div></td>
+<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>A list of modules nested with and loaded into the scope of this module.</p>
+<p>This list contains full module objects, so each item can have all of the properties listed here, including <code class="docutils literal notranslate"><span class="pre">nested_modules</span></code>.</p>
+<p class="ansible-option-line"><span class="ansible-option-returned-bold">Returned:</span> success</p>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="return-modules/package_management_provider"></div><p class="ansible-option-title" id="ansible-collections-community-windows-win-psmodule-info-module-return-modules-package-management-provider"><strong>package_management_provider</strong></p>
+<a class="ansibleOptionLink" href="#return-modules/package_management_provider" title="Permalink to this return value"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+</div></td>
+<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>If the module was installed from PowerShellGet, this is the package management provider used.</p>
+<p class="ansible-option-line"><span class="ansible-option-returned-bold">Returned:</span> success</p>
+<p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> “NuGet”</p>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="return-modules/path"></div><p class="ansible-option-title" id="ansible-collections-community-windows-win-psmodule-info-module-return-modules-path"><strong>path</strong></p>
+<a class="ansibleOptionLink" href="#return-modules/path" title="Permalink to this return value"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+</div></td>
+<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>The path to the module.</p>
+<p class="ansible-option-line"><span class="ansible-option-returned-bold">Returned:</span> success</p>
+<p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> “C:\\WINDOWS\\system32\\WindowsPowerShell\\v1.0\\Modules\\PKI\\PKI.psd1”</p>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="return-modules/power_shell_host_name"></div><p class="ansible-option-title" id="ansible-collections-community-windows-win-psmodule-info-module-return-modules-power-shell-host-name"><strong>power_shell_host_name</strong></p>
+<a class="ansibleOptionLink" href="#return-modules/power_shell_host_name" title="Permalink to this return value"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+</div></td>
+<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>The name of the PowerShell host that the module requires.</p>
+<p class="ansible-option-line"><span class="ansible-option-returned-bold">Returned:</span> success</p>
+<p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> “Windows PowerShell ISE Host”</p>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="return-modules/power_shell_host_version"></div><p class="ansible-option-title" id="ansible-collections-community-windows-win-psmodule-info-module-return-modules-power-shell-host-version"><strong>power_shell_host_version</strong></p>
+<a class="ansibleOptionLink" href="#return-modules/power_shell_host_version" title="Permalink to this return value"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+</div></td>
+<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>The version of the PowerShell host that the module requires.</p>
+<p class="ansible-option-line"><span class="ansible-option-returned-bold">Returned:</span> success</p>
+<p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> “1.1”</p>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="return-modules/power_shell_version"></div><p class="ansible-option-title" id="ansible-collections-community-windows-win-psmodule-info-module-return-modules-power-shell-version"><strong>power_shell_version</strong></p>
+<a class="ansibleOptionLink" href="#return-modules/power_shell_version" title="Permalink to this return value"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+</div></td>
+<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>The minimum version of PowerShell that the module requires.</p>
+<p class="ansible-option-line"><span class="ansible-option-returned-bold">Returned:</span> success</p>
+<p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> “5.1”</p>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="return-modules/prefix"></div><p class="ansible-option-title" id="ansible-collections-community-windows-win-psmodule-info-module-return-modules-prefix"><strong>prefix</strong></p>
+<a class="ansibleOptionLink" href="#return-modules/prefix" title="Permalink to this return value"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+</div></td>
+<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>The default prefix applied to <code class="docutils literal notranslate"><span class="pre">Verb-Noun</span></code> commands exported from the module, resulting in <code class="docutils literal notranslate"><span class="pre">Verb-PrefixNoun</span></code> names.</p>
+<p class="ansible-option-line"><span class="ansible-option-returned-bold">Returned:</span> success</p>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="return-modules/private_data"></div><p class="ansible-option-title" id="ansible-collections-community-windows-win-psmodule-info-module-return-modules-private-data"><strong>private_data</strong></p>
+<a class="ansibleOptionLink" href="#return-modules/private_data" title="Permalink to this return value"></a><p class="ansible-option-type-line"><span class="ansible-option-type">dictionary</span></p>
+</div></td>
+<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>Arbitrary private data used by the module. This is typically defined in the module manifest.</p>
+<p>This module limits the depth of the data returned for module types other than <code class="docutils literal notranslate"><span class="pre">Script</span></code> and <code class="docutils literal notranslate"><span class="pre">Manifest</span></code>.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">PSData</span></code> is commonly supplied and provides metadata for PowerShellGet but those fields are surfaced in top-level properties as well.</p>
+<p class="ansible-option-line"><span class="ansible-option-returned-bold">Returned:</span> success</p>
+<p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> {“PSData”: {“LicenseUri”: “<a class="reference external" href="https://example.com/module/LICENSE">https://example.com/module/LICENSE</a>”, “ProjectUri”: “<a class="reference external" href="https://example.com/module/">https://example.com/module/</a>”, “ReleaseNotes”: “v2 - Fixed some bugs\nv1 - First release\n”, “Tags”: [“networking”, “serialization”]}}</p>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="return-modules/procoessor_architecture"></div><p class="ansible-option-title" id="ansible-collections-community-windows-win-psmodule-info-module-return-modules-procoessor-architecture"><strong>procoessor_architecture</strong></p>
+<a class="ansibleOptionLink" href="#return-modules/procoessor_architecture" title="Permalink to this return value"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+</div></td>
+<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>The module’s processor architecture. See <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.reflection.processorarchitecture">https://docs.microsoft.com/en-us/dotnet/api/system.reflection.processorarchitecture</a></p>
+<p class="ansible-option-line"><span class="ansible-option-returned-bold">Returned:</span> success</p>
+<p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> “Amd64”</p>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="return-modules/project_uri"></div><p class="ansible-option-title" id="ansible-collections-community-windows-win-psmodule-info-module-return-modules-project-uri"><strong>project_uri</strong></p>
+<a class="ansibleOptionLink" href="#return-modules/project_uri" title="Permalink to this return value"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+</div></td>
+<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>The address of the module’s project.</p>
+<p class="ansible-option-line"><span class="ansible-option-returned-bold">Returned:</span> success</p>
+<p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> “<a class="reference external" href="https://github.com/psake/psake">https://github.com/psake/psake</a>”</p>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="return-modules/published_date"></div><p class="ansible-option-title" id="ansible-collections-community-windows-win-psmodule-info-module-return-modules-published-date"><strong>published_date</strong></p>
+<a class="ansibleOptionLink" href="#return-modules/published_date" title="Permalink to this return value"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+</div></td>
+<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>The date the module was published.</p>
+<p class="ansible-option-line"><span class="ansible-option-returned-bold">Returned:</span> success</p>
+<p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> “2017-03-15T04:18:09.0000000”</p>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="return-modules/release_notes"></div><p class="ansible-option-title" id="ansible-collections-community-windows-win-psmodule-info-module-return-modules-release-notes"><strong>release_notes</strong></p>
+<a class="ansibleOptionLink" href="#return-modules/release_notes" title="Permalink to this return value"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+</div></td>
+<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>The module’s release notes. This is a free text field and no specific format should be assumed.</p>
+<p class="ansible-option-line"><span class="ansible-option-returned-bold">Returned:</span> success</p>
+<p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> “## 1.4.6\n- Update `HelpInfoUri` to point to the latest content\n\n## 1.4.5\n- Bug fix for deadlock when getting parameters in an event\n\n## 1.4.4\n- Bug fix when installing modules from private feeds\n”</p>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="return-modules/repository"></div><p class="ansible-option-title" id="ansible-collections-community-windows-win-psmodule-info-module-return-modules-repository"><strong>repository</strong></p>
+<a class="ansibleOptionLink" href="#return-modules/repository" title="Permalink to this return value"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+</div></td>
+<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>The PSRepository where the module was installed from.</p>
+<p>This value is not historical. It depends on the PSRepositories that are registered now for the current user.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">repository_source_location</span></code> must match the current source location of a registered repository to get a repository name.</p>
+<p>If there is no match, then this value will match <code class="docutils literal notranslate"><span class="pre">repository_source_location</span></code>.</p>
+<p class="ansible-option-line"><span class="ansible-option-returned-bold">Returned:</span> success</p>
+<p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> “PSGallery”</p>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="return-modules/repository_source_location"></div><p class="ansible-option-title" id="ansible-collections-community-windows-win-psmodule-info-module-return-modules-repository-source-location"><strong>repository_source_location</strong></p>
+<a class="ansibleOptionLink" href="#return-modules/repository_source_location" title="Permalink to this return value"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+</div></td>
+<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>The source location of the repository where the module was installed from.</p>
+<p class="ansible-option-line"><span class="ansible-option-returned-bold">Returned:</span> success</p>
+<p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> “<a class="reference external" href="https://www.powershellgallery.com/api/v2">https://www.powershellgallery.com/api/v2</a>”</p>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="return-modules/required_assemblies"></div><p class="ansible-option-title" id="ansible-collections-community-windows-win-psmodule-info-module-return-modules-required-assemblies"><strong>required_assemblies</strong></p>
+<a class="ansibleOptionLink" href="#return-modules/required_assemblies" title="Permalink to this return value"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+</div></td>
+<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>A list of assemblies that the module requires.</p>
+<p>The values may be a simple name or a full path.</p>
+<p class="ansible-option-line"><span class="ansible-option-returned-bold">Returned:</span> success</p>
+<p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> [“Microsoft.Management.Infrastructure.CimCmdlets.dll”, “Microsoft.Management.Infrastructure.Dll”]</p>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="return-modules/required_modules"></div><p class="ansible-option-title" id="ansible-collections-community-windows-win-psmodule-info-module-return-modules-required-modules"><strong>required_modules</strong></p>
+<a class="ansibleOptionLink" href="#return-modules/required_modules" title="Permalink to this return value"></a><p class="ansible-option-type-line"><span class="ansible-option-type">list</span> / <span class="ansible-option-elements">elements=dictionary</span></p>
+</div></td>
+<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>A list of modules required by this module.</p>
+<p>This list contains full module objects, so each item can have all of the properties listed here, including <code class="docutils literal notranslate"><span class="pre">required_modules</span></code>.</p>
+<p>These module objects may not contain full information however, so you may see different results than if you had directly queried the module.</p>
+<p class="ansible-option-line"><span class="ansible-option-returned-bold">Returned:</span> success</p>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="return-modules/root_module"></div><p class="ansible-option-title" id="ansible-collections-community-windows-win-psmodule-info-module-return-modules-root-module"><strong>root_module</strong></p>
+<a class="ansibleOptionLink" href="#return-modules/root_module" title="Permalink to this return value"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+</div></td>
+<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>The root module as defined in the manifest.</p>
+<p>This may be a module name, filename, or full path.</p>
+<p class="ansible-option-line"><span class="ansible-option-returned-bold">Returned:</span> success</p>
+<p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> “WindowsErrorReporting.psm1”</p>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="return-modules/scripts"></div><p class="ansible-option-title" id="ansible-collections-community-windows-win-psmodule-info-module-return-modules-scripts"><strong>scripts</strong></p>
+<a class="ansibleOptionLink" href="#return-modules/scripts" title="Permalink to this return value"></a><p class="ansible-option-type-line"><span class="ansible-option-type">list</span> / <span class="ansible-option-elements">elements=string</span></p>
+</div></td>
+<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>A list of scripts (<code class="docutils literal notranslate"><span class="pre">.ps1</span></code> files) that run in the caller’s session state when the module is imported.</p>
+<p>This value comes from the <code class="docutils literal notranslate"><span class="pre">ScriptsToProcess</span></code> field in the module’s manifest.</p>
+<p class="ansible-option-line"><span class="ansible-option-returned-bold">Returned:</span> success</p>
+<p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> [“PrepareEnvironment.ps1”, “InitializeData.ps1”]</p>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="return-modules/tags"></div><p class="ansible-option-title" id="ansible-collections-community-windows-win-psmodule-info-module-return-modules-tags"><strong>tags</strong></p>
+<a class="ansibleOptionLink" href="#return-modules/tags" title="Permalink to this return value"></a><p class="ansible-option-type-line"><span class="ansible-option-type">list</span> / <span class="ansible-option-elements">elements=string</span></p>
+</div></td>
+<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>The tags defined in the module’s <code class="docutils literal notranslate"><span class="pre">PSData</span></code> metadata.</p>
+<p class="ansible-option-line"><span class="ansible-option-returned-bold">Returned:</span> success</p>
+<p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> [“networking”, “serialization”, “git”, “dsc”]</p>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="return-modules/updated_date"></div><p class="ansible-option-title" id="ansible-collections-community-windows-win-psmodule-info-module-return-modules-updated-date"><strong>updated_date</strong></p>
+<a class="ansibleOptionLink" href="#return-modules/updated_date" title="Permalink to this return value"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+</div></td>
+<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>The date the module was last updated.</p>
+<p class="ansible-option-line"><span class="ansible-option-returned-bold">Returned:</span> success</p>
+<p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> “2019-12-31T09:20:02.0000000”</p>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="return-modules/version"></div><p class="ansible-option-title" id="ansible-collections-community-windows-win-psmodule-info-module-return-modules-version"><strong>version</strong></p>
+<a class="ansibleOptionLink" href="#return-modules/version" title="Permalink to this return value"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+</div></td>
+<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>The module version.</p>
+<p class="ansible-option-line"><span class="ansible-option-returned-bold">Returned:</span> success</p>
+<p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> “1.2.3”</p>
+</div></td>
+</tr>
+</tbody>
+</table>
+<section id="authors">
+<h3>Authors<a class="headerlink" href="#authors" title="Permalink to this heading"></a></h3>
+<ul class="simple">
+<li><p>Brian Scholer (&#64;briantist)</p></li>
+</ul>
+</section>
+<section id="collection-links">
+<h3>Collection links<a class="headerlink" href="#collection-links" title="Permalink to this heading"></a></h3>
+<p class="ansible-links">
+  <a href="https://github.com/ansible-collections/community.windows/issues" aria-role="button" target="_blank" rel="noopener external">Issue Tracker</a>
+  <a href="https://github.com/ansible-collections/community.windows" aria-role="button" target="_blank" rel="noopener external">Repository (Sources)</a>
+  <a href="./#communication-for-community-windows" aria-role="button" target="_blank">Communication</a>
+</p></section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          
+
+<footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="win_psmodule_module.html" class="btn btn-neutral float-left" title="community.windows.win_psmodule module – Adds or removes a Windows PowerShell module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="win_psrepository_module.html" class="btn btn-neutral float-right" title="community.windows.win_psrepository module – Adds, removes or updates a Windows PowerShell repository." accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright Ansible contributors.</p>
+  </div>
+
+  
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script><!-- extra footer elements for Ansible beyond RTD Sphinx Theme -->
+
+</body>
+</html>
