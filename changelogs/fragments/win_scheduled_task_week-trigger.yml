@@ -1,2 +1,0 @@
-bugfixes:
-- win_scheduled_task - Fix the Monthly DOW trigger value ``run_on_last_week_of_month`` when ``weeks_of_month`` is also set - https://github.com/ansible-collections/community.windows/issues/414

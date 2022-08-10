@@ -167,6 +167,25 @@ releases:
       name: win_listen_ports_facts
       namespace: ''
     release_date: '2022-05-13'
+  1.11.0:
+    changes:
+      bugfixes:
+      - win_domain_user - Fix broken warning call when failing to get group membership
+        - https://github.com/ansible-collections/community.windows/issues/412
+      - win_scheduled_task - Fix the Monthly DOW trigger value ``run_on_last_week_of_month``
+        when ``weeks_of_month`` is also set - https://github.com/ansible-collections/community.windows/issues/414
+      minor_changes:
+      - Raise minimum Ansible version to ``2.11`` or newer
+      - win_psmodule module - add ``accept_license`` option to allow for installing
+        modules that require license acceptance (https://github.com/ansible-collections/community.windows/issues/340).
+      release_summary: Release summary for v1.11.0
+    fragments:
+    - 1.11.0-release.yml
+    - 340-win_psmodule-accept_license-option.yml
+    - ansible-version-bump.yml
+    - win_domain_user-add-warning.yml
+    - win_scheduled_task_week-trigger.yml
+    release_date: '2022-08-11'
   1.2.0:
     changes:
       bugfixes:

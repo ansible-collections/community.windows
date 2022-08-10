@@ -5,6 +5,26 @@ Community Windows Release Notes
 .. contents:: Topics
 
 
+v1.11.0
+=======
+
+Release Summary
+---------------
+
+Release summary for v1.11.0
+
+Minor Changes
+-------------
+
+- Raise minimum Ansible version to ``2.11`` or newer
+- win_psmodule module - add ``accept_license`` option to allow for installing modules that require license acceptance (https://github.com/ansible-collections/community.windows/issues/340).
+
+Bugfixes
+--------
+
+- win_domain_user - Fix broken warning call when failing to get group membership - https://github.com/ansible-collections/community.windows/issues/412
+- win_scheduled_task - Fix the Monthly DOW trigger value ``run_on_last_week_of_month`` when ``weeks_of_month`` is also set - https://github.com/ansible-collections/community.windows/issues/414
+
 v1.10.0
 =======
 
