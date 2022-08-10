@@ -72,28 +72,6 @@ You can run the collection's test suites with the commands:
 
 ## Publishing New Version
 
-The current process for publishing new versions of the Windows Community Collection is manual, and requires a user who has access to the `community` namespace on Ansible Galaxy to publish the build artifact.
-
-* Update `galaxy.yml` with the new version for the collection.
-* Rebuild the plugin docs:
-    ```bash
-    pip install git+https://github.com/ansible-network/collection_prep
-    collection_prep_add_docs --path ./ --branch-name main
-    ```
-* Update the `CHANGELOG`:
-  * Make sure you have [`antsibull-changelog`](https://pypi.org/project/antsibull-changelog/) installed `pip install antsibull-changelog`.
-  * Make sure there are fragments for all known changes in `changelogs/fragments`.
-  * Add a new fragment with the header `release_summary` to give a summary on the release.
-  * Run `antsibull-changelog release`.
-* Commit the changes and wait for CI to be green
-* Build and publish the collection to Galaxy:
-    ```bash
-    git clone https://github.com/ansible-collections/community.windows.git /tmp/community.windows
-    ansible-galaxy collection build /tmp/community.windows --output-path /tmp/community.windows
-    ansible-galaxy collection publish $(find /tmp/community.windows -maxdepth 1 -name 'community-windows-*.tar.gz') --token <API_KEY> -vv
-
-
-
 The current process for publishing new versions of the Windows Core Collection is manual, and requires a user who has access to the `community` namespace on Ansible Galaxy and Automation Hub to publish the build artifact.
 
 * Update `galaxy.yml` with the new version for the collection.
