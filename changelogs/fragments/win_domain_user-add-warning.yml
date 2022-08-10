@@ -1,2 +1,0 @@
-bugfixes:
-- win_domain_user - Fix broken warning call when failing to get group membership - https://github.com/ansible-collections/community.windows/issues/412
