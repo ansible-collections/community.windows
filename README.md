@@ -59,23 +59,6 @@ This collection follows the Ansible project's
 [Code of Conduct](https://docs.ansible.com/ansible/devel/community/code_of_conduct.html).
 Please read and familiarize yourself with this document.
 
-### Generating plugin docs
-
-Currently module documentation is generated manually using
-[add_docs.py](https://github.com/ansible-network/collection_prep/blob/master/collection_prep/cmd/add_docs.py). This should be run whenever
-there are any major doc changes or additional plugins have been added to ensure a docpage is viewable online in this
-repo. The following commands will run the doc generator and create the updated doc pages under [docs](docs).
-
-```bash
-# This is the path to the ansible.windows checkout
-COLLECTION_PATH=~/ansible_collections/community/windows
-
-cd /tmp
-git clone https://github.com/ansible-network/collection_prep.git
-cd collection_prep
-python add_docs.py -p "${COLLECTION_PATH}"
-```
-
 
 ### Testing with `ansible-test`
 
@@ -108,6 +91,22 @@ The current process for publishing new versions of the Windows Community Collect
     git clone https://github.com/ansible-collections/community.windows.git /tmp/community.windows
     ansible-galaxy collection build /tmp/community.windows --output-path /tmp/community.windows
     ansible-galaxy collection publish $(find /tmp/community.windows -maxdepth 1 -name 'community-windows-*.tar.gz') --token <API_KEY> -vv
+
+
+
+The current process for publishing new versions of the Windows Core Collection is manual, and requires a user who has access to the `community` namespace on Ansible Galaxy and Automation Hub to publish the build artifact.
+
+* Update `galaxy.yml` with the new version for the collection.
+* Update the `CHANGELOG`:
+  * Make sure you have [`antsibull-changelog`](https://pypi.org/project/antsibull-changelog/) installed `pip install antsibull-changelog`.
+  * Make sure there are fragments for all known changes in `changelogs/fragments`.
+  * Add a new fragment with the header `release_summary` to give a summary on the release.
+  * Run `antsibull-changelog release`.
+* Commit the changes and wait for CI to be green
+* Create a release with the tag that matches the version number
+  * The tag is the version number itself, and should not start with anything
+  * This will trigger a build and publish the collection to Galaxy
+  * The Zuul job progress will be listed [here](https://ansible.softwarefactory-project.io/zuul/builds?job_name=release-ansible-collection-automation-hub)
 
 After the version is published, verify it exists on the [Windows Community Collection Galaxy page](https://galaxy.ansible.com/community/windows).
 
