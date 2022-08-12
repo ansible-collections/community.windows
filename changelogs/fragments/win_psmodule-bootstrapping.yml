@@ -1,0 +1,3 @@
+bugfixes:
+- win_psmodule - Fix bootstrapping PowerShellGet with ``-AcceptLicense`` - https://github.com/ansible-collections/community.windows/issues/424
+- win_psmodule - Source PowerShellGet and PackagementManagement from ``repository`` if specified

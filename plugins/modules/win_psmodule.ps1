@@ -66,7 +66,8 @@ Function Install-PrereqModule {
         [Switch]$TestInstallationOnly,
         [bool]$AllowClobber,
         [Bool]$CheckMode,
-        [bool]$AcceptLicense
+        [bool]$AcceptLicense,
+        [string]$Repository
     )
 
     # Those are minimum required versions of modules.
@@ -92,7 +93,6 @@ Function Install-PrereqModule {
                         MinimumVersion = $PrereqModules[$Name]
                         Force = $true
                         WhatIf = $CheckMode
-                        AcceptLicense = $AcceptLicense
                     }
                     $installCmd = Get-Command -Name Install-Module
                     if ($installCmd.Parameters.ContainsKey('SkipPublisherCheck')) {
@@ -100,6 +100,12 @@ Function Install-PrereqModule {
                     }
                     if ($installCmd.Parameters.ContainsKey('AllowClobber')) {
                         $install_params.AllowClobber = $AllowClobber
+                    }
+                    if ($installCmd.Parameters.ContainsKey('AcceptLicense')) {
+                        $install_params.AcceptLicense = $AcceptLicense
+                    }
+                    if ($Repository) {
+                        $install_params.Repository = $Repository
                     }
 
                     Install-Module @install_params > $null
@@ -460,13 +466,13 @@ if ($repo_user -and $repo_pass ) {
 }
 
 if ( ($allow_clobber -or $allow_prerelease -or $skip_publisher_check -or
-        $required_version -or $minimum_version -or $maximum_version) ) {
+        $required_version -or $minimum_version -or $maximum_version -or $accept_license) ) {
     # Update the PowerShellGet and PackageManagement modules.
     # It's required to support AllowClobber, AllowPrerelease parameters.
-    Install-PrereqModule -AllowClobber $allow_clobber -CheckMode $check_mode -AcceptLicense $accept_license
+    Install-PrereqModule -AllowClobber $allow_clobber -CheckMode $check_mode -AcceptLicense $accept_license -Repository $repo
 }
 
-Import-Module -Name PackageManagement, PowerShellGet
+Import-Module -Name PackageManagement, PowerShellGet -Force
 
 if ($state -eq "present") {
     if (($repo) -and ($url)) {
