@@ -51,11 +51,9 @@ stages:
       - checkout: self
         fetchDepth: 1
 
-      - task: CmdLine@2
-        bash: python -m pip install ansible-core
+      - bash: python -m pip install ansible-core
 
-      - task: CmdLine@2
-        bash: ansible-galaxy collection install -r tests/requirements.yml
+      - bash: ansible-galaxy collection install -r tests/requirements.yml
 
       - task: PublishPipelineArtifact@1
         inputs:
