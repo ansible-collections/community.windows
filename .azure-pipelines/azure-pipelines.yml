@@ -51,17 +51,15 @@ stages:
       - checkout: self
         fetchDepth: 1
 
-      - bash: command -v python
-
       - bash: python -m pip install ansible-core
         displayName: Install Ansible
 
-      - bash: ansible-galaxy collection install -r tests/requirements.yml
+      - bash: ansible-galaxy collection install -r tests/requirements.yml -p collections
         displayName: Install collection requirements
 
       - task: PublishPipelineArtifact@1
         inputs:
-          targetPath: ~/.ansible/collections/ansible_collections
+          targetPath: collections/ansible_collections
           artifactName: CollectionRequirements
 
   - stage: Ansible_devel
