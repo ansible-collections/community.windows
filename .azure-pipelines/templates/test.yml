@@ -22,7 +22,7 @@ jobs:
           inputs:
             artifact: CollectionRequirements
             path: $(Agent.BuildDirectory)
-        - bash: ls -al $(Agent.BuildDirectory)/ansible_collections
+        - bash: ls -al $(Agent.BuildDirectory); echo "sep"; ls -al $(Agent.BuildDirectory)/ansible_collections
         - bash: .azure-pipelines/scripts/run-tests.sh "$(entryPoint)" "${{ job.test }}" "$(coverageBranches)"
           displayName: Run Tests
         - bash: .azure-pipelines/scripts/process-results.sh
