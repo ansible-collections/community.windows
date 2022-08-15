@@ -59,13 +59,11 @@ stages:
       #   input:
       #     script: python -m pip install ansible-core
 
-      - displayName: Download Collection dependencies
-        task: CmdLine@2
+      - task: CmdLine@2
         input:
           script: ansible-galaxy collection install -r tests/requirements.yml
 
-      - displayName: Publish Collection
-        task: PublishPipelineArtifact@1
+      - task: PublishPipelineArtifact@1
         inputs:
           targetPath: ~/.ansible/collections/ansible_collections
           artifactName: CollectionRequirements
