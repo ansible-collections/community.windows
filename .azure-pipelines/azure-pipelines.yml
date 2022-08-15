@@ -41,9 +41,35 @@ resources:
 pool: Standard
 
 stages:
+  - stage: Dependencies
+    displayName: Download Dependencies
+    jobs:
+    - checkout: self
+      fetchDepth: 1
+
+    - task: UsePythonVersion@0
+      inputs:
+
+    - displayName: Install Ansible
+      task: CmdLine@2
+      input:
+        script: python -m pip install ansible-core
+
+    - displayName: Download Collection dependencies
+      task: CmdLine@2
+      input:
+        script: ansible-galaxy collection install -r tests/requirements.yml
+
+    - displayName: Publish Collection
+      task: PublishPipelineArtifact@1
+      inputs:
+        targetPath: ~/.ansible/collections/ansible_collections
+        artifactName: CollectionRequirements
+
   - stage: Ansible_devel
     displayName: Ansible devel
-    dependsOn: []
+    dependsOn:
+    - Dependencies
     jobs:
       - template: templates/matrix.yml
         parameters:
@@ -56,7 +82,8 @@ stages:
               test: units
   - stage: Ansible_2_13
     displayName: Ansible 2.13
-    dependsOn: []
+    dependsOn:
+    - Dependencies
     jobs:
       - template: templates/matrix.yml
         parameters:
@@ -69,7 +96,8 @@ stages:
               test: units
   - stage: Ansible_2_12
     displayName: Ansible 2.12
-    dependsOn: []
+    dependsOn:
+    - Dependencies
     jobs:
       - template: templates/matrix.yml
         parameters:
@@ -82,7 +110,8 @@ stages:
               test: units
   - stage: Ansible_2_11
     displayName: Ansible 2.11
-    dependsOn: []
+    dependsOn:
+    - Dependencies
     jobs:
       - template: templates/matrix.yml
         parameters:
@@ -95,7 +124,8 @@ stages:
               test: units
   - stage: Windows
     displayName: Windows
-    dependsOn: []
+    dependsOn:
+    - Dependencies
     jobs:
       - template: templates/matrix.yml
         parameters:
