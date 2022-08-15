@@ -64,7 +64,7 @@ stages:
 
       - task: PublishPipelineArtifact@1
         inputs:
-          targetPath: collections/ansible_collections
+          targetPath: collections
           artifactName: CollectionRequirements
 
   - stage: Ansible_devel
