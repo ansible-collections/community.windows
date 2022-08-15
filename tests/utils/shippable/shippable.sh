@@ -70,10 +70,7 @@ else
     export ANSIBLE_COLLECTIONS_PATHS="${PWD}/../../../"
 fi
 
-# TODO: put this in a requirements file
-# Install the depss of this collection
-# sudo chown "$(whoami)" "${PWD}/../../"
-# retry ansible-galaxy collection install 'ansible.windows' 'chocolatey.chocolatey'
+ansible-galaxy collection list
 
 export PYTHONIOENCODING='utf-8'
 
