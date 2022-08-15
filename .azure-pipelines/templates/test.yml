@@ -20,7 +20,7 @@ jobs:
           path: $(checkoutPath)
         - task: DownloadPipelineArtifact@2
           inputs:
-            artifact: abc
+            artifact: CollectionRequirements
             path: $(checkoutPath)/../../../
         - bash: .azure-pipelines/scripts/run-tests.sh "$(entryPoint)" "${{ job.test }}" "$(coverageBranches)"
           displayName: Run Tests
