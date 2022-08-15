@@ -46,12 +46,15 @@ stages:
     jobs:
     - job: dep_download
       displayName: Download Dependencies
-      container: default
+      pool:
+        vmImage: ubuntu-latest
       steps:
       - checkout: self
         fetchDepth: 1
 
-      - bash: command -v python
+      - task: UsePythonVersion@0
+        inputs:
+          versionSpec: '3.10'
 
       - bash: python -m pip install ansible-core
         displayName: Install Ansible
