@@ -23,7 +23,13 @@ jobs:
           inputs:
             artifact: CollectionRequirements
             path: $(checkoutPath)
-        - bash: mv ansible_collections/* $(Agent.BuildDirectory)
+        - bash: |
+            echo "$(pwd)/ansible_collections"
+            ls -al $(pwd)/ansible_collections
+
+            echo "Agent.BuildDirectory - $(Agent.BuildDirectory)"
+            ls -al $(Agent.BuildDirectory)
+            mv ansible_collections/* $(Agent.BuildDirectory)
           # ../../env | sort; echo "sep"; pwd; echo "sep"; ls -al $(pwd); echo "sep"; ls -al $(pwd)/ansible_collections; echo "sep"; ls -al $(Agent.BuildDirectory); echo "sep"; ls -al $(Agent.BuildDirectory)/ansible_collections; echo "sep"; ls -al $(Pipeline.Workspace)
         - bash: .azure-pipelines/scripts/run-tests.sh "$(entryPoint)" "${{ job.test }}" "$(coverageBranches)"
           displayName: Run Tests
