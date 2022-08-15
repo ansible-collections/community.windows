@@ -17,12 +17,11 @@ jobs:
       steps:
         - checkout: self
           fetchDepth: $(fetchDepth)
-          clean: false
           path: $(checkoutPath)
-        - task: DownloadPipelineArtifact@2
-          inputs:
-            artifact: CollectionRequirements
-            path: $(checkoutPath)
+        # - task: DownloadPipelineArtifact@2
+        #   inputs:
+        #     artifact: CollectionRequirements
+        #     path: $(checkoutPath)
         - bash: |
             echo "$(pwd)/ansible_collections"
             ls -al $(pwd)/ansible_collections
