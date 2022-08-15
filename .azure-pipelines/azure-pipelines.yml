@@ -52,12 +52,10 @@ stages:
         fetchDepth: 1
 
       - task: CmdLine@2
-        inputs:
-          script: python -m pip install ansible-core
+        bash: python -m pip install ansible-core
 
       - task: CmdLine@2
-        inputs:
-          script: ansible-galaxy collection install -r tests/requirements.yml
+        bash: ansible-galaxy collection install -r tests/requirements.yml
 
       - task: PublishPipelineArtifact@1
         inputs:
