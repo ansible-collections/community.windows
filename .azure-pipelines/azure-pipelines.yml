@@ -60,7 +60,7 @@ stages:
       #     script: python -m pip install ansible-core
 
       - task: CmdLine@2
-        input:
+        inputs:
           script: ansible-galaxy collection install -r tests/requirements.yml
 
       - task: PublishPipelineArtifact@1
