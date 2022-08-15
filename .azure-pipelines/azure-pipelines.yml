@@ -56,7 +56,7 @@ stages:
           versionSpec: '3.10'
 
       - task: CmdLine@2
-        input:
+        inputs:
           script: python -m pip install ansible-core
 
       - task: CmdLine@2
