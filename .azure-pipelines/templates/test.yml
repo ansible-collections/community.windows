@@ -22,6 +22,7 @@ jobs:
           inputs:
             artifact: CollectionRequirements
             path: ansible_collections
+        - bash: tree
         - bash: .azure-pipelines/scripts/run-tests.sh "$(entryPoint)" "${{ job.test }}" "$(coverageBranches)"
           displayName: Run Tests
         - bash: .azure-pipelines/scripts/process-results.sh
