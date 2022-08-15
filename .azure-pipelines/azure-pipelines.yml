@@ -51,6 +51,8 @@ stages:
       - checkout: self
         fetchDepth: 1
 
+      - bash: command -v python
+
       - bash: python -m pip install ansible-core
         displayName: Install Ansible
 
