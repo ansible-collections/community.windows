@@ -42,29 +42,33 @@ pool: Standard
 
 stages:
   - stage: Dependencies
-    displayName: Download Dependencies
+    displayName: Dependencies
     jobs:
-    - checkout: self
-      fetchDepth: 1
+    - job: dep_download
+      displayName: Download Dependencies
+      container: default
+      steps:
+      - checkout: self
+        fetchDepth: 1
 
-    - task: UsePythonVersion@0
-      inputs:
+      # - task: UsePythonVersion@0
+      #   inputs:
 
-    - displayName: Install Ansible
-      task: CmdLine@2
-      input:
-        script: python -m pip install ansible-core
+      # - displayName: Install Ansible
+      #   task: CmdLine@2
+      #   input:
+      #     script: python -m pip install ansible-core
 
-    - displayName: Download Collection dependencies
-      task: CmdLine@2
-      input:
-        script: ansible-galaxy collection install -r tests/requirements.yml
+      - displayName: Download Collection dependencies
+        task: CmdLine@2
+        input:
+          script: ansible-galaxy collection install -r tests/requirements.yml
 
-    - displayName: Publish Collection
-      task: PublishPipelineArtifact@1
-      inputs:
-        targetPath: ~/.ansible/collections/ansible_collections
-        artifactName: CollectionRequirements
+      - displayName: Publish Collection
+        task: PublishPipelineArtifact@1
+        inputs:
+          targetPath: ~/.ansible/collections/ansible_collections
+          artifactName: CollectionRequirements
 
   - stage: Ansible_devel
     displayName: Ansible devel
