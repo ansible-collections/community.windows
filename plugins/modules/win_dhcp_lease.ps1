@@ -52,14 +52,8 @@ Function Convert-MacAddress {
         return $mac
     }
     elseif ($mac.Length -eq 17) {
-        # Remove Colons
-        if ($mac -like "*:*:*:*:*:*") {
-            return ($mac -replace ':')
-        }
-        # Remove Dashes
-        if ($mac -like "*-*-*-*-*-*") {
-            return ($mac -replace '-')
-        }
+        # Replace Colons by Dashes
+        return ($mac -replace ':', '-')
     }
     else {
         return $false
@@ -123,16 +117,13 @@ if ($ip) {
 
 # MacAddress was specified
 if ($mac) {
-    if ($mac -like "*-*") {
-        $mac_original = $mac
-        $mac = Convert-MacAddress -mac $mac
-    }
+    $mac = Convert-MacAddress -mac $mac
 
     if ($mac -eq $false) {
         $module.FailJson("The MAC Address is not properly formatted")
     }
     else {
-        $current_lease = Get-DhcpServerv4Scope | Get-DhcpServerv4Lease | Where-Object ClientId -eq $mac_original
+        $current_lease = Get-DhcpServerv4Scope | Get-DhcpServerv4Lease | Where-Object ClientId -eq $mac
     }
 }
 
@@ -424,7 +415,7 @@ if ($state -eq "present") {
                 Try {
                     if ($check_mode) {
                         # In check mode, a lease won't exist for conversion, make one manually
-                        Add-DhcpServerv4Reservation -ScopeId $scope_id -ClientId $mac_original -IPAddress $ip -WhatIf:$check_mode
+                        Add-DhcpServerv4Reservation -ScopeId $scope_id -ClientId $mac -IPAddress $ip -WhatIf:$check_mode
                     }
                     else {
                         # Convert to Reservation
@@ -438,7 +429,7 @@ if ($state -eq "present") {
 
                 if (-not $check_mode) {
                     # Get DHCP reservation object
-                    $new_lease = Get-DhcpServerv4Reservation -ClientId $mac_original -ScopeId $scope_id
+                    $new_lease = Get-DhcpServerv4Reservation -ClientId $mac -ScopeId $scope_id
                     $module.Result.lease = Convert-ReturnValue -Object $new_lease
                 }
 
