@@ -110,12 +110,7 @@ Catch {
     $module.FailJson("The DhcpServer module failed to load properly: $($_.Exception.Message)", $_)
 }
 
-# Determine if there is an existing lease
-if ($ip) {
-    $current_lease = Get-DhcpServerv4Scope | Get-DhcpServerv4Lease | Where-Object IPAddress -eq $ip
-}
-
-# MacAddress was specified
+# Find existing lease by MAC address
 if ($mac) {
     $mac = Convert-MacAddress -mac $mac
 
@@ -125,6 +120,11 @@ if ($mac) {
     else {
         $current_lease = Get-DhcpServerv4Scope | Get-DhcpServerv4Lease | Where-Object ClientId -eq $mac
     }
+}
+
+# Find existing lease by IP address
+if ($ip -and (-not $current_lease)) {
+    $current_lease = Get-DhcpServerv4Scope | Get-DhcpServerv4Lease | Where-Object IPAddress -eq $ip
 }
 
 # Did we find a lease/reservation
