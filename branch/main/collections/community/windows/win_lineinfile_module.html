@@ -126,9 +126,6 @@
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/community/windows">community.windows collection</a> (version 1.11.0).</p>
-<p>You might already have this collection installed if you are using the <code class="docutils literal notranslate"><span class="pre">ansible</span></code> package.
-It is not included in <code class="docutils literal notranslate"><span class="pre">ansible-core</span></code>.
-To check whether it is installed, run <code class="code docutils literal notranslate"><span class="pre">ansible-galaxy</span> <span class="pre">collection</span> <span class="pre">list</span></code>.</p>
 <p>To install it, use: <code class="code docutils literal notranslate"><span class="pre">ansible-galaxy</span> <span class="pre">collection</span> <span class="pre">install</span> <span class="pre">community.windows</span></code>.</p>
 <p>To use it in a playbook, specify: <code class="code docutils literal notranslate"><span class="pre">community.windows.win_lineinfile</span></code>.</p>
 </div>
@@ -165,8 +162,8 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <p>If the <code class="docutils literal notranslate"><span class="pre">regexp</span></code> does match, the last matching line will be replaced by the expanded line parameter.</p>
 <p class="ansible-option-line"><span class="ansible-option-choices">Choices:</span></p>
 <ul class="simple">
-<li><p><span class="ansible-option-default-bold">no</span> <span class="ansible-option-default">← (default)</span></p></li>
-<li><p><span class="ansible-option-choices-entry">yes</span></p></li>
+<li><p><span class="ansible-option-default-bold">false</span> <span class="ansible-option-default">← (default)</span></p></li>
+<li><p><span class="ansible-option-choices-entry">true</span></p></li>
 </ul>
 </div></td>
 </tr>
@@ -178,8 +175,8 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <p>When set to <code class="docutils literal notranslate"><span class="pre">yes</span></code>, create a backup file including the timestamp information so you can get the original file back if you somehow clobbered it incorrectly.</p>
 <p class="ansible-option-line"><span class="ansible-option-choices">Choices:</span></p>
 <ul class="simple">
-<li><p><span class="ansible-option-default-bold">no</span> <span class="ansible-option-default">← (default)</span></p></li>
-<li><p><span class="ansible-option-choices-entry">yes</span></p></li>
+<li><p><span class="ansible-option-default-bold">false</span> <span class="ansible-option-default">← (default)</span></p></li>
+<li><p><span class="ansible-option-choices-entry">true</span></p></li>
 </ul>
 </div></td>
 </tr>
@@ -190,8 +187,8 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <td><div class="ansible-option-cell"><p>Used with <code class="docutils literal notranslate"><span class="pre">state=present</span></code>. If specified, the file will be created if it does not already exist. By default it will fail if the file is missing.</p>
 <p class="ansible-option-line"><span class="ansible-option-choices">Choices:</span></p>
 <ul class="simple">
-<li><p><span class="ansible-option-default-bold">no</span> <span class="ansible-option-default">← (default)</span></p></li>
-<li><p><span class="ansible-option-choices-entry">yes</span></p></li>
+<li><p><span class="ansible-option-default-bold">false</span> <span class="ansible-option-default">← (default)</span></p></li>
+<li><p><span class="ansible-option-choices-entry">true</span></p></li>
 </ul>
 </div></td>
 </tr>
@@ -236,7 +233,7 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <a class="ansibleOptionLink" href="#parameter-line" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>Required for <code class="docutils literal notranslate"><span class="pre">state=present</span></code>. The line to insert/replace into the file. If <code class="docutils literal notranslate"><span class="pre">backrefs</span></code> is set, may contain backreferences that will get expanded with the <code class="docutils literal notranslate"><span class="pre">regexp</span></code> capture groups if the regexp matches.</p>
-<p>Be aware that the line is processed first on the controller and thus is dependent on yaml quoting rules. Any double quoted line will have control characters, such as ‘rn’, expanded. To print such characters literally, use single or no quotes.</p>
+<p>Be aware that the line is processed first on the controller and thus is dependent on yaml quoting rules. Any double quoted line will have control characters, such as ‘\r\n’, expanded. To print such characters literally, use single or no quotes.</p>
 </div></td>
 </tr>
 <tr class="row-odd"><td><div class="ansible-option-cell">

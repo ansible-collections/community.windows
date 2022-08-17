@@ -126,9 +126,6 @@
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/community/windows">community.windows collection</a> (version 1.11.0).</p>
-<p>You might already have this collection installed if you are using the <code class="docutils literal notranslate"><span class="pre">ansible</span></code> package.
-It is not included in <code class="docutils literal notranslate"><span class="pre">ansible-core</span></code>.
-To check whether it is installed, run <code class="code docutils literal notranslate"><span class="pre">ansible-galaxy</span> <span class="pre">collection</span> <span class="pre">list</span></code>.</p>
 <p>To install it, use: <code class="code docutils literal notranslate"><span class="pre">ansible-galaxy</span> <span class="pre">collection</span> <span class="pre">install</span> <span class="pre">community.windows</span></code>.</p>
 <p>To use it in a playbook, specify: <code class="code docutils literal notranslate"><span class="pre">community.windows.win_audit_rule</span></code>.</p>
 </div>
@@ -180,10 +177,10 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <p>For more information on the choices see MSDN PropagationFlags enumeration at <a class="reference external" href="https://msdn.microsoft.com/en-us/library/system.security.accesscontrol.inheritanceflags.aspx">https://msdn.microsoft.com/en-us/library/system.security.accesscontrol.inheritanceflags.aspx</a>.</p>
 <p class="ansible-option-line"><span class="ansible-option-choices">Choices:</span></p>
 <ul class="simple">
-<li><p><span class="ansible-option-choices-entry">ContainerInherit</span></p></li>
-<li><p><span class="ansible-option-choices-entry">ObjectInherit</span></p></li>
+<li><p><span class="ansible-option-default-bold">ContainerInherit</span> <span class="ansible-option-default">← (default)</span></p></li>
+<li><p><span class="ansible-option-default-bold">ObjectInherit</span> <span class="ansible-option-default">← (default)</span></p></li>
 </ul>
-<p class="ansible-option-line"><span class="ansible-option-default-bold">Default:</span> <span class="ansible-option-default">“ContainerInherit,ObjectInherit”</span></p>
+<p class="ansible-option-line"><span class="ansible-option-default-bold">Default:</span> <span class="ansible-option-default">[“ContainerInherit”, “ObjectInherit”]</span></p>
 </div></td>
 </tr>
 <tr class="row-even"><td><div class="ansible-option-cell">
@@ -311,7 +308,7 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <td><div class="ansible-option-cell"><p>The current rules on the defined <em>path</em></p>
 <p>Will return “No audit rules defined on <em>path</em>“</p>
 <p class="ansible-option-line"><span class="ansible-option-returned-bold">Returned:</span> always</p>
-<p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> “{\n  \”audit_flags\”: \”Success\”,\n  \”user\”: \”Everyone\”,\n  \”inheritance_flags\”: \”False\”,\n  \”is_inherited\”: \”False\”,\n  \”propagation_flags\”: \”None\”,\n  \”rights\”: \”Delete\”\n}\n”</p>
+<p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> {“audit_flags”: “Success”, “inheritance_flags”: “False”, “is_inherited”: “False”, “propagation_flags”: “None”, “rights”: “Delete”, “user”: “Everyone”}</p>
 </div></td>
 </tr>
 <tr class="row-odd"><td><div class="ansible-option-cell">
