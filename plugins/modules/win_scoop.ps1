@@ -44,7 +44,12 @@ function Install-Scoop {
     $env:Path = [System.Environment]::GetEnvironmentVariable("Path", "Machine") + ";" + [System.Environment]::GetEnvironmentVariable("Path", "User")
 
     $scoop_app = Get-Command -Name scoop.ps1 -Type ExternalScript -ErrorAction SilentlyContinue
-    if ($null -eq $scoop_app) {
+    if ($module.CheckMode -and $null -eq $scoop_app) {
+        $module.Result.skipped = $true
+        $module.Result.msg = "Skipped check mode run on win_scoop as scoop.ps1 cannot be found on the system"
+        $module.ExitJson()
+    }
+    elseif ($null -eq $scoop_app) {
         # We need to install scoop
         # We run this in a separate process to make it easier to get the result in a failure and capture any output that
         # might be sent to the host. We also need to enable TLS 1.2 in that process and not here so it can download the
@@ -57,38 +62,39 @@ function Install-Scoop {
             }
             [Net.ServicePointManager]::SecurityProtocol = $security_protocols
 
-            Invoke-Expression (New-Object System.Net.WebClient).DownloadString('https://get.scoop.sh')
+            $script = (New-Object System.Net.WebClient).DownloadString('https://get.scoop.sh')
+            $installer = [ScriptBlock]::Create($script)
+            $params = @{}
+
+            $current_user = [Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()
+            if ($current_user.IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)) {
+                $params.RunAsAdmin = $true
+            }
+            . $installer -RunAsAdmin
         }
 
-        if (-not $module.CheckMode) {
-            $enc_command = [Convert]::ToBase64String([Text.Encoding]::Unicode.GetBytes($install_script.ToString()))
-            $cmd = "powershell.exe -NoProfile -NoLogo -EncodedCommand $enc_command"
-            $res = Run-Command -Command $cmd -environment $environment
-            if ($res.rc -ne 0) {
-                $module.Result.rc = $res.rc
-                $module.Result.stdout = $res.stdout
-                $module.Result.stderr = $res.stderr
-                $module.FailJson("Scoop bootstrap installation failed.")
-            }
-            $module.Warn("Scoop was missing from this system, so it was installed during this task run.")
-        }
-        $module.Result.changed = $true
+        $enc_command = [Convert]::ToBase64String([Text.Encoding]::Unicode.GetBytes($install_script.ToString()))
+        $cmd = "powershell.exe -NoProfile -NoLogo -EncodedCommand $enc_command"
+
+        # Scoops installer does weird things and the exit code will most likely be 0. Use the presence of the scoop
+        # command as the indicator as to whether it was installed or not.
+        $res = Run-Command -Command $cmd -environment $environment
 
         # Refresh PATH
         $env:Path = [System.Environment]::GetEnvironmentVariable("Path", "Machine") + ";" + [System.Environment]::GetEnvironmentVariable("Path", "User")
 
         # locate the newly installed scoop.ps1
         $scoop_app = Get-Command -Name scoop.ps1 -Type ExternalScript -ErrorAction SilentlyContinue
-    }
 
-    if ($module.CheckMode -and $null -eq $scoop_app) {
-        $module.Result.skipped = $true
-        $module.Result.msg = "Skipped check mode run on win_scoop as scoop.ps1 cannot be found on the system"
-        $module.ExitJson()
-    }
+        if ($null -eq $scoop_app -or -not (Test-Path -LiteralPath $scoop_app.Path)) {
+            $module.Result.rc = $res.rc
+            $module.Result.stdout = $res.stdout
+            $module.Result.stderr = $res.stderr
+            $module.FailJson("Failed to bootstrap scoop.ps1")
+        }
 
-    if ($null -eq $scoop_app -or -not (Test-Path -LiteralPath $scoop_app.Path)) {
-        $module.FailJson("Failed to find scoop.ps1, make sure it is added to the PATH")
+        $module.Warn("Scoop was missing from this system, so it was installed during this task run.")
+        $module.Result.changed = $true
     }
 
     return $scoop_app.Path

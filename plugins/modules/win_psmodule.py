@@ -59,6 +59,30 @@ options:
     description:
       - Name of the custom repository to use.
     type: str
+  username:
+    description:
+      - Username to authenticate against private repository.
+    type: str
+    required: no
+    version_added: '1.10.0'
+  password:
+    description:
+      - Password to authenticate against private repository.
+    type: str
+    required: no
+    version_added: '1.10.0'
+  accept_license:
+    description:
+      - Accepts the module's license.
+      - Required for modules that require license acceptance, since interactively answering the prompt is not possible.
+      - Corresponds to the C(-AcceptLicense) parameter of C(Install-Module).
+      - >-
+        Installation of a module or a dependency that requires license acceptance cannot be detected in check mode,
+        but will cause a failure at runtime unless I(accept_license=true).
+    type: bool
+    required: no
+    default: false
+    version_added: '1.11.0'
   url:
     description:
       - URL of the custom repository to register.
@@ -114,6 +138,14 @@ EXAMPLES = r'''
   community.windows.win_psmodule:
     name: PowerShellModule
     repository: MyRepository
+    state: present
+
+- name: Add a PowerShell module from a specific repository with credentials
+  win_psmodule:
+    name: PowerShellModule
+    repository: MyRepository
+    username: repo_username
+    password: repo_password
     state: present
 
 - name: Remove a PowerShell module

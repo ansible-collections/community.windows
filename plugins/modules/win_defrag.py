@@ -10,7 +10,7 @@ module: win_defrag
 short_description: Consolidate fragmented files on local volumes
 description:
 - Locates and consolidates fragmented files on local volumes to improve system performance.
-- 'More information regarding C(win_defrag) is available from: U(https://technet.microsoft.com/en-us/library/cc731650(v=ws.11).aspx)'
+- 'More information regarding C(win_defrag) is available from: U(https://technet.microsoft.com/en-us/library/cc731650%28v%3Dws.11.aspx%29)'
 requirements:
 - defrag.exe
 options:

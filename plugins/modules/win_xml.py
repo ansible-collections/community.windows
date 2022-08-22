@@ -52,7 +52,6 @@ options:
         description:
         - The type of XML node you are working with.
         type: str
-        required: yes
         default: element
         choices: [ attribute, element, text ]
     xpath:

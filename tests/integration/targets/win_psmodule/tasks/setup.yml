@@ -8,7 +8,7 @@
 #     ansible-test2 - 1.0.1 (Not signed for skip_publisher tests)
 #     ansible-test2 - 1.1.0-beta1
 #     ansible-clobber - 0.1.0
-#
+#     ansible-licensed - 1.1.1 (requires license acceptance)
 # PSRepo 2 contains
 #     ansible-test2 - 1.0.0
 #

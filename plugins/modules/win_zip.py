@@ -10,7 +10,7 @@ module: win_zip
 short_description: Compress file or directory as zip archive on the Windows node
 description:
 - Compress file or directory as zip archive.
-- For non-Windows targets, use the M(ansible.builtin.archive) module instead.
+- For non-Windows targets, use the M(community.general.archive) module instead.
 notes:
 - The filenames in the zip are encoded using UTF-8.
 requirements:
@@ -29,7 +29,7 @@ options:
     type: path
     required: yes
 seealso:
-- module: ansible.builtin.archive
+- module: community.general.archive
 author:
 - Kento Yagisawa (@hiyoko_taisa)
 '''

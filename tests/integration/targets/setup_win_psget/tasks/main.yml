@@ -1,24 +1,64 @@
 # Installs PackageManagement and PowerShellGet to the required versions for testing
 ---
 - name: check if PackageManagement has been installed
-  ansible.windows.win_shell: if (Get-Command -Name Install-Module -ErrorAction SilentlyContinue) { $true } else { $false }
-  changed_when: False
+  ansible.windows.win_powershell:
+    script: |
+      $ErrorActionPreference = 'Stop'
+      $Ansible.Changed = $false
+
+      if (-not (Get-Command -Name Install-Module -ErrorAction SilentlyContinue)) {
+          [PSCustomObject]@{
+              Install = $true
+              Action = "scratch"
+          }
+          return
+      }
+
+      $psGet = Get-Module -Name PowerShellGet -ListAvailable |
+          Sort-Object -Property Version -Descending |
+          Select-Object -First 1 -ExpandProperty Version
+      $package = Get-Module -Name PackageManagement -ListAvailable |
+          Sort-Object -Property Version -Descending |
+          Select-Object -First 1 -ExpandProperty Version
+
+      if ($psGet -lt [Version]"1.6.0" -or $package -lt [Version]"1.1.7") {
+          [PSCustomObject]@{
+              Install = $true
+              Action = "module"
+          }
+      }
+      else {
+          [PSCustomObject]@{
+              Install = $false
+          }
+      }
+
   register: module_installed
 
-- name: install PackageManagement and PowerShellGet
-  when: not module_installed.stdout | trim | bool
+- name: bootstrap required modules
+  when: module_installed.output[0].Install
   block:
-  - name: install PackageManagement
+  - name: install PackageManagement for older hosts
     ansible.windows.win_package:
       path: https://ansible-ci-files.s3.amazonaws.com/test/integration/targets/setup_win_psget/PackageManagement_x64.msi
       product_id: '{57E5A8BB-41EB-4F09-B332-B535C5954A28}'
       state: present
+    when: module_installed.output[0].Action == "scratch"
     register: download_res
     until: download_res is successful
     retries: 3
     delay: 5
 
-  - name: create the required folder
+  - name: remove the old versions of PackageManagement and PowerShellGet
+    ansible.windows.win_file:
+      path: C:\Program Files\WindowsPowerShell\Modules\{{ item }}
+      state: absent
+    when: module_installed.output[0].Action == "scratch"
+    loop:
+    - PackageManagement
+    - PowerShellGet
+
+  - name: create the required folder for nuget
     ansible.windows.win_file:
       path: C:\Program Files\PackageManagement\ProviderAssemblies\nuget\2.8.5.208
       state: directory
@@ -27,48 +67,17 @@
     ansible.windows.win_get_url:
       url: https://ansible-ci-files.s3.amazonaws.com/test/integration/targets/setup_win_psget/Microsoft.PackageManagement.NuGetProvider-2.8.5.208.dll
       dest: C:\Program Files\PackageManagement\ProviderAssemblies\nuget\2.8.5.208\Microsoft.PackageManagement.NuGetProvider.dll
+      force: false
     register: nuget_download_res
     until: nuget_download_res is successful
     retries: 3
     delay: 5
 
-- name: get version and install location of PackageManagement and PowerShellGet
-  ansible.windows.win_shell: |
-    $info = @{}
-    $modules = Get-Module -ListAvailable | Where-Object {
-        ($_.Name -eq "PackageManagement" -and $_.Version -lt "1.1.7") -or ($_.Name -eq "PowerShellGet" -and $_.Version -lt "1.6.0")
-    } | ForEach-Object {
-        $module_info = @{}
-        if ([System.IO.Path]::GetFileName($_.ModuleBase) -eq $_.Name) {
-            $module_info.remove_path = $_.ModuleBase
-            $module_info.install_path = $_.ModuleBase
-        } else {
-            $module_version = switch($_.Name) {
-                PackageManagement { "1.1.7.0" }
-                PowerShellGet { "1.6.0" }
-            }
-            $module_info.remove_path = ""
-            $module_info.install_path = ([System.IO.Path]::Combine([System.IO.Path]::GetDirectoryName($_.ModuleBase), $module_version))
-        }
-        $info.($_.Name) = $module_info
-    }
-
-    ConvertTo-Json -InputObject $info -Compress
-  changed_when: False
-  register: installed_modules
-
-- name: register installed_modules info
-  set_fact:
-    installed_modules: '{{ installed_modules.stdout | trim | from_json }}'
-
-- name: update the PackageManagement and PowerShellGet versions
-  when: installed_modules.keys() | list | length > 0
-  block:
   - name: download newer PackageManagement and PowerShellGet nupkg
     ansible.windows.win_get_url:
       url: '{{ item.url }}'
-      dest: '{{ remote_tmp_dir }}\{{ item.name }}.zip'  # .zip is required for win_unzip
-    when: item.name in installed_modules
+      dest: '{{ remote_tmp_dir }}\{{ item.name }}.{{ "nupkg" if module_installed.output[0].Action == "module" else "zip" }}'  # .zip is required for win_unzip
+    when: module_installed.output[0].Install
     register: download_res
     until: download_res is successful
     retries: 3
@@ -79,21 +88,42 @@
     - name: PowerShellGet
       url: https://ansible-ci-files.s3.amazonaws.com/test/integration/targets/setup_win_psget/powershellget.1.6.0.nupkg
 
-  - name: remove the old versions of PackageManagement and PowerShellGet
-    ansible.windows.win_file:
-      path: '{{ item.value.remove_path }}'
-      state: absent
-    # This isn't necessary on 2016+ as packages are installed in a version specific dir
-    when: item.value.remove_path != ""
-    with_dict: '{{ installed_modules }}'
-
-  - name: extract new modules to correct location
+  - name: extract new modules to correct location for older hosts
     win_unzip:
-      src: '{{ remote_tmp_dir }}\{{ item.name }}.zip'
-      dest: '{{ item.path }}'
-    when: item.path != ""
+      src: '{{ remote_tmp_dir }}\{{ item }}.zip'
+      dest: C:\Program Files\WindowsPowerShell\Modules\{{ item }}
+    when: module_installed.output[0].Action == "scratch"
     loop:
-    - name: PackageManagement
-      path: '{{ installed_modules.PackageManagement.install_path | default("") }}'
-    - name: PowerShellGet
-      path: '{{ installed_modules.PowerShellGet.install_path | default("") }}'
+    - PackageManagement
+    - PowerShellGet
+
+  - name: update PackageManagement and PowerShellGet
+    when: module_installed.output[0].Action == "module"
+    block:
+    - name: register local PSRepo
+      ansible.windows.win_powershell:
+        script: |
+          param($Path)
+          
+          Register-PSRepository -Name LocalNuget -SourceLocation $Path
+        parameters:
+          Path: '{{ remote_tmp_dir }}'
+
+    - name: ensure PowerShellGet and PackageManagement requirements have been met
+      win_psmodule:
+        name: PowerShellGet
+        repository: LocalNuget
+        accept_license: true
+        state: present
+
+    always:
+    - name: unregister local PSRepo
+      ansible.windows.win_powershell:
+        script: |
+          if (Get-PSRepository -Name LocalNuget -ErrorAction SilentlyContinue) {
+              Unregister-PSRepository -Name LocalNuget
+              $Ansible.Changed = $true
+          }
+          else {
+              $Ansible.Changed = $false
+          }

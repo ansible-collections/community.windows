@@ -46,6 +46,7 @@ options:
     - This module only supports the C(ExecAction) type but can still delete the
       older legacy types.
     type: list
+    elements: dict
     suboptions:
       path:
         description:
@@ -73,6 +74,7 @@ options:
     - The suboption options listed below are not required for all trigger
       types, read the description for more details.
     type: list
+    elements: dict
     suboptions:
       type:
         description:
@@ -344,7 +346,7 @@ options:
   execution_time_limit:
     description:
     - The amount of time allowed to complete the task.
-    - When set to `PT0S`, the time limit is infinite.
+    - When set to C(PT0S), the time limit is infinite.
     - When omitted, the default time limit is 72 hours.
     - This is in the ISO 8601 Duration format C(P[n]Y[n]M[n]DT[n]H[n]M[n]S).
     type: str

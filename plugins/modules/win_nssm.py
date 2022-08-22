@@ -73,6 +73,7 @@ options:
     description:
       - Service dependencies that has to be started to trigger startup, separated by comma.
     type: list
+    elements: str
   username:
     description:
       - User to be used for service startup.

@@ -16,11 +16,14 @@ $required_version = Get-AnsibleParam -obj $params -name "required_version" -type
 $minimum_version = Get-AnsibleParam -obj $params -name "minimum_version" -type "str"
 $maximum_version = Get-AnsibleParam -obj $params -name "maximum_version" -type "str"
 $repo = Get-AnsibleParam -obj $params -name "repository" -type "str"
+$repo_user = Get-AnsibleParam -obj $params -name "username" -type "str"
+$repo_pass = Get-AnsibleParam -obj $params -name "password" -type "str"
 $url = Get-AnsibleParam -obj $params -name "url" -type str
 $state = Get-AnsibleParam -obj $params -name "state" -type "str" -default "present" -validateset "present", "absent", "latest"
 $allow_clobber = Get-AnsibleParam -obj $params -name "allow_clobber" -type "bool" -default $false
 $skip_publisher_check = Get-AnsibleParam -obj $params -name "skip_publisher_check" -type "bool" -default $false
 $allow_prerelease = Get-AnsibleParam -obj $params -name "allow_prerelease" -type "bool" -default $false
+$accept_license = Get-AnsibleParam -obj $params -name "accept_license" -type "bool" -default $false
 
 $result = @{changed = $false
     output = ""
@@ -62,7 +65,9 @@ Function Install-PrereqModule {
     Param(
         [Switch]$TestInstallationOnly,
         [bool]$AllowClobber,
-        [Bool]$CheckMode
+        [Bool]$CheckMode,
+        [bool]$AcceptLicense,
+        [string]$Repository
     )
 
     # Those are minimum required versions of modules.
@@ -95,6 +100,12 @@ Function Install-PrereqModule {
                     }
                     if ($installCmd.Parameters.ContainsKey('AllowClobber')) {
                         $install_params.AllowClobber = $AllowClobber
+                    }
+                    if ($installCmd.Parameters.ContainsKey('AcceptLicense')) {
+                        $install_params.AcceptLicense = $AcceptLicense
+                    }
+                    if ($Repository) {
+                        $install_params.Repository = $Repository
                     }
 
                     Install-Module @install_params > $null
@@ -206,10 +217,12 @@ Function Install-PsModule {
         [String]$MinimumVersion,
         [String]$MaximumVersion,
         [String]$Repository,
+        [System.Management.Automation.PSCredential]$Credential = [System.Management.Automation.PSCredential]::Empty,
         [Bool]$AllowClobber,
         [Bool]$SkipPublisherCheck,
         [Bool]$AllowPrerelease,
-        [Bool]$CheckMode
+        [Bool]$CheckMode,
+        [Bool]$AcceptLicense
     )
 
     $getParams = @{
@@ -229,10 +242,11 @@ Function Install-PsModule {
                 Name = $Name
                 WhatIf = $CheckMode
                 Force = $true
+                AcceptLicense = $AcceptLicense
             }
 
             [String[]]$ParametersNames = @("RequiredVersion", "MinimumVersion", "MaximumVersion", "AllowPrerelease",
-                "AllowClobber", "SkipPublisherCheck", "Repository")
+                "AllowClobber", "SkipPublisherCheck", "Repository", "Credential")
 
             $ht = Add-DefinedParameter -Hashtable $ht -ParametersNames $ParametersNames
 
@@ -303,6 +317,7 @@ Function Find-LatestPsModule {
         [Parameter(Mandatory = $true)]
         [String]$Name,
         [String]$Repository,
+        [System.Management.Automation.PSCredential]$Credential = [System.Management.Automation.PSCredential]::Empty,
         [Bool]$AllowPrerelease,
         [Bool]$CheckMode
     )
@@ -312,7 +327,7 @@ Function Find-LatestPsModule {
             Name = $Name
         }
 
-        [String[]]$ParametersNames = @("AllowPrerelease", "Repository")
+        [String[]]$ParametersNames = @("AllowPrerelease", "Repository", "Credential")
 
         $ht = Add-DefinedParameter -Hashtable $ht -ParametersNames $ParametersNames
 
@@ -446,14 +461,18 @@ if ( $repo -and (-not $url) ) {
 
 }
 
-if ( ($allow_clobber -or $allow_prerelease -or $skip_publisher_check -or
-        $required_version -or $minimum_version -or $maximum_version) ) {
-    # Update the PowerShellGet and PackageManagement modules.
-    # It's required to support AllowClobber, AllowPrerelease parameters.
-    Install-PrereqModule -AllowClobber $allow_clobber -CheckMode $check_mode
+if ($repo_user -and $repo_pass ) {
+    $repo_credential = New-Object -TypeName PSCredential ($repo_user, ($repo_pass | ConvertTo-SecureString -AsPlainText -Force))
 }
 
-Import-Module -Name PackageManagement, PowerShellGet
+if ( ($allow_clobber -or $allow_prerelease -or $skip_publisher_check -or
+        $required_version -or $minimum_version -or $maximum_version -or $accept_license) ) {
+    # Update the PowerShellGet and PackageManagement modules.
+    # It's required to support AllowClobber, AllowPrerelease parameters.
+    Install-PrereqModule -AllowClobber $allow_clobber -CheckMode $check_mode -AcceptLicense $accept_license -Repository $repo
+}
+
+Import-Module -Name PackageManagement, PowerShellGet -Force
 
 if ($state -eq "present") {
     if (($repo) -and ($url)) {
@@ -474,6 +493,8 @@ if ($state -eq "present") {
             SkipPublisherCheck = $skip_publisher_check
             AllowPrerelease = $allow_prerelease
             CheckMode = $check_mode
+            Credential = $repo_credential
+            AcceptLicense = $accept_license
         }
         Install-PsModule @ht
     }
@@ -501,6 +522,7 @@ elseif ( $state -eq "latest") {
         AllowPrerelease = $allow_prerelease
         Repository = $repo
         CheckMode = $check_mode
+        Credential = $repo_credential
     }
 
     $LatestVersion = Find-LatestPsModule @ht
@@ -517,6 +539,8 @@ elseif ( $state -eq "latest") {
             SkipPublisherCheck = $skip_publisher_check
             AllowPrerelease = $allow_prerelease
             CheckMode = $check_mode
+            Credential = $repo_credential
+            AcceptLicense = $accept_license
         }
         Install-PsModule @ht
     }

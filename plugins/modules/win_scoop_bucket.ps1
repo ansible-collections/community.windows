@@ -3,8 +3,6 @@
 # Copyright: (c) 2020, Jamie Magee <jamie.magee@gmail.com>
 # GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 
-#Requires -Module Ansible.ModuleUtils.ArgvParser
-#Requires -Module Ansible.ModuleUtils.CommandUtil
 #AnsibleRequires -CSharpUtil Ansible.Basic
 
 $spec = @{
@@ -21,6 +19,9 @@ $module = [Ansible.Basic.AnsibleModule]::Create($args, $spec)
 $name = $module.Params.name
 $repo = $module.Params.repo
 $state = $module.Params.state
+
+# Kept for backwards compatibility
+$module.Result.rc = 0
 
 function Get-Scoop {
     # Scoop doesn't have refreshenv like Chocolatey
@@ -47,19 +48,7 @@ function Get-ScoopBucket {
         [Parameter(Mandatory = $true)] [string]$scoop_path
     )
 
-    $arguments = @("powershell.exe", $scoop_path, "bucket", "list")
-    $command = Argv-ToString -arguments $arguments
-    $res = Run-Command -Command $command
-
-    if ($res.rc -ne 0) {
-        $module.Result.command = $command
-        $module.Result.rc = $res.rc
-        $module.Result.stdout = $res.stdout
-        $module.Result.stderr = $res.stderr
-        $module.FailJson("Error checking installed buckets")
-    }
-
-    return $res.stdout -split "`r`n"
+    &$scoop_path bucket list
 }
 
 function Uninstall-ScoopBucket {
@@ -67,21 +56,25 @@ function Uninstall-ScoopBucket {
         [Parameter(Mandatory = $true)] [string]$scoop_path,
         [Parameter(Mandatory = $true)] [String]$bucket
     )
-    $arguments = [System.Collections.Generic.List[String]]@("powershell.exe", $scoop_path, "bucket", "rm")
-    $arguments.Add($bucket)
-    if ($repo) {
-        $arguments.Add($repo)
-    }
 
-    $command = Argv-ToString -arguments $arguments
+    $arguments = @(
+        "bucket",
+        "rm"
+        $bucket
+        if ($repo) { $repo }
+    )
     if (-not $module.CheckMode) {
-        $res = Run-Command -Command $command
-        $module.Result.rc = $res.rc
-
-        if ($module.Verbosity -gt 1) {
-            $module.Result.stdout = $res.stdout
+        $res = (&$scoop_path @arguments) -join "`n"
+        if (-not $?) {
+            $module.Result.stdout = $res
+            $module.Result.rc = 1
+            $module.FailJson("Failed to remove scoop bucket, see stdout for more details")
+        }
+        elseif ($module.Verbosity -gt 1) {
+            $module.Result.stdout = $res
         }
     }
+
     $module.Result.changed = $true
 }
 
@@ -91,21 +84,25 @@ function Install-ScoopBucket {
         [Parameter(Mandatory = $true)] [String]$bucket,
         [String]$repo
     )
-    $arguments = [System.Collections.Generic.List[String]]@("powershell.exe", $scoop_path, "bucket", "add")
-    $arguments.Add($bucket)
-    if ($repo) {
-        $arguments.Add($repo)
-    }
 
-    $command = Argv-ToString -arguments $arguments
+    $arguments = @(
+        "bucket"
+        "add"
+        $bucket
+        if ($repo) { $repo }
+    )
     if (-not $module.CheckMode) {
-        $res = Run-Command -Command $command
-        $module.Result.rc = $res.rc
-
-        if ($module.Verbosity -gt 1) {
-            $module.Result.stdout = $res.stdout
+        $res = (&$scoop_path @arguments) -join "`n"
+        if (-not $?) {
+            $module.Result.stdout = $res
+            $module.Result.rc = 1
+            $module.FailJson("Failed to add scoop bucket, see stdout for more details")
+        }
+        elseif ($module.Verbosity -gt 1) {
+            $module.Result.stdout = $res
         }
     }
+
     $module.Result.changed = $true
 }
 
@@ -114,13 +111,13 @@ $scoop_path = Get-Scoop
 $installed_buckets = Get-ScoopBucket -scoop_path $scoop_path
 
 if ($state -in @("absent")) {
-    if ($installed_buckets -contains $name) {
+    if ($installed_buckets.Name -contains $name) {
         Uninstall-ScoopBucket -scoop_path $scoop_path -bucket $name
     }
 }
 
 if ($state -in @("present")) {
-    if ($installed_buckets -notcontains $name) {
+    if ($installed_buckets.Name -notcontains $name) {
         Install-ScoopBucket -scoop_path $scoop_path -bucket $name -repo $repo
     }
 }

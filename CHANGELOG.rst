@@ -5,13 +5,61 @@ Community Windows Release Notes
 .. contents:: Topics
 
 
-v1.9.0
-======
+v1.11.0
+=======
 
 Release Summary
 ---------------
 
-- Release summary for v1.9.0
+Release summary for v1.11.0
+
+Minor Changes
+-------------
+
+- Raise minimum Ansible version to ``2.11`` or newer
+- win_psmodule module - add ``accept_license`` option to allow for installing modules that require license acceptance (https://github.com/ansible-collections/community.windows/issues/340).
+
+Bugfixes
+--------
+
+- win_domain_user - Fix broken warning call when failing to get group membership - https://github.com/ansible-collections/community.windows/issues/412
+- win_scheduled_task - Fix the Monthly DOW trigger value ``run_on_last_week_of_month`` when ``weeks_of_month`` is also set - https://github.com/ansible-collections/community.windows/issues/414
+
+v1.10.0
+=======
+
+Release Summary
+---------------
+
+Release summary for v1.10.0
+
+Minor Changes
+-------------
+
+- win_domain_user - Add support for managing service prinicpal names via the ``spn`` param and principals allowed to delegate via the ``delegates`` param (https://github.com/ansible-collections/community.windows/pull/365)
+- win_domain_user - Added the ``groups_missing_behaviour`` option that controls the behaviour when a group specified does not exist - https://github.com/ansible-collections/community.windows/pull/375
+- win_hotfix - Added the ``identifiers`` and ``kbs`` return value that is always a list of identifiers and kbs inside a hotfix
+- win_psmodule - Add credential support for through the ``username`` and ``password`` options
+- win_psrepository - Add credential support for through the ``username`` and ``password`` options
+
+Bugfixes
+--------
+
+- win_hotfix - Supports hotfixes that contain multiple updates inside the supplied update msu - https://github.com/ansible-collections/community.windows/issues/284
+- win_iis_webapplication - Fix physical path check for broken configurations - https://github.com/ansible-collections/community.windows/pull/385
+- win_rds_cap - Fix SID lookup with any account ending with the ``@builtin`` UPN suffix
+- win_rds_rap - Fix SID lookup with any account ending with the ``@builtin`` UPN suffix
+- win_region - Fix junk output when copying settings across users
+- win_scoop - Fix bootstrapping process to properly work when running as admin
+- win_scoop_bucket - Fix handling of output and errors from each scoop command
+
+New Modules
+-----------
+
+- win_listen_ports_facts - Recopilates the facts of the listening ports of the machine
+
+v1.9.0
+======
 
 Minor Changes
 -------------

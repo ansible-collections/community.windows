@@ -25,6 +25,8 @@ $state = Get-AnsibleParam -obj $params -name "state" -type "str" -default "prese
 $installation_policy = Get-AnsibleParam -obj $params -name "installation_policy" -type "str" -validateset "trusted", "untrusted"
 $force = Get-AnsibleParam -obj $params -name "force" -type "bool" -default $false
 $proxy = Get-AnsibleParam -obj $params -name "proxy" -type "str" -failifempty $false
+$repo_user = Get-AnsibleParam -obj $params -name "username" -type "str"
+$repo_pass = Get-AnsibleParam -obj $params -name "password" -type "str"
 
 $result = @{"changed" = $false }
 
@@ -54,6 +56,10 @@ if ($installation_policy) {
 
 if ($proxy) {
     $repository_params.Proxy = $Proxy
+}
+
+if ($repo_user -and $repo_pass ) {
+    $repository_params.Credential = New-Object -TypeName PSCredential ($repo_user, ($repo_pass | ConvertTo-SecureString -AsPlainText -Force))
 }
 
 function Resolve-LocationParameter {
@@ -130,6 +136,12 @@ if ($Repo) {
     if ($force -or $repository_params.ScriptPublishLocation) {
         if ($repository_params.ScriptPublishLocation -ne $Repo.ScriptPublishLocation) {
             $changed_properties.ScriptPublishLocation = $repository_params.ScriptPublishLocation
+        }
+    }
+
+    if ($changed_properties.Count -gt 0) {
+        if ($repository_params.Credential) {
+            $changed_properties.Credential = $repository_params.Credential
         }
     }
 }
