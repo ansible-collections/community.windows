@@ -59,12 +59,17 @@ Function Convert-MacAddress {
     # number of characters is 2 (regardless if such a short identifier makes sense). Allowed characters are 0-9 and A-F,
     # allthough the RFC allows any characters, Microsoft does not.
     if ($mac -match $pat -and $mac_length -ge 2 -and $mac_length -le 510 -and $mac_length % 2 -eq 0) {
-    
         # The string is a valid client identifier, so we prepare the string to represent the *-*-* pattern for this client id
-    	for ($i = 2; $i -lt $mac_length; $i+=3) {
-            $mac = $mac.Insert($i,'-')
+        $counter = 1
+        $str = ""
+        foreach ($char in $mac.toCharArray()) {
+            $str += $char
+            if ($counter % 2 -eq 0 -and $counter -lt $mac_length) {
+                $str += "-"
+            }
+            $counter++
         }
-        return $mac
+        return $str
     }
     else {
         return $false
@@ -81,6 +86,7 @@ Function Compare-DhcpLease {
     -not (
         ($Original.AddressState -eq $Updated.AddressState) -and
         ($Original.IPAddress -eq $Updated.IPAddress) -and
+        ($Original.ClientId -eq $Updated.ClientId) -and
         ($Original.ScopeId -eq $Updated.ScopeId) -and
         ($Original.Name -eq $Updated.Name) -and
         ($Original.Description -eq $Updated.Description)
@@ -134,9 +140,9 @@ if ($mac) {
     if ($mac -eq $false) {
         $module.FailJson("The MAC Address is not properly formatted")
     }
-    else {
-        $current_lease = Get-DhcpServerv4Scope | Get-DhcpServerv4Lease | Where-Object ClientId -eq $mac
-    }
+   # elseif ($current_lease -and $current_lease.ClientId -eq $mac ) {
+   #     $current_lease = Get-DhcpServerv4Scope | Get-DhcpServerv4Lease | Where-Object ClientId -eq $mac
+   # }
 }
 
 # Did we find a lease/reservation
@@ -144,6 +150,7 @@ if ($current_lease) {
     $current_lease_exists = $true
     $original_lease = $current_lease
     $module.Diff.before = Convert-ReturnValue -Object $original_lease
+    #$module.FailJson("Current: " + $current_lease.ClientId + ", Original: " + $original_lease.ClientId + ", MAC: " + $mac )
 }
 else {
     $current_lease_exists = $false
@@ -345,9 +352,10 @@ if ($state -eq "present") {
             $current_lease | Set-DhcpServerv4Reservation @params -WhatIf:$check_mode
 
             if (-not $check_mode) {
-                $reservation = Get-DhcpServerv4Lease -ClientId $current_lease.ClientId -ScopeId $current_lease.ScopeId
+                $reservation = Get-DhcpServerv4Lease -ClientId $params.ClientId -ScopeId $current_lease.ScopeId
                 $module.Result.changed = Compare-DhcpLease -Original $original_lease -Updated $reservation
                 $module.Result.lease = Convert-ReturnValue -Object $reservation
+
             }
             else {
                 $module.Result.changed = $true
