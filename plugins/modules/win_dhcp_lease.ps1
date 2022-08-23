@@ -44,22 +44,27 @@ Function Convert-MacAddress {
     Param(
         [string]$mac
     )
+    # Remove dashes and colons
+    $mac = $mac -replace ':'
+    $mac = $mac -replace '-'
+    
+    # These are valid characters for a mac address or a client identifier
+    $pat = "^[a-fA-F0-9]+$"
+    
+    # Get the length of the provided identifier
+    $mac_length = $mac.length
 
-    # Evaluate Length
-    if ($mac.Length -eq 12) {
-        # Insert Dashes
-        $mac = $mac.Insert(2, "-").Insert(5, "-").Insert(8, "-").Insert(11, "-").Insert(14, "-")
+    # Evaluate the identifier. The maximum length of a client identifier is 510 characters, otherwise the DHCP server crashes. 
+    # The number of characters should be an even number, as the DHCP server otherwise shortens the string. The minimum
+    # number of characters is 2 (regardless if such a short identifier makes sense). Allowed characters are 0-9 and A-F,
+    # allthough the RFC allows any characters, Microsoft does not.
+    if ($mac -match $pat -and $mac_length -ge 2 -and $mac_length -le 510 -and $mac_length % 2 -eq 0) {
+    
+        # The string is a valid client identifier, so we prepare the string to represent the *-*-* pattern for this client id
+    	for ($i = 2; $i -lt $mac_length; $i+=3) {
+            $mac = $mac.Insert($i,'-')
+        }
         return $mac
-    }
-    elseif ($mac.Length -eq 17) {
-        # Remove Colons
-        if ($mac -like "*:*:*:*:*:*") {
-            return ($mac -replace ':')
-        }
-        # Remove Dashes
-        if ($mac -like "*-*-*-*-*-*") {
-            return ($mac -replace '-')
-        }
     }
     else {
         return $false
@@ -123,6 +128,7 @@ if ($ip) {
 
 # MacAddress was specified
 if ($mac) {
+    
     if ($mac -like "*-*") {
         $mac_original = $mac
         $mac = Convert-MacAddress -mac $mac
