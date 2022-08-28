@@ -139,6 +139,8 @@ if ($mac) {
 
     if ($mac -eq $false) {
         $module.FailJson("The MAC Address is not properly formatted")
+    } else {
+        $current_lease = Get-DhcpServerv4Scope | Get-DhcpServerv4Lease | Where-Object ClientId -eq $mac
     }
 }
 
