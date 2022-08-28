@@ -142,6 +142,7 @@ if ($mac) {
     } else {
         $current_lease = Get-DhcpServerv4Scope | Get-DhcpServerv4Lease | Where-Object ClientId -eq $mac
     }
+    
 }
 
 # Did we find a lease/reservation
