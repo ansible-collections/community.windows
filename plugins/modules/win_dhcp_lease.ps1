@@ -47,14 +47,14 @@ Function Convert-MacAddress {
     # Remove dashes and colons
     $mac = $mac -replace ':'
     $mac = $mac -replace '-'
-    
+
     # These are valid characters for a mac address or a client identifier
     $pat = "^[a-fA-F0-9]+$"
-    
+
     # Get the length of the provided identifier
     $mac_length = $mac.length
 
-    # Evaluate the identifier. The maximum length of a client identifier is 510 characters, otherwise the DHCP server crashes. 
+    # Evaluate the identifier. The maximum length of a client identifier is 510 characters, otherwise the DHCP server crashes.
     # The number of characters should be an even number, as the DHCP server otherwise shortens the string. The minimum
     # number of characters is 2 (regardless if such a short identifier makes sense). Allowed characters are 0-9 and A-F,
     # allthough the RFC allows any characters, Microsoft does not.
@@ -71,7 +71,8 @@ Function Convert-MacAddress {
         }
         return $str
     }
-    else {
+    else
+    {
         return $false
     }
 }
@@ -134,15 +135,12 @@ if ($ip) {
 
 # MacAddress was specified
 if ($mac) {
-    
+
     $mac = Convert-MacAddress -mac $mac
 
     if ($mac -eq $false) {
         $module.FailJson("The MAC Address is not properly formatted")
     }
-   # elseif ($current_lease -and $current_lease.ClientId -eq $mac ) {
-   #     $current_lease = Get-DhcpServerv4Scope | Get-DhcpServerv4Lease | Where-Object ClientId -eq $mac
-   # }
 }
 
 # Did we find a lease/reservation
@@ -150,7 +148,6 @@ if ($current_lease) {
     $current_lease_exists = $true
     $original_lease = $current_lease
     $module.Diff.before = Convert-ReturnValue -Object $original_lease
-    #$module.FailJson("Current: " + $current_lease.ClientId + ", Original: " + $original_lease.ClientId + ", MAC: " + $mac )
 }
 else {
     $current_lease_exists = $false
