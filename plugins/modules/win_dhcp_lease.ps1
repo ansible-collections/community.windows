@@ -71,8 +71,7 @@ Function Convert-MacAddress {
         }
         return $str
     }
-    else
-    {
+    else {
         return $false
     }
 }
