@@ -16,6 +16,13 @@ $name = $module.Params.name
 
 $module.Result.exists = $false
 
+try {
+    Import-Module -Name ServerManager
+}
+catch {
+    $module.FailJson("The ServerManager module failed to load properly: $($_.Exception.Message)", $_)
+}
+
 $features = Get-WindowsFeature -Name $name
 
 $module.Result.features = @(foreach ($feature in ($features)) {
