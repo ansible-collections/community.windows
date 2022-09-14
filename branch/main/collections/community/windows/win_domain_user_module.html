@@ -205,7 +205,7 @@
 <div class="ansibleOptionAnchor" id="parameter-principals_allowed_to_delegate"></div><p class="ansible-option-title" id="ansible-collections-community-windows-win-domain-user-module-parameter-principals-allowed-to-delegate"><span id="ansible-collections-community-windows-win-domain-user-module-parameter-delegates"></span><strong>delegates</strong></p>
 <a class="ansibleOptionLink" href="#parameter-delegates" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-aliases">aliases: principals_allowed_to_delegate</span></p>
 <p class="ansible-option-type-line"><span class="ansible-option-type">list</span> / <span class="ansible-option-elements">elements=string</span></p>
-<p><span class="ansible-option-versionadded">added in 1.10.0 of community.windows</span></p>
+<p><span class="ansible-option-versionadded">added in community.windows 1.10.0</span></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>Specifies an array of principal objects. This parameter sets the msDS-AllowedToActOnBehalfOfOtherIdentity attribute of a computer account object.</p>
 <p>Must be specified as a distinguished name <code class="docutils literal notranslate"><span class="pre">CN=shenetworks,CN=Users,DC=ansible,DC=test</span></code></p>
@@ -297,7 +297,7 @@
 <tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-groups_missing_behaviour"></div><p class="ansible-option-title" id="ansible-collections-community-windows-win-domain-user-module-parameter-groups-missing-behaviour"><strong>groups_missing_behaviour</strong></p>
 <a class="ansibleOptionLink" href="#parameter-groups_missing_behaviour" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
-<p><span class="ansible-option-versionadded">added in 1.10.0 of community.windows</span></p>
+<p><span class="ansible-option-versionadded">added in community.windows 1.10.0</span></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>Controls what happens when a group specified by <code class="docutils literal notranslate"><span class="pre">groups</span></code> is an invalid group name.</p>
 <p><code class="docutils literal notranslate"><span class="pre">fail</span></code> is the default and will return an error any groups do not exist.</p>
@@ -381,7 +381,7 @@
 <tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-sam_account_name"></div><p class="ansible-option-title" id="ansible-collections-community-windows-win-domain-user-module-parameter-sam-account-name"><strong>sam_account_name</strong></p>
 <a class="ansibleOptionLink" href="#parameter-sam_account_name" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
-<p><span class="ansible-option-versionadded">added in 1.7.0 of community.windows</span></p>
+<p><span class="ansible-option-versionadded">added in community.windows 1.7.0</span></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>Configures the SAM Account Name (<code class="docutils literal notranslate"><span class="pre">sAMAccountName</span></code>) for the account.</p>
 <p>This is allowed to a maximum of 20 characters due to pre-Windows 2000 restrictions.</p>
@@ -393,7 +393,7 @@
 <div class="ansibleOptionAnchor" id="parameter-spns"></div><p class="ansible-option-title" id="ansible-collections-community-windows-win-domain-user-module-parameter-spns"><span id="ansible-collections-community-windows-win-domain-user-module-parameter-spn"></span><strong>spn</strong></p>
 <a class="ansibleOptionLink" href="#parameter-spn" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-aliases">aliases: spns</span></p>
 <p class="ansible-option-type-line"><span class="ansible-option-type">list</span> / <span class="ansible-option-elements">elements=string</span></p>
-<p><span class="ansible-option-versionadded">added in 1.10.0 of community.windows</span></p>
+<p><span class="ansible-option-versionadded">added in community.windows 1.10.0</span></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>Specifies the service principal name(s) for the account. This parameter sets the ServicePrincipalNames property of the account. The LDAP display name (ldapDisplayName) for this property is servicePrincipalName.</p>
 </div></td>
@@ -401,7 +401,7 @@
 <tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-spn_action"></div><p class="ansible-option-title" id="ansible-collections-community-windows-win-domain-user-module-parameter-spn-action"><strong>spn_action</strong></p>
 <a class="ansibleOptionLink" href="#parameter-spn_action" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
-<p><span class="ansible-option-versionadded">added in 1.10.0 of community.windows</span></p>
+<p><span class="ansible-option-versionadded">added in community.windows 1.10.0</span></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>If <code class="docutils literal notranslate"><span class="pre">add</span></code>, the SPNs are added to the user.</p>
 <p>If <code class="docutils literal notranslate"><span class="pre">remove</span></code>, the SPNs are removed from the user.</p>
@@ -668,7 +668,7 @@
 <tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="return-delegates"></div><p class="ansible-option-title" id="ansible-collections-community-windows-win-domain-user-module-return-delegates"><strong>delegates</strong></p>
 <a class="ansibleOptionLink" href="#return-delegates" title="Permalink to this return value"></a><p class="ansible-option-type-line"><span class="ansible-option-type">list</span> / <span class="ansible-option-elements">elements=string</span></p>
-<p><span class="ansible-option-versionadded">added in 1.10.0 of community.windows</span></p>
+<p><span class="ansible-option-versionadded">added in community.windows 1.10.0</span></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>Principals allowed to delegate</p>
 <p class="ansible-option-line"><span class="ansible-option-returned-bold">Returned:</span> always</p>
@@ -777,7 +777,7 @@
 <tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="return-sam_account_name"></div><p class="ansible-option-title" id="ansible-collections-community-windows-win-domain-user-module-return-sam-account-name"><strong>sam_account_name</strong></p>
 <a class="ansibleOptionLink" href="#return-sam_account_name" title="Permalink to this return value"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
-<p><span class="ansible-option-versionadded">added in 1.7.0 of community.windows</span></p>
+<p><span class="ansible-option-versionadded">added in community.windows 1.7.0</span></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>The SAM Account Name of the account</p>
 <p class="ansible-option-line"><span class="ansible-option-returned-bold">Returned:</span> always</p>
@@ -796,7 +796,7 @@
 <tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="return-spn"></div><p class="ansible-option-title" id="ansible-collections-community-windows-win-domain-user-module-return-spn"><strong>spn</strong></p>
 <a class="ansibleOptionLink" href="#return-spn" title="Permalink to this return value"></a><p class="ansible-option-type-line"><span class="ansible-option-type">list</span> / <span class="ansible-option-elements">elements=string</span></p>
-<p><span class="ansible-option-versionadded">added in 1.10.0 of community.windows</span></p>
+<p><span class="ansible-option-versionadded">added in community.windows 1.10.0</span></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>The service principal names</p>
 <p class="ansible-option-line"><span class="ansible-option-returned-bold">Returned:</span> always</p>
