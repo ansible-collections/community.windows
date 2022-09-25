@@ -19,6 +19,7 @@
         <script src="../../../_static/underscore.js"></script>
         <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/sphinx_highlight.js"></script>
     <script src="../../../_static/js/theme.js"></script>
     <link rel="search" title="Search" href="../../../search.html" />
     <link rel="next" title="community.windows.win_domain_computer module – Manage computers in Active Directory" href="win_domain_computer_module.html" />
@@ -183,9 +184,9 @@ see <a class="reference internal" href="#ansible-collections-community-windows-w
 <p>When not specified during new zone creation, Windows will default this to l(none).</p>
 <p class="ansible-option-line"><span class="ansible-option-choices">Choices:</span></p>
 <ul class="simple">
-<li><p><span class="ansible-option-choices-entry">secure</span></p></li>
-<li><p><span class="ansible-option-choices-entry">none</span></p></li>
-<li><p><span class="ansible-option-choices-entry">nonsecureandsecure</span></p></li>
+<li><p><span class="ansible-option-choices-entry">“secure”</span></p></li>
+<li><p><span class="ansible-option-choices-entry">“none”</span></p></li>
+<li><p><span class="ansible-option-choices-entry">“nonsecureandsecure”</span></p></li>
 </ul>
 </div></td>
 </tr>
@@ -216,10 +217,10 @@ see <a class="reference internal" href="#ansible-collections-community-windows-w
 <p>This is the equivalent of selecting l(store the zone in Active Directory) in the GUI.</p>
 <p class="ansible-option-line"><span class="ansible-option-choices">Choices:</span></p>
 <ul class="simple">
-<li><p><span class="ansible-option-choices-entry">forest</span></p></li>
-<li><p><span class="ansible-option-choices-entry">domain</span></p></li>
-<li><p><span class="ansible-option-choices-entry">legacy</span></p></li>
-<li><p><span class="ansible-option-choices-entry">none</span></p></li>
+<li><p><span class="ansible-option-choices-entry">“forest”</span></p></li>
+<li><p><span class="ansible-option-choices-entry">“domain”</span></p></li>
+<li><p><span class="ansible-option-choices-entry">“legacy”</span></p></li>
+<li><p><span class="ansible-option-choices-entry">“none”</span></p></li>
 </ul>
 </div></td>
 </tr>
@@ -232,8 +233,8 @@ see <a class="reference internal" href="#ansible-collections-community-windows-w
 <p>When l(state=absent), the module will remove the specified DNS zone and all subsequent DNS records.</p>
 <p class="ansible-option-line"><span class="ansible-option-choices">Choices:</span></p>
 <ul class="simple">
-<li><p><span class="ansible-option-default-bold">present</span> <span class="ansible-option-default">← (default)</span></p></li>
-<li><p><span class="ansible-option-choices-entry">absent</span></p></li>
+<li><p><span class="ansible-option-default-bold">“present”</span> <span class="ansible-option-default">← (default)</span></p></li>
+<li><p><span class="ansible-option-choices-entry">“absent”</span></p></li>
 </ul>
 </div></td>
 </tr>
@@ -245,10 +246,10 @@ see <a class="reference internal" href="#ansible-collections-community-windows-w
 <p>When l(type=secondary), the DNS server will immediately attempt to perform a zone transfer from the servers in this list. If this initial transfer fails, then the zone will be left in an unworkable state. This module does not verify the initial transfer.</p>
 <p class="ansible-option-line"><span class="ansible-option-choices">Choices:</span></p>
 <ul class="simple">
-<li><p><span class="ansible-option-choices-entry">primary</span></p></li>
-<li><p><span class="ansible-option-choices-entry">secondary</span></p></li>
-<li><p><span class="ansible-option-choices-entry">stub</span></p></li>
-<li><p><span class="ansible-option-choices-entry">forwarder</span></p></li>
+<li><p><span class="ansible-option-choices-entry">“primary”</span></p></li>
+<li><p><span class="ansible-option-choices-entry">“secondary”</span></p></li>
+<li><p><span class="ansible-option-choices-entry">“stub”</span></p></li>
+<li><p><span class="ansible-option-choices-entry">“forwarder”</span></p></li>
 </ul>
 </div></td>
 </tr>

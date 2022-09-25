@@ -19,6 +19,7 @@
         <script src="../../../_static/underscore.js"></script>
         <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/sphinx_highlight.js"></script>
     <script src="../../../_static/js/theme.js"></script>
     <link rel="search" title="Search" href="../../../search.html" />
     <link rel="next" title="community.windows.win_rabbitmq_plugin module – Manage RabbitMQ plugins" href="win_rabbitmq_plugin_module.html" />
@@ -164,9 +165,9 @@
 <td><div class="ansible-option-cell"><p>Controls whether the session configuration allows connection from the <code class="docutils literal notranslate"><span class="pre">local</span></code> machine only, both local and <code class="docutils literal notranslate"><span class="pre">remote</span></code>, or none (<code class="docutils literal notranslate"><span class="pre">disabled</span></code>).</p>
 <p class="ansible-option-line"><span class="ansible-option-choices">Choices:</span></p>
 <ul class="simple">
-<li><p><span class="ansible-option-choices-entry">disabled</span></p></li>
-<li><p><span class="ansible-option-choices-entry">local</span></p></li>
-<li><p><span class="ansible-option-choices-entry">remote</span></p></li>
+<li><p><span class="ansible-option-choices-entry">“disabled”</span></p></li>
+<li><p><span class="ansible-option-choices-entry">“local”</span></p></li>
+<li><p><span class="ansible-option-choices-entry">“remote”</span></p></li>
 </ul>
 </div></td>
 </tr>
@@ -258,11 +259,11 @@
 <td><div class="ansible-option-cell"><p>The execution policy controlling script execution in the PowerShell session.</p>
 <p class="ansible-option-line"><span class="ansible-option-choices">Choices:</span></p>
 <ul class="simple">
-<li><p><span class="ansible-option-choices-entry">default</span></p></li>
-<li><p><span class="ansible-option-choices-entry">remote_signed</span></p></li>
-<li><p><span class="ansible-option-choices-entry">restricted</span></p></li>
-<li><p><span class="ansible-option-choices-entry">undefined</span></p></li>
-<li><p><span class="ansible-option-choices-entry">unrestricted</span></p></li>
+<li><p><span class="ansible-option-choices-entry">“default”</span></p></li>
+<li><p><span class="ansible-option-choices-entry">“remote_signed”</span></p></li>
+<li><p><span class="ansible-option-choices-entry">“restricted”</span></p></li>
+<li><p><span class="ansible-option-choices-entry">“undefined”</span></p></li>
+<li><p><span class="ansible-option-choices-entry">“unrestricted”</span></p></li>
 </ul>
 </div></td>
 </tr>
@@ -306,10 +307,10 @@
 <td><div class="ansible-option-cell"><p>Determines the language mode of the PowerShell session.</p>
 <p class="ansible-option-line"><span class="ansible-option-choices">Choices:</span></p>
 <ul class="simple">
-<li><p><span class="ansible-option-choices-entry">no_language</span></p></li>
-<li><p><span class="ansible-option-choices-entry">restricted_language</span></p></li>
-<li><p><span class="ansible-option-choices-entry">constrained_language</span></p></li>
-<li><p><span class="ansible-option-choices-entry">full_language</span></p></li>
+<li><p><span class="ansible-option-choices-entry">“no_language”</span></p></li>
+<li><p><span class="ansible-option-choices-entry">“restricted_language”</span></p></li>
+<li><p><span class="ansible-option-choices-entry">“constrained_language”</span></p></li>
+<li><p><span class="ansible-option-choices-entry">“full_language”</span></p></li>
 </ul>
 </div></td>
 </tr>
@@ -381,8 +382,8 @@
 <td><div class="ansible-option-cell"><p>The processor architecture of the session (32 bit vs. 64 bit).</p>
 <p class="ansible-option-line"><span class="ansible-option-choices">Choices:</span></p>
 <ul class="simple">
-<li><p><span class="ansible-option-choices-entry">amd64</span></p></li>
-<li><p><span class="ansible-option-choices-entry">x86</span></p></li>
+<li><p><span class="ansible-option-choices-entry">“amd64”</span></p></li>
+<li><p><span class="ansible-option-choices-entry">“x86”</span></p></li>
 </ul>
 </div></td>
 </tr>
@@ -471,9 +472,9 @@
 <td><div class="ansible-option-cell"><p>Controls what type of session this is.</p>
 <p class="ansible-option-line"><span class="ansible-option-choices">Choices:</span></p>
 <ul class="simple">
-<li><p><span class="ansible-option-choices-entry">default</span></p></li>
-<li><p><span class="ansible-option-choices-entry">empty</span></p></li>
-<li><p><span class="ansible-option-choices-entry">restricted_remote_server</span></p></li>
+<li><p><span class="ansible-option-choices-entry">“default”</span></p></li>
+<li><p><span class="ansible-option-choices-entry">“empty”</span></p></li>
+<li><p><span class="ansible-option-choices-entry">“restricted_remote_server”</span></p></li>
 </ul>
 </div></td>
 </tr>
@@ -491,8 +492,8 @@
 <td><div class="ansible-option-cell"><p>The desired state of the configuration.</p>
 <p class="ansible-option-line"><span class="ansible-option-choices">Choices:</span></p>
 <ul class="simple">
-<li><p><span class="ansible-option-default-bold">present</span> <span class="ansible-option-default">← (default)</span></p></li>
-<li><p><span class="ansible-option-choices-entry">absent</span></p></li>
+<li><p><span class="ansible-option-default-bold">“present”</span> <span class="ansible-option-default">← (default)</span></p></li>
+<li><p><span class="ansible-option-choices-entry">“absent”</span></p></li>
 </ul>
 </div></td>
 </tr>
@@ -503,8 +504,8 @@
 <td><div class="ansible-option-cell"><p>The apartment state for the PowerShell session.</p>
 <p class="ansible-option-line"><span class="ansible-option-choices">Choices:</span></p>
 <ul class="simple">
-<li><p><span class="ansible-option-choices-entry">mta</span></p></li>
-<li><p><span class="ansible-option-choices-entry">sta</span></p></li>
+<li><p><span class="ansible-option-choices-entry">“mta”</span></p></li>
+<li><p><span class="ansible-option-choices-entry">“sta”</span></p></li>
 </ul>
 </div></td>
 </tr>
@@ -515,10 +516,10 @@
 <td><div class="ansible-option-cell"><p>Sets thread options for the session.</p>
 <p class="ansible-option-line"><span class="ansible-option-choices">Choices:</span></p>
 <ul class="simple">
-<li><p><span class="ansible-option-choices-entry">default</span></p></li>
-<li><p><span class="ansible-option-choices-entry">reuse_thread</span></p></li>
-<li><p><span class="ansible-option-choices-entry">use_current_thread</span></p></li>
-<li><p><span class="ansible-option-choices-entry">use_new_thread</span></p></li>
+<li><p><span class="ansible-option-choices-entry">“default”</span></p></li>
+<li><p><span class="ansible-option-choices-entry">“reuse_thread”</span></p></li>
+<li><p><span class="ansible-option-choices-entry">“use_current_thread”</span></p></li>
+<li><p><span class="ansible-option-choices-entry">“use_new_thread”</span></p></li>
 </ul>
 </div></td>
 </tr>

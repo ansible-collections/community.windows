@@ -19,6 +19,7 @@
         <script src="../../../_static/underscore.js"></script>
         <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/sphinx_highlight.js"></script>
     <script src="../../../_static/js/theme.js"></script>
     <link rel="search" title="Search" href="../../../search.html" />
     <link rel="next" title="community.windows.win_firewall_rule module – Windows firewall automation" href="win_firewall_rule_module.html" />
@@ -172,9 +173,9 @@ see <a class="reference internal" href="#ansible-collections-community-windows-w
 <p><code class="docutils literal notranslate"><span class="pre">not_configured</span></code> is valid when configuring a GPO.</p>
 <p class="ansible-option-line"><span class="ansible-option-choices">Choices:</span></p>
 <ul class="simple">
-<li><p><span class="ansible-option-choices-entry">allow</span></p></li>
-<li><p><span class="ansible-option-choices-entry">block</span></p></li>
-<li><p><span class="ansible-option-choices-entry">not_configured</span></p></li>
+<li><p><span class="ansible-option-choices-entry">“allow”</span></p></li>
+<li><p><span class="ansible-option-choices-entry">“block”</span></p></li>
+<li><p><span class="ansible-option-choices-entry">“not_configured”</span></p></li>
 </ul>
 </div></td>
 </tr>
@@ -187,9 +188,9 @@ see <a class="reference internal" href="#ansible-collections-community-windows-w
 <p><code class="docutils literal notranslate"><span class="pre">not_configured</span></code> is valid when configuring a GPO.</p>
 <p class="ansible-option-line"><span class="ansible-option-choices">Choices:</span></p>
 <ul class="simple">
-<li><p><span class="ansible-option-choices-entry">allow</span></p></li>
-<li><p><span class="ansible-option-choices-entry">block</span></p></li>
-<li><p><span class="ansible-option-choices-entry">not_configured</span></p></li>
+<li><p><span class="ansible-option-choices-entry">“allow”</span></p></li>
+<li><p><span class="ansible-option-choices-entry">“block”</span></p></li>
+<li><p><span class="ansible-option-choices-entry">“not_configured”</span></p></li>
 </ul>
 </div></td>
 </tr>
@@ -200,9 +201,9 @@ see <a class="reference internal" href="#ansible-collections-community-windows-w
 <td><div class="ansible-option-cell"><p>Specify one or more profiles to change.</p>
 <p class="ansible-option-line"><span class="ansible-option-choices">Choices:</span></p>
 <ul class="simple">
-<li><p><span class="ansible-option-default-bold">Domain</span> <span class="ansible-option-default">← (default)</span></p></li>
-<li><p><span class="ansible-option-default-bold">Private</span> <span class="ansible-option-default">← (default)</span></p></li>
-<li><p><span class="ansible-option-default-bold">Public</span> <span class="ansible-option-default">← (default)</span></p></li>
+<li><p><span class="ansible-option-default-bold">“Domain”</span> <span class="ansible-option-default">← (default)</span></p></li>
+<li><p><span class="ansible-option-default-bold">“Private”</span> <span class="ansible-option-default">← (default)</span></p></li>
+<li><p><span class="ansible-option-default-bold">“Public”</span> <span class="ansible-option-default">← (default)</span></p></li>
 </ul>
 <p class="ansible-option-line"><span class="ansible-option-default-bold">Default:</span> <span class="ansible-option-default">[“Domain”, “Private”, “Public”]</span></p>
 </div></td>
@@ -214,8 +215,8 @@ see <a class="reference internal" href="#ansible-collections-community-windows-w
 <td><div class="ansible-option-cell"><p>Set state of firewall for given profile.</p>
 <p class="ansible-option-line"><span class="ansible-option-choices">Choices:</span></p>
 <ul class="simple">
-<li><p><span class="ansible-option-choices-entry">disabled</span></p></li>
-<li><p><span class="ansible-option-choices-entry">enabled</span></p></li>
+<li><p><span class="ansible-option-choices-entry">“disabled”</span></p></li>
+<li><p><span class="ansible-option-choices-entry">“enabled”</span></p></li>
 </ul>
 </div></td>
 </tr>

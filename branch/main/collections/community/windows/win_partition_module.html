@@ -19,6 +19,7 @@
         <script src="../../../_static/underscore.js"></script>
         <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/sphinx_highlight.js"></script>
     <script src="../../../_static/js/theme.js"></script>
     <link rel="search" title="Search" href="../../../search.html" />
     <link rel="next" title="community.windows.win_pester module – Run Pester tests on Windows hosts" href="win_pester_module.html" />
@@ -189,10 +190,10 @@
 <p>This does not relate to the partitions file system formatting.</p>
 <p class="ansible-option-line"><span class="ansible-option-choices">Choices:</span></p>
 <ul class="simple">
-<li><p><span class="ansible-option-choices-entry">system_partition</span></p></li>
-<li><p><span class="ansible-option-choices-entry">microsoft_reserved</span></p></li>
-<li><p><span class="ansible-option-choices-entry">basic_data</span></p></li>
-<li><p><span class="ansible-option-choices-entry">microsoft_recovery</span></p></li>
+<li><p><span class="ansible-option-choices-entry">“system_partition”</span></p></li>
+<li><p><span class="ansible-option-choices-entry">“microsoft_reserved”</span></p></li>
+<li><p><span class="ansible-option-choices-entry">“basic_data”</span></p></li>
+<li><p><span class="ansible-option-choices-entry">“microsoft_recovery”</span></p></li>
 </ul>
 </div></td>
 </tr>
@@ -217,12 +218,12 @@
 <p>This does not relate to the partitions file system formatting.</p>
 <p class="ansible-option-line"><span class="ansible-option-choices">Choices:</span></p>
 <ul class="simple">
-<li><p><span class="ansible-option-choices-entry">fat12</span></p></li>
-<li><p><span class="ansible-option-choices-entry">fat16</span></p></li>
-<li><p><span class="ansible-option-choices-entry">extended</span></p></li>
-<li><p><span class="ansible-option-choices-entry">huge</span></p></li>
-<li><p><span class="ansible-option-choices-entry">ifs</span></p></li>
-<li><p><span class="ansible-option-choices-entry">fat32</span></p></li>
+<li><p><span class="ansible-option-choices-entry">“fat12”</span></p></li>
+<li><p><span class="ansible-option-choices-entry">“fat16”</span></p></li>
+<li><p><span class="ansible-option-choices-entry">“extended”</span></p></li>
+<li><p><span class="ansible-option-choices-entry">“huge”</span></p></li>
+<li><p><span class="ansible-option-choices-entry">“ifs”</span></p></li>
+<li><p><span class="ansible-option-choices-entry">“fat32”</span></p></li>
 </ul>
 </div></td>
 </tr>
@@ -274,8 +275,8 @@
 <td><div class="ansible-option-cell"><p>Used to specify the state of the partition. Use <code class="docutils literal notranslate"><span class="pre">absent</span></code> to specify if a partition should be removed and <code class="docutils literal notranslate"><span class="pre">present</span></code> to specify if the partition should be created or updated.</p>
 <p class="ansible-option-line"><span class="ansible-option-choices">Choices:</span></p>
 <ul class="simple">
-<li><p><span class="ansible-option-choices-entry">absent</span></p></li>
-<li><p><span class="ansible-option-default-bold">present</span> <span class="ansible-option-default">← (default)</span></p></li>
+<li><p><span class="ansible-option-choices-entry">“absent”</span></p></li>
+<li><p><span class="ansible-option-default-bold">“present”</span> <span class="ansible-option-default">← (default)</span></p></li>
 </ul>
 </div></td>
 </tr>

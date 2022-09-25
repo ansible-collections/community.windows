@@ -19,6 +19,7 @@
         <script src="../../../_static/underscore.js"></script>
         <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/sphinx_highlight.js"></script>
     <script src="../../../_static/js/theme.js"></script>
     <link rel="search" title="Search" href="../../../search.html" />
     <link rel="next" title="community.windows.win_auto_logon module – Adds or Sets auto logon registry keys." href="win_auto_logon_module.html" />
@@ -163,8 +164,8 @@
 <p>To log both define as comma separated list “Success, Failure”.</p>
 <p class="ansible-option-line"><span class="ansible-option-choices">Choices:</span></p>
 <ul class="simple">
-<li><p><span class="ansible-option-choices-entry">Failure</span></p></li>
-<li><p><span class="ansible-option-choices-entry">Success</span></p></li>
+<li><p><span class="ansible-option-choices-entry">“Failure”</span></p></li>
+<li><p><span class="ansible-option-choices-entry">“Success”</span></p></li>
 </ul>
 </div></td>
 </tr>
@@ -177,8 +178,8 @@
 <p>For more information on the choices see MSDN PropagationFlags enumeration at <a class="reference external" href="https://msdn.microsoft.com/en-us/library/system.security.accesscontrol.inheritanceflags.aspx">https://msdn.microsoft.com/en-us/library/system.security.accesscontrol.inheritanceflags.aspx</a>.</p>
 <p class="ansible-option-line"><span class="ansible-option-choices">Choices:</span></p>
 <ul class="simple">
-<li><p><span class="ansible-option-default-bold">ContainerInherit</span> <span class="ansible-option-default">← (default)</span></p></li>
-<li><p><span class="ansible-option-default-bold">ObjectInherit</span> <span class="ansible-option-default">← (default)</span></p></li>
+<li><p><span class="ansible-option-default-bold">“ContainerInherit”</span> <span class="ansible-option-default">← (default)</span></p></li>
+<li><p><span class="ansible-option-default-bold">“ObjectInherit”</span> <span class="ansible-option-default">← (default)</span></p></li>
 </ul>
 <p class="ansible-option-line"><span class="ansible-option-default-bold">Default:</span> <span class="ansible-option-default">[“ContainerInherit”, “ObjectInherit”]</span></p>
 </div></td>
@@ -203,9 +204,9 @@
 <p>For more information on the choices see MSDN PropagationFlags enumeration at <a class="reference external" href="https://msdn.microsoft.com/en-us/library/system.security.accesscontrol.propagationflags.aspx">https://msdn.microsoft.com/en-us/library/system.security.accesscontrol.propagationflags.aspx</a>.</p>
 <p class="ansible-option-line"><span class="ansible-option-choices">Choices:</span></p>
 <ul class="simple">
-<li><p><span class="ansible-option-default-bold">None</span> <span class="ansible-option-default">← (default)</span></p></li>
-<li><p><span class="ansible-option-choices-entry">InherityOnly</span></p></li>
-<li><p><span class="ansible-option-choices-entry">NoPropagateInherit</span></p></li>
+<li><p><span class="ansible-option-default-bold">“None”</span> <span class="ansible-option-default">← (default)</span></p></li>
+<li><p><span class="ansible-option-choices-entry">“InherityOnly”</span></p></li>
+<li><p><span class="ansible-option-choices-entry">“NoPropagateInherit”</span></p></li>
 </ul>
 </div></td>
 </tr>
@@ -227,8 +228,8 @@
 <p>Specifying <code class="docutils literal notranslate"><span class="pre">absent</span></code> will remove all rules matching the defined <em>user</em>.</p>
 <p class="ansible-option-line"><span class="ansible-option-choices">Choices:</span></p>
 <ul class="simple">
-<li><p><span class="ansible-option-choices-entry">absent</span></p></li>
-<li><p><span class="ansible-option-default-bold">present</span> <span class="ansible-option-default">← (default)</span></p></li>
+<li><p><span class="ansible-option-choices-entry">“absent”</span></p></li>
+<li><p><span class="ansible-option-default-bold">“present”</span> <span class="ansible-option-default">← (default)</span></p></li>
 </ul>
 </div></td>
 </tr>

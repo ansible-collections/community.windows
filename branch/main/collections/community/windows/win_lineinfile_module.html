@@ -19,6 +19,7 @@
         <script src="../../../_static/underscore.js"></script>
         <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/sphinx_highlight.js"></script>
     <script src="../../../_static/js/theme.js"></script>
     <link rel="search" title="Search" href="../../../search.html" />
     <link rel="next" title="community.windows.win_listen_ports_facts module – Recopilates the facts of the listening ports of the machine" href="win_listen_ports_facts_module.html" />
@@ -210,8 +211,8 @@
 <p>If specified regular expression has no matches, EOF will be used instead. May not be used with <code class="docutils literal notranslate"><span class="pre">backrefs</span></code>.</p>
 <p class="ansible-option-line"><span class="ansible-option-choices">Choices:</span></p>
 <ul class="simple">
-<li><p><span class="ansible-option-default-bold">EOF</span> <span class="ansible-option-default">← (default)</span></p></li>
-<li><p><span class="ansible-option-choices-entry">*regex*</span></p></li>
+<li><p><span class="ansible-option-default-bold">“EOF”</span> <span class="ansible-option-default">← (default)</span></p></li>
+<li><p><span class="ansible-option-choices-entry">“*regex*”</span></p></li>
 </ul>
 </div></td>
 </tr>
@@ -223,8 +224,8 @@
 <p>If specified regular expression has no matches, the line will be inserted at the end of the file. May not be used with <code class="docutils literal notranslate"><span class="pre">backrefs</span></code>.</p>
 <p class="ansible-option-line"><span class="ansible-option-choices">Choices:</span></p>
 <ul class="simple">
-<li><p><span class="ansible-option-choices-entry">BOF</span></p></li>
-<li><p><span class="ansible-option-choices-entry">*regex*</span></p></li>
+<li><p><span class="ansible-option-choices-entry">“BOF”</span></p></li>
+<li><p><span class="ansible-option-choices-entry">“*regex*”</span></p></li>
 </ul>
 </div></td>
 </tr>
@@ -243,8 +244,8 @@
 <td><div class="ansible-option-cell"><p>Specifies the line separator style to use for the modified file. This defaults to the windows line separator (<code class="docutils literal notranslate"><span class="pre">\r\n</span></code>). Note that the indicated line separator will be used for file output regardless of the original line separator that appears in the input file.</p>
 <p class="ansible-option-line"><span class="ansible-option-choices">Choices:</span></p>
 <ul class="simple">
-<li><p><span class="ansible-option-choices-entry">unix</span></p></li>
-<li><p><span class="ansible-option-default-bold">windows</span> <span class="ansible-option-default">← (default)</span></p></li>
+<li><p><span class="ansible-option-choices-entry">“unix”</span></p></li>
+<li><p><span class="ansible-option-default-bold">“windows”</span> <span class="ansible-option-default">← (default)</span></p></li>
 </ul>
 </div></td>
 </tr>
@@ -276,8 +277,8 @@
 <td><div class="ansible-option-cell"><p>Whether the line should be there or not.</p>
 <p class="ansible-option-line"><span class="ansible-option-choices">Choices:</span></p>
 <ul class="simple">
-<li><p><span class="ansible-option-choices-entry">absent</span></p></li>
-<li><p><span class="ansible-option-default-bold">present</span> <span class="ansible-option-default">← (default)</span></p></li>
+<li><p><span class="ansible-option-choices-entry">“absent”</span></p></li>
+<li><p><span class="ansible-option-default-bold">“present”</span> <span class="ansible-option-default">← (default)</span></p></li>
 </ul>
 </div></td>
 </tr>

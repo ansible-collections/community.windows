@@ -19,6 +19,7 @@
         <script src="../../../_static/underscore.js"></script>
         <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/sphinx_highlight.js"></script>
     <script src="../../../_static/js/theme.js"></script>
     <link rel="search" title="Search" href="../../../search.html" />
     <link rel="next" title="community.windows.win_scheduled_task_stat module – Get information about Windows Scheduled Tasks" href="win_scheduled_task_stat_module.html" />
@@ -333,13 +334,13 @@
 <p><code class="docutils literal notranslate"><span class="pre">service_account</span></code> means that a service account like System, Local Service or Network Service will run the task.</p>
 <p class="ansible-option-line"><span class="ansible-option-choices">Choices:</span></p>
 <ul class="simple">
-<li><p><span class="ansible-option-choices-entry">none</span></p></li>
-<li><p><span class="ansible-option-choices-entry">password</span></p></li>
-<li><p><span class="ansible-option-choices-entry">s4u</span></p></li>
-<li><p><span class="ansible-option-choices-entry">interactive_token</span></p></li>
-<li><p><span class="ansible-option-choices-entry">group</span></p></li>
-<li><p><span class="ansible-option-choices-entry">service_account</span></p></li>
-<li><p><span class="ansible-option-choices-entry">token_or_password</span></p></li>
+<li><p><span class="ansible-option-choices-entry">“none”</span></p></li>
+<li><p><span class="ansible-option-choices-entry">“password”</span></p></li>
+<li><p><span class="ansible-option-choices-entry">“s4u”</span></p></li>
+<li><p><span class="ansible-option-choices-entry">“interactive_token”</span></p></li>
+<li><p><span class="ansible-option-choices-entry">“group”</span></p></li>
+<li><p><span class="ansible-option-choices-entry">“service_account”</span></p></li>
+<li><p><span class="ansible-option-choices-entry">“token_or_password”</span></p></li>
 </ul>
 </div></td>
 </tr>
@@ -424,8 +425,8 @@
 <p>If not specified the task will be created with limited rights.</p>
 <p class="ansible-option-line"><span class="ansible-option-choices">Choices:</span></p>
 <ul class="simple">
-<li><p><span class="ansible-option-choices-entry">limited</span></p></li>
-<li><p><span class="ansible-option-choices-entry">highest</span></p></li>
+<li><p><span class="ansible-option-choices-entry">“limited”</span></p></li>
+<li><p><span class="ansible-option-choices-entry">“highest”</span></p></li>
 </ul>
 </div></td>
 </tr>
@@ -480,8 +481,8 @@
 <p>When <code class="docutils literal notranslate"><span class="pre">state=absent</span></code> will ensure the task does not exist.</p>
 <p class="ansible-option-line"><span class="ansible-option-choices">Choices:</span></p>
 <ul class="simple">
-<li><p><span class="ansible-option-choices-entry">absent</span></p></li>
-<li><p><span class="ansible-option-default-bold">present</span> <span class="ansible-option-default">← (default)</span></p></li>
+<li><p><span class="ansible-option-choices-entry">“absent”</span></p></li>
+<li><p><span class="ansible-option-default-bold">“present”</span> <span class="ansible-option-default">← (default)</span></p></li>
 </ul>
 </div></td>
 </tr>
@@ -668,12 +669,12 @@
 <p>Optional when <code class="docutils literal notranslate"><span class="pre">type=session_state_change</span></code></p>
 <p class="ansible-option-line"><span class="ansible-option-choices">Choices:</span></p>
 <ul class="simple">
-<li><p><span class="ansible-option-choices-entry">console_connect</span></p></li>
-<li><p><span class="ansible-option-choices-entry">console_disconnect</span></p></li>
-<li><p><span class="ansible-option-choices-entry">remote_connect</span></p></li>
-<li><p><span class="ansible-option-choices-entry">remote_disconnect</span></p></li>
-<li><p><span class="ansible-option-choices-entry">session_lock</span></p></li>
-<li><p><span class="ansible-option-choices-entry">session_unlock</span></p></li>
+<li><p><span class="ansible-option-choices-entry">“console_connect”</span></p></li>
+<li><p><span class="ansible-option-choices-entry">“console_disconnect”</span></p></li>
+<li><p><span class="ansible-option-choices-entry">“remote_connect”</span></p></li>
+<li><p><span class="ansible-option-choices-entry">“remote_disconnect”</span></p></li>
+<li><p><span class="ansible-option-choices-entry">“session_lock”</span></p></li>
+<li><p><span class="ansible-option-choices-entry">“session_unlock”</span></p></li>
 </ul>
 </div></td>
 </tr>
@@ -692,17 +693,17 @@
 <td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>The trigger type, this value controls what below options are required.</p>
 <p class="ansible-option-line"><span class="ansible-option-choices">Choices:</span></p>
 <ul class="simple">
-<li><p><span class="ansible-option-choices-entry">boot</span></p></li>
-<li><p><span class="ansible-option-choices-entry">daily</span></p></li>
-<li><p><span class="ansible-option-choices-entry">event</span></p></li>
-<li><p><span class="ansible-option-choices-entry">idle</span></p></li>
-<li><p><span class="ansible-option-choices-entry">logon</span></p></li>
-<li><p><span class="ansible-option-choices-entry">monthlydow</span></p></li>
-<li><p><span class="ansible-option-choices-entry">monthly</span></p></li>
-<li><p><span class="ansible-option-choices-entry">registration</span></p></li>
-<li><p><span class="ansible-option-choices-entry">time</span></p></li>
-<li><p><span class="ansible-option-choices-entry">weekly</span></p></li>
-<li><p><span class="ansible-option-choices-entry">session_state_change</span></p></li>
+<li><p><span class="ansible-option-choices-entry">“boot”</span></p></li>
+<li><p><span class="ansible-option-choices-entry">“daily”</span></p></li>
+<li><p><span class="ansible-option-choices-entry">“event”</span></p></li>
+<li><p><span class="ansible-option-choices-entry">“idle”</span></p></li>
+<li><p><span class="ansible-option-choices-entry">“logon”</span></p></li>
+<li><p><span class="ansible-option-choices-entry">“monthlydow”</span></p></li>
+<li><p><span class="ansible-option-choices-entry">“monthly”</span></p></li>
+<li><p><span class="ansible-option-choices-entry">“registration”</span></p></li>
+<li><p><span class="ansible-option-choices-entry">“time”</span></p></li>
+<li><p><span class="ansible-option-choices-entry">“weekly”</span></p></li>
+<li><p><span class="ansible-option-choices-entry">“session_state_change”</span></p></li>
 </ul>
 </div></td>
 </tr>

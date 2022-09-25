@@ -19,6 +19,7 @@
         <script src="../../../_static/underscore.js"></script>
         <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/sphinx_highlight.js"></script>
     <script src="../../../_static/js/theme.js"></script>
     <link rel="search" title="Search" href="../../../search.html" />
     <link rel="next" title="community.windows.win_pagefile module – Query or change pagefile configuration" href="win_pagefile_module.html" />
@@ -196,10 +197,9 @@ see <a class="reference internal" href="#ansible-collections-community-windows-w
 <td><div class="ansible-option-cell"><p>If set to 1, nssm can rotate files which grow to the configured file size limit while the service is running.</p>
 <p class="ansible-option-line"><span class="ansible-option-choices">Choices:</span></p>
 <ul class="simple">
-<li><p><span class="ansible-option-choices-entry">0</span></p></li>
+<li><p><span class="ansible-option-default-bold">0</span> <span class="ansible-option-default">← (default)</span></p></li>
 <li><p><span class="ansible-option-choices-entry">1</span></p></li>
 </ul>
-<p class="ansible-option-line"><span class="ansible-option-default-bold">Default:</span> <span class="ansible-option-default">0</span></p>
 </div></td>
 </tr>
 <tr class="row-even"><td><div class="ansible-option-cell">
@@ -311,10 +311,10 @@ see <a class="reference internal" href="#ansible-collections-community-windows-w
 <p><code class="docutils literal notranslate"><span class="pre">disabled</span></code> means that the service will stay off, regardless if it is needed or not.</p>
 <p class="ansible-option-line"><span class="ansible-option-choices">Choices:</span></p>
 <ul class="simple">
-<li><p><span class="ansible-option-default-bold">auto</span> <span class="ansible-option-default">← (default)</span></p></li>
-<li><p><span class="ansible-option-choices-entry">delayed</span></p></li>
-<li><p><span class="ansible-option-choices-entry">disabled</span></p></li>
-<li><p><span class="ansible-option-choices-entry">manual</span></p></li>
+<li><p><span class="ansible-option-default-bold">“auto”</span> <span class="ansible-option-default">← (default)</span></p></li>
+<li><p><span class="ansible-option-choices-entry">“delayed”</span></p></li>
+<li><p><span class="ansible-option-choices-entry">“disabled”</span></p></li>
+<li><p><span class="ansible-option-choices-entry">“manual”</span></p></li>
 </ul>
 </div></td>
 </tr>
@@ -325,11 +325,11 @@ see <a class="reference internal" href="#ansible-collections-community-windows-w
 <td><div class="ansible-option-cell"><p>State of the service on the system.</p>
 <p class="ansible-option-line"><span class="ansible-option-choices">Choices:</span></p>
 <ul class="simple">
-<li><p><span class="ansible-option-choices-entry">absent</span></p></li>
-<li><p><span class="ansible-option-default-bold">present</span> <span class="ansible-option-default">← (default)</span></p></li>
-<li><p><span class="ansible-option-choices-entry">started</span></p></li>
-<li><p><span class="ansible-option-choices-entry">stopped</span></p></li>
-<li><p><span class="ansible-option-choices-entry">restarted</span></p></li>
+<li><p><span class="ansible-option-choices-entry">“absent”</span></p></li>
+<li><p><span class="ansible-option-default-bold">“present”</span> <span class="ansible-option-default">← (default)</span></p></li>
+<li><p><span class="ansible-option-choices-entry">“started”</span></p></li>
+<li><p><span class="ansible-option-choices-entry">“stopped”</span></p></li>
+<li><p><span class="ansible-option-choices-entry">“restarted”</span></p></li>
 </ul>
 </div></td>
 </tr>
