@@ -139,7 +139,8 @@ if ($mac) {
 
     if ($mac -eq $false) {
         $module.FailJson("The MAC Address is not properly formatted")
-    } else {
+    } 
+    else {
         $current_lease = Get-DhcpServerv4Scope | Get-DhcpServerv4Lease | Where-Object ClientId -eq $mac
     }
 
@@ -232,8 +233,8 @@ if ($state -eq "present") {
 
                 if ($reservation_name) {
                     $params.Name = $reservation_name
-                }
-                else {
+                } 
+                else { 
                     $params.Name = "reservation-" + $params.ClientId
                 }
 
