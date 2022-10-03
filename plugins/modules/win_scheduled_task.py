@@ -504,6 +504,7 @@ EXAMPLES = r'''
 
 - name: Disable a task that already exists
   community.windows.win_scheduled_task:
+    path: \TaskChecker
     name: TaskToDisable
     enabled: no
 
