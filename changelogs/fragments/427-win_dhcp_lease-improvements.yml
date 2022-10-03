@@ -1,0 +1,3 @@
+bugfixes:
+- win_dhcp_lease - fix mac address convert (https://github.com/ansible-collections/community.windows/issues/291)
+- win_dhcp_lease - call Get-DhcpServerv4Lease once when MAC and IP are defined (https://github.com/ansible-collections/community.windows/pull/427)
