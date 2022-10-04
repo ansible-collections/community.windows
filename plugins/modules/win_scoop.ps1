@@ -115,17 +115,40 @@ function Get-ScoopPackage {
         $module.FailJson("Error checking installed packages")
     }
 
-    $res.stdout -split "`n" |
-        Select-String '(.*?) \(v:(.*?)\)( \*global\*)? \[(.*?)\](\{32bit\})?' |
-        ForEach-Object {
-            [PSCustomObject]@{
-                Package = $_.Matches[0].Groups[1].Value
-                Version = $_.Matches[0].Groups[2].Value
-                Global = -not ([string]::IsNullOrWhiteSpace($_.Matches[0].Groups[3].Value))
-                Bucket = $_.Matches[0].Groups[4].Value
-                x86 = -not ([string]::IsNullOrWhiteSpace($_.Matches[0].Groups[5].Value))
+    # Scoop since 0.2.3 output as JSON, older versions use a custom format
+    # https://github.com/ScoopInstaller/Scoop/commit/c4d1b9c22f943a810bed7f9f74d7d4d5c42d9a74
+    try {
+        $exportObj = ConvertFrom-Json -InputObject $res.stdout -ErrorAction Stop
+    }
+    catch {
+        $res.stdout -split "`n" |
+            Select-String '(.*?) \(v:(.*?)\)( \*global\*)? \[(.*?)\](\{32bit\})?' |
+            ForEach-Object {
+                [PSCustomObject]@{
+                    Package = $_.Matches[0].Groups[1].Value
+                    Version = $_.Matches[0].Groups[2].Value
+                    Global = -not ([string]::IsNullOrWhiteSpace($_.Matches[0].Groups[3].Value))
+                    Bucket = $_.Matches[0].Groups[4].Value
+                    x86 = -not ([string]::IsNullOrWhiteSpace($_.Matches[0].Groups[5].Value))
+                }
             }
+        return
+    }
+
+    $exportObj.apps | ForEach-Object {
+        $options = @($_.Info -split ',' | ForEach-Object Trim | Where-Object { $_ })
+        if ('Install failed' -in $options) {
+            return
         }
+
+        [PSCustomObject]@{
+            Package = $_.Name
+            Version = $_.Version
+            Global = 'Global install' -in $options
+            Bucket = $_.Source
+            x86 = '32bit' -in $options
+        }
+    }
 }
 
 function Get-InstallScoopPackageArgument {
