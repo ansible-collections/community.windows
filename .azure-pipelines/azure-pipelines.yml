@@ -41,9 +41,31 @@ resources:
 pool: Standard
 
 stages:
+  - stage: Dependencies
+    displayName: Dependencies
+    jobs:
+    - job: dep_download
+      displayName: Download Dependencies
+      pool:
+        vmImage: ubuntu-latest
+      steps:
+      - checkout: self
+        fetchDepth: 1
+      - task: UsePythonVersion@0
+        inputs:
+          versionSpec: '3.10'
+      - bash: python -m pip install ansible-core
+        displayName: Install Ansible
+      - bash: ansible-galaxy collection install -r tests/requirements.yml -p collections
+        displayName: Install collection requirements
+      - task: PublishPipelineArtifact@1
+        inputs:
+          targetPath: collections
+          artifactName: CollectionRequirements
   - stage: Ansible_devel
     displayName: Ansible devel
-    dependsOn: []
+    dependsOn:
+    - Dependencies
     jobs:
       - template: templates/matrix.yml
         parameters:
@@ -56,7 +78,8 @@ stages:
               test: units
   - stage: Ansible_2_14
     displayName: Ansible 2.14
-    dependsOn: []
+    dependsOn:
+    - Dependencies
     jobs:
       - template: templates/matrix.yml
         parameters:
@@ -69,7 +92,8 @@ stages:
               test: units
   - stage: Ansible_2_13
     displayName: Ansible 2.13
-    dependsOn: []
+    dependsOn:
+    - Dependencies
     jobs:
       - template: templates/matrix.yml
         parameters:
@@ -82,7 +106,8 @@ stages:
               test: units
   - stage: Ansible_2_12
     displayName: Ansible 2.12
-    dependsOn: []
+    dependsOn:
+    - Dependencies
     jobs:
       - template: templates/matrix.yml
         parameters:
@@ -95,7 +120,8 @@ stages:
               test: units
   - stage: Ansible_2_11
     displayName: Ansible 2.11
-    dependsOn: []
+    dependsOn:
+    - Dependencies
     jobs:
       - template: templates/matrix.yml
         parameters:
@@ -108,7 +134,8 @@ stages:
               test: units
   - stage: Windows
     displayName: Windows
-    dependsOn: []
+    dependsOn:
+    - Dependencies
     jobs:
       - template: templates/matrix.yml
         parameters:
