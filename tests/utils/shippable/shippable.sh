@@ -70,12 +70,7 @@ else
     export ANSIBLE_COLLECTIONS_PATHS="${PWD}/../../../"
 fi
 
-# TODO: put this in a requirements file
-# Install the depss of this collection
-sudo chown "$(whoami)" "${PWD}/../../"
-# Chocolatey 1.3.0 broke compatibiltiy wtih WinPS 3 and 4 so we are stuck with 1.2.0
-# https://github.com/chocolatey/chocolatey-ansible/issues/96
-retry ansible-galaxy collection install 'ansible.windows' 'chocolatey.chocolatey:1.2.0'
+ansible-galaxy collection list
 
 export PYTHONIOENCODING='utf-8'
 
