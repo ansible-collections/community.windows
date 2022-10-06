@@ -1,0 +1,2 @@
+bugfixes:
+- win_firewall_rule - fix problem in check mode with multiple ip addresses not in same order
