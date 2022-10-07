@@ -166,7 +166,7 @@
 <a class="ansibleOptionLink" href="#parameter-certificate_store_name" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>Name of the certificate store where the certificate for the binding is located.</p>
-<p class="ansible-option-line"><span class="ansible-option-default-bold">Default:</span> <span class="ansible-option-default">“my”</span></p>
+<p class="ansible-option-line"><span class="ansible-option-default-bold">Default:</span> <code class="ansible-option-default docutils literal notranslate"><span class="pre">&quot;my&quot;</span></code></p>
 </div></td>
 </tr>
 <tr class="row-even"><td><div class="ansible-option-cell">
@@ -182,7 +182,7 @@
 <a class="ansibleOptionLink" href="#parameter-ip" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>The IP address to bind to / use for the new site.</p>
-<p class="ansible-option-line"><span class="ansible-option-default-bold">Default:</span> <span class="ansible-option-default">“*”</span></p>
+<p class="ansible-option-line"><span class="ansible-option-default-bold">Default:</span> <code class="ansible-option-default docutils literal notranslate"><span class="pre">&quot;*&quot;</span></code></p>
 </div></td>
 </tr>
 <tr class="row-even"><td><div class="ansible-option-cell">
@@ -199,7 +199,7 @@
 <a class="ansibleOptionLink" href="#parameter-port" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">integer</span></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>The port to bind to / use for the new site.</p>
-<p class="ansible-option-line"><span class="ansible-option-default-bold">Default:</span> <span class="ansible-option-default">80</span></p>
+<p class="ansible-option-line"><span class="ansible-option-default-bold">Default:</span> <code class="ansible-option-default docutils literal notranslate"><span class="pre">80</span></code></p>
 </div></td>
 </tr>
 <tr class="row-even"><td><div class="ansible-option-cell">
@@ -207,7 +207,7 @@
 <a class="ansibleOptionLink" href="#parameter-protocol" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>The protocol to be used for the Web binding (usually HTTP, HTTPS, or FTP).</p>
-<p class="ansible-option-line"><span class="ansible-option-default-bold">Default:</span> <span class="ansible-option-default">“http”</span></p>
+<p class="ansible-option-line"><span class="ansible-option-default-bold">Default:</span> <code class="ansible-option-default docutils literal notranslate"><span class="pre">&quot;http&quot;</span></code></p>
 </div></td>
 </tr>
 <tr class="row-odd"><td><div class="ansible-option-cell">
@@ -227,8 +227,8 @@
 <td><div class="ansible-option-cell"><p>State of the binding.</p>
 <p class="ansible-option-line"><span class="ansible-option-choices">Choices:</span></p>
 <ul class="simple">
-<li><p><span class="ansible-option-choices-entry">“absent”</span></p></li>
-<li><p><span class="ansible-option-default-bold">“present”</span> <span class="ansible-option-default">← (default)</span></p></li>
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">&quot;absent&quot;</span></code></p></li>
+<li><p><code class="ansible-option-default-bold docutils literal notranslate"><span class="pre">&quot;present&quot;</span></code> <span class="ansible-option-choices-default-mark">← (default)</span></p></li>
 </ul>
 </div></td>
 </tr>
@@ -309,7 +309,7 @@
 </div></td>
 <td><div class="ansible-option-cell"><p>Information on the binding being manipulated</p>
 <p class="ansible-option-line"><span class="ansible-option-returned-bold">Returned:</span> on success</p>
-<p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> “\”binding_info\”: {\n  \”bindingInformation\”: \”127.0.0.1:443:\”,\n  \”certificateHash\”: \”FF3910CE089397F1B5A77EB7BAFDD8F44CDE77DD\”,\n  \”certificateStoreName\”: \”MY\”,\n  \”hostheader\”: \”\”,\n  \”ip\”: \”127.0.0.1\”,\n  \”port\”: 443,\n  \”protocol\”: \”https\”,\n  \”sslFlags\”: \”not supported\”\n}”</p>
+<p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> <code class="ansible-option-sample docutils literal notranslate"><span class="pre">&quot;\&quot;binding_info\&quot;:</span> <span class="pre">{\n</span>&#160; <span class="pre">\&quot;bindingInformation\&quot;:</span> <span class="pre">\&quot;127.0.0.1:443:\&quot;,\n</span>&#160; <span class="pre">\&quot;certificateHash\&quot;:</span> <span class="pre">\&quot;FF3910CE089397F1B5A77EB7BAFDD8F44CDE77DD\&quot;,\n</span>&#160; <span class="pre">\&quot;certificateStoreName\&quot;:</span> <span class="pre">\&quot;MY\&quot;,\n</span>&#160; <span class="pre">\&quot;hostheader\&quot;:</span> <span class="pre">\&quot;\&quot;,\n</span>&#160; <span class="pre">\&quot;ip\&quot;:</span> <span class="pre">\&quot;127.0.0.1\&quot;,\n</span>&#160; <span class="pre">\&quot;port\&quot;:</span> <span class="pre">443,\n</span>&#160; <span class="pre">\&quot;protocol\&quot;:</span> <span class="pre">\&quot;https\&quot;,\n</span>&#160; <span class="pre">\&quot;sslFlags\&quot;:</span> <span class="pre">\&quot;not</span> <span class="pre">supported\&quot;\n}&quot;</span></code></p>
 </div></td>
 </tr>
 <tr class="row-odd"><td><div class="ansible-option-cell">
@@ -319,7 +319,7 @@
 <td><div class="ansible-option-cell"><p>The type of operation performed</p>
 <p>Can be removed, updated, matched, or added</p>
 <p class="ansible-option-line"><span class="ansible-option-returned-bold">Returned:</span> on success</p>
-<p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> “removed”</p>
+<p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> <code class="ansible-option-sample docutils literal notranslate"><span class="pre">&quot;removed&quot;</span></code></p>
 </div></td>
 </tr>
 <tr class="row-even"><td><div class="ansible-option-cell">
@@ -329,7 +329,7 @@
 <td><div class="ansible-option-cell"><p>The state of the website being targetted</p>
 <p>Can be helpful in case you accidentally cause a binding collision which can result in the targetted site being stopped</p>
 <p class="ansible-option-line"><span class="ansible-option-returned-bold">Returned:</span> always</p>
-<p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> “Started”</p>
+<p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> <code class="ansible-option-sample docutils literal notranslate"><span class="pre">&quot;Started&quot;</span></code></p>
 </div></td>
 </tr>
 </tbody>

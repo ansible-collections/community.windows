@@ -184,8 +184,8 @@ see <a class="reference internal" href="#ansible-collections-community-windows-p
 <p>The <em>rc</em> return value is not set when this is <code class="docutils literal notranslate"><span class="pre">yes</span></code></p>
 <p class="ansible-option-line"><span class="ansible-option-choices">Choices:</span></p>
 <ul class="simple">
-<li><p><span class="ansible-option-default-bold">false</span> <span class="ansible-option-default">← (default)</span></p></li>
-<li><p><span class="ansible-option-choices-entry">true</span></p></li>
+<li><p><code class="ansible-option-default-bold docutils literal notranslate"><span class="pre">false</span></code> <span class="ansible-option-choices-default-mark">← (default)</span></p></li>
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">true</span></code></p></li>
 </ul>
 </div></td>
 </tr>
@@ -203,7 +203,7 @@ see <a class="reference internal" href="#ansible-collections-community-windows-p
 <a class="ansibleOptionLink" href="#parameter-connection_timeout" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">integer</span></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>The timeout in seconds to wait when receiving the initial SMB negotiate response from the server.</p>
-<p class="ansible-option-line"><span class="ansible-option-default-bold">Default:</span> <span class="ansible-option-default">60</span></p>
+<p class="ansible-option-line"><span class="ansible-option-default-bold">Default:</span> <code class="ansible-option-default docutils literal notranslate"><span class="pre">60</span></code></p>
 </div></td>
 </tr>
 <tr class="row-even"><td><div class="ansible-option-cell">
@@ -226,8 +226,8 @@ see <a class="reference internal" href="#ansible-collections-community-windows-p
 <p>When setting to <code class="docutils literal notranslate"><span class="pre">no</span></code>, the packets are in plaintext and can be seen by anyone sniffing the network, any process options are included in this.</p>
 <p class="ansible-option-line"><span class="ansible-option-choices">Choices:</span></p>
 <ul class="simple">
-<li><p><span class="ansible-option-choices-entry">false</span></p></li>
-<li><p><span class="ansible-option-default-bold">true</span> <span class="ansible-option-default">← (default)</span></p></li>
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">false</span></code></p></li>
+<li><p><code class="ansible-option-default-bold docutils literal notranslate"><span class="pre">true</span></code> <span class="ansible-option-choices-default-mark">← (default)</span></p></li>
 </ul>
 </div></td>
 </tr>
@@ -255,9 +255,9 @@ see <a class="reference internal" href="#ansible-collections-community-windows-p
 <p>When <code class="docutils literal notranslate"><span class="pre">limited</span></code>, the command will be forced to run with non-Administrative rights.</p>
 <p class="ansible-option-line"><span class="ansible-option-choices">Choices:</span></p>
 <ul class="simple">
-<li><p><span class="ansible-option-choices-entry">“limited”</span></p></li>
-<li><p><span class="ansible-option-default-bold">“default”</span> <span class="ansible-option-default">← (default)</span></p></li>
-<li><p><span class="ansible-option-choices-entry">“elevated”</span></p></li>
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">&quot;limited&quot;</span></code></p></li>
+<li><p><code class="ansible-option-default-bold docutils literal notranslate"><span class="pre">&quot;default&quot;</span></code> <span class="ansible-option-choices-default-mark">← (default)</span></p></li>
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">&quot;elevated&quot;</span></code></p></li>
 </ul>
 </div></td>
 </tr>
@@ -270,8 +270,8 @@ see <a class="reference internal" href="#ansible-collections-community-windows-p
 <p>The <em>stdin</em> option does not work with this type of process.</p>
 <p class="ansible-option-line"><span class="ansible-option-choices">Choices:</span></p>
 <ul class="simple">
-<li><p><span class="ansible-option-default-bold">false</span> <span class="ansible-option-default">← (default)</span></p></li>
-<li><p><span class="ansible-option-choices-entry">true</span></p></li>
+<li><p><code class="ansible-option-default-bold docutils literal notranslate"><span class="pre">false</span></code> <span class="ansible-option-choices-default-mark">← (default)</span></p></li>
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">true</span></code></p></li>
 </ul>
 </div></td>
 </tr>
@@ -282,7 +282,7 @@ see <a class="reference internal" href="#ansible-collections-community-windows-p
 <td><div class="ansible-option-cell"><p>The Windows session ID to use when displaying the interactive process on the remote Windows host.</p>
 <p>This is only valid when <em>interactive</em> is <code class="docutils literal notranslate"><span class="pre">yes</span></code>.</p>
 <p>The default is <code class="docutils literal notranslate"><span class="pre">0</span></code> which is the console session of the Windows host.</p>
-<p class="ansible-option-line"><span class="ansible-option-default-bold">Default:</span> <span class="ansible-option-default">0</span></p>
+<p class="ansible-option-line"><span class="ansible-option-default-bold">Default:</span> <code class="ansible-option-default docutils literal notranslate"><span class="pre">0</span></code></p>
 </div></td>
 </tr>
 <tr class="row-odd"><td><div class="ansible-option-cell">
@@ -292,8 +292,8 @@ see <a class="reference internal" href="#ansible-collections-community-windows-p
 <td><div class="ansible-option-cell"><p>Runs the remote command with the user’s profile loaded.</p>
 <p class="ansible-option-line"><span class="ansible-option-choices">Choices:</span></p>
 <ul class="simple">
-<li><p><span class="ansible-option-choices-entry">false</span></p></li>
-<li><p><span class="ansible-option-default-bold">true</span> <span class="ansible-option-default">← (default)</span></p></li>
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">false</span></code></p></li>
+<li><p><code class="ansible-option-default-bold docutils literal notranslate"><span class="pre">true</span></code> <span class="ansible-option-choices-default-mark">← (default)</span></p></li>
 </ul>
 </div></td>
 </tr>
@@ -302,7 +302,7 @@ see <a class="reference internal" href="#ansible-collections-community-windows-p
 <a class="ansibleOptionLink" href="#parameter-port" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">integer</span></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>The port that the remote SMB service is listening on.</p>
-<p class="ansible-option-line"><span class="ansible-option-default-bold">Default:</span> <span class="ansible-option-default">445</span></p>
+<p class="ansible-option-line"><span class="ansible-option-default-bold">Default:</span> <code class="ansible-option-default docutils literal notranslate"><span class="pre">445</span></code></p>
 </div></td>
 </tr>
 <tr class="row-odd"><td><div class="ansible-option-cell">
@@ -313,12 +313,12 @@ see <a class="reference internal" href="#ansible-collections-community-windows-p
 <p>See <a class="reference external" href="https://msdn.microsoft.com/en-us/library/windows/desktop/ms683211.aspx">https://msdn.microsoft.com/en-us/library/windows/desktop/ms683211.aspx</a> for more details.</p>
 <p class="ansible-option-line"><span class="ansible-option-choices">Choices:</span></p>
 <ul class="simple">
-<li><p><span class="ansible-option-choices-entry">“above_normal”</span></p></li>
-<li><p><span class="ansible-option-choices-entry">“below_normal”</span></p></li>
-<li><p><span class="ansible-option-choices-entry">“high”</span></p></li>
-<li><p><span class="ansible-option-choices-entry">“idle”</span></p></li>
-<li><p><span class="ansible-option-default-bold">“normal”</span> <span class="ansible-option-default">← (default)</span></p></li>
-<li><p><span class="ansible-option-choices-entry">“realtime”</span></p></li>
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">&quot;above_normal&quot;</span></code></p></li>
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">&quot;below_normal&quot;</span></code></p></li>
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">&quot;high&quot;</span></code></p></li>
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">&quot;idle&quot;</span></code></p></li>
+<li><p><code class="ansible-option-default-bold docutils literal notranslate"><span class="pre">&quot;normal&quot;</span></code> <span class="ansible-option-choices-default-mark">← (default)</span></p></li>
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">&quot;realtime&quot;</span></code></p></li>
 </ul>
 </div></td>
 </tr>
@@ -336,7 +336,7 @@ see <a class="reference internal" href="#ansible-collections-community-windows-p
 </div></td>
 <td><div class="ansible-option-cell"><p>The timeout in seconds that is placed upon the running process.</p>
 <p>A value of <code class="docutils literal notranslate"><span class="pre">0</span></code> means no timeout.</p>
-<p class="ansible-option-line"><span class="ansible-option-default-bold">Default:</span> <span class="ansible-option-default">0</span></p>
+<p class="ansible-option-line"><span class="ansible-option-default-bold">Default:</span> <code class="ansible-option-default docutils literal notranslate"><span class="pre">0</span></code></p>
 </div></td>
 </tr>
 <tr class="row-even"><td><div class="ansible-option-cell">
@@ -357,8 +357,8 @@ see <a class="reference internal" href="#ansible-collections-community-windows-p
 <td><div class="ansible-option-cell"><p>Shows the process UI on the Winlogon secure desktop when <em>process_username</em> is <code class="docutils literal notranslate"><span class="pre">System</span></code>.</p>
 <p class="ansible-option-line"><span class="ansible-option-choices">Choices:</span></p>
 <ul class="simple">
-<li><p><span class="ansible-option-default-bold">false</span> <span class="ansible-option-default">← (default)</span></p></li>
-<li><p><span class="ansible-option-choices-entry">true</span></p></li>
+<li><p><code class="ansible-option-default-bold docutils literal notranslate"><span class="pre">false</span></code> <span class="ansible-option-choices-default-mark">← (default)</span></p></li>
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">true</span></code></p></li>
 </ul>
 </div></td>
 </tr>
@@ -375,7 +375,7 @@ see <a class="reference internal" href="#ansible-collections-community-windows-p
 <a class="ansibleOptionLink" href="#parameter-working_directory" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>Changes the working directory set when starting the process.</p>
-<p class="ansible-option-line"><span class="ansible-option-default-bold">Default:</span> <span class="ansible-option-default">“C:\\Windows\\System32”</span></p>
+<p class="ansible-option-line"><span class="ansible-option-default-bold">Default:</span> <code class="ansible-option-default docutils literal notranslate"><span class="pre">&quot;C:\\Windows\\System32&quot;</span></code></p>
 </div></td>
 </tr>
 </tbody>
@@ -513,7 +513,7 @@ see <a class="reference internal" href="#ansible-collections-community-windows-p
 </div></td>
 <td><div class="ansible-option-cell"><p>Any exception details when trying to run the process</p>
 <p class="ansible-option-line"><span class="ansible-option-returned-bold">Returned:</span> module failed</p>
-<p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> “Received exception from remote PAExec service: Failed to start \”invalid.exe\”. The system cannot find the file specified. [Err=0x2, 2]”</p>
+<p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> <code class="ansible-option-sample docutils literal notranslate"><span class="pre">&quot;Received</span> <span class="pre">exception</span> <span class="pre">from</span> <span class="pre">remote</span> <span class="pre">PAExec</span> <span class="pre">service:</span> <span class="pre">Failed</span> <span class="pre">to</span> <span class="pre">start</span> <span class="pre">\&quot;invalid.exe\&quot;.</span> <span class="pre">The</span> <span class="pre">system</span> <span class="pre">cannot</span> <span class="pre">find</span> <span class="pre">the</span> <span class="pre">file</span> <span class="pre">specified.</span> <span class="pre">[Err=0x2,</span> <span class="pre">2]&quot;</span></code></p>
 </div></td>
 </tr>
 <tr class="row-odd"><td><div class="ansible-option-cell">
@@ -522,7 +522,7 @@ see <a class="reference internal" href="#ansible-collections-community-windows-p
 </div></td>
 <td><div class="ansible-option-cell"><p>The process ID of the asynchronous process that was created</p>
 <p class="ansible-option-line"><span class="ansible-option-returned-bold">Returned:</span> success and asynchronous is ‘yes’</p>
-<p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> 719</p>
+<p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> <code class="ansible-option-sample docutils literal notranslate"><span class="pre">719</span></code></p>
 </div></td>
 </tr>
 <tr class="row-even"><td><div class="ansible-option-cell">
@@ -531,7 +531,7 @@ see <a class="reference internal" href="#ansible-collections-community-windows-p
 </div></td>
 <td><div class="ansible-option-cell"><p>The return code of the remote process</p>
 <p class="ansible-option-line"><span class="ansible-option-returned-bold">Returned:</span> success and asynchronous is ‘no’</p>
-<p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> 0</p>
+<p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> <code class="ansible-option-sample docutils literal notranslate"><span class="pre">0</span></code></p>
 </div></td>
 </tr>
 <tr class="row-odd"><td><div class="ansible-option-cell">
@@ -540,7 +540,7 @@ see <a class="reference internal" href="#ansible-collections-community-windows-p
 </div></td>
 <td><div class="ansible-option-cell"><p>The stderr from the remote process</p>
 <p class="ansible-option-line"><span class="ansible-option-returned-bold">Returned:</span> success and interactive or asynchronous is ‘no’</p>
-<p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> “Error [10] running process”</p>
+<p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> <code class="ansible-option-sample docutils literal notranslate"><span class="pre">&quot;Error</span> <span class="pre">[10]</span> <span class="pre">running</span> <span class="pre">process&quot;</span></code></p>
 </div></td>
 </tr>
 <tr class="row-even"><td><div class="ansible-option-cell">
@@ -549,7 +549,7 @@ see <a class="reference internal" href="#ansible-collections-community-windows-p
 </div></td>
 <td><div class="ansible-option-cell"><p>The stdout from the remote process</p>
 <p class="ansible-option-line"><span class="ansible-option-returned-bold">Returned:</span> success and interactive or asynchronous is ‘no’</p>
-<p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> “Hello World”</p>
+<p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> <code class="ansible-option-sample docutils literal notranslate"><span class="pre">&quot;Hello</span> <span class="pre">World&quot;</span></code></p>
 </div></td>
 </tr>
 </tbody>

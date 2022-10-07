@@ -178,8 +178,8 @@ see <a class="reference internal" href="#ansible-collections-community-windows-w
 <td><div class="ansible-option-cell"><p>Perform free space consolidation on the specified volumes.</p>
 <p class="ansible-option-line"><span class="ansible-option-choices">Choices:</span></p>
 <ul class="simple">
-<li><p><span class="ansible-option-default-bold">false</span> <span class="ansible-option-default">← (default)</span></p></li>
-<li><p><span class="ansible-option-choices-entry">true</span></p></li>
+<li><p><code class="ansible-option-default-bold docutils literal notranslate"><span class="pre">false</span></code> <span class="ansible-option-choices-default-mark">← (default)</span></p></li>
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">true</span></code></p></li>
 </ul>
 </div></td>
 </tr>
@@ -198,8 +198,8 @@ see <a class="reference internal" href="#ansible-collections-community-windows-w
 <td><div class="ansible-option-cell"><p>Run the operation on each volume in parallel in the background.</p>
 <p class="ansible-option-line"><span class="ansible-option-choices">Choices:</span></p>
 <ul class="simple">
-<li><p><span class="ansible-option-default-bold">false</span> <span class="ansible-option-default">← (default)</span></p></li>
-<li><p><span class="ansible-option-choices-entry">true</span></p></li>
+<li><p><code class="ansible-option-default-bold docutils literal notranslate"><span class="pre">false</span></code> <span class="ansible-option-choices-default-mark">← (default)</span></p></li>
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">true</span></code></p></li>
 </ul>
 </div></td>
 </tr>
@@ -210,8 +210,8 @@ see <a class="reference internal" href="#ansible-collections-community-windows-w
 <td><div class="ansible-option-cell"><p>Run the operation at low or normal priority.</p>
 <p class="ansible-option-line"><span class="ansible-option-choices">Choices:</span></p>
 <ul class="simple">
-<li><p><span class="ansible-option-default-bold">“low”</span> <span class="ansible-option-default">← (default)</span></p></li>
-<li><p><span class="ansible-option-choices-entry">“normal”</span></p></li>
+<li><p><code class="ansible-option-default-bold docutils literal notranslate"><span class="pre">&quot;low&quot;</span></code> <span class="ansible-option-choices-default-mark">← (default)</span></p></li>
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">&quot;normal&quot;</span></code></p></li>
 </ul>
 </div></td>
 </tr>
@@ -255,7 +255,7 @@ see <a class="reference internal" href="#ansible-collections-community-windows-w
 </div></td>
 <td><div class="ansible-option-cell"><p>Whether or not any changes were made.</p>
 <p class="ansible-option-line"><span class="ansible-option-returned-bold">Returned:</span> always</p>
-<p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> true</p>
+<p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> <code class="ansible-option-sample docutils literal notranslate"><span class="pre">true</span></code></p>
 </div></td>
 </tr>
 <tr class="row-odd"><td><div class="ansible-option-cell">
@@ -264,7 +264,7 @@ see <a class="reference internal" href="#ansible-collections-community-windows-w
 </div></td>
 <td><div class="ansible-option-cell"><p>The complete command line used by the module.</p>
 <p class="ansible-option-line"><span class="ansible-option-returned-bold">Returned:</span> always</p>
-<p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> “defrag.exe /C /V”</p>
+<p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> <code class="ansible-option-sample docutils literal notranslate"><span class="pre">&quot;defrag.exe</span> <span class="pre">/C</span> <span class="pre">/V&quot;</span></code></p>
 </div></td>
 </tr>
 <tr class="row-even"><td><div class="ansible-option-cell">
@@ -273,7 +273,7 @@ see <a class="reference internal" href="#ansible-collections-community-windows-w
 </div></td>
 <td><div class="ansible-option-cell"><p>Possible error message on failure.</p>
 <p class="ansible-option-line"><span class="ansible-option-returned-bold">Returned:</span> failed</p>
-<p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> “Command ‘defrag.exe’ not found in $env:PATH.”</p>
+<p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> <code class="ansible-option-sample docutils literal notranslate"><span class="pre">&quot;Command</span> <span class="pre">'defrag.exe'</span> <span class="pre">not</span> <span class="pre">found</span> <span class="pre">in</span> <span class="pre">$env:PATH.&quot;</span></code></p>
 </div></td>
 </tr>
 <tr class="row-odd"><td><div class="ansible-option-cell">
@@ -282,7 +282,7 @@ see <a class="reference internal" href="#ansible-collections-community-windows-w
 </div></td>
 <td><div class="ansible-option-cell"><p>The return code for the command.</p>
 <p class="ansible-option-line"><span class="ansible-option-returned-bold">Returned:</span> always</p>
-<p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> 0</p>
+<p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> <code class="ansible-option-sample docutils literal notranslate"><span class="pre">0</span></code></p>
 </div></td>
 </tr>
 <tr class="row-even"><td><div class="ansible-option-cell">
@@ -299,7 +299,7 @@ see <a class="reference internal" href="#ansible-collections-community-windows-w
 </div></td>
 <td><div class="ansible-option-cell"><p>The standard output from the command.</p>
 <p class="ansible-option-line"><span class="ansible-option-returned-bold">Returned:</span> always</p>
-<p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> “Success.”</p>
+<p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> <code class="ansible-option-sample docutils literal notranslate"><span class="pre">&quot;Success.&quot;</span></code></p>
 </div></td>
 </tr>
 </tbody>

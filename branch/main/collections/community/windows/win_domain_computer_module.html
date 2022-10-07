@@ -162,7 +162,7 @@
 <td><div class="ansible-option-cell"><p>Specifies a description of the object.</p>
 <p>This parameter sets the value of the Description property for the object.</p>
 <p>The LDAP display name (ldapDisplayName) for this property is description.</p>
-<p class="ansible-option-line"><span class="ansible-option-default-bold">Default:</span> <span class="ansible-option-default">“”</span></p>
+<p class="ansible-option-line"><span class="ansible-option-default-bold">Default:</span> <code class="ansible-option-default docutils literal notranslate"><span class="pre">&quot;&quot;</span></code></p>
 </div></td>
 </tr>
 <tr class="row-odd"><td><div class="ansible-option-cell">
@@ -209,8 +209,8 @@
 <p>This parameter also sets the ADS_UF_ACCOUNTDISABLE flag of the Active Directory User Account Control (UAC) attribute.</p>
 <p class="ansible-option-line"><span class="ansible-option-choices">Choices:</span></p>
 <ul class="simple">
-<li><p><span class="ansible-option-choices-entry">false</span></p></li>
-<li><p><span class="ansible-option-default-bold">true</span> <span class="ansible-option-default">← (default)</span></p></li>
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">false</span></code></p></li>
+<li><p><code class="ansible-option-default-bold docutils literal notranslate"><span class="pre">true</span></code> <span class="ansible-option-choices-default-mark">← (default)</span></p></li>
 </ul>
 </div></td>
 </tr>
@@ -252,9 +252,9 @@
 <p>If the computer already exists, no BLOB will be created/returned, and the module will operate as it would have without offline domain join.</p>
 <p class="ansible-option-line"><span class="ansible-option-choices">Choices:</span></p>
 <ul class="simple">
-<li><p><span class="ansible-option-default-bold">“none”</span> <span class="ansible-option-default">← (default)</span></p></li>
-<li><p><span class="ansible-option-choices-entry">“output”</span></p></li>
-<li><p><span class="ansible-option-choices-entry">“path”</span></p></li>
+<li><p><code class="ansible-option-default-bold docutils literal notranslate"><span class="pre">&quot;none&quot;</span></code> <span class="ansible-option-choices-default-mark">← (default)</span></p></li>
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">&quot;output&quot;</span></code></p></li>
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">&quot;path&quot;</span></code></p></li>
 </ul>
 </div></td>
 </tr>
@@ -285,8 +285,8 @@
 <td><div class="ansible-option-cell"><p>Specified whether the computer should be <code class="docutils literal notranslate"><span class="pre">present</span></code> or <code class="docutils literal notranslate"><span class="pre">absent</span></code> in Active Directory.</p>
 <p class="ansible-option-line"><span class="ansible-option-choices">Choices:</span></p>
 <ul class="simple">
-<li><p><span class="ansible-option-choices-entry">“absent”</span></p></li>
-<li><p><span class="ansible-option-default-bold">“present”</span> <span class="ansible-option-default">← (default)</span></p></li>
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">&quot;absent&quot;</span></code></p></li>
+<li><p><code class="ansible-option-default-bold docutils literal notranslate"><span class="pre">&quot;present&quot;</span></code> <span class="ansible-option-choices-default-mark">← (default)</span></p></li>
 </ul>
 </div></td>
 </tr>
@@ -390,7 +390,7 @@
 </div></td>
 <td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>The full command line used to call djoin.exe</p>
 <p class="ansible-option-line"><span class="ansible-option-returned-bold">Returned:</span> always</p>
-<p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> “djoin.exe /PROVISION /MACHINE compname /MACHINEOU OU=Hosts,DC=ansible,DC=local /DOMAIN ansible.local /SAVEFILE blobfile.txt”</p>
+<p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> <code class="ansible-option-sample docutils literal notranslate"><span class="pre">&quot;djoin.exe</span> <span class="pre">/PROVISION</span> <span class="pre">/MACHINE</span> <span class="pre">compname</span> <span class="pre">/MACHINEOU</span> <span class="pre">OU=Hosts,DC=ansible,DC=local</span> <span class="pre">/DOMAIN</span> <span class="pre">ansible.local</span> <span class="pre">/SAVEFILE</span> <span class="pre">blobfile.txt&quot;</span></code></p>
 </div></td>
 </tr>
 <tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
@@ -399,7 +399,7 @@
 </div></td>
 <td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>The return code from djoin.exe</p>
 <p class="ansible-option-line"><span class="ansible-option-returned-bold">Returned:</span> when not check mode</p>
-<p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> 87</p>
+<p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> <code class="ansible-option-sample docutils literal notranslate"><span class="pre">87</span></code></p>
 </div></td>
 </tr>
 <tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
@@ -408,7 +408,7 @@
 </div></td>
 <td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>The stderr from djoin.exe</p>
 <p class="ansible-option-line"><span class="ansible-option-returned-bold">Returned:</span> when not check mode</p>
-<p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> “Invalid input parameter combination.”</p>
+<p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> <code class="ansible-option-sample docutils literal notranslate"><span class="pre">&quot;Invalid</span> <span class="pre">input</span> <span class="pre">parameter</span> <span class="pre">combination.&quot;</span></code></p>
 </div></td>
 </tr>
 <tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
@@ -417,7 +417,7 @@
 </div></td>
 <td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>The stdout from djoin.exe</p>
 <p class="ansible-option-line"><span class="ansible-option-returned-bold">Returned:</span> when not check mode</p>
-<p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> “Computer provisioning completed successfully.”</p>
+<p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> <code class="ansible-option-sample docutils literal notranslate"><span class="pre">&quot;Computer</span> <span class="pre">provisioning</span> <span class="pre">completed</span> <span class="pre">successfully.&quot;</span></code></p>
 </div></td>
 </tr>
 <tr class="row-odd"><td><div class="ansible-option-cell">
@@ -427,7 +427,7 @@
 <td><div class="ansible-option-cell"><p>The offline domain join BLOB. This is an empty string when in check mode or when offline_domain_join is ‘path’.</p>
 <p>This field contains the base64 encoded raw bytes of the offline domain join BLOB file.</p>
 <p class="ansible-option-line"><span class="ansible-option-returned-bold">Returned:</span> when offline_domain_join is not ‘none’ and the computer didn’t exist</p>
-<p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> “&lt;a long base64 string&gt;”</p>
+<p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> <code class="ansible-option-sample docutils literal notranslate"><span class="pre">&quot;&lt;a</span> <span class="pre">long</span> <span class="pre">base64</span> <span class="pre">string&gt;&quot;</span></code></p>
 </div></td>
 </tr>
 <tr class="row-even"><td><div class="ansible-option-cell">
@@ -436,7 +436,7 @@
 </div></td>
 <td><div class="ansible-option-cell"><p>The path to the offline domain join BLOB file on the target host. If odj_blob_path was specified, this will match that path.</p>
 <p class="ansible-option-line"><span class="ansible-option-returned-bold">Returned:</span> when offline_domain_join is ‘path’ and the computer didn’t exist</p>
-<p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> “C:\\Users\\admin\\AppData\\Local\\Temp\\e4vxonty.rkb”</p>
+<p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> <code class="ansible-option-sample docutils literal notranslate"><span class="pre">&quot;C:\\Users\\admin\\AppData\\Local\\Temp\\e4vxonty.rkb&quot;</span></code></p>
 </div></td>
 </tr>
 </tbody>

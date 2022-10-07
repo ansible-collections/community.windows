@@ -160,7 +160,7 @@
 <a class="ansibleOptionLink" href="#parameter-display_seconds" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">integer</span></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>How long to wait for receiver to acknowledge message, in seconds.</p>
-<p class="ansible-option-line"><span class="ansible-option-default-bold">Default:</span> <span class="ansible-option-default">10</span></p>
+<p class="ansible-option-line"><span class="ansible-option-default-bold">Default:</span> <code class="ansible-option-default docutils literal notranslate"><span class="pre">10</span></code></p>
 </div></td>
 </tr>
 <tr class="row-odd"><td><div class="ansible-option-cell">
@@ -169,7 +169,7 @@
 </div></td>
 <td><div class="ansible-option-cell"><p>The text of the message to be displayed.</p>
 <p>The message must be less than 256 characters.</p>
-<p class="ansible-option-line"><span class="ansible-option-default-bold">Default:</span> <span class="ansible-option-default">“Hello world!”</span></p>
+<p class="ansible-option-line"><span class="ansible-option-default-bold">Default:</span> <code class="ansible-option-default docutils literal notranslate"><span class="pre">&quot;Hello</span> <span class="pre">world!&quot;</span></code></p>
 </div></td>
 </tr>
 <tr class="row-even"><td><div class="ansible-option-cell">
@@ -177,7 +177,7 @@
 <a class="ansibleOptionLink" href="#parameter-to" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>Who to send the message to. Can be a username, sessionname or sessionid.</p>
-<p class="ansible-option-line"><span class="ansible-option-default-bold">Default:</span> <span class="ansible-option-default">“*”</span></p>
+<p class="ansible-option-line"><span class="ansible-option-default-bold">Default:</span> <code class="ansible-option-default docutils literal notranslate"><span class="pre">&quot;*&quot;</span></code></p>
 </div></td>
 </tr>
 <tr class="row-odd"><td><div class="ansible-option-cell">
@@ -187,8 +187,8 @@
 <td><div class="ansible-option-cell"><p>Whether to wait for users to respond.  Module will only wait for the number of seconds specified in display_seconds or 10 seconds if not specified. However, if <em>wait</em> is <code class="docutils literal notranslate"><span class="pre">yes</span></code>, the message is sent to each logged on user in turn, waiting for the user to either press ‘ok’ or for the timeout to elapse before moving on to the next user.</p>
 <p class="ansible-option-line"><span class="ansible-option-choices">Choices:</span></p>
 <ul class="simple">
-<li><p><span class="ansible-option-default-bold">false</span> <span class="ansible-option-default">← (default)</span></p></li>
-<li><p><span class="ansible-option-choices-entry">true</span></p></li>
+<li><p><code class="ansible-option-default-bold docutils literal notranslate"><span class="pre">false</span></code> <span class="ansible-option-choices-default-mark">← (default)</span></p></li>
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">true</span></code></p></li>
 </ul>
 </div></td>
 </tr>
@@ -244,7 +244,7 @@
 </div></td>
 <td><div class="ansible-option-cell"><p>Value of display_seconds module parameter.</p>
 <p class="ansible-option-line"><span class="ansible-option-returned-bold">Returned:</span> success</p>
-<p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> “10”</p>
+<p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> <code class="ansible-option-sample docutils literal notranslate"><span class="pre">&quot;10&quot;</span></code></p>
 </div></td>
 </tr>
 <tr class="row-odd"><td><div class="ansible-option-cell">
@@ -253,7 +253,7 @@
 </div></td>
 <td><div class="ansible-option-cell"><p>Test of the message that was sent.</p>
 <p class="ansible-option-line"><span class="ansible-option-returned-bold">Returned:</span> changed</p>
-<p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> “Automated upgrade about to start.  Please save your work and log off before 22 July 2016 18:00:00”</p>
+<p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> <code class="ansible-option-sample docutils literal notranslate"><span class="pre">&quot;Automated</span> <span class="pre">upgrade</span> <span class="pre">about</span> <span class="pre">to</span> <span class="pre">start.</span>&#160; <span class="pre">Please</span> <span class="pre">save</span> <span class="pre">your</span> <span class="pre">work</span> <span class="pre">and</span> <span class="pre">log</span> <span class="pre">off</span> <span class="pre">before</span> <span class="pre">22</span> <span class="pre">July</span> <span class="pre">2016</span> <span class="pre">18:00:00&quot;</span></code></p>
 </div></td>
 </tr>
 <tr class="row-even"><td><div class="ansible-option-cell">
@@ -262,7 +262,7 @@
 </div></td>
 <td><div class="ansible-option-cell"><p>The return code of the API call.</p>
 <p class="ansible-option-line"><span class="ansible-option-returned-bold">Returned:</span> always</p>
-<p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> 0</p>
+<p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> <code class="ansible-option-sample docutils literal notranslate"><span class="pre">0</span></code></p>
 </div></td>
 </tr>
 <tr class="row-odd"><td><div class="ansible-option-cell">
@@ -271,7 +271,7 @@
 </div></td>
 <td><div class="ansible-option-cell"><p>How long the module took to run on the remote windows host.</p>
 <p class="ansible-option-line"><span class="ansible-option-returned-bold">Returned:</span> success</p>
-<p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> “22 July 2016 17:45:51”</p>
+<p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> <code class="ansible-option-sample docutils literal notranslate"><span class="pre">&quot;22</span> <span class="pre">July</span> <span class="pre">2016</span> <span class="pre">17:45:51&quot;</span></code></p>
 </div></td>
 </tr>
 <tr class="row-even"><td><div class="ansible-option-cell">
@@ -280,7 +280,7 @@
 </div></td>
 <td><div class="ansible-option-cell"><p>local time from windows host when the message was sent.</p>
 <p class="ansible-option-line"><span class="ansible-option-returned-bold">Returned:</span> success</p>
-<p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> “22 July 2016 17:45:51”</p>
+<p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> <code class="ansible-option-sample docutils literal notranslate"><span class="pre">&quot;22</span> <span class="pre">July</span> <span class="pre">2016</span> <span class="pre">17:45:51&quot;</span></code></p>
 </div></td>
 </tr>
 <tr class="row-odd"><td><div class="ansible-option-cell">
@@ -289,7 +289,7 @@
 </div></td>
 <td><div class="ansible-option-cell"><p>Value of wait module parameter.</p>
 <p class="ansible-option-line"><span class="ansible-option-returned-bold">Returned:</span> success</p>
-<p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> false</p>
+<p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> <code class="ansible-option-sample docutils literal notranslate"><span class="pre">false</span></code></p>
 </div></td>
 </tr>
 </tbody>

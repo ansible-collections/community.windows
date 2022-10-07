@@ -196,7 +196,7 @@ see <a class="reference internal" href="#ansible-collections-community-windows-w
 <a class="ansibleOptionLink" href="#parameter-filter" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>filter for lookup of ou.</p>
-<p class="ansible-option-line"><span class="ansible-option-default-bold">Default:</span> <span class="ansible-option-default">“*”</span></p>
+<p class="ansible-option-line"><span class="ansible-option-default-bold">Default:</span> <code class="ansible-option-default docutils literal notranslate"><span class="pre">&quot;*&quot;</span></code></p>
 </div></td>
 </tr>
 <tr class="row-even"><td><div class="ansible-option-cell">
@@ -228,8 +228,8 @@ see <a class="reference internal" href="#ansible-collections-community-windows-w
 <td><div class="ansible-option-cell"><p>Indicates whether to prevent the object from being deleted. When this <em>protected=true</em>, you cannot delete the corresponding object without changing the value of the property.</p>
 <p class="ansible-option-line"><span class="ansible-option-choices">Choices:</span></p>
 <ul class="simple">
-<li><p><span class="ansible-option-default-bold">false</span> <span class="ansible-option-default">← (default)</span></p></li>
-<li><p><span class="ansible-option-choices-entry">true</span></p></li>
+<li><p><code class="ansible-option-default-bold docutils literal notranslate"><span class="pre">false</span></code> <span class="ansible-option-choices-default-mark">← (default)</span></p></li>
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">true</span></code></p></li>
 </ul>
 </div></td>
 </tr>
@@ -241,8 +241,8 @@ see <a class="reference internal" href="#ansible-collections-community-windows-w
 <p>You must specify this parameter to remove an OU that is not empty.</p>
 <p class="ansible-option-line"><span class="ansible-option-choices">Choices:</span></p>
 <ul class="simple">
-<li><p><span class="ansible-option-default-bold">false</span> <span class="ansible-option-default">← (default)</span></p></li>
-<li><p><span class="ansible-option-choices-entry">true</span></p></li>
+<li><p><code class="ansible-option-default-bold docutils literal notranslate"><span class="pre">false</span></code> <span class="ansible-option-choices-default-mark">← (default)</span></p></li>
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">true</span></code></p></li>
 </ul>
 </div></td>
 </tr>
@@ -256,8 +256,8 @@ see <a class="reference internal" href="#ansible-collections-community-windows-w
 <p>When <em>state=absent</em> and <em>recursive=true</em>, the module will remove all the OU and all child OU’s.</p>
 <p class="ansible-option-line"><span class="ansible-option-choices">Choices:</span></p>
 <ul class="simple">
-<li><p><span class="ansible-option-default-bold">“present”</span> <span class="ansible-option-default">← (default)</span></p></li>
-<li><p><span class="ansible-option-choices-entry">“absent”</span></p></li>
+<li><p><code class="ansible-option-default-bold docutils literal notranslate"><span class="pre">&quot;present&quot;</span></code> <span class="ansible-option-choices-default-mark">← (default)</span></p></li>
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">&quot;absent&quot;</span></code></p></li>
 </ul>
 </div></td>
 </tr>
@@ -330,7 +330,7 @@ see <a class="reference internal" href="#ansible-collections-community-windows-w
 </div></td>
 <td><div class="ansible-option-cell"><p>New/Updated organizational unit parameters</p>
 <p class="ansible-option-line"><span class="ansible-option-returned-bold">Returned:</span> When <em>state=present</em></p>
-<p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> {“AddedProperties”: [], “City”: “Sandy Springs”, “Country”: null, “DistinguishedName”: “OU=VMW Atlanta,DC=ansible,DC=test”, “LinkedGroupPolicyObjects”: [], “ManagedBy”: null, “ModifiedProperties”: [], “Name”: “VMW Atlanta”, “ObjectClass”: “organizationalUnit”, “ObjectGUID”: “3e987e30-93ad-4229-8cd0-cff6a91275e4”, “PostalCode”: null, “PropertyCount”: 11, “PropertyNames”: “City Country DistinguishedName LinkedGroupPolicyObjects ManagedBy Name ObjectClass ObjectGUID PostalCode State StreetAddress”, “RemovedProperties”: [], “State”: “Georgia”, “StreetAddress”: “1155 Perimeter Center West”}</p>
+<p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> <code class="ansible-option-sample docutils literal notranslate"><span class="pre">{&quot;AddedProperties&quot;:</span> <span class="pre">[],</span> <span class="pre">&quot;City&quot;:</span> <span class="pre">&quot;Sandy</span> <span class="pre">Springs&quot;,</span> <span class="pre">&quot;Country&quot;:</span> <span class="pre">null,</span> <span class="pre">&quot;DistinguishedName&quot;:</span> <span class="pre">&quot;OU=VMW</span> <span class="pre">Atlanta,DC=ansible,DC=test&quot;,</span> <span class="pre">&quot;LinkedGroupPolicyObjects&quot;:</span> <span class="pre">[],</span> <span class="pre">&quot;ManagedBy&quot;:</span> <span class="pre">null,</span> <span class="pre">&quot;ModifiedProperties&quot;:</span> <span class="pre">[],</span> <span class="pre">&quot;Name&quot;:</span> <span class="pre">&quot;VMW</span> <span class="pre">Atlanta&quot;,</span> <span class="pre">&quot;ObjectClass&quot;:</span> <span class="pre">&quot;organizationalUnit&quot;,</span> <span class="pre">&quot;ObjectGUID&quot;:</span> <span class="pre">&quot;3e987e30-93ad-4229-8cd0-cff6a91275e4&quot;,</span> <span class="pre">&quot;PostalCode&quot;:</span> <span class="pre">null,</span> <span class="pre">&quot;PropertyCount&quot;:</span> <span class="pre">11,</span> <span class="pre">&quot;PropertyNames&quot;:</span> <span class="pre">&quot;City</span> <span class="pre">Country</span> <span class="pre">DistinguishedName</span> <span class="pre">LinkedGroupPolicyObjects</span> <span class="pre">ManagedBy</span> <span class="pre">Name</span> <span class="pre">ObjectClass</span> <span class="pre">ObjectGUID</span> <span class="pre">PostalCode</span> <span class="pre">State</span> <span class="pre">StreetAddress&quot;,</span> <span class="pre">&quot;RemovedProperties&quot;:</span> <span class="pre">[],</span> <span class="pre">&quot;State&quot;:</span> <span class="pre">&quot;Georgia&quot;,</span> <span class="pre">&quot;StreetAddress&quot;:</span> <span class="pre">&quot;1155</span> <span class="pre">Perimeter</span> <span class="pre">Center</span> <span class="pre">West&quot;}</span></code></p>
 </div></td>
 </tr>
 <tr class="row-odd"><td><div class="ansible-option-cell">
@@ -339,7 +339,7 @@ see <a class="reference internal" href="#ansible-collections-community-windows-w
 </div></td>
 <td><div class="ansible-option-cell"><p>Base ou path used by module either when provided <em>path=DC=Ansible,DC=Test</em> or derived by module.</p>
 <p class="ansible-option-line"><span class="ansible-option-returned-bold">Returned:</span> always</p>
-<p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> “{‘path’: ‘DC=ansible,DC=test’}”</p>
+<p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> <code class="ansible-option-sample docutils literal notranslate"><span class="pre">&quot;{'path':</span> <span class="pre">'DC=ansible,DC=test'}&quot;</span></code></p>
 </div></td>
 </tr>
 </tbody>

@@ -163,8 +163,8 @@
 <td><div class="ansible-option-cell"><p>Configures AutomaticManagedPagefile for the entire system.</p>
 <p class="ansible-option-line"><span class="ansible-option-choices">Choices:</span></p>
 <ul class="simple">
-<li><p><span class="ansible-option-choices-entry">false</span></p></li>
-<li><p><span class="ansible-option-choices-entry">true</span></p></li>
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">false</span></code></p></li>
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">true</span></code></p></li>
 </ul>
 </div></td>
 </tr>
@@ -196,8 +196,8 @@
 <td><div class="ansible-option-cell"><p>Override the current pagefile on the drive.</p>
 <p class="ansible-option-line"><span class="ansible-option-choices">Choices:</span></p>
 <ul class="simple">
-<li><p><span class="ansible-option-choices-entry">false</span></p></li>
-<li><p><span class="ansible-option-default-bold">true</span> <span class="ansible-option-default">← (default)</span></p></li>
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">false</span></code></p></li>
+<li><p><code class="ansible-option-default-bold docutils literal notranslate"><span class="pre">true</span></code> <span class="ansible-option-choices-default-mark">← (default)</span></p></li>
 </ul>
 </div></td>
 </tr>
@@ -208,8 +208,8 @@
 <td><div class="ansible-option-cell"><p>Remove all pagefiles in the system, not including automatic managed.</p>
 <p class="ansible-option-line"><span class="ansible-option-choices">Choices:</span></p>
 <ul class="simple">
-<li><p><span class="ansible-option-default-bold">false</span> <span class="ansible-option-default">← (default)</span></p></li>
-<li><p><span class="ansible-option-choices-entry">true</span></p></li>
+<li><p><code class="ansible-option-default-bold docutils literal notranslate"><span class="pre">false</span></code> <span class="ansible-option-choices-default-mark">← (default)</span></p></li>
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">true</span></code></p></li>
 </ul>
 </div></td>
 </tr>
@@ -220,9 +220,9 @@
 <td><div class="ansible-option-cell"><p>State of the pagefile.</p>
 <p class="ansible-option-line"><span class="ansible-option-choices">Choices:</span></p>
 <ul class="simple">
-<li><p><span class="ansible-option-choices-entry">“absent”</span></p></li>
-<li><p><span class="ansible-option-choices-entry">“present”</span></p></li>
-<li><p><span class="ansible-option-default-bold">“query”</span> <span class="ansible-option-default">← (default)</span></p></li>
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">&quot;absent&quot;</span></code></p></li>
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">&quot;present&quot;</span></code></p></li>
+<li><p><code class="ansible-option-default-bold docutils literal notranslate"><span class="pre">&quot;query&quot;</span></code> <span class="ansible-option-choices-default-mark">← (default)</span></p></li>
 </ul>
 </div></td>
 </tr>
@@ -233,8 +233,8 @@
 <td><div class="ansible-option-cell"><p>Configures current pagefile to be managed by the system.</p>
 <p class="ansible-option-line"><span class="ansible-option-choices">Choices:</span></p>
 <ul class="simple">
-<li><p><span class="ansible-option-default-bold">false</span> <span class="ansible-option-default">← (default)</span></p></li>
-<li><p><span class="ansible-option-choices-entry">true</span></p></li>
+<li><p><code class="ansible-option-default-bold docutils literal notranslate"><span class="pre">false</span></code> <span class="ansible-option-choices-default-mark">← (default)</span></p></li>
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">true</span></code></p></li>
 </ul>
 </div></td>
 </tr>
@@ -245,8 +245,8 @@
 <td><div class="ansible-option-cell"><p>Use Test-Path on the drive to make sure the drive is accessible before creating the pagefile.</p>
 <p class="ansible-option-line"><span class="ansible-option-choices">Choices:</span></p>
 <ul class="simple">
-<li><p><span class="ansible-option-choices-entry">false</span></p></li>
-<li><p><span class="ansible-option-default-bold">true</span> <span class="ansible-option-default">← (default)</span></p></li>
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">false</span></code></p></li>
+<li><p><code class="ansible-option-default-bold docutils literal notranslate"><span class="pre">true</span></code> <span class="ansible-option-choices-default-mark">← (default)</span></p></li>
 </ul>
 </div></td>
 </tr>
@@ -333,7 +333,7 @@
 </div></td>
 <td><div class="ansible-option-cell"><p>Whether the pagefiles is automatically managed.</p>
 <p class="ansible-option-line"><span class="ansible-option-returned-bold">Returned:</span> When state is query.</p>
-<p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> true</p>
+<p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> <code class="ansible-option-sample docutils literal notranslate"><span class="pre">true</span></code></p>
 </div></td>
 </tr>
 <tr class="row-odd"><td><div class="ansible-option-cell">
@@ -342,7 +342,7 @@
 </div></td>
 <td><div class="ansible-option-cell"><p>Contains caption, description, initial_size, maximum_size and name for each pagefile in the system.</p>
 <p class="ansible-option-line"><span class="ansible-option-returned-bold">Returned:</span> When state is query.</p>
-<p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> [{“caption”: “c:\\ ‘pagefile.sys’”, “description”: “‘pagefile.sys’ &#64; c:\\”, “initial_size”: 2048, “maximum_size”: 2048, “name”: “c:\\pagefile.sys”}, {“caption”: “d:\\ ‘pagefile.sys’”, “description”: “‘pagefile.sys’ &#64; d:\\”, “initial_size”: 1024, “maximum_size”: 1024, “name”: “d:\\pagefile.sys”}]</p>
+<p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> <code class="ansible-option-sample docutils literal notranslate"><span class="pre">[{&quot;caption&quot;:</span> <span class="pre">&quot;c:\\</span> <span class="pre">'pagefile.sys'&quot;,</span> <span class="pre">&quot;description&quot;:</span> <span class="pre">&quot;'pagefile.sys'</span> <span class="pre">&#64;</span> <span class="pre">c:\\&quot;,</span> <span class="pre">&quot;initial_size&quot;:</span> <span class="pre">2048,</span> <span class="pre">&quot;maximum_size&quot;:</span> <span class="pre">2048,</span> <span class="pre">&quot;name&quot;:</span> <span class="pre">&quot;c:\\pagefile.sys&quot;},</span> <span class="pre">{&quot;caption&quot;:</span> <span class="pre">&quot;d:\\</span> <span class="pre">'pagefile.sys'&quot;,</span> <span class="pre">&quot;description&quot;:</span> <span class="pre">&quot;'pagefile.sys'</span> <span class="pre">&#64;</span> <span class="pre">d:\\&quot;,</span> <span class="pre">&quot;initial_size&quot;:</span> <span class="pre">1024,</span> <span class="pre">&quot;maximum_size&quot;:</span> <span class="pre">1024,</span> <span class="pre">&quot;name&quot;:</span> <span class="pre">&quot;d:\\pagefile.sys&quot;}]</span></code></p>
 </div></td>
 </tr>
 </tbody>

@@ -190,9 +190,9 @@ see <a class="reference internal" href="#ansible-collections-community-windows-w
 <p>l(noreg) results in no DNS records being registered.</p>
 <p class="ansible-option-line"><span class="ansible-option-choices">Choices:</span></p>
 <ul class="simple">
-<li><p><span class="ansible-option-default-bold">“aptr”</span> <span class="ansible-option-default">← (default)</span></p></li>
-<li><p><span class="ansible-option-choices-entry">“a”</span></p></li>
-<li><p><span class="ansible-option-choices-entry">“noreg”</span></p></li>
+<li><p><code class="ansible-option-default-bold docutils literal notranslate"><span class="pre">&quot;aptr&quot;</span></code> <span class="ansible-option-choices-default-mark">← (default)</span></p></li>
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">&quot;a&quot;</span></code></p></li>
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">&quot;noreg&quot;</span></code></p></li>
 </ul>
 </div></td>
 </tr>
@@ -249,8 +249,8 @@ see <a class="reference internal" href="#ansible-collections-community-windows-w
 <td><div class="ansible-option-cell"><p>Specifies the desired state of the DHCP lease or reservation.</p>
 <p class="ansible-option-line"><span class="ansible-option-choices">Choices:</span></p>
 <ul class="simple">
-<li><p><span class="ansible-option-default-bold">“present”</span> <span class="ansible-option-default">← (default)</span></p></li>
-<li><p><span class="ansible-option-choices-entry">“absent”</span></p></li>
+<li><p><code class="ansible-option-default-bold docutils literal notranslate"><span class="pre">&quot;present&quot;</span></code> <span class="ansible-option-choices-default-mark">← (default)</span></p></li>
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">&quot;absent&quot;</span></code></p></li>
 </ul>
 </div></td>
 </tr>
@@ -264,8 +264,8 @@ see <a class="reference internal" href="#ansible-collections-community-windows-w
 <p>Reservations are permanent.</p>
 <p class="ansible-option-line"><span class="ansible-option-choices">Choices:</span></p>
 <ul class="simple">
-<li><p><span class="ansible-option-default-bold">“reservation”</span> <span class="ansible-option-default">← (default)</span></p></li>
-<li><p><span class="ansible-option-choices-entry">“lease”</span></p></li>
+<li><p><code class="ansible-option-default-bold docutils literal notranslate"><span class="pre">&quot;reservation&quot;</span></code> <span class="ansible-option-choices-default-mark">← (default)</span></p></li>
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">&quot;lease&quot;</span></code></p></li>
 </ul>
 </div></td>
 </tr>
@@ -322,7 +322,7 @@ see <a class="reference internal" href="#ansible-collections-community-windows-w
 </div></td>
 <td><div class="ansible-option-cell"><p>New/Updated DHCP object parameters</p>
 <p class="ansible-option-line"><span class="ansible-option-returned-bold">Returned:</span> When l(state=present)</p>
-<p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> {“address_state”: “InactiveReservation”, “client_id”: “0a-0b-0c-04-05-aa”, “description”: “Really Fancy”, “ip_address”: “172.16.98.230”, “name”: null, “scope_id”: “172.16.98.0”}</p>
+<p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> <code class="ansible-option-sample docutils literal notranslate"><span class="pre">{&quot;address_state&quot;:</span> <span class="pre">&quot;InactiveReservation&quot;,</span> <span class="pre">&quot;client_id&quot;:</span> <span class="pre">&quot;0a-0b-0c-04-05-aa&quot;,</span> <span class="pre">&quot;description&quot;:</span> <span class="pre">&quot;Really</span> <span class="pre">Fancy&quot;,</span> <span class="pre">&quot;ip_address&quot;:</span> <span class="pre">&quot;172.16.98.230&quot;,</span> <span class="pre">&quot;name&quot;:</span> <span class="pre">null,</span> <span class="pre">&quot;scope_id&quot;:</span> <span class="pre">&quot;172.16.98.0&quot;}</span></code></p>
 </div></td>
 </tr>
 </tbody>

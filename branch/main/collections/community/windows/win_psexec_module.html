@@ -187,8 +187,8 @@ see <a class="reference internal" href="#ansible-collections-community-windows-w
 <td><div class="ansible-option-cell"><p>Run the command with elevated privileges.</p>
 <p class="ansible-option-line"><span class="ansible-option-choices">Choices:</span></p>
 <ul class="simple">
-<li><p><span class="ansible-option-default-bold">false</span> <span class="ansible-option-default">← (default)</span></p></li>
-<li><p><span class="ansible-option-choices-entry">true</span></p></li>
+<li><p><code class="ansible-option-default-bold docutils literal notranslate"><span class="pre">false</span></code> <span class="ansible-option-choices-default-mark">← (default)</span></p></li>
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">true</span></code></p></li>
 </ul>
 </div></td>
 </tr>
@@ -197,7 +197,7 @@ see <a class="reference internal" href="#ansible-collections-community-windows-w
 <a class="ansibleOptionLink" href="#parameter-executable" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">path</span></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>The location of the PsExec utility (in case it is not located in your PATH).</p>
-<p class="ansible-option-line"><span class="ansible-option-default-bold">Default:</span> <span class="ansible-option-default">“psexec.exe”</span></p>
+<p class="ansible-option-line"><span class="ansible-option-default-bold">Default:</span> <code class="ansible-option-default docutils literal notranslate"><span class="pre">&quot;psexec.exe&quot;</span></code></p>
 </div></td>
 </tr>
 <tr class="row-even"><td><div class="ansible-option-cell">
@@ -215,8 +215,8 @@ see <a class="reference internal" href="#ansible-collections-community-windows-w
 <td><div class="ansible-option-cell"><p>Run the program so that it interacts with the desktop on the remote system.</p>
 <p class="ansible-option-line"><span class="ansible-option-choices">Choices:</span></p>
 <ul class="simple">
-<li><p><span class="ansible-option-default-bold">false</span> <span class="ansible-option-default">← (default)</span></p></li>
-<li><p><span class="ansible-option-choices-entry">true</span></p></li>
+<li><p><code class="ansible-option-default-bold docutils literal notranslate"><span class="pre">false</span></code> <span class="ansible-option-choices-default-mark">← (default)</span></p></li>
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">true</span></code></p></li>
 </ul>
 </div></td>
 </tr>
@@ -227,8 +227,8 @@ see <a class="reference internal" href="#ansible-collections-community-windows-w
 <td><div class="ansible-option-cell"><p>Run the command as limited user (strips the Administrators group and allows only privileges assigned to the Users group).</p>
 <p class="ansible-option-line"><span class="ansible-option-choices">Choices:</span></p>
 <ul class="simple">
-<li><p><span class="ansible-option-default-bold">false</span> <span class="ansible-option-default">← (default)</span></p></li>
-<li><p><span class="ansible-option-choices-entry">true</span></p></li>
+<li><p><code class="ansible-option-default-bold docutils literal notranslate"><span class="pre">false</span></code> <span class="ansible-option-choices-default-mark">← (default)</span></p></li>
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">true</span></code></p></li>
 </ul>
 </div></td>
 </tr>
@@ -240,8 +240,8 @@ see <a class="reference internal" href="#ansible-collections-community-windows-w
 <p>This only works for specific versions of the PsExec binary.</p>
 <p class="ansible-option-line"><span class="ansible-option-choices">Choices:</span></p>
 <ul class="simple">
-<li><p><span class="ansible-option-default-bold">false</span> <span class="ansible-option-default">← (default)</span></p></li>
-<li><p><span class="ansible-option-choices-entry">true</span></p></li>
+<li><p><code class="ansible-option-default-bold docutils literal notranslate"><span class="pre">false</span></code> <span class="ansible-option-choices-default-mark">← (default)</span></p></li>
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">true</span></code></p></li>
 </ul>
 </div></td>
 </tr>
@@ -252,8 +252,8 @@ see <a class="reference internal" href="#ansible-collections-community-windows-w
 <td><div class="ansible-option-cell"><p>Run the command without loading the account’s profile.</p>
 <p class="ansible-option-line"><span class="ansible-option-choices">Choices:</span></p>
 <ul class="simple">
-<li><p><span class="ansible-option-default-bold">false</span> <span class="ansible-option-default">← (default)</span></p></li>
-<li><p><span class="ansible-option-choices-entry">true</span></p></li>
+<li><p><code class="ansible-option-default-bold docutils literal notranslate"><span class="pre">false</span></code> <span class="ansible-option-choices-default-mark">← (default)</span></p></li>
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">true</span></code></p></li>
 </ul>
 </div></td>
 </tr>
@@ -272,12 +272,12 @@ see <a class="reference internal" href="#ansible-collections-community-windows-w
 <td><div class="ansible-option-cell"><p>Used to run the command at a different priority.</p>
 <p class="ansible-option-line"><span class="ansible-option-choices">Choices:</span></p>
 <ul class="simple">
-<li><p><span class="ansible-option-choices-entry">“abovenormal”</span></p></li>
-<li><p><span class="ansible-option-choices-entry">“background”</span></p></li>
-<li><p><span class="ansible-option-choices-entry">“belownormal”</span></p></li>
-<li><p><span class="ansible-option-choices-entry">“high”</span></p></li>
-<li><p><span class="ansible-option-choices-entry">“low”</span></p></li>
-<li><p><span class="ansible-option-choices-entry">“realtime”</span></p></li>
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">&quot;abovenormal&quot;</span></code></p></li>
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">&quot;background&quot;</span></code></p></li>
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">&quot;belownormal&quot;</span></code></p></li>
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">&quot;high&quot;</span></code></p></li>
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">&quot;low&quot;</span></code></p></li>
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">&quot;realtime&quot;</span></code></p></li>
 </ul>
 </div></td>
 </tr>
@@ -297,8 +297,8 @@ see <a class="reference internal" href="#ansible-collections-community-windows-w
 <td><div class="ansible-option-cell"><p>Run the remote command in the System account.</p>
 <p class="ansible-option-line"><span class="ansible-option-choices">Choices:</span></p>
 <ul class="simple">
-<li><p><span class="ansible-option-default-bold">false</span> <span class="ansible-option-default">← (default)</span></p></li>
-<li><p><span class="ansible-option-choices-entry">true</span></p></li>
+<li><p><code class="ansible-option-default-bold docutils literal notranslate"><span class="pre">false</span></code> <span class="ansible-option-choices-default-mark">← (default)</span></p></li>
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">true</span></code></p></li>
 </ul>
 </div></td>
 </tr>
@@ -325,8 +325,8 @@ see <a class="reference internal" href="#ansible-collections-community-windows-w
 <p>Only use for non-interactive applications.</p>
 <p class="ansible-option-line"><span class="ansible-option-choices">Choices:</span></p>
 <ul class="simple">
-<li><p><span class="ansible-option-choices-entry">false</span></p></li>
-<li><p><span class="ansible-option-default-bold">true</span> <span class="ansible-option-default">← (default)</span></p></li>
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">false</span></code></p></li>
+<li><p><code class="ansible-option-default-bold docutils literal notranslate"><span class="pre">true</span></code> <span class="ansible-option-choices-default-mark">← (default)</span></p></li>
 </ul>
 </div></td>
 </tr>
@@ -406,7 +406,7 @@ see <a class="reference internal" href="#ansible-collections-community-windows-w
 </div></td>
 <td><div class="ansible-option-cell"><p>The complete command line used by the module, including PsExec call and additional options.</p>
 <p class="ansible-option-line"><span class="ansible-option-returned-bold">Returned:</span> always</p>
-<p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> “psexec.exe -nobanner \\\\remote_server -u \”DOMAIN\\Administrator\” -p \”some_password\” -accepteula E:\\setup.exe”</p>
+<p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> <code class="ansible-option-sample docutils literal notranslate"><span class="pre">&quot;psexec.exe</span> <span class="pre">-nobanner</span> <span class="pre">\\\\remote_server</span> <span class="pre">-u</span> <span class="pre">\&quot;DOMAIN\\Administrator\&quot;</span> <span class="pre">-p</span> <span class="pre">\&quot;some_password\&quot;</span> <span class="pre">-accepteula</span> <span class="pre">E:\\setup.exe&quot;</span></code></p>
 </div></td>
 </tr>
 <tr class="row-odd"><td><div class="ansible-option-cell">
@@ -415,7 +415,7 @@ see <a class="reference internal" href="#ansible-collections-community-windows-w
 </div></td>
 <td><div class="ansible-option-cell"><p>The PID of the async process created by PsExec.</p>
 <p class="ansible-option-line"><span class="ansible-option-returned-bold">Returned:</span> when <code class="docutils literal notranslate"><span class="pre">wait=False</span></code></p>
-<p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> 1532</p>
+<p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> <code class="ansible-option-sample docutils literal notranslate"><span class="pre">1532</span></code></p>
 </div></td>
 </tr>
 <tr class="row-even"><td><div class="ansible-option-cell">
@@ -424,7 +424,7 @@ see <a class="reference internal" href="#ansible-collections-community-windows-w
 </div></td>
 <td><div class="ansible-option-cell"><p>The return code for the command.</p>
 <p class="ansible-option-line"><span class="ansible-option-returned-bold">Returned:</span> always</p>
-<p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> 0</p>
+<p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> <code class="ansible-option-sample docutils literal notranslate"><span class="pre">0</span></code></p>
 </div></td>
 </tr>
 <tr class="row-odd"><td><div class="ansible-option-cell">
@@ -433,7 +433,7 @@ see <a class="reference internal" href="#ansible-collections-community-windows-w
 </div></td>
 <td><div class="ansible-option-cell"><p>The error output from the command.</p>
 <p class="ansible-option-line"><span class="ansible-option-returned-bold">Returned:</span> always</p>
-<p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> “Error 15 running E:\\setup.exe”</p>
+<p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> <code class="ansible-option-sample docutils literal notranslate"><span class="pre">&quot;Error</span> <span class="pre">15</span> <span class="pre">running</span> <span class="pre">E:\\setup.exe&quot;</span></code></p>
 </div></td>
 </tr>
 <tr class="row-even"><td><div class="ansible-option-cell">
@@ -442,7 +442,7 @@ see <a class="reference internal" href="#ansible-collections-community-windows-w
 </div></td>
 <td><div class="ansible-option-cell"><p>The standard output from the command.</p>
 <p class="ansible-option-line"><span class="ansible-option-returned-bold">Returned:</span> always</p>
-<p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> “Success.”</p>
+<p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> <code class="ansible-option-sample docutils literal notranslate"><span class="pre">&quot;Success.&quot;</span></code></p>
 </div></td>
 </tr>
 </tbody>

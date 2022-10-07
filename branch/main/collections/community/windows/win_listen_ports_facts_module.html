@@ -164,7 +164,7 @@
 </div></td>
 <td><div class="ansible-option-cell"><p>The format of the date when the process that owns the port started.</p>
 <p>The date specification is UFormat</p>
-<p class="ansible-option-line"><span class="ansible-option-default-bold">Default:</span> <span class="ansible-option-default">“%c”</span></p>
+<p class="ansible-option-line"><span class="ansible-option-default-bold">Default:</span> <code class="ansible-option-default docutils literal notranslate"><span class="pre">&quot;%c&quot;</span></code></p>
 </div></td>
 </tr>
 <tr class="row-odd"><td><div class="ansible-option-cell">
@@ -173,7 +173,7 @@
 </div></td>
 <td><div class="ansible-option-cell"><p>Filter for the state of the TCP ports that will be recopilated.</p>
 <p>Supports multiple states (Bound, Closed, CloseWait, Closing, DeleteTCB, Established, FinWait1, FinWait2, LastAck, Listen, SynReceived, SynSent and TimeWait), that can be used alone or combined. Note that the Bound state is only available on PowerShell version 4.0 or later.</p>
-<p class="ansible-option-line"><span class="ansible-option-default-bold">Default:</span> <span class="ansible-option-default">[“Listen”]</span></p>
+<p class="ansible-option-line"><span class="ansible-option-default-bold">Default:</span> <code class="ansible-option-default docutils literal notranslate"><span class="pre">[&quot;Listen&quot;]</span></code></p>
 </div></td>
 </tr>
 </tbody>
@@ -231,7 +231,7 @@
 </div></td>
 <td><div class="ansible-option-cell"><p>List of dicts with the detected TCP ports</p>
 <p class="ansible-option-line"><span class="ansible-option-returned-bold">Returned:</span> success</p>
-<p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> [{“address”: “127.0.0.1”, “name”: “python”, “pid”: 5332, “port”: 82, “protocol”: “tcp”, “stime”: “Thu Nov 18 15:27:42 2021”, “user”: “SERVER\\Administrator”}]</p>
+<p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> <code class="ansible-option-sample docutils literal notranslate"><span class="pre">[{&quot;address&quot;:</span> <span class="pre">&quot;127.0.0.1&quot;,</span> <span class="pre">&quot;name&quot;:</span> <span class="pre">&quot;python&quot;,</span> <span class="pre">&quot;pid&quot;:</span> <span class="pre">5332,</span> <span class="pre">&quot;port&quot;:</span> <span class="pre">82,</span> <span class="pre">&quot;protocol&quot;:</span> <span class="pre">&quot;tcp&quot;,</span> <span class="pre">&quot;stime&quot;:</span> <span class="pre">&quot;Thu</span> <span class="pre">Nov</span> <span class="pre">18</span> <span class="pre">15:27:42</span> <span class="pre">2021&quot;,</span> <span class="pre">&quot;user&quot;:</span> <span class="pre">&quot;SERVER\\Administrator&quot;}]</span></code></p>
 </div></td>
 </tr>
 <tr class="row-odd"><td><div class="ansible-option-cell">
@@ -240,7 +240,7 @@
 </div></td>
 <td><div class="ansible-option-cell"><p>List of dicts with the detected UDP ports</p>
 <p class="ansible-option-line"><span class="ansible-option-returned-bold">Returned:</span> success</p>
-<p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> [{“address”: “127.0.0.1”, “name”: “python”, “pid”: 5332, “port”: 82, “protocol”: “udp”, “stime”: “Thu Nov 18 15:27:42 2021”, “user”: “SERVER\\Administrator”}]</p>
+<p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> <code class="ansible-option-sample docutils literal notranslate"><span class="pre">[{&quot;address&quot;:</span> <span class="pre">&quot;127.0.0.1&quot;,</span> <span class="pre">&quot;name&quot;:</span> <span class="pre">&quot;python&quot;,</span> <span class="pre">&quot;pid&quot;:</span> <span class="pre">5332,</span> <span class="pre">&quot;port&quot;:</span> <span class="pre">82,</span> <span class="pre">&quot;protocol&quot;:</span> <span class="pre">&quot;udp&quot;,</span> <span class="pre">&quot;stime&quot;:</span> <span class="pre">&quot;Thu</span> <span class="pre">Nov</span> <span class="pre">18</span> <span class="pre">15:27:42</span> <span class="pre">2021&quot;,</span> <span class="pre">&quot;user&quot;:</span> <span class="pre">&quot;SERVER\\Administrator&quot;}]</span></code></p>
 </div></td>
 </tr>
 </tbody>

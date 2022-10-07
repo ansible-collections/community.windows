@@ -173,8 +173,8 @@
 <p>When set to <code class="docutils literal notranslate"><span class="pre">yes</span></code>, create a backup file including the timestamp information so you can get the original file back if you somehow clobbered it incorrectly.</p>
 <p class="ansible-option-line"><span class="ansible-option-choices">Choices:</span></p>
 <ul class="simple">
-<li><p><span class="ansible-option-default-bold">false</span> <span class="ansible-option-default">← (default)</span></p></li>
-<li><p><span class="ansible-option-choices-entry">true</span></p></li>
+<li><p><code class="ansible-option-default-bold docutils literal notranslate"><span class="pre">false</span></code> <span class="ansible-option-choices-default-mark">← (default)</span></p></li>
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">true</span></code></p></li>
 </ul>
 </div></td>
 </tr>
@@ -185,8 +185,8 @@
 <td><div class="ansible-option-cell"><p>When set to <code class="docutils literal notranslate"><span class="pre">yes</span></code>, return the number of nodes matched by <em>xpath</em>.</p>
 <p class="ansible-option-line"><span class="ansible-option-choices">Choices:</span></p>
 <ul class="simple">
-<li><p><span class="ansible-option-default-bold">false</span> <span class="ansible-option-default">← (default)</span></p></li>
-<li><p><span class="ansible-option-choices-entry">true</span></p></li>
+<li><p><code class="ansible-option-default-bold docutils literal notranslate"><span class="pre">false</span></code> <span class="ansible-option-choices-default-mark">← (default)</span></p></li>
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">true</span></code></p></li>
 </ul>
 </div></td>
 </tr>
@@ -216,8 +216,8 @@
 <td><div class="ansible-option-cell"><p>Set or remove the nodes (or attributes) matched by <em>xpath</em>.</p>
 <p class="ansible-option-line"><span class="ansible-option-choices">Choices:</span></p>
 <ul class="simple">
-<li><p><span class="ansible-option-default-bold">“present”</span> <span class="ansible-option-default">← (default)</span></p></li>
-<li><p><span class="ansible-option-choices-entry">“absent”</span></p></li>
+<li><p><code class="ansible-option-default-bold docutils literal notranslate"><span class="pre">&quot;present&quot;</span></code> <span class="ansible-option-choices-default-mark">← (default)</span></p></li>
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">&quot;absent&quot;</span></code></p></li>
 </ul>
 </div></td>
 </tr>
@@ -228,9 +228,9 @@
 <td><div class="ansible-option-cell"><p>The type of XML node you are working with.</p>
 <p class="ansible-option-line"><span class="ansible-option-choices">Choices:</span></p>
 <ul class="simple">
-<li><p><span class="ansible-option-choices-entry">“attribute”</span></p></li>
-<li><p><span class="ansible-option-default-bold">“element”</span> <span class="ansible-option-default">← (default)</span></p></li>
-<li><p><span class="ansible-option-choices-entry">“text”</span></p></li>
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">&quot;attribute&quot;</span></code></p></li>
+<li><p><code class="ansible-option-default-bold docutils literal notranslate"><span class="pre">&quot;element&quot;</span></code> <span class="ansible-option-choices-default-mark">← (default)</span></p></li>
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">&quot;text&quot;</span></code></p></li>
 </ul>
 </div></td>
 </tr>
@@ -325,7 +325,7 @@
 </div></td>
 <td><div class="ansible-option-cell"><p>Name of the backup file that was created.</p>
 <p class="ansible-option-line"><span class="ansible-option-returned-bold">Returned:</span> if backup=yes</p>
-<p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> “C:\\Path\\To\\File.txt.11540.20150212-220915.bak”</p>
+<p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> <code class="ansible-option-sample docutils literal notranslate"><span class="pre">&quot;C:\\Path\\To\\File.txt.11540.20150212-220915.bak&quot;</span></code></p>
 </div></td>
 </tr>
 <tr class="row-odd"><td><div class="ansible-option-cell">
@@ -334,7 +334,7 @@
 </div></td>
 <td><div class="ansible-option-cell"><p>Number of nodes matched by xpath.</p>
 <p class="ansible-option-line"><span class="ansible-option-returned-bold">Returned:</span> if count=yes</p>
-<p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> 33</p>
+<p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> <code class="ansible-option-sample docutils literal notranslate"><span class="pre">33</span></code></p>
 </div></td>
 </tr>
 <tr class="row-even"><td><div class="ansible-option-cell">
@@ -343,7 +343,7 @@
 </div></td>
 <td><div class="ansible-option-cell"><p>XML comparison exceptions.</p>
 <p class="ansible-option-line"><span class="ansible-option-returned-bold">Returned:</span> always, for type element and -vvv or more</p>
-<p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> [“attribute mismatch for actual=string”]</p>
+<p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> <code class="ansible-option-sample docutils literal notranslate"><span class="pre">[&quot;attribute</span> <span class="pre">mismatch</span> <span class="pre">for</span> <span class="pre">actual=string&quot;]</span></code></p>
 </div></td>
 </tr>
 <tr class="row-odd"><td><div class="ansible-option-cell">
@@ -352,7 +352,7 @@
 </div></td>
 <td><div class="ansible-option-cell"><p>What was done.</p>
 <p class="ansible-option-line"><span class="ansible-option-returned-bold">Returned:</span> always</p>
-<p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> “xml added”</p>
+<p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> <code class="ansible-option-sample docutils literal notranslate"><span class="pre">&quot;xml</span> <span class="pre">added&quot;</span></code></p>
 </div></td>
 </tr>
 </tbody>

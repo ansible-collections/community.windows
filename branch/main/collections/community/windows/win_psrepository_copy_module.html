@@ -174,7 +174,7 @@
 <p>If a profile matches both an include (<em>profiles</em>) and <em>exclude_profiles</em>, it will be excluded.</p>
 <p>By default, the service account profiles are excluded.</p>
 <p>To explcitly exclude nothing, set <em>exclude_profiles=[]</em>.</p>
-<p class="ansible-option-line"><span class="ansible-option-default-bold">Default:</span> <span class="ansible-option-default">[“systemprofile”, “LocalService”, “NetworkService”]</span></p>
+<p class="ansible-option-line"><span class="ansible-option-default-bold">Default:</span> <code class="ansible-option-default docutils literal notranslate"><span class="pre">[&quot;systemprofile&quot;,</span> <span class="pre">&quot;LocalService&quot;,</span> <span class="pre">&quot;NetworkService&quot;]</span></code></p>
 </div></td>
 </tr>
 <tr class="row-even"><td><div class="ansible-option-cell">
@@ -183,7 +183,7 @@
 </div></td>
 <td><div class="ansible-option-cell"><p>The names of repositories to copy.</p>
 <p>Names are interpreted as wildcards.</p>
-<p class="ansible-option-line"><span class="ansible-option-default-bold">Default:</span> <span class="ansible-option-default">[”*”]</span></p>
+<p class="ansible-option-line"><span class="ansible-option-default-bold">Default:</span> <code class="ansible-option-default docutils literal notranslate"><span class="pre">[&quot;*&quot;]</span></code></p>
 </div></td>
 </tr>
 <tr class="row-odd"><td><div class="ansible-option-cell">
@@ -194,7 +194,7 @@
 <p>Names are interpreted as wildcards.</p>
 <p>The <code class="docutils literal notranslate"><span class="pre">Default</span></code> profile can also be matched.</p>
 <p>The <code class="docutils literal notranslate"><span class="pre">Public</span></code> and <code class="docutils literal notranslate"><span class="pre">All</span> <span class="pre">Users</span></code> profiles cannot be targeted, as PSRepositories are not loaded from them.</p>
-<p class="ansible-option-line"><span class="ansible-option-default-bold">Default:</span> <span class="ansible-option-default">[”*”]</span></p>
+<p class="ansible-option-line"><span class="ansible-option-default-bold">Default:</span> <code class="ansible-option-default docutils literal notranslate"><span class="pre">[&quot;*&quot;]</span></code></p>
 </div></td>
 </tr>
 <tr class="row-even"><td><div class="ansible-option-cell">
@@ -203,7 +203,7 @@
 </div></td>
 <td><div class="ansible-option-cell"><p>The full path to the source repositories XML file.</p>
 <p>Defaults to the repositories registered to the current user.</p>
-<p class="ansible-option-line"><span class="ansible-option-default-bold">Default:</span> <span class="ansible-option-default">“%LOCALAPPDATA%\\Microsoft\\Windows\\PowerShell\\PowerShellGet\\PSRepositories.xml”</span></p>
+<p class="ansible-option-line"><span class="ansible-option-default-bold">Default:</span> <code class="ansible-option-default docutils literal notranslate"><span class="pre">&quot;%LOCALAPPDATA%\\Microsoft\\Windows\\PowerShell\\PowerShellGet\\PSRepositories.xml&quot;</span></code></p>
 </div></td>
 </tr>
 </tbody>

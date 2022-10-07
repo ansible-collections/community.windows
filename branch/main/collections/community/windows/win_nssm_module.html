@@ -187,7 +187,7 @@ see <a class="reference internal" href="#ansible-collections-community-windows-w
 <a class="ansibleOptionLink" href="#parameter-app_rotate_bytes" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">integer</span></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>NSSM will not rotate any file which is smaller than the configured number of bytes.</p>
-<p class="ansible-option-line"><span class="ansible-option-default-bold">Default:</span> <span class="ansible-option-default">104858</span></p>
+<p class="ansible-option-line"><span class="ansible-option-default-bold">Default:</span> <code class="ansible-option-default docutils literal notranslate"><span class="pre">104858</span></code></p>
 </div></td>
 </tr>
 <tr class="row-odd"><td><div class="ansible-option-cell">
@@ -197,8 +197,8 @@ see <a class="reference internal" href="#ansible-collections-community-windows-w
 <td><div class="ansible-option-cell"><p>If set to 1, nssm can rotate files which grow to the configured file size limit while the service is running.</p>
 <p class="ansible-option-line"><span class="ansible-option-choices">Choices:</span></p>
 <ul class="simple">
-<li><p><span class="ansible-option-default-bold">0</span> <span class="ansible-option-default">← (default)</span></p></li>
-<li><p><span class="ansible-option-choices-entry">1</span></p></li>
+<li><p><code class="ansible-option-default-bold docutils literal notranslate"><span class="pre">0</span></code> <span class="ansible-option-choices-default-mark">← (default)</span></p></li>
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">1</span></code></p></li>
 </ul>
 </div></td>
 </tr>
@@ -220,21 +220,21 @@ see <a class="reference internal" href="#ansible-collections-community-windows-w
 <p>8 - Don’t call TerminateProcess().</p>
 <p class="ansible-option-line"><span class="ansible-option-choices">Choices:</span></p>
 <ul class="simple">
-<li><p><span class="ansible-option-choices-entry">1</span></p></li>
-<li><p><span class="ansible-option-choices-entry">2</span></p></li>
-<li><p><span class="ansible-option-choices-entry">3</span></p></li>
-<li><p><span class="ansible-option-choices-entry">4</span></p></li>
-<li><p><span class="ansible-option-choices-entry">5</span></p></li>
-<li><p><span class="ansible-option-choices-entry">6</span></p></li>
-<li><p><span class="ansible-option-choices-entry">7</span></p></li>
-<li><p><span class="ansible-option-choices-entry">8</span></p></li>
-<li><p><span class="ansible-option-choices-entry">9</span></p></li>
-<li><p><span class="ansible-option-choices-entry">10</span></p></li>
-<li><p><span class="ansible-option-choices-entry">11</span></p></li>
-<li><p><span class="ansible-option-choices-entry">12</span></p></li>
-<li><p><span class="ansible-option-choices-entry">13</span></p></li>
-<li><p><span class="ansible-option-choices-entry">14</span></p></li>
-<li><p><span class="ansible-option-choices-entry">15</span></p></li>
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">1</span></code></p></li>
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">2</span></code></p></li>
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">3</span></code></p></li>
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">4</span></code></p></li>
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">5</span></code></p></li>
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">6</span></code></p></li>
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">7</span></code></p></li>
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">8</span></code></p></li>
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">9</span></code></p></li>
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">10</span></code></p></li>
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">11</span></code></p></li>
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">12</span></code></p></li>
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">13</span></code></p></li>
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">14</span></code></p></li>
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">15</span></code></p></li>
 </ul>
 </div></td>
 </tr>
@@ -283,7 +283,7 @@ see <a class="reference internal" href="#ansible-collections-community-windows-w
 <a class="ansibleOptionLink" href="#parameter-executable" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">path</span></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>The location of the NSSM utility (in case it is not located in your PATH).</p>
-<p class="ansible-option-line"><span class="ansible-option-default-bold">Default:</span> <span class="ansible-option-default">“nssm.exe”</span></p>
+<p class="ansible-option-line"><span class="ansible-option-default-bold">Default:</span> <code class="ansible-option-default docutils literal notranslate"><span class="pre">&quot;nssm.exe&quot;</span></code></p>
 </div></td>
 </tr>
 <tr class="row-even"><td><div class="ansible-option-cell">
@@ -311,10 +311,10 @@ see <a class="reference internal" href="#ansible-collections-community-windows-w
 <p><code class="docutils literal notranslate"><span class="pre">disabled</span></code> means that the service will stay off, regardless if it is needed or not.</p>
 <p class="ansible-option-line"><span class="ansible-option-choices">Choices:</span></p>
 <ul class="simple">
-<li><p><span class="ansible-option-default-bold">“auto”</span> <span class="ansible-option-default">← (default)</span></p></li>
-<li><p><span class="ansible-option-choices-entry">“delayed”</span></p></li>
-<li><p><span class="ansible-option-choices-entry">“disabled”</span></p></li>
-<li><p><span class="ansible-option-choices-entry">“manual”</span></p></li>
+<li><p><code class="ansible-option-default-bold docutils literal notranslate"><span class="pre">&quot;auto&quot;</span></code> <span class="ansible-option-choices-default-mark">← (default)</span></p></li>
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">&quot;delayed&quot;</span></code></p></li>
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">&quot;disabled&quot;</span></code></p></li>
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">&quot;manual&quot;</span></code></p></li>
 </ul>
 </div></td>
 </tr>
@@ -325,11 +325,11 @@ see <a class="reference internal" href="#ansible-collections-community-windows-w
 <td><div class="ansible-option-cell"><p>State of the service on the system.</p>
 <p class="ansible-option-line"><span class="ansible-option-choices">Choices:</span></p>
 <ul class="simple">
-<li><p><span class="ansible-option-choices-entry">“absent”</span></p></li>
-<li><p><span class="ansible-option-default-bold">“present”</span> <span class="ansible-option-default">← (default)</span></p></li>
-<li><p><span class="ansible-option-choices-entry">“started”</span></p></li>
-<li><p><span class="ansible-option-choices-entry">“stopped”</span></p></li>
-<li><p><span class="ansible-option-choices-entry">“restarted”</span></p></li>
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">&quot;absent&quot;</span></code></p></li>
+<li><p><code class="ansible-option-default-bold docutils literal notranslate"><span class="pre">&quot;present&quot;</span></code> <span class="ansible-option-choices-default-mark">← (default)</span></p></li>
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">&quot;started&quot;</span></code></p></li>
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">&quot;stopped&quot;</span></code></p></li>
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">&quot;restarted&quot;</span></code></p></li>
 </ul>
 </div></td>
 </tr>

@@ -204,8 +204,8 @@
 <td><div class="ansible-option-cell"><p>Also search for deleted Active Directory objects.</p>
 <p class="ansible-option-line"><span class="ansible-option-choices">Choices:</span></p>
 <ul class="simple">
-<li><p><span class="ansible-option-default-bold">false</span> <span class="ansible-option-default">← (default)</span></p></li>
-<li><p><span class="ansible-option-choices-entry">true</span></p></li>
+<li><p><code class="ansible-option-default-bold docutils literal notranslate"><span class="pre">false</span></code> <span class="ansible-option-choices-default-mark">← (default)</span></p></li>
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">true</span></code></p></li>
 </ul>
 </div></td>
 </tr>
@@ -249,9 +249,9 @@
 <p>This cannot be set with <em>identity</em>.</p>
 <p class="ansible-option-line"><span class="ansible-option-choices">Choices:</span></p>
 <ul class="simple">
-<li><p><span class="ansible-option-choices-entry">“base”</span></p></li>
-<li><p><span class="ansible-option-choices-entry">“one_level”</span></p></li>
-<li><p><span class="ansible-option-choices-entry">“subtree”</span></p></li>
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">&quot;base&quot;</span></code></p></li>
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">&quot;one_level&quot;</span></code></p></li>
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">&quot;subtree&quot;</span></code></p></li>
 </ul>
 </div></td>
 </tr>
@@ -317,7 +317,7 @@
 <p>All security descriptor properties are returned as the SDDL string of that descriptor.</p>
 <p>The properties <code class="docutils literal notranslate"><span class="pre">DistinguishedName</span></code>, <code class="docutils literal notranslate"><span class="pre">Name</span></code>, <code class="docutils literal notranslate"><span class="pre">ObjectClass</span></code>, and <code class="docutils literal notranslate"><span class="pre">ObjectGUID</span></code> are always returned.</p>
 <p class="ansible-option-line"><span class="ansible-option-returned-bold">Returned:</span> always</p>
-<p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> “[{\n  \”accountExpires\”: 0,\n  \”adminCount\”: 1,\n  \”CanonicalName\”: \”domain.com/Users/Administrator\”,\n  \”CN\”: \”Administrator\”,\n  \”Created\”: \”2020-01-13T09:03:22.0000000Z\”,\n  \”Description\”: \”Built-in account for administering computer/domain\”,\n  \”DisplayName\”: null,\n  \”DistinguishedName\”: \”CN=Administrator,CN=Users,DC=domain,DC=com\”,\n  \”memberOf\”: [\n    \”CN=Group Policy Creator Owners,CN=Users,DC=domain,DC=com\”,\n    \”CN=Domain Admins\”,CN=Users,DC=domain,DC=com\”\n  ],\n  \”Name\”: \”Administrator\”,\n  \”nTSecurityDescriptor\”: \”O:DAG:DAD:PAI(A;;LCRPLORC;;;AU)(A;;CCDCLCSWRPWPDTLOCRSDRCWDWO;;;SY)(A;;CCDCLCSWRPWPLOCRSDRCWDWO;;;BA)\”,\n  \”ObjectCategory\”: \”CN=Person,CN=Schema,CN=Configuration,DC=domain,DC=com\”,\n  \”ObjectClass\”: \”user\”,\n  \”ObjectGUID\”: \”c8c6569e-4688-4f3c-8462-afc4ff60817b\”,\n  \”objectSid\”: {\n    \”Sid\”: \”S-1-5-21-2959096244-3298113601-420842770-500\”,\n    \”Name\”: \”DOMAIN\\Administrator\”\n  },\n  \”sAMAccountName\”: \”Administrator\”,\n}]\n”</p>
+<p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> <code class="ansible-option-sample docutils literal notranslate"><span class="pre">&quot;[{\n</span>&#160; <span class="pre">\&quot;accountExpires\&quot;:</span> <span class="pre">0,\n</span>&#160; <span class="pre">\&quot;adminCount\&quot;:</span> <span class="pre">1,\n</span>&#160; <span class="pre">\&quot;CanonicalName\&quot;:</span> <span class="pre">\&quot;domain.com/Users/Administrator\&quot;,\n</span>&#160; <span class="pre">\&quot;CN\&quot;:</span> <span class="pre">\&quot;Administrator\&quot;,\n</span>&#160; <span class="pre">\&quot;Created\&quot;:</span> <span class="pre">\&quot;2020-01-13T09:03:22.0000000Z\&quot;,\n</span>&#160; <span class="pre">\&quot;Description\&quot;:</span> <span class="pre">\&quot;Built-in</span> <span class="pre">account</span> <span class="pre">for</span> <span class="pre">administering</span> <span class="pre">computer/domain\&quot;,\n</span>&#160; <span class="pre">\&quot;DisplayName\&quot;:</span> <span class="pre">null,\n</span>&#160; <span class="pre">\&quot;DistinguishedName\&quot;:</span> <span class="pre">\&quot;CN=Administrator,CN=Users,DC=domain,DC=com\&quot;,\n</span>&#160; <span class="pre">\&quot;memberOf\&quot;:</span> <span class="pre">[\n</span>&#160;&#160;&#160; <span class="pre">\&quot;CN=Group</span> <span class="pre">Policy</span> <span class="pre">Creator</span> <span class="pre">Owners,CN=Users,DC=domain,DC=com\&quot;,\n</span>&#160;&#160;&#160; <span class="pre">\&quot;CN=Domain</span> <span class="pre">Admins\&quot;,CN=Users,DC=domain,DC=com\&quot;\n</span>&#160; <span class="pre">],\n</span>&#160; <span class="pre">\&quot;Name\&quot;:</span> <span class="pre">\&quot;Administrator\&quot;,\n</span>&#160; <span class="pre">\&quot;nTSecurityDescriptor\&quot;:</span> <span class="pre">\&quot;O:DAG:DAD:PAI(A;;LCRPLORC;;;AU)(A;;CCDCLCSWRPWPDTLOCRSDRCWDWO;;;SY)(A;;CCDCLCSWRPWPLOCRSDRCWDWO;;;BA)\&quot;,\n</span>&#160; <span class="pre">\&quot;ObjectCategory\&quot;:</span> <span class="pre">\&quot;CN=Person,CN=Schema,CN=Configuration,DC=domain,DC=com\&quot;,\n</span>&#160; <span class="pre">\&quot;ObjectClass\&quot;:</span> <span class="pre">\&quot;user\&quot;,\n</span>&#160; <span class="pre">\&quot;ObjectGUID\&quot;:</span> <span class="pre">\&quot;c8c6569e-4688-4f3c-8462-afc4ff60817b\&quot;,\n</span>&#160; <span class="pre">\&quot;objectSid\&quot;:</span> <span class="pre">{\n</span>&#160;&#160;&#160; <span class="pre">\&quot;Sid\&quot;:</span> <span class="pre">\&quot;S-1-5-21-2959096244-3298113601-420842770-500\&quot;,\n</span>&#160;&#160;&#160; <span class="pre">\&quot;Name\&quot;:</span> <span class="pre">\&quot;DOMAIN\\Administrator\&quot;\n</span>&#160; <span class="pre">},\n</span>&#160; <span class="pre">\&quot;sAMAccountName\&quot;:</span> <span class="pre">\&quot;Administrator\&quot;,\n}]\n&quot;</span></code></p>
 </div></td>
 </tr>
 </tbody>

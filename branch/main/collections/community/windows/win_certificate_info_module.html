@@ -161,8 +161,8 @@
 <td><div class="ansible-option-cell"><p>The location of the store to search.</p>
 <p class="ansible-option-line"><span class="ansible-option-choices">Choices:</span></p>
 <ul class="simple">
-<li><p><span class="ansible-option-choices-entry">“CurrentUser”</span></p></li>
-<li><p><span class="ansible-option-default-bold">“LocalMachine”</span> <span class="ansible-option-default">← (default)</span></p></li>
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">&quot;CurrentUser&quot;</span></code></p></li>
+<li><p><code class="ansible-option-default-bold docutils literal notranslate"><span class="pre">&quot;LocalMachine&quot;</span></code> <span class="ansible-option-choices-default-mark">← (default)</span></p></li>
 </ul>
 </div></td>
 </tr>
@@ -172,7 +172,7 @@
 </div></td>
 <td><div class="ansible-option-cell"><p>The name of the store to search.</p>
 <p>See <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.security.cryptography.x509certificates.storename">https://docs.microsoft.com/en-us/dotnet/api/system.security.cryptography.x509certificates.storename</a> for a list of built-in store names.</p>
-<p class="ansible-option-line"><span class="ansible-option-default-bold">Default:</span> <span class="ansible-option-default">“My”</span></p>
+<p class="ansible-option-line"><span class="ansible-option-default-bold">Default:</span> <code class="ansible-option-default docutils literal notranslate"><span class="pre">&quot;My&quot;</span></code></p>
 </div></td>
 </tr>
 <tr class="row-even"><td><div class="ansible-option-cell">
@@ -257,7 +257,7 @@
 </div></td>
 <td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>Indicates that the certificate is archived.</p>
 <p class="ansible-option-line"><span class="ansible-option-returned-bold">Returned:</span> success</p>
-<p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> false</p>
+<p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> <code class="ansible-option-sample docutils literal notranslate"><span class="pre">false</span></code></p>
 </div></td>
 </tr>
 <tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
@@ -274,7 +274,7 @@
 </div></td>
 <td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>Lists the registered dns names for the certificate.</p>
 <p class="ansible-option-line"><span class="ansible-option-returned-bold">Returned:</span> success</p>
-<p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> [”*.m.wikiquote.org”, “*.wikipedia.org”]</p>
+<p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> <code class="ansible-option-sample docutils literal notranslate"><span class="pre">[&quot;*.m.wikiquote.org&quot;,</span> <span class="pre">&quot;*.wikipedia.org&quot;]</span></code></p>
 </div></td>
 </tr>
 <tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
@@ -283,7 +283,7 @@
 </div></td>
 <td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>The collection of the certificates extensions.</p>
 <p class="ansible-option-line"><span class="ansible-option-returned-bold">Returned:</span> success</p>
-<p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> [{“critical”: false, “field”: “Subject Key Identifier”, “value”: “88 27 17 09 a9 b6 18 60 8b ec eb ba f6 47 59 c5 52 54 a3 b7”}, {“critical”: true, “field”: “Basic Constraints”, “value”: “Subject Type=CA, Path Length Constraint=None”}, {“critical”: false, “field”: “Authority Key Identifier”, “value”: “KeyID=2b d0 69 47 94 76 09 fe f4 6b 8d 2e 40 a6 f7 47 4d 7f 08 5e”}, {“critical”: false, “field”: “CRL Distribution Points”, “value”: “[1]CRL Distribution Point: Distribution Point Name:Full Name:URL=http://crl.apple.com/root.crl”}, {“critical”: true, “field”: “Key Usage”, “value”: “Digital Signature, Certificate Signing, Off-line CRL Signing, CRL Signing (86)”}, {“critical”: false, “field”: null, “value”: “05 00”}]</p>
+<p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> <code class="ansible-option-sample docutils literal notranslate"><span class="pre">[{&quot;critical&quot;:</span> <span class="pre">false,</span> <span class="pre">&quot;field&quot;:</span> <span class="pre">&quot;Subject</span> <span class="pre">Key</span> <span class="pre">Identifier&quot;,</span> <span class="pre">&quot;value&quot;:</span> <span class="pre">&quot;88</span> <span class="pre">27</span> <span class="pre">17</span> <span class="pre">09</span> <span class="pre">a9</span> <span class="pre">b6</span> <span class="pre">18</span> <span class="pre">60</span> <span class="pre">8b</span> <span class="pre">ec</span> <span class="pre">eb</span> <span class="pre">ba</span> <span class="pre">f6</span> <span class="pre">47</span> <span class="pre">59</span> <span class="pre">c5</span> <span class="pre">52</span> <span class="pre">54</span> <span class="pre">a3</span> <span class="pre">b7&quot;},</span> <span class="pre">{&quot;critical&quot;:</span> <span class="pre">true,</span> <span class="pre">&quot;field&quot;:</span> <span class="pre">&quot;Basic</span> <span class="pre">Constraints&quot;,</span> <span class="pre">&quot;value&quot;:</span> <span class="pre">&quot;Subject</span> <span class="pre">Type=CA,</span> <span class="pre">Path</span> <span class="pre">Length</span> <span class="pre">Constraint=None&quot;},</span> <span class="pre">{&quot;critical&quot;:</span> <span class="pre">false,</span> <span class="pre">&quot;field&quot;:</span> <span class="pre">&quot;Authority</span> <span class="pre">Key</span> <span class="pre">Identifier&quot;,</span> <span class="pre">&quot;value&quot;:</span> <span class="pre">&quot;KeyID=2b</span> <span class="pre">d0</span> <span class="pre">69</span> <span class="pre">47</span> <span class="pre">94</span> <span class="pre">76</span> <span class="pre">09</span> <span class="pre">fe</span> <span class="pre">f4</span> <span class="pre">6b</span> <span class="pre">8d</span> <span class="pre">2e</span> <span class="pre">40</span> <span class="pre">a6</span> <span class="pre">f7</span> <span class="pre">47</span> <span class="pre">4d</span> <span class="pre">7f</span> <span class="pre">08</span> <span class="pre">5e&quot;},</span> <span class="pre">{&quot;critical&quot;:</span> <span class="pre">false,</span> <span class="pre">&quot;field&quot;:</span> <span class="pre">&quot;CRL</span> <span class="pre">Distribution</span> <span class="pre">Points&quot;,</span> <span class="pre">&quot;value&quot;:</span> <span class="pre">&quot;[1]CRL</span> <span class="pre">Distribution</span> <span class="pre">Point:</span> <span class="pre">Distribution</span> <span class="pre">Point</span> <span class="pre">Name:Full</span> <span class="pre">Name:URL=http://crl.apple.com/root.crl&quot;},</span> <span class="pre">{&quot;critical&quot;:</span> <span class="pre">true,</span> <span class="pre">&quot;field&quot;:</span> <span class="pre">&quot;Key</span> <span class="pre">Usage&quot;,</span> <span class="pre">&quot;value&quot;:</span> <span class="pre">&quot;Digital</span> <span class="pre">Signature,</span> <span class="pre">Certificate</span> <span class="pre">Signing,</span> <span class="pre">Off-line</span> <span class="pre">CRL</span> <span class="pre">Signing,</span> <span class="pre">CRL</span> <span class="pre">Signing</span> <span class="pre">(86)&quot;},</span> <span class="pre">{&quot;critical&quot;:</span> <span class="pre">false,</span> <span class="pre">&quot;field&quot;:</span> <span class="pre">null,</span> <span class="pre">&quot;value&quot;:</span> <span class="pre">&quot;05</span> <span class="pre">00&quot;}]</span></code></p>
 </div></td>
 </tr>
 <tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
@@ -292,7 +292,7 @@
 </div></td>
 <td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>The associated alias for the certificate.</p>
 <p class="ansible-option-line"><span class="ansible-option-returned-bold">Returned:</span> success</p>
-<p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> “Microsoft Root Authority”</p>
+<p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> <code class="ansible-option-sample docutils literal notranslate"><span class="pre">&quot;Microsoft</span> <span class="pre">Root</span> <span class="pre">Authority&quot;</span></code></p>
 </div></td>
 </tr>
 <tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
@@ -301,7 +301,7 @@
 </div></td>
 <td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>Indicates that the certificate contains a private key.</p>
 <p class="ansible-option-line"><span class="ansible-option-returned-bold">Returned:</span> success</p>
-<p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> false</p>
+<p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> <code class="ansible-option-sample docutils literal notranslate"><span class="pre">false</span></code></p>
 </div></td>
 </tr>
 <tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
@@ -310,7 +310,7 @@
 </div></td>
 <td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>lists the intended applications for the certificate.</p>
 <p class="ansible-option-line"><span class="ansible-option-returned-bold">Returned:</span> enhanced key usages extension exists.</p>
-<p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> [“Server Authentication”]</p>
+<p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> <code class="ansible-option-sample docutils literal notranslate"><span class="pre">[&quot;Server</span> <span class="pre">Authentication&quot;]</span></code></p>
 </div></td>
 </tr>
 <tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
@@ -319,7 +319,7 @@
 </div></td>
 <td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>Indicates that the certificate is a certificate authority (CA) certificate.</p>
 <p class="ansible-option-line"><span class="ansible-option-returned-bold">Returned:</span> basic constraints extension exists.</p>
-<p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> true</p>
+<p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> <code class="ansible-option-sample docutils literal notranslate"><span class="pre">true</span></code></p>
 </div></td>
 </tr>
 <tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
@@ -328,7 +328,7 @@
 </div></td>
 <td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>The certificate issuer’s common name.</p>
 <p class="ansible-option-line"><span class="ansible-option-returned-bold">Returned:</span> success</p>
-<p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> “Apple Root CA”</p>
+<p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> <code class="ansible-option-sample docutils literal notranslate"><span class="pre">&quot;Apple</span> <span class="pre">Root</span> <span class="pre">CA&quot;</span></code></p>
 </div></td>
 </tr>
 <tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
@@ -337,7 +337,7 @@
 </div></td>
 <td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>The certificate’s common name.</p>
 <p class="ansible-option-line"><span class="ansible-option-returned-bold">Returned:</span> success</p>
-<p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> “Apple Worldwide Developer Relations Certification Authority”</p>
+<p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> <code class="ansible-option-sample docutils literal notranslate"><span class="pre">&quot;Apple</span> <span class="pre">Worldwide</span> <span class="pre">Developer</span> <span class="pre">Relations</span> <span class="pre">Certification</span> <span class="pre">Authority&quot;</span></code></p>
 </div></td>
 </tr>
 <tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
@@ -346,7 +346,7 @@
 </div></td>
 <td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>The certificate issuer’s distinguished name.</p>
 <p class="ansible-option-line"><span class="ansible-option-returned-bold">Returned:</span> success</p>
-<p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> “CN=Apple Root CA, OU=Apple Certification Authority, O=Apple Inc., C=US”</p>
+<p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> <code class="ansible-option-sample docutils literal notranslate"><span class="pre">&quot;CN=Apple</span> <span class="pre">Root</span> <span class="pre">CA,</span> <span class="pre">OU=Apple</span> <span class="pre">Certification</span> <span class="pre">Authority,</span> <span class="pre">O=Apple</span> <span class="pre">Inc.,</span> <span class="pre">C=US&quot;</span></code></p>
 </div></td>
 </tr>
 <tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
@@ -356,7 +356,7 @@
 <td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>Defines how the certificate key can be used.</p>
 <p>If this value is not defined, the key can be used for any purpose.</p>
 <p class="ansible-option-line"><span class="ansible-option-returned-bold">Returned:</span> key usages extension exists.</p>
-<p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> [“CrlSign”, “KeyCertSign”, “DigitalSignature”]</p>
+<p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> <code class="ansible-option-sample docutils literal notranslate"><span class="pre">[&quot;CrlSign&quot;,</span> <span class="pre">&quot;KeyCertSign&quot;,</span> <span class="pre">&quot;DigitalSignature&quot;]</span></code></p>
 </div></td>
 </tr>
 <tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
@@ -366,7 +366,7 @@
 <td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>The number of levels allowed in a certificates path.</p>
 <p>If this value is 0, the certificate does not have a restriction.</p>
 <p class="ansible-option-line"><span class="ansible-option-returned-bold">Returned:</span> basic constraints extension exists</p>
-<p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> 0</p>
+<p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> <code class="ansible-option-sample docutils literal notranslate"><span class="pre">0</span></code></p>
 </div></td>
 </tr>
 <tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
@@ -383,7 +383,7 @@
 </div></td>
 <td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>The serial number of the certificate represented as a hexadecimal string</p>
 <p class="ansible-option-line"><span class="ansible-option-returned-bold">Returned:</span> success</p>
-<p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> “01DEBCC4396DA010”</p>
+<p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> <code class="ansible-option-sample docutils literal notranslate"><span class="pre">&quot;01DEBCC4396DA010&quot;</span></code></p>
 </div></td>
 </tr>
 <tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
@@ -392,7 +392,7 @@
 </div></td>
 <td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>The algorithm used to create the certificate’s signature</p>
 <p class="ansible-option-line"><span class="ansible-option-returned-bold">Returned:</span> success</p>
-<p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> “sha1RSA”</p>
+<p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> <code class="ansible-option-sample docutils literal notranslate"><span class="pre">&quot;sha1RSA&quot;</span></code></p>
 </div></td>
 </tr>
 <tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
@@ -401,7 +401,7 @@
 </div></td>
 <td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>The certificate’s subject key identifier</p>
 <p class="ansible-option-line"><span class="ansible-option-returned-bold">Returned:</span> subject key identifier extension exists.</p>
-<p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> “88271709A9B618608BECEBBAF64759C55254A3B7”</p>
+<p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> <code class="ansible-option-sample docutils literal notranslate"><span class="pre">&quot;88271709A9B618608BECEBBAF64759C55254A3B7&quot;</span></code></p>
 </div></td>
 </tr>
 <tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
@@ -410,7 +410,7 @@
 </div></td>
 <td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>The certificate’s distinguished name.</p>
 <p class="ansible-option-line"><span class="ansible-option-returned-bold">Returned:</span> success</p>
-<p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> “CN=Apple Worldwide Developer Relations Certification Authority, OU=Apple Worldwide Developer Relations, O=Apple Inc., C=US”</p>
+<p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> <code class="ansible-option-sample docutils literal notranslate"><span class="pre">&quot;CN=Apple</span> <span class="pre">Worldwide</span> <span class="pre">Developer</span> <span class="pre">Relations</span> <span class="pre">Certification</span> <span class="pre">Authority,</span> <span class="pre">OU=Apple</span> <span class="pre">Worldwide</span> <span class="pre">Developer</span> <span class="pre">Relations,</span> <span class="pre">O=Apple</span> <span class="pre">Inc.,</span> <span class="pre">C=US&quot;</span></code></p>
 </div></td>
 </tr>
 <tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
@@ -420,7 +420,7 @@
 <td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>The thumbprint as a hex string of the certificate.</p>
 <p>The return format will always be upper case.</p>
 <p class="ansible-option-line"><span class="ansible-option-returned-bold">Returned:</span> success</p>
-<p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> “FF6797793A3CD798DC5B2ABEF56F73EDC9F83A64”</p>
+<p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> <code class="ansible-option-sample docutils literal notranslate"><span class="pre">&quot;FF6797793A3CD798DC5B2ABEF56F73EDC9F83A64&quot;</span></code></p>
 </div></td>
 </tr>
 <tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
@@ -429,7 +429,7 @@
 </div></td>
 <td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>The start date of the certificate represented in seconds since epoch.</p>
 <p class="ansible-option-line"><span class="ansible-option-returned-bold">Returned:</span> success</p>
-<p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> 1360255727.0</p>
+<p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> <code class="ansible-option-sample docutils literal notranslate"><span class="pre">1360255727.0</span></code></p>
 </div></td>
 </tr>
 <tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
@@ -438,7 +438,7 @@
 </div></td>
 <td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>The start date of the certificate represented as an iso8601 formatted date.</p>
 <p class="ansible-option-line"><span class="ansible-option-returned-bold">Returned:</span> success</p>
-<p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> “2017-12-15T08:39:32Z”</p>
+<p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> <code class="ansible-option-sample docutils literal notranslate"><span class="pre">&quot;2017-12-15T08:39:32Z&quot;</span></code></p>
 </div></td>
 </tr>
 <tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
@@ -447,7 +447,7 @@
 </div></td>
 <td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>The expiry date of the certificate represented in seconds since epoch.</p>
 <p class="ansible-option-line"><span class="ansible-option-returned-bold">Returned:</span> success</p>
-<p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> 1675788527.0</p>
+<p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> <code class="ansible-option-sample docutils literal notranslate"><span class="pre">1675788527.0</span></code></p>
 </div></td>
 </tr>
 <tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
@@ -456,7 +456,7 @@
 </div></td>
 <td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>The expiry date of the certificate represented as an iso8601 formatted date.</p>
 <p class="ansible-option-line"><span class="ansible-option-returned-bold">Returned:</span> success</p>
-<p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> “2086-01-02T08:39:32Z”</p>
+<p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> <code class="ansible-option-sample docutils literal notranslate"><span class="pre">&quot;2086-01-02T08:39:32Z&quot;</span></code></p>
 </div></td>
 </tr>
 <tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
@@ -465,7 +465,7 @@
 </div></td>
 <td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>The x509 format version of the certificate</p>
 <p class="ansible-option-line"><span class="ansible-option-returned-bold">Returned:</span> success</p>
-<p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> 3</p>
+<p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> <code class="ansible-option-sample docutils literal notranslate"><span class="pre">3</span></code></p>
 </div></td>
 </tr>
 <tr class="row-odd"><td><div class="ansible-option-cell">
@@ -475,7 +475,7 @@
 <td><div class="ansible-option-cell"><p>Whether any certificates were found in the store.</p>
 <p>When <em>thumbprint</em> is specified, returns true only if the certificate mathing the thumbprint exists.</p>
 <p class="ansible-option-line"><span class="ansible-option-returned-bold">Returned:</span> success</p>
-<p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> true</p>
+<p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> <code class="ansible-option-sample docutils literal notranslate"><span class="pre">true</span></code></p>
 </div></td>
 </tr>
 </tbody>
