@@ -233,8 +233,8 @@ if ($state -eq "present") {
 
                 if ($reservation_name) {
                     $params.Name = $reservation_name
-                } 
-                else { 
+                }
+                else {
                     $params.Name = "reservation-" + $params.ClientId
                 }
 
