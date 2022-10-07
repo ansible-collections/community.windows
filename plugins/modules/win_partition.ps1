@@ -108,10 +108,21 @@ elseif ($drive_letter -and -not ($disk_number -and $partition_number)) {
 }
 elseif ($disk_number) {
     try {
-        Get-Disk -Number $disk_number | Out-Null
+        $Disk = Get-Disk -Number $disk_number
     }
     catch {
         $module.FailJson("Specified disk does not exist")
+    }
+    if ($state -eq "absent") {
+        # We allows to filter a partition to remove just by type without necessarly knowing its id or something else.
+        if ($null -ne $gpt_type) {
+            $ansible_partition = $Disk | Get-Partition | Where-Object {$_.GptType -eq "$($gpt_styles.$gpt_type)"}
+        } elseif ($null -ne $mbr_type) {
+            $ansible_partition = $Disk | Get-Partition | Where-Object {$_.MbrType -eq "$($mbr_styles.$mbr_type)"}
+        }
+        if (($ansible_partition | Measure-Object).Count -gt 1) {
+            $module.FailJson("More than 1 partition match the filter. Too risky to continue")
+        }
     }
 }
 else {
@@ -206,7 +217,7 @@ function Set-AnsiblePartitionState {
 }
 
 
-if ($ansible_partition) {
+if ($null -ne $ansible_partition) {
     if ($state -eq "absent") {
         try {
             $remove_params = @{
