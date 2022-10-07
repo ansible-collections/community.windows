@@ -106,5 +106,9 @@ EXAMPLES = r'''
 '''
 
 RETURN = r'''
-#
+unique_id:
+    description: C(True) Partition Unique identifier.
+    returned: success
+    type: str
+    sample: False
 '''

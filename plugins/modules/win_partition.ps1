@@ -344,6 +344,7 @@ else {
 }
 
 if ($state -eq "present" -and $ansible_partition) {
+    $module.Result.unique_id = $ansible_partition.UniqueId
     if ($offline -NotIn ($null, $ansible_partition.IsOffline)) {
         if (-not $module.CheckMode) {
             try {
