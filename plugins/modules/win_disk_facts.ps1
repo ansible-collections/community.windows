@@ -53,7 +53,6 @@ foreach ($disk in $disks) {
 
         $pdisk = Get-PhysicalDisk -ErrorAction SilentlyContinue | Where-Object {
             $_.DeviceId -eq $disk.Number
-
         }
         if ($pdisk) {
             $disk_info["physical_disk"] += @{
@@ -128,7 +127,10 @@ foreach ($disk in $disks) {
     }
     if ("win32_disk_drive" -in $module.Params.filter) {
         $win32_disk_drive = Get-CimInstance -ClassName Win32_DiskDrive -ErrorAction SilentlyContinue | Where-Object {
-            if ($_.SerialNumber) {
+            if ($null -ne $_.Index) {
+                $_.Index -eq $disk.DiskNumber
+            }
+            elseif ($_.SerialNumber.Trim()) {
                 $_.SerialNumber -eq $disk.SerialNumber
             }
             elseif ($disk.UniqueIdFormat -eq 'Vendor Specific') {
