@@ -23,12 +23,13 @@ $spec = @{
         compress = @{ type = "bool" }
         integrity_streams = @{ type = "bool" }
         force = @{ type = "bool"; default = $false }
+        partition_id = @{ type = "str" }
     }
     mutually_exclusive = @(
-        , @('drive_letter', 'path', 'label')
+        , @('drive_letter', 'path', 'label', 'partition_id')
     )
     required_one_of = @(
-        , @('drive_letter', 'path', 'label')
+        , @('drive_letter', 'path', 'label', 'partition_id')
     )
     supports_check_mode = $true
 }
@@ -46,6 +47,7 @@ $full_format = $module.Params.full
 $compress_volume = $module.Params.compress
 $integrity_streams = $module.Params.integrity_streams
 $force_format = $module.Params.force
+$partition_id = $module.Params.partition_id
 
 # Some pre-checks
 if ($null -ne $drive_letter -and $drive_letter -notmatch "^[a-zA-Z]$") {
@@ -69,7 +71,8 @@ function Get-AnsibleVolume {
     param(
         $DriveLetter,
         $Path,
-        $Label
+        $Label,
+        $UniqueId
     )
 
     if ($null -ne $DriveLetter) {
@@ -112,12 +115,19 @@ function Format-AnsibleVolume {
         $UseLargeFRS,
         $Compress,
         $SetIntegrityStreams,
-        $AllocationUnitSize
+        $AllocationUnitSize,
+        $Partition
     )
     $parameters = @{
-        Path = $Path
         Full = $Full
     }
+    if ($null -ne $Partition) {
+        $parameters.Add("Partition", $Partition)
+    }
+    elseif ($null -ne $Path) {
+        $parameters.Add("Path", $Path)
+    }
+
     if ($null -ne $UseLargeFRS) {
         $parameters.Add("UseLargeFRS", $UseLargeFRS)
     }
@@ -141,12 +151,16 @@ function Format-AnsibleVolume {
 
 }
 
-$ansible_volume = Get-AnsibleVolume -DriveLetter $drive_letter -Path $path -Label $label
+if ($null -eq $partition_id) {
+    $ansible_volume = Get-AnsibleVolume -DriveLetter $drive_letter -Path $path -Label $label
+    $ansible_partition = Get-Partition -Volume $ansible_volume
+} else {
+    $ansible_partition = Get-Partition -UniqueId $partition_id
+    $ansible_volume = Get-Volume -Partition $ansible_partition
+}
 $ansible_file_system = $ansible_volume.FileSystem
 $ansible_volume_size = $ansible_volume.Size
 $ansible_volume_alu = (Get-CimInstance -ClassName Win32_Volume -Filter "DeviceId = '$($ansible_volume.path.replace('\','\\'))'" -Property BlockSize).BlockSize
-
-$ansible_partition = Get-Partition -Volume $ansible_volume
 
 if (
     -not $force_format -and
@@ -190,7 +204,7 @@ foreach ($access_path in $ansible_partition.AccessPaths) {
 if ($force_format) {
     if (-not $module.CheckMode) {
         $format_params = @{
-            Path = $ansible_volume.Path
+            Partition = $ansible_partition
             Full = $full_format
             Label = $new_label
             FileSystem = $file_system
@@ -213,7 +227,7 @@ else {
             $ansible_volume.FileSystemLabel -ne $new_label) {
             if (-not $module.CheckMode) {
                 $format_params = @{
-                    Path = $ansible_volume.Path
+                    Partition = $ansible_partition
                     Full = $full_format
                     Label = $new_label
                     FileSystem = $file_system

@@ -18,6 +18,10 @@ options:
     description:
       - Used to specify the path to the volume to be formatted.
     type: str
+  partition_id:
+    description:
+      - Partition unique ID to select it.
+    type: str
   label:
     description:
       - Used to specify the label of the volume to be formatted.
