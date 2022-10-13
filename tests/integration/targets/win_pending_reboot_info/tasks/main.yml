@@ -1,0 +1,81 @@
+---
+- name: Get current pending reboot states
+  ansible.windows.win_powershell:
+    script: |
+      Set-StrictMode -Off
+      $cbs_state = (
+          (Test-Path -Path 'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Component Based Servicing\RebootPending') -or
+          (Test-Path -Path 'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Component Based Servicing\RebootInProgress') -or
+          (Test-Path -Path 'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Component Based Servicing\PackagesPending')
+      )
+
+      $dsc_lcm_state = $false
+      try {
+          $dsc_lcm_state = (Get-DscLocalConfigurationManager).LcmState -eq 'PendingReboot'
+      }
+      catch {}
+
+      $wu_state = (
+          [bool](Get-ChildItem -LiteralPath 'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\WindowsUpdate\Services\Pending') -or
+          (((Get-ItemProperty -LiteralPath 'HKLM:\SOFTWARE\Microsoft\Updates' -Name 'UpdateExeVolatile' -ErrorAction SilentlyContinue).UpdateExeVolatile) -gt 0)
+      )
+
+      $fro_state = (
+          ($null -ne (Get-ItemProperty -LiteralPath 'HKLM:\SYSTEM\CurrentControlSet\Control\Session Manager\' -Name 'PendingFileRenameOperations' -ErrorAction SilentlyContinue).PendingFileRenameOperations) -or
+          ($null -ne (Get-ItemProperty -LiteralPath 'HKLM:\SYSTEM\CurrentControlSet\Control\Session Manager\' -Name 'PendingFileRenameOperations2' -ErrorAction SilentlyContinue).PendingFileRenameOperations2)
+      )
+
+      $sm_state = Test-Path -LiteralPath 'HKLM:\SOFTWARE\Microsoft\ServerManager\CurrentRebootAttempts'
+
+      $dvd_state = $null -ne (Get-ItemProperty -LiteralPath 'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\RunOnce' -Name 'DVDRebootSignal' -ErrorAction SilentlyContinue).DVDRebootSignal
+
+      $rename_state = (
+          (Get-ItemProperty -LiteralPath 'HKLM:\SYSTEM\CurrentControlSet\Control\ComputerName\ActiveComputerName' -Name 'ComputerName').ComputerName -ne
+          (Get-ItemProperty -LiteralPath 'HKLM:\SYSTEM\CurrentControlSet\Control\ComputerName\ComputerName'-Name 'ComputerName').ComputerName
+      )
+
+      $domjoin_state = (
+          ($null -ne (Get-ItemProperty -LiteralPath 'HKLM:\SYSTEM\CurrentControlSet\Services\Netlogon').JoinDomain) -or
+          ($null -ne (Get-ItemProperty -LiteralPath 'HKLM:\SYSTEM\CurrentControlSet\Services\Netlogon').AvoidSpnSet)
+      )
+
+      $ccm_state = $(
+          $cim_req = Invoke-CimMethod -Namespace 'ROOT\ccm\ClientSDK' -ClassName 'CCM_ClientUtilities' -Name 'DetermineIfRebootPending' -ErrorAction SilentlyContinue
+          $(($cim_req.ReturnValue -eq 0) -and ($cim_req.IsHardRebootPending -or $cim_req.RebootPending))
+      )
+
+      $overall_state = $cbs_state -or $dsc_lcm_state -or $wu_state -or $fro_state -or $sm_state -or $dvd_state -or $rename_state -or $domjoin_state -or $ccm_state
+
+      $Ansible.Result = @{
+        cbs = $cbs_state
+        dsc_lcm = $dsc_lcm_state
+        windows_update = $wu_state
+        file_rename = $fro_state
+        server_manager = $sm_state
+        dvd_reboot_signal = $dvd_state
+        computer_rename = $rename_state
+        join_domain = $domjoin_state
+        ccm_client = $ccm_state
+        reboot_required = $overall_state
+      }
+  changed_when: false
+  register: actual_checks
+
+
+- name: Get current pending reboot with module
+  community.windows.win_pending_reboot_info:
+  register: module_checks
+
+- name: assetion
+  ansible.builtin.assert:
+    that:
+    - module_checks.checks.cbs == actual_checks.result.cbs
+    - module_checks.checks.dsc_lcm == actual_checks.result.dsc_lcm
+    - module_checks.checks.windows_update == actual_checks.result.windows_update
+    - module_checks.checks.file_rename == actual_checks.result.file_rename
+    - module_checks.checks.server_manager == actual_checks.result.server_manager
+    - module_checks.checks.dvd_reboot_signal == actual_checks.result.dvd_reboot_signal
+    - module_checks.checks.computer_rename == actual_checks.result.computer_rename
+    - module_checks.checks.join_domain == actual_checks.result.join_domain
+    - module_checks.checks.ccm_client == actual_checks.result.ccm_client
+    - module_checks.reboot_required == actual_checks.result.reboot_required
