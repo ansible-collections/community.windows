@@ -8,10 +8,9 @@
 Set-StrictMode -Version 3.0
 
 $spec = @{
-    options             = @{
+    options = @{
         skip = @{ type = 'list'; elements = 'str'; required = $false; choices = @(
-                'cbs', 'ccm_client', 'computer_rename', 'dsc_lcm', 'dvd_reboot_signal',
-                'file_rename', 'join_domain', 'server_manager', 'windows_update'
+                'cbs', 'ccm_client', 'computer_rename', 'dsc_lcm', 'dvd_reboot_signal', 'file_rename', 'join_domain', 'server_manager', 'windows_update'
             )
         }
     }
@@ -135,8 +134,8 @@ function Test-DVDRebootSignal {
 
 function Test-ComputerRenamePR {
     [OutputType([System.Boolean])]
-    $actual_computer_name = (Get-ItemProperty -LiteralPath 'HKLM:\SYSTEM\CurrentControlSet\Control\ComputerName\ActiveComputerName' -Name 'ComputerName').ComputerName
-    $pending_computer_name = (Get-ItemProperty -LiteralPath 'HKLM:\SYSTEM\CurrentControlSet\Control\ComputerName\ComputerName'-Name 'ComputerName').ComputerName
+    $actual_computer_name = Get-ItemPropertyValue -LiteralPath 'HKLM:\SYSTEM\CurrentControlSet\Control\ComputerName\ActiveComputerName' -Name 'ComputerName'
+    $pending_computer_name = Get-ItemPropertyValue -LiteralPath 'HKLM:\SYSTEM\CurrentControlSet\Control\ComputerName\ComputerName'-Name 'ComputerName'
     $result = $actual_computer_name -ne $pending_computer_name
 
     return $result
@@ -181,7 +180,7 @@ function Test-CcmClientPR {
     return $result
 }
 
-$checks_results = [System.Collections.Generic.Dictionary[[System.String], [System.Boolean]]]::new()
+$checks_results = [ordered]@{}
 forEach ($c in $checks) {
     if ($c -in $skip_list) {
         $checks_results.Add($c, $false)
