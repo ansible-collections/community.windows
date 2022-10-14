@@ -134,9 +134,9 @@ function Test-DVDRebootSignal {
 
 function Test-ComputerRenamePR {
     [OutputType([System.Boolean])]
-    $actual_computer_name = Get-ItemPropertyValue -LiteralPath 'HKLM:\SYSTEM\CurrentControlSet\Control\ComputerName\ActiveComputerName' -Name 'ComputerName'
-    $pending_computer_name = Get-ItemPropertyValue -LiteralPath 'HKLM:\SYSTEM\CurrentControlSet\Control\ComputerName\ComputerName'-Name 'ComputerName'
-    $result = $actual_computer_name -ne $pending_computer_name
+    $actual_computer_name = Get-ItemProperty -LiteralPath 'HKLM:\SYSTEM\CurrentControlSet\Control\ComputerName\ActiveComputerName' -Name 'ComputerName'
+    $pending_computer_name = Get-ItemProperty -LiteralPath 'HKLM:\SYSTEM\CurrentControlSet\Control\ComputerName\ComputerName'-Name 'ComputerName'
+    $result = $actual_computer_name.ComputerName -ne $pending_computer_name.ComputerName
 
     return $result
 }
