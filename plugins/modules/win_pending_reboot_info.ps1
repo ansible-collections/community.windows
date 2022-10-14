@@ -74,8 +74,14 @@ function Test-WindowsUpdatePR {
         }
     }
 
-    $pending_services = Get-ChildItem -LiteralPath 'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\WindowsUpdate\Services\Pending'
-    if ($pending_services) {
+    try {
+        $pending_services = Get-ChildItem -LiteralPath 'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\WindowsUpdate\Services\Pending' -ErrorAction Stop
+    }
+    catch {
+        $pending_services = $null
+    }
+
+    if ($null -ne $pending_services) {
         return $true
     }
 
