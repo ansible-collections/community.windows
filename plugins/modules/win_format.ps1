@@ -154,7 +154,8 @@ function Format-AnsibleVolume {
 if ($null -eq $partition_id) {
     $ansible_volume = Get-AnsibleVolume -DriveLetter $drive_letter -Path $path -Label $label
     $ansible_partition = Get-Partition -Volume $ansible_volume
-} else {
+}
+else {
     $ansible_partition = Get-Partition -UniqueId $partition_id
     $ansible_volume = Get-Volume -Partition $ansible_partition
 }
