@@ -67,6 +67,7 @@ options:
     - When C(type=PTR) only the partial part of the IP should be given.
     - Multiple values can be passed when C(type=NS)
     aliases: [ values ]
+    default: []
     type: list
     elements: str
   weight:
