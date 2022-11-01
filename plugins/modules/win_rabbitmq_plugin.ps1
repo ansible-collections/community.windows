@@ -74,7 +74,7 @@ $result = @{
     disabled = @()
 }
 
-$params = Parse-Args $args -supports_check_mode $true;
+$params = Parse-Args $args -supports_check_mode $true
 $check_mode = Get-AnsibleParam -obj $params -name "_ansible_check_mode" -type "bool" -default $false
 $diff_support = Get-AnsibleParam -obj $params -name "_ansible_diff" -type "bool" -default $false
 

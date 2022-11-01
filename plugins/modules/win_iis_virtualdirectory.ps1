@@ -26,7 +26,7 @@ if ($null -eq (Get-Module "WebAdministration" -ErrorAction SilentlyContinue)) {
 $result = @{
     directory = @{}
     changed = $false
-};
+}
 
 # Construct path
 $directory_path = if ($application) {

@@ -25,7 +25,7 @@ $bind_hostname = Get-AnsibleParam -obj $params -name "hostname" -type "str"
 $parameters = Get-AnsibleParam -obj $params -name "parameters" -type "str"
 if ($null -ne $parameters) {
     $parameters = @($parameters -split '\|' | ForEach-Object {
-            return , ($_ -split "\:", 2);
+            return , ($_ -split "\:", 2)
         })
 }
 
