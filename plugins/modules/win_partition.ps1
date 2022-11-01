@@ -116,9 +116,10 @@ elseif ($disk_number) {
     if ($state -eq "absent") {
         # We allows to filter a partition to remove just by type without necessarly knowing its id or something else.
         if ($null -ne $gpt_type) {
-            $ansible_partition = $Disk | Get-Partition | Where-Object {$_.GptType -eq "$($gpt_styles.$gpt_type)"}
-        } elseif ($null -ne $mbr_type) {
-            $ansible_partition = $Disk | Get-Partition | Where-Object {$_.MbrType -eq "$($mbr_styles.$mbr_type)"}
+            $ansible_partition = $Disk | Get-Partition | Where-Object { $_.GptType -eq "$($gpt_styles.$gpt_type)" }
+        }
+        elseif ($null -ne $mbr_type) {
+            $ansible_partition = $Disk | Get-Partition | Where-Object { $_.MbrType -eq "$($mbr_styles.$mbr_type)" }
         }
         if (($ansible_partition | Measure-Object).Count -gt 1) {
             $module.FailJson("More than 1 partition match the filter. Too risky to continue")
