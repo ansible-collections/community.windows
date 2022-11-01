@@ -38,6 +38,7 @@ options:
   pid:
     description:
     - The PID of the process.
+    default: 0
     type: int
   owner:
     description:
