@@ -1,2 +1,0 @@
-bugfixes:
-  - win_region - did not allow regional format en-150 (= English(Europe); also referred as en-EU or en-Europe). This fix allows specifying en-150 as regional format (https://github.com/ansible-collections/community.windows/issues/438).

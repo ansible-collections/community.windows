@@ -1,2 +1,0 @@
-bugfixes:
-- win_scoop - Fix idempotency checks with Scoop ``v0.2.3`` and newer.
