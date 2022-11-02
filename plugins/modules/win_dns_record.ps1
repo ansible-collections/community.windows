@@ -58,17 +58,17 @@ if (($type -eq 'CNAME' -or $type -eq 'NS' -or $type -eq 'PTR' -or $type -eq 'SRV
     }
 }
 $record_argument_name = @{
-    A = "IPv4Address";
-    AAAA = "IPv6Address";
-    CNAME = "HostNameAlias";
-    # MX = "MailExchange";
-    NS = "NameServer";
-    PTR = "PtrDomainName";
-    SRV = "DomainName";
+    A = "IPv4Address"
+    AAAA = "IPv6Address"
+    CNAME = "HostNameAlias"
+    # MX = "MailExchange"
+    NS = "NameServer"
+    PTR = "PtrDomainName"
+    SRV = "DomainName"
     TXT = "DescriptiveText"
 }[$type]
 $changes = @{
-    before = "";
+    before = ""
     after = ""
 }
 $records = Get-DnsServerResourceRecord -ZoneName $zone -Name $name -RRType $type -Node -ErrorAction:Ignore @extra_args | Sort-Object
@@ -150,7 +150,7 @@ if ($null -ne $values -and $values.Count -gt 0) {
         }
         try {
             if ($type -eq 'SRV') {
-                Add-DnsServerResourceRecord -SRV -Name $name  -ZoneName $zone @srv_args @extra_args -WhatIf:$module.CheckMode
+                Add-DnsServerResourceRecord -SRV -Name $name -ZoneName $zone @srv_args @extra_args -WhatIf:$module.CheckMode
             }
             elseif ($type -eq 'TXT') {
                 Add-DnsServerResourceRecord -TXT -Name $name -DescriptiveText $value -ZoneName $zone -TimeToLive $ttl @extra_args -WhatIf:$module.CheckMode
