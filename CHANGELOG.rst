@@ -5,6 +5,24 @@ Community Windows Release Notes
 .. contents:: Topics
 
 
+v1.11.1
+=======
+
+Release Summary
+---------------
+
+Release summary for v1.11.1
+
+Bugfixes
+--------
+
+- win_dhcp_lease - call Get-DhcpServerv4Lease once when MAC and IP are defined (https://github.com/ansible-collections/community.windows/pull/427)
+- win_dhcp_lease - fix mac address convert (https://github.com/ansible-collections/community.windows/issues/291)
+- win_psmodule - Fix bootstrapping PowerShellGet with ``-AcceptLicense`` - https://github.com/ansible-collections/community.windows/issues/424
+- win_psmodule - Source PowerShellGet and PackagementManagement from ``repository`` if specified
+- win_region - did not allow regional format en-150 (= English(Europe); also referred as en-EU or en-Europe). This fix allows specifying en-150 as regional format (https://github.com/ansible-collections/community.windows/issues/438).
+- win_scoop - Fix idempotency checks with Scoop ``v0.2.3`` and newer.
+
 v1.11.0
 =======
 
