@@ -32,6 +32,7 @@ $values = $module.Params.value
 $weight = $module.Params.weight
 $zone = $module.Params.zone
 $dns_computer_name = $module.Params.computer_name
+# If you add additional arguments, check that they are supported by all modules (Add-DnsServerResourceRecordCName and Add-DnsServerResourceRecord).
 $extra_args = @{}
 if ($null -ne $dns_computer_name) {
     $extra_args.ComputerName = $dns_computer_name
@@ -156,7 +157,7 @@ if ($null -ne $values -and $values.Count -gt 0) {
                 Add-DnsServerResourceRecord -TXT -Name $name -DescriptiveText $value -ZoneName $zone -TimeToLive $ttl @extra_args -WhatIf:$module.CheckMode
             }
             elseif ($type -eq 'CNAME') {
-                Add-DnsServerResourceRecordCName -Name $name -HostNameAlias $value -ZoneName $zone -TimeToLive $ttl -WhatIf:$module.CheckMode
+                Add-DnsServerResourceRecordCName -Name $name -HostNameAlias $value -ZoneName $zone -TimeToLive $ttl @extra_args -WhatIf:$module.CheckMode
             }
             else {
                 Add-DnsServerResourceRecord -Name $name -AllowUpdateAny -ZoneName $zone -TimeToLive $ttl @splat_args -WhatIf:$module.CheckMode @extra_args
