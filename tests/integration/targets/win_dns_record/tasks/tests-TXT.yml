@@ -45,7 +45,7 @@
       - cmd_result_actual.stdout == 'txtrecordvalue\r\n'
 
 - name: 'TYPE=TXT - remove record (check mode)'
-  win_dns_record: {zone: '{{ win_dns_record_zone }}', name: testtxt, value: txtrecordvalue, type: TXT, state: absent}
+  win_dns_record: {zone: '{{ win_dns_record_zone }}', name: testtxt, type: TXT, state: absent}
   register: cmd_result
   check_mode: yes
 
@@ -61,7 +61,7 @@
       - cmd_result_actual.stdout == 'exists\r\n'
 
 - name: 'TYPE=A - remove record'
-  win_dns_record: {zone: '{{ win_dns_record_zone }}', name: testtxt, value: txtrecordvalue, type: TXT, state: absent}
+  win_dns_record: {zone: '{{ win_dns_record_zone }}', name: testtxt, type: TXT, state: absent}
   register: cmd_result
 
 - name: 'TYPE=A - remove record get results'
