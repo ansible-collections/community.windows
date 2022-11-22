@@ -139,7 +139,7 @@ Bugfixes
 New Modules
 -----------
 
-- win_psrepository_copy - Copies registered PSRepositories to other user profiles
+- win_psrepository_copy - Copies registered PSRepositories to other user profiless
 
 v1.2.0
 ======
