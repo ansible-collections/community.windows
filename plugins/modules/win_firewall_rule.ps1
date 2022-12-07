@@ -166,7 +166,11 @@ try {
     if ($null -ne $enabled) { $new_rule.Enabled = $enabled } else { $new_rule.Enabled = $true }
     if ($null -ne $description) { $new_rule.Description = $description }
     if ($null -ne $group) { $new_rule.Grouping = $group }
-    if ($null -ne $program -and $program -ne "any") { $new_rule.ApplicationName = [System.Environment]::ExpandEnvironmentVariables($program) }
+    if ($null -ne $program -and $program -ne "any") { 
+        $new_rule.ApplicationName = [System.Environment]::ExpandEnvironmentVariables($program) 
+    } elseif ($program -eq "any") {
+        $new_rule.ApplicationName = $program
+    }
     if ($null -ne $service -and $service -ne "any") { $new_rule.ServiceName = $service }
     if ($null -ne $protocol -and $protocol -ne "any") { $new_rule.Protocol = ConvertTo-ProtocolType -protocol $protocol }
     if ($null -ne $localport -and $localport -ne "any") { $new_rule.LocalPorts = $localport }
@@ -278,16 +282,20 @@ try {
                                 }
 
                                 if (-not $check_mode) {
-                                    # Profiles value cannot be a uint32, but the "all profiles" value (0x7FFFFFFF) will often become a uint32,
-                                    # so must cast to [int] to prevent InvalidCastException under PS5+
-                                    If ($prop -eq 'Profiles') {
-                                        $existingRule.Profiles = [int] $new_rule.$prop
-                                    }
-                                    Else {
-                                        $existingRule.$prop = $new_rule.$prop
-                                    }
+                                # Profiles value cannot be a uint32, but the "all profiles" value (0x7FFFFFFF) will often become a uint32, so must cast to [int]
+                                # to prevent InvalidCastException under PS5+
+                                If ($prop -eq 'Profiles') {
+                                    $existingRule.Profiles = [int] $new_rule.$prop
                                 }
-                                $changed = $true
+                                # If Application Name is "any" the value of the firewall rule has to be $null, so must use Set-NetFirewallRule here. 
+                                ElseIf(($prop -eq 'ApplicationName') -and ($new_rule.$prop -eq "any")) {
+                                    Set-NetFirewallRule -DisplayName "$($existingRule.Name)" -Program "any"            
+                                }
+                                Else {
+                                    $existingRule.$prop = $new_rule.$prop
+                                }
+                            }
+                            $changed = $true
                             }
                         }
                     }
