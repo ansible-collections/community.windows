@@ -1,2 +1,0 @@
-bugfixes:
-  - win_dns_record - Fix CNAME creation in subdomains - https://github.com/ansible-collections/community.windows/issues/429
