@@ -134,17 +134,6 @@ if ($null -ne $records) {
                     $module.Result.changed = $true
                 }
             }
-            elseif ($type -eq "TXT") {
-                $record_descriptivetext_old = $record.RecordData.DescriptiveText.ToString()
-                if ($value -ne $record_descriptivetext_old) {
-                    $new_record = $record.Clone()
-                    $new_record.RecordData.DescriptiveText = $value
-                    Set-DnsServerResourceRecord -ZoneName $zone -OldInputObject $record -NewInputObject $new_record -WhatIf:$module.CheckMode @extra_args
-                    $changes.before += "[$zone] $($record.HostName) $($record.TimeToLive.TotalSeconds) IN $type $record_value $record_descriptivetext_old`n"
-                    $changes.after += "[$zone] $($record.HostName) $($ttl.TotalSeconds) IN $type $record_value $value`n"
-                    $module.Result.changed = $true
-                }
-            }
             else {
                 # This record matches one of the values; but does it match the TTL?
                 if ($record.TimeToLive -ne $ttl) {
@@ -177,9 +166,6 @@ if ($null -ne $values -and $values.Count -gt 0) {
         try {
             if ($type -eq 'SRV') {
                 Add-DnsServerResourceRecord -SRV -Name $name -ZoneName $zone @srv_args @extra_args -WhatIf:$module.CheckMode
-            }
-            elseif ($type -eq 'TXT') {
-                Add-DnsServerResourceRecord -TXT -Name $name -DescriptiveText $value -ZoneName $zone -TimeToLive $ttl @extra_args -WhatIf:$module.CheckMode
             }
             else {
                 Add-DnsServerResourceRecord -Name $name -AllowUpdateAny -ZoneName $zone -TimeToLive $ttl @splat_args -WhatIf:$module.CheckMode @extra_args
