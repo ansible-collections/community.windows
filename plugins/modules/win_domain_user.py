@@ -140,6 +140,7 @@ options:
     description:
       - Configures the user's display name.
     type: str
+    version_added: 1.12.0
   company:
     description:
       - Configures the user's company name.
