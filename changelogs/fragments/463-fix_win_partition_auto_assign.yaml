@@ -1,2 +1,0 @@
-bugfixes:
-- win_partition - fix problem in auto assigning a drive letter should the user use either a, u, t or o as a drive letter
