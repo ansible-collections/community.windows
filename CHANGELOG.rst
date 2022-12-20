@@ -5,6 +5,26 @@ Community Windows Release Notes
 .. contents:: Topics
 
 
+v1.12.0
+=======
+
+Release Summary
+---------------
+
+Release summary for v1.12.0
+
+Minor Changes
+-------------
+
+- win_dns_record - Added support for DHCID (RFC 4701) records
+- win_domain_user - Added the ``display_name`` option to set the users display name attribute
+
+Bugfixes
+--------
+
+- win_firewall_rule - fix problem in check mode with multiple ip addresses not in same order
+- win_partition - fix problem in auto assigning a drive letter should the user use either a, u, t or o as a drive letter
+
 v1.11.1
 =======
 

@@ -1,2 +1,0 @@
-minor_changes:
-- win_domain_user - Added the ``display_name`` option to set the users display name attribute
