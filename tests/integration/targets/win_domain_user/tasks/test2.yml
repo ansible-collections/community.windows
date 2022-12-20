@@ -5,6 +5,7 @@
     upn: hana@ansible.test
     firstname: Hana
     surname: Lytx
+    display_name: Hana Lytx
     company: HelpMeExitVi Inc.
     password: 123
     state: present
@@ -28,6 +29,7 @@
     upn: hana@ansible.test
     firstname: Hana
     surname: Lytx
+    display_name: Hana Lytx
     company: HelpMeExitVi Inc.
     password: h@nAlyTx18!X
     state: present
@@ -50,6 +52,7 @@
     name: katie
     firstname: Katie
     surname: Kickscancer
+    display_name: Katie Kickscancer
     password: SyNs@tI0N
     update_password: on_create
     state: present
@@ -66,6 +69,7 @@
     name: katie
     firstname: Katie
     surname: Kickscancer
+    display_name: Katie Kickscancer
     password: SyNs@tI0N
     update_password: on_create
     state: present
