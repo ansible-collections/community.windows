@@ -5,6 +5,7 @@
 # GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 
 #Requires -Module Ansible.ModuleUtils.Legacy
+#AnsibleRequires -PowerShell Ansible.ModuleUtils.AddType
 
 function ConvertTo-ProtocolType {
     param($protocol)
@@ -130,6 +131,32 @@ $icmp_type_code = Get-AnsibleParam -obj $params -name "icmp_type_code" -type "li
 
 $state = Get-AnsibleParam -obj $params -name "state" -type "str" -default "present" -validateset "present", "absent"
 
+$_remote_tmp = Get-AnsibleParam $params "_ansible_remote_tmp" -type "path" -default $env:TMP
+Add-CSharpType -TempPath $_remote_tmp -References @'
+using System;
+using System.Runtime.InteropServices;
+
+namespace Community.Windows.WinFirewallRule
+{
+    [ComImport]
+    [InterfaceType(ComInterfaceType.InterfaceIsIDispatch)]
+    [Guid("AF230D27-BABA-4E42-ACED-F524F22CFCE2")]
+    public interface INetFwRule
+    {
+        [DispId(3)]
+        string ApplicationName { get; set; }
+    }
+
+    public static class NetFwRule
+    {
+        public static void PutApplicationName(object rule, string value)
+        {
+            ((INetFwRule)rule).ApplicationName = string.IsNullOrEmpty(value) ? null : value;
+        }
+    }
+}
+'@
+
 if (-not $name -and -not $group) {
     Fail-Json -obj $result -message "Either name or group must be specified"
 }
@@ -166,11 +193,7 @@ try {
     if ($null -ne $enabled) { $new_rule.Enabled = $enabled } else { $new_rule.Enabled = $true }
     if ($null -ne $description) { $new_rule.Description = $description }
     if ($null -ne $group) { $new_rule.Grouping = $group }
-    if ($null -ne $program -and $program -ne "any") { 
-        $new_rule.ApplicationName = [System.Environment]::ExpandEnvironmentVariables($program) 
-    } elseif ($program -eq "any") {
-        $new_rule.ApplicationName = $program
-    }
+    if ($null -ne $program -and $program -ne "any") { $new_rule.ApplicationName = [System.Environment]::ExpandEnvironmentVariables($program) }
     if ($null -ne $service -and $service -ne "any") { $new_rule.ServiceName = $service }
     if ($null -ne $protocol -and $protocol -ne "any") { $new_rule.Protocol = ConvertTo-ProtocolType -protocol $protocol }
     if ($null -ne $localport -and $localport -ne "any") { $new_rule.LocalPorts = $localport }
@@ -287,9 +310,9 @@ try {
                                 If ($prop -eq 'Profiles') {
                                     $existingRule.Profiles = [int] $new_rule.$prop
                                 }
-                                # If Application Name is "any" the value of the firewall rule has to be $null, so must use Set-NetFirewallRule here. 
-                                ElseIf(($prop -eq 'ApplicationName') -and ($new_rule.$prop -eq "any")) {
-                                    Set-NetFirewallRule -DisplayName "$($existingRule.Name)" -Program "any"            
+                                # There is a fundamental problem with the COM binder in PowerShell and how it treats null values. 
+                                ElseIf($prop -eq 'ApplicationName') {
+                                    [Community.Windows.WinFirewallRule.NetFwRule]::PutApplicationName($existingRule, $new_rule.$prop)
                                 }
                                 Else {
                                     $existingRule.$prop = $new_rule.$prop
