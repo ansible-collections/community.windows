@@ -52,6 +52,12 @@ options:
       dynamically "round up" other values to that minimum.
     default: 3600
     type: int
+  aging:
+    description:
+    - Should aging be activated for the record.
+    - If set to C(false), the record will be static.
+    default: false
+    type: bool
   type:
     description:
     - The type of DNS record to manage.
