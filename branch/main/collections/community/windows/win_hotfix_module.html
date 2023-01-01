@@ -231,59 +231,59 @@
 </section>
 <section id="examples">
 <h2><a class="toc-backref" href="#id5">Examples</a><a class="headerlink" href="#examples" title="Permalink to this heading"></a></h2>
-<div class="highlight-yaml+jinja notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Install Windows ADK with DISM for Server 2008 R2</span><span class="w"></span>
-<span class="w">  </span><span class="nt">chocolatey.chocolatey.win_chocolatey</span><span class="p">:</span><span class="w"></span>
-<span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">windows-adk</span><span class="w"></span>
-<span class="w">    </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">8.100.26866.0</span><span class="w"></span>
-<span class="w">    </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">present</span><span class="w"></span>
-<span class="w">    </span><span class="nt">install_args</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/features OptionId.DeploymentTools</span><span class="w"></span>
+<div class="highlight-yaml+jinja notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Install Windows ADK with DISM for Server 2008 R2</span>
+<span class="w">  </span><span class="nt">chocolatey.chocolatey.win_chocolatey</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">windows-adk</span>
+<span class="w">    </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">8.100.26866.0</span>
+<span class="w">    </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">present</span>
+<span class="w">    </span><span class="nt">install_args</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/features OptionId.DeploymentTools</span>
 
-<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Install hotfix without validating the KB and Identifier</span><span class="w"></span>
-<span class="w">  </span><span class="nt">community.windows.win_hotfix</span><span class="p">:</span><span class="w"></span>
-<span class="w">    </span><span class="nt">source</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">C:\temp\windows8.1-kb3172729-x64_e8003822a7ef4705cbb65623b72fd3cec73fe222.msu</span><span class="w"></span>
-<span class="w">    </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">present</span><span class="w"></span>
-<span class="w">  </span><span class="nt">register</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">hotfix_install</span><span class="w"></span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Install hotfix without validating the KB and Identifier</span>
+<span class="w">  </span><span class="nt">community.windows.win_hotfix</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">source</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">C:\temp\windows8.1-kb3172729-x64_e8003822a7ef4705cbb65623b72fd3cec73fe222.msu</span>
+<span class="w">    </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">present</span>
+<span class="w">  </span><span class="nt">register</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">hotfix_install</span>
 
-<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">ansible.windows.win_reboot</span><span class="p">:</span><span class="w"></span>
-<span class="w">  </span><span class="nt">when</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">hotfix_install.reboot_required</span><span class="w"></span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">ansible.windows.win_reboot</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">when</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">hotfix_install.reboot_required</span>
 
-<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Install hotfix validating KB</span><span class="w"></span>
-<span class="w">  </span><span class="nt">community.windows.win_hotfix</span><span class="p">:</span><span class="w"></span>
-<span class="w">    </span><span class="nt">hotfix_kb</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">KB3172729</span><span class="w"></span>
-<span class="w">    </span><span class="nt">source</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">C:\temp\windows8.1-kb3172729-x64_e8003822a7ef4705cbb65623b72fd3cec73fe222.msu</span><span class="w"></span>
-<span class="w">    </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">present</span><span class="w"></span>
-<span class="w">  </span><span class="nt">register</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">hotfix_install</span><span class="w"></span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Install hotfix validating KB</span>
+<span class="w">  </span><span class="nt">community.windows.win_hotfix</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">hotfix_kb</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">KB3172729</span>
+<span class="w">    </span><span class="nt">source</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">C:\temp\windows8.1-kb3172729-x64_e8003822a7ef4705cbb65623b72fd3cec73fe222.msu</span>
+<span class="w">    </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">present</span>
+<span class="w">  </span><span class="nt">register</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">hotfix_install</span>
 
-<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">ansible.windows.win_reboot</span><span class="p">:</span><span class="w"></span>
-<span class="w">  </span><span class="nt">when</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">hotfix_install.reboot_required</span><span class="w"></span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">ansible.windows.win_reboot</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">when</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">hotfix_install.reboot_required</span>
 
-<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Install hotfix validating Identifier</span><span class="w"></span>
-<span class="w">  </span><span class="nt">community.windows.win_hotfix</span><span class="p">:</span><span class="w"></span>
-<span class="w">    </span><span class="nt">hotfix_identifier</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Package_for_KB3172729~31bf3856ad364e35~amd64~~6.3.1.0</span><span class="w"></span>
-<span class="w">    </span><span class="nt">source</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">C:\temp\windows8.1-kb3172729-x64_e8003822a7ef4705cbb65623b72fd3cec73fe222.msu</span><span class="w"></span>
-<span class="w">    </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">present</span><span class="w"></span>
-<span class="w">  </span><span class="nt">register</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">hotfix_install</span><span class="w"></span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Install hotfix validating Identifier</span>
+<span class="w">  </span><span class="nt">community.windows.win_hotfix</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">hotfix_identifier</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Package_for_KB3172729~31bf3856ad364e35~amd64~~6.3.1.0</span>
+<span class="w">    </span><span class="nt">source</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">C:\temp\windows8.1-kb3172729-x64_e8003822a7ef4705cbb65623b72fd3cec73fe222.msu</span>
+<span class="w">    </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">present</span>
+<span class="w">  </span><span class="nt">register</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">hotfix_install</span>
 
-<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">ansible.windows.win_reboot</span><span class="p">:</span><span class="w"></span>
-<span class="w">  </span><span class="nt">when</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">hotfix_install.reboot_required</span><span class="w"></span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">ansible.windows.win_reboot</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">when</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">hotfix_install.reboot_required</span>
 
-<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Uninstall hotfix with Identifier</span><span class="w"></span>
-<span class="w">  </span><span class="nt">community.windows.win_hotfix</span><span class="p">:</span><span class="w"></span>
-<span class="w">    </span><span class="nt">hotfix_identifier</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Package_for_KB3172729~31bf3856ad364e35~amd64~~6.3.1.0</span><span class="w"></span>
-<span class="w">    </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">absent</span><span class="w"></span>
-<span class="w">  </span><span class="nt">register</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">hotfix_uninstall</span><span class="w"></span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Uninstall hotfix with Identifier</span>
+<span class="w">  </span><span class="nt">community.windows.win_hotfix</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">hotfix_identifier</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Package_for_KB3172729~31bf3856ad364e35~amd64~~6.3.1.0</span>
+<span class="w">    </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">absent</span>
+<span class="w">  </span><span class="nt">register</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">hotfix_uninstall</span>
 
-<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">ansible.windows.win_reboot</span><span class="p">:</span><span class="w"></span>
-<span class="w">  </span><span class="nt">when</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">hotfix_uninstall.reboot_required</span><span class="w"></span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">ansible.windows.win_reboot</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">when</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">hotfix_uninstall.reboot_required</span>
 
-<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Uninstall hotfix with KB (not recommended)</span><span class="w"></span>
-<span class="w">  </span><span class="nt">community.windows.win_hotfix</span><span class="p">:</span><span class="w"></span>
-<span class="w">    </span><span class="nt">hotfix_kb</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">KB3172729</span><span class="w"></span>
-<span class="w">    </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">absent</span><span class="w"></span>
-<span class="w">  </span><span class="nt">register</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">hotfix_uninstall</span><span class="w"></span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Uninstall hotfix with KB (not recommended)</span>
+<span class="w">  </span><span class="nt">community.windows.win_hotfix</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">hotfix_kb</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">KB3172729</span>
+<span class="w">    </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">absent</span>
+<span class="w">  </span><span class="nt">register</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">hotfix_uninstall</span>
 
-<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">ansible.windows.win_reboot</span><span class="p">:</span><span class="w"></span>
-<span class="w">  </span><span class="nt">when</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">hotfix_uninstall.reboot_required</span><span class="w"></span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">ansible.windows.win_reboot</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">when</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">hotfix_uninstall.reboot_required</span>
 </pre></div>
 </div>
 </section>

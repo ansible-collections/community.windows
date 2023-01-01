@@ -312,57 +312,57 @@
 </section>
 <section id="examples">
 <h2><a class="toc-backref" href="#id4">Examples</a><a class="headerlink" href="#examples" title="Permalink to this heading"></a></h2>
-<div class="highlight-yaml+jinja notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Insert path without converting \r\n</span><span class="w"></span>
-<span class="w">  </span><span class="nt">community.windows.win_lineinfile</span><span class="p">:</span><span class="w"></span>
-<span class="w">    </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">c:\file.txt</span><span class="w"></span>
-<span class="w">    </span><span class="nt">line</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">c:\return\new</span><span class="w"></span>
+<div class="highlight-yaml+jinja notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Insert path without converting \r\n</span>
+<span class="w">  </span><span class="nt">community.windows.win_lineinfile</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">c:\file.txt</span>
+<span class="w">    </span><span class="nt">line</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">c:\return\new</span>
 
-<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">community.windows.win_lineinfile</span><span class="p">:</span><span class="w"></span>
-<span class="w">    </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">C:\Temp\example.conf</span><span class="w"></span>
-<span class="w">    </span><span class="nt">regex</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;^name=&#39;</span><span class="w"></span>
-<span class="w">    </span><span class="nt">line</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;name=JohnDoe&#39;</span><span class="w"></span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">community.windows.win_lineinfile</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">C:\Temp\example.conf</span>
+<span class="w">    </span><span class="nt">regex</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;^name=&#39;</span>
+<span class="w">    </span><span class="nt">line</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;name=JohnDoe&#39;</span>
 
-<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">community.windows.win_lineinfile</span><span class="p">:</span><span class="w"></span>
-<span class="w">    </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">C:\Temp\example.conf</span><span class="w"></span>
-<span class="w">    </span><span class="nt">regex</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;^name=&#39;</span><span class="w"></span>
-<span class="w">    </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">absent</span><span class="w"></span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">community.windows.win_lineinfile</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">C:\Temp\example.conf</span>
+<span class="w">    </span><span class="nt">regex</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;^name=&#39;</span>
+<span class="w">    </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">absent</span>
 
-<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">community.windows.win_lineinfile</span><span class="p">:</span><span class="w"></span>
-<span class="w">    </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">C:\Temp\example.conf</span><span class="w"></span>
-<span class="w">    </span><span class="nt">regex</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;^127\.0\.0\.1&#39;</span><span class="w"></span>
-<span class="w">    </span><span class="nt">line</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;127.0.0.1</span><span class="nv"> </span><span class="s">localhost&#39;</span><span class="w"></span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">community.windows.win_lineinfile</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">C:\Temp\example.conf</span>
+<span class="w">    </span><span class="nt">regex</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;^127\.0\.0\.1&#39;</span>
+<span class="w">    </span><span class="nt">line</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;127.0.0.1</span><span class="nv"> </span><span class="s">localhost&#39;</span>
 
-<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">community.windows.win_lineinfile</span><span class="p">:</span><span class="w"></span>
-<span class="w">    </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">C:\Temp\httpd.conf</span><span class="w"></span>
-<span class="w">    </span><span class="nt">regex</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;^Listen</span><span class="nv"> </span><span class="s">&#39;</span><span class="w"></span>
-<span class="w">    </span><span class="nt">insertafter</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;^#Listen</span><span class="nv"> </span><span class="s">&#39;</span><span class="w"></span>
-<span class="w">    </span><span class="nt">line</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Listen 8080</span><span class="w"></span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">community.windows.win_lineinfile</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">C:\Temp\httpd.conf</span>
+<span class="w">    </span><span class="nt">regex</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;^Listen</span><span class="nv"> </span><span class="s">&#39;</span>
+<span class="w">    </span><span class="nt">insertafter</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;^#Listen</span><span class="nv"> </span><span class="s">&#39;</span>
+<span class="w">    </span><span class="nt">line</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Listen 8080</span>
 
-<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">community.windows.win_lineinfile</span><span class="p">:</span><span class="w"></span>
-<span class="w">    </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">C:\Temp\services</span><span class="w"></span>
-<span class="w">    </span><span class="nt">regex</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;^#</span><span class="nv"> </span><span class="s">port</span><span class="nv"> </span><span class="s">for</span><span class="nv"> </span><span class="s">http&#39;</span><span class="w"></span>
-<span class="w">    </span><span class="nt">insertbefore</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;^www.*80/tcp&#39;</span><span class="w"></span>
-<span class="w">    </span><span class="nt">line</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;#</span><span class="nv"> </span><span class="s">port</span><span class="nv"> </span><span class="s">for</span><span class="nv"> </span><span class="s">http</span><span class="nv"> </span><span class="s">by</span><span class="nv"> </span><span class="s">default&#39;</span><span class="w"></span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">community.windows.win_lineinfile</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">C:\Temp\services</span>
+<span class="w">    </span><span class="nt">regex</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;^#</span><span class="nv"> </span><span class="s">port</span><span class="nv"> </span><span class="s">for</span><span class="nv"> </span><span class="s">http&#39;</span>
+<span class="w">    </span><span class="nt">insertbefore</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;^www.*80/tcp&#39;</span>
+<span class="w">    </span><span class="nt">line</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;#</span><span class="nv"> </span><span class="s">port</span><span class="nv"> </span><span class="s">for</span><span class="nv"> </span><span class="s">http</span><span class="nv"> </span><span class="s">by</span><span class="nv"> </span><span class="s">default&#39;</span>
 
-<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Create file if it doesn&#39;t exist with a specific encoding</span><span class="w"></span>
-<span class="w">  </span><span class="nt">community.windows.win_lineinfile</span><span class="p">:</span><span class="w"></span>
-<span class="w">    </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">C:\Temp\utf16.txt</span><span class="w"></span>
-<span class="w">    </span><span class="nt">create</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">yes</span><span class="w"></span>
-<span class="w">    </span><span class="nt">encoding</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">utf-16</span><span class="w"></span>
-<span class="w">    </span><span class="nt">line</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">This is a utf-16 encoded file</span><span class="w"></span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Create file if it doesn&#39;t exist with a specific encoding</span>
+<span class="w">  </span><span class="nt">community.windows.win_lineinfile</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">C:\Temp\utf16.txt</span>
+<span class="w">    </span><span class="nt">create</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">yes</span>
+<span class="w">    </span><span class="nt">encoding</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">utf-16</span>
+<span class="w">    </span><span class="nt">line</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">This is a utf-16 encoded file</span>
 
-<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Add a line to a file and ensure the resulting file uses unix line separators</span><span class="w"></span>
-<span class="w">  </span><span class="nt">community.windows.win_lineinfile</span><span class="p">:</span><span class="w"></span>
-<span class="w">    </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">C:\Temp\testfile.txt</span><span class="w"></span>
-<span class="w">    </span><span class="nt">line</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Line added to file</span><span class="w"></span>
-<span class="w">    </span><span class="nt">newline</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">unix</span><span class="w"></span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Add a line to a file and ensure the resulting file uses unix line separators</span>
+<span class="w">  </span><span class="nt">community.windows.win_lineinfile</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">C:\Temp\testfile.txt</span>
+<span class="w">    </span><span class="nt">line</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Line added to file</span>
+<span class="w">    </span><span class="nt">newline</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">unix</span>
 
-<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Update a line using backrefs</span><span class="w"></span>
-<span class="w">  </span><span class="nt">community.windows.win_lineinfile</span><span class="p">:</span><span class="w"></span>
-<span class="w">    </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">C:\Temp\example.conf</span><span class="w"></span>
-<span class="w">    </span><span class="nt">backrefs</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">yes</span><span class="w"></span>
-<span class="w">    </span><span class="nt">regex</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;(^name=)&#39;</span><span class="w"></span>
-<span class="w">    </span><span class="nt">line</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;$1JohnDoe&#39;</span><span class="w"></span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Update a line using backrefs</span>
+<span class="w">  </span><span class="nt">community.windows.win_lineinfile</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">C:\Temp\example.conf</span>
+<span class="w">    </span><span class="nt">backrefs</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">yes</span>
+<span class="w">    </span><span class="nt">regex</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;(^name=)&#39;</span>
+<span class="w">    </span><span class="nt">line</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;$1JohnDoe&#39;</span>
 </pre></div>
 </div>
 </section>

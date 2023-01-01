@@ -201,37 +201,37 @@ see <a class="reference internal" href="#ansible-collections-community-windows-w
 </section>
 <section id="examples">
 <h2><a class="toc-backref" href="#id5">Examples</a><a class="headerlink" href="#examples" title="Permalink to this heading"></a></h2>
-<div class="highlight-yaml+jinja notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Get disk facts</span><span class="w"></span>
-<span class="w">  </span><span class="nt">community.windows.win_disk_facts</span><span class="p">:</span><span class="w"></span>
+<div class="highlight-yaml+jinja notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Get disk facts</span>
+<span class="w">  </span><span class="nt">community.windows.win_disk_facts</span><span class="p">:</span>
 
-<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Output first disk size</span><span class="w"></span>
-<span class="w">  </span><span class="nt">debug</span><span class="p">:</span><span class="w"></span>
-<span class="w">    </span><span class="nt">var</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ansible_facts.disks[0].size</span><span class="w"></span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Output first disk size</span>
+<span class="w">  </span><span class="nt">debug</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">var</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ansible_facts.disks[0].size</span>
 
-<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Convert first system disk into various formats</span><span class="w"></span>
-<span class="w">  </span><span class="nt">debug</span><span class="p">:</span><span class="w"></span>
-<span class="w">    </span><span class="nt">msg</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">disksize_gib</span> <span class="cp">}}</span><span class="nv"> </span><span class="s">vs</span><span class="nv"> </span><span class="cp">{{</span> <span class="nv">disksize_gib_human</span> <span class="cp">}}</span><span class="s">&#39;</span><span class="w"></span>
-<span class="w">  </span><span class="nt">vars</span><span class="p">:</span><span class="w"></span>
-<span class="w">    </span><span class="c1"># Get first system disk</span><span class="w"></span>
-<span class="w">    </span><span class="nt">disk</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">ansible_facts.disks</span><span class="o">|</span><span class="nf">selectattr</span><span class="o">(</span><span class="s2">&quot;system_disk&quot;</span><span class="o">)|</span><span class="nf">first</span> <span class="cp">}}</span><span class="s">&#39;</span><span class="w"></span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Convert first system disk into various formats</span>
+<span class="w">  </span><span class="nt">debug</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">msg</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">disksize_gib</span> <span class="cp">}}</span><span class="nv"> </span><span class="s">vs</span><span class="nv"> </span><span class="cp">{{</span> <span class="nv">disksize_gib_human</span> <span class="cp">}}</span><span class="s">&#39;</span>
+<span class="w">  </span><span class="nt">vars</span><span class="p">:</span>
+<span class="w">    </span><span class="c1"># Get first system disk</span>
+<span class="w">    </span><span class="nt">disk</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">ansible_facts.disks</span><span class="o">|</span><span class="nf">selectattr</span><span class="o">(</span><span class="s2">&quot;system_disk&quot;</span><span class="o">)|</span><span class="nf">first</span> <span class="cp">}}</span><span class="s">&#39;</span>
 
-<span class="w">    </span><span class="c1"># Show disk size in Gibibytes</span><span class="w"></span>
-<span class="w">    </span><span class="nt">disksize_gib_human</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">disk.size</span><span class="o">|</span><span class="nf">filesizeformat</span><span class="o">(</span><span class="kp">true</span><span class="o">)</span> <span class="cp">}}</span><span class="s">&#39;</span><span class="w">   </span><span class="c1"># returns &quot;223.6 GiB&quot; (human readable)</span><span class="w"></span>
-<span class="w">    </span><span class="nt">disksize_gib</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;</span><span class="cp">{{</span> <span class="o">(</span><span class="nv">disk.size</span><span class="o">/</span><span class="m">1024</span><span class="o">|</span><span class="nf">pow</span><span class="o">(</span><span class="m">3</span><span class="o">))|</span><span class="nf">round</span><span class="o">|</span><span class="nf">int</span> <span class="cp">}}</span><span class="nv"> </span><span class="s">GiB&#39;</span><span class="w">  </span><span class="c1"># returns &quot;224 GiB&quot; (value in GiB)</span><span class="w"></span>
+<span class="w">    </span><span class="c1"># Show disk size in Gibibytes</span>
+<span class="w">    </span><span class="nt">disksize_gib_human</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">disk.size</span><span class="o">|</span><span class="nf">filesizeformat</span><span class="o">(</span><span class="kp">true</span><span class="o">)</span> <span class="cp">}}</span><span class="s">&#39;</span><span class="w">   </span><span class="c1"># returns &quot;223.6 GiB&quot; (human readable)</span>
+<span class="w">    </span><span class="nt">disksize_gib</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;</span><span class="cp">{{</span> <span class="o">(</span><span class="nv">disk.size</span><span class="o">/</span><span class="m">1024</span><span class="o">|</span><span class="nf">pow</span><span class="o">(</span><span class="m">3</span><span class="o">))|</span><span class="nf">round</span><span class="o">|</span><span class="nf">int</span> <span class="cp">}}</span><span class="nv"> </span><span class="s">GiB&#39;</span><span class="w">  </span><span class="c1"># returns &quot;224 GiB&quot; (value in GiB)</span>
 
-<span class="w">    </span><span class="c1"># Show disk size in Gigabytes</span><span class="w"></span>
-<span class="w">    </span><span class="nt">disksize_gb_human</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">disk.size</span><span class="o">|</span><span class="nf">filesizeformat</span> <span class="cp">}}</span><span class="s">&#39;</span><span class="w">        </span><span class="c1"># returns &quot;240.1 GB&quot; (human readable)</span><span class="w"></span>
-<span class="w">    </span><span class="nt">disksize_gb</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;</span><span class="cp">{{</span> <span class="o">(</span><span class="nv">disk.size</span><span class="o">/</span><span class="m">1000</span><span class="o">|</span><span class="nf">pow</span><span class="o">(</span><span class="m">3</span><span class="o">))|</span><span class="nf">round</span><span class="o">|</span><span class="nf">int</span> <span class="cp">}}</span><span class="nv"> </span><span class="s">GB&#39;</span><span class="w">  </span><span class="c1"># returns &quot;240 GB&quot; (value in GB)</span><span class="w"></span>
+<span class="w">    </span><span class="c1"># Show disk size in Gigabytes</span>
+<span class="w">    </span><span class="nt">disksize_gb_human</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">disk.size</span><span class="o">|</span><span class="nf">filesizeformat</span> <span class="cp">}}</span><span class="s">&#39;</span><span class="w">        </span><span class="c1"># returns &quot;240.1 GB&quot; (human readable)</span>
+<span class="w">    </span><span class="nt">disksize_gb</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;</span><span class="cp">{{</span> <span class="o">(</span><span class="nv">disk.size</span><span class="o">/</span><span class="m">1000</span><span class="o">|</span><span class="nf">pow</span><span class="o">(</span><span class="m">3</span><span class="o">))|</span><span class="nf">round</span><span class="o">|</span><span class="nf">int</span> <span class="cp">}}</span><span class="nv"> </span><span class="s">GB&#39;</span><span class="w">  </span><span class="c1"># returns &quot;240 GB&quot; (value in GB)</span>
 
-<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Output second disk serial number</span><span class="w"></span>
-<span class="w">  </span><span class="nt">debug</span><span class="p">:</span><span class="w"></span>
-<span class="w">    </span><span class="nt">var</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ansible_facts.disks[1].serial_number</span><span class="w"></span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Output second disk serial number</span>
+<span class="w">  </span><span class="nt">debug</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">var</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ansible_facts.disks[1].serial_number</span>
 
-<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">get disk physical_disk and partition facts on the target</span><span class="w"></span>
-<span class="w">  </span><span class="nt">win_disk_facts</span><span class="p">:</span><span class="w"></span>
-<span class="w">    </span><span class="nt">filter</span><span class="p">:</span><span class="w"></span>
-<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">physical_disk</span><span class="w"></span>
-<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">partitions</span><span class="w"></span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">get disk physical_disk and partition facts on the target</span>
+<span class="w">  </span><span class="nt">win_disk_facts</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">filter</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">physical_disk</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">partitions</span>
 </pre></div>
 </div>
 </section>

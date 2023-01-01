@@ -243,66 +243,66 @@
 </section>
 <section id="examples">
 <h2><a class="toc-backref" href="#id5">Examples</a><a class="headerlink" href="#examples" title="Permalink to this heading"></a></h2>
-<div class="highlight-yaml+jinja notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Copy the current user&#39;s PSRepositories to all non-service account profiles and Default profile</span><span class="w"></span>
-<span class="w">  </span><span class="nt">community.windows.win_psrepository_copy</span><span class="p">:</span><span class="w"></span>
+<div class="highlight-yaml+jinja notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Copy the current user&#39;s PSRepositories to all non-service account profiles and Default profile</span>
+<span class="w">  </span><span class="nt">community.windows.win_psrepository_copy</span><span class="p">:</span>
 
-<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Copy the current user&#39;s PSRepositories to all profiles and Default profile</span><span class="w"></span>
-<span class="w">  </span><span class="nt">community.windows.win_psrepository_copy</span><span class="p">:</span><span class="w"></span>
-<span class="w">    </span><span class="nt">exclude_profiles</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[]</span><span class="w"></span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Copy the current user&#39;s PSRepositories to all profiles and Default profile</span>
+<span class="w">  </span><span class="nt">community.windows.win_psrepository_copy</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">exclude_profiles</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[]</span>
 
-<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Copy the current user&#39;s PSRepositories to all profiles beginning with A, B, or C</span><span class="w"></span>
-<span class="w">  </span><span class="nt">community.windows.win_psrepository_copy</span><span class="p">:</span><span class="w"></span>
-<span class="w">    </span><span class="nt">profiles</span><span class="p">:</span><span class="w"></span>
-<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&#39;A*&#39;</span><span class="w"></span>
-<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&#39;B*&#39;</span><span class="w"></span>
-<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&#39;C*&#39;</span><span class="w"></span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Copy the current user&#39;s PSRepositories to all profiles beginning with A, B, or C</span>
+<span class="w">  </span><span class="nt">community.windows.win_psrepository_copy</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">profiles</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&#39;A*&#39;</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&#39;B*&#39;</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&#39;C*&#39;</span>
 
-<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Copy the current user&#39;s PSRepositories to all profiles beginning B except Brian and Brianna</span><span class="w"></span>
-<span class="w">  </span><span class="nt">community.windows.win_psrepository_copy</span><span class="p">:</span><span class="w"></span>
-<span class="w">    </span><span class="nt">profiles</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;B*&#39;</span><span class="w"></span>
-<span class="w">    </span><span class="nt">exclude_profiles</span><span class="p">:</span><span class="w"></span>
-<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Brian</span><span class="w"></span>
-<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Brianna</span><span class="w"></span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Copy the current user&#39;s PSRepositories to all profiles beginning B except Brian and Brianna</span>
+<span class="w">  </span><span class="nt">community.windows.win_psrepository_copy</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">profiles</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;B*&#39;</span>
+<span class="w">    </span><span class="nt">exclude_profiles</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Brian</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Brianna</span>
 
-<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Copy a specific set of repositories to profiles beginning with &#39;svc&#39; with exceptions</span><span class="w"></span>
-<span class="w">  </span><span class="nt">community.windows.win_psrepository_copy</span><span class="p">:</span><span class="w"></span>
-<span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"></span>
-<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">CompanyRepo1</span><span class="w"></span>
-<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">CompanyRepo2</span><span class="w"></span>
-<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">PSGallery</span><span class="w"></span>
-<span class="w">    </span><span class="nt">profiles</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;svc*&#39;</span><span class="w"></span>
-<span class="w">    </span><span class="nt">exclude_profiles</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;svc-restricted&#39;</span><span class="w"></span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Copy a specific set of repositories to profiles beginning with &#39;svc&#39; with exceptions</span>
+<span class="w">  </span><span class="nt">community.windows.win_psrepository_copy</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">name</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">CompanyRepo1</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">CompanyRepo2</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">PSGallery</span>
+<span class="w">    </span><span class="nt">profiles</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;svc*&#39;</span>
+<span class="w">    </span><span class="nt">exclude_profiles</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;svc-restricted&#39;</span>
 
-<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Copy repos matching a pattern with exceptions</span><span class="w"></span>
-<span class="w">  </span><span class="nt">community.windows.win_psrepository_copy</span><span class="p">:</span><span class="w"></span>
-<span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;CompanyRepo*&#39;</span><span class="w"></span>
-<span class="w">    </span><span class="nt">exclude</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;CompanyRepo*-Beta&#39;</span><span class="w"></span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Copy repos matching a pattern with exceptions</span>
+<span class="w">  </span><span class="nt">community.windows.win_psrepository_copy</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;CompanyRepo*&#39;</span>
+<span class="w">    </span><span class="nt">exclude</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;CompanyRepo*-Beta&#39;</span>
 
-<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Copy repositories from a custom XML file on the target host</span><span class="w"></span>
-<span class="w">  </span><span class="nt">community.windows.win_psrepository_copy</span><span class="p">:</span><span class="w"></span>
-<span class="w">    </span><span class="nt">source</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;C:\data\CustomRepostories.xml&#39;</span><span class="w"></span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Copy repositories from a custom XML file on the target host</span>
+<span class="w">  </span><span class="nt">community.windows.win_psrepository_copy</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">source</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;C:\data\CustomRepostories.xml&#39;</span>
 
-<span class="c1">### A sample workflow of seeding a system with a custom repository</span><span class="w"></span>
+<span class="c1">### A sample workflow of seeding a system with a custom repository</span>
 
-<span class="c1"># A playbook that does initial host setup or builds system images</span><span class="w"></span>
+<span class="c1"># A playbook that does initial host setup or builds system images</span>
 
-<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Register custom respository</span><span class="w"></span>
-<span class="w">  </span><span class="nt">community.windows.win_psrepository</span><span class="p">:</span><span class="w"></span>
-<span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">PrivateRepo</span><span class="w"></span>
-<span class="w">    </span><span class="nt">source_location</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://example.com/nuget/feed/etc</span><span class="w"></span>
-<span class="w">    </span><span class="nt">installation_policy</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">trusted</span><span class="w"></span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Register custom respository</span>
+<span class="w">  </span><span class="nt">community.windows.win_psrepository</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">PrivateRepo</span>
+<span class="w">    </span><span class="nt">source_location</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://example.com/nuget/feed/etc</span>
+<span class="w">    </span><span class="nt">installation_policy</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">trusted</span>
 
-<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Ensure all current and new users have this repository registered</span><span class="w"></span>
-<span class="w">  </span><span class="nt">community.windows.win_psrepository_copy</span><span class="p">:</span><span class="w"></span>
-<span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">PrivateRepo</span><span class="w"></span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Ensure all current and new users have this repository registered</span>
+<span class="w">  </span><span class="nt">community.windows.win_psrepository_copy</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">PrivateRepo</span>
 
-<span class="c1"># In another playbook, run by other users (who may have been created later)</span><span class="w"></span>
+<span class="c1"># In another playbook, run by other users (who may have been created later)</span>
 
-<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Install a module</span><span class="w"></span>
-<span class="w">  </span><span class="nt">community.windows.win_psmodule</span><span class="p">:</span><span class="w"></span>
-<span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">CompanyModule</span><span class="w"></span>
-<span class="w">    </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">PrivateRepo</span><span class="w"></span>
-<span class="w">    </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">present</span><span class="w"></span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Install a module</span>
+<span class="w">  </span><span class="nt">community.windows.win_psmodule</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">CompanyModule</span>
+<span class="w">    </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">PrivateRepo</span>
+<span class="w">    </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">present</span>
 </pre></div>
 </div>
 <section id="authors">

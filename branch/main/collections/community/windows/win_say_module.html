@@ -247,27 +247,27 @@ $speech.Dispose()</p>
 </section>
 <section id="examples">
 <h2><a class="toc-backref" href="#id5">Examples</a><a class="headerlink" href="#examples" title="Permalink to this heading"></a></h2>
-<div class="highlight-yaml+jinja notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Warn of impending deployment</span><span class="w"></span>
-<span class="w">  </span><span class="nt">community.windows.win_say</span><span class="p">:</span><span class="w"></span>
-<span class="w">    </span><span class="nt">msg</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Warning, deployment commencing in 5 minutes, please log out.</span><span class="w"></span>
+<div class="highlight-yaml+jinja notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Warn of impending deployment</span>
+<span class="w">  </span><span class="nt">community.windows.win_say</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">msg</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Warning, deployment commencing in 5 minutes, please log out.</span>
 
-<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Using a different voice and a start sound</span><span class="w"></span>
-<span class="w">  </span><span class="nt">community.windows.win_say</span><span class="p">:</span><span class="w"></span>
-<span class="w">    </span><span class="nt">start_sound_path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">C:\Windows\Media\ding.wav</span><span class="w"></span>
-<span class="w">    </span><span class="nt">msg</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Warning, deployment commencing in 5 minutes, please log out.</span><span class="w"></span>
-<span class="w">    </span><span class="nt">voice</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Microsoft Hazel Desktop</span><span class="w"></span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Using a different voice and a start sound</span>
+<span class="w">  </span><span class="nt">community.windows.win_say</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">start_sound_path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">C:\Windows\Media\ding.wav</span>
+<span class="w">    </span><span class="nt">msg</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Warning, deployment commencing in 5 minutes, please log out.</span>
+<span class="w">    </span><span class="nt">voice</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Microsoft Hazel Desktop</span>
 
-<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">With start and end sound</span><span class="w"></span>
-<span class="w">  </span><span class="nt">community.windows.win_say</span><span class="p">:</span><span class="w"></span>
-<span class="w">    </span><span class="nt">start_sound_path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">C:\Windows\Media\Windows Balloon.wav</span><span class="w"></span>
-<span class="w">    </span><span class="nt">msg</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">New software installed</span><span class="w"></span>
-<span class="w">    </span><span class="nt">end_sound_path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">C:\Windows\Media\chimes.wav</span><span class="w"></span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">With start and end sound</span>
+<span class="w">  </span><span class="nt">community.windows.win_say</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">start_sound_path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">C:\Windows\Media\Windows Balloon.wav</span>
+<span class="w">    </span><span class="nt">msg</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">New software installed</span>
+<span class="w">    </span><span class="nt">end_sound_path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">C:\Windows\Media\chimes.wav</span>
 
-<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Text from file example</span><span class="w"></span>
-<span class="w">  </span><span class="nt">community.windows.win_say</span><span class="p">:</span><span class="w"></span>
-<span class="w">    </span><span class="nt">start_sound_path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">C:\Windows\Media\Windows Balloon.wav</span><span class="w"></span>
-<span class="w">    </span><span class="nt">msg_file</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">AppData\Local\Temp\morning_report.txt</span><span class="w"></span>
-<span class="w">    </span><span class="nt">end_sound_path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">C:\Windows\Media\chimes.wav</span><span class="w"></span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Text from file example</span>
+<span class="w">  </span><span class="nt">community.windows.win_say</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">start_sound_path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">C:\Windows\Media\Windows Balloon.wav</span>
+<span class="w">    </span><span class="nt">msg_file</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">AppData\Local\Temp\morning_report.txt</span>
+<span class="w">    </span><span class="nt">end_sound_path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">C:\Windows\Media\chimes.wav</span>
 </pre></div>
 </div>
 </section>

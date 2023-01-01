@@ -222,42 +222,42 @@ see <a class="reference internal" href="#ansible-collections-community-windows-w
 </section>
 <section id="examples">
 <h2><a class="toc-backref" href="#id4">Examples</a><a class="headerlink" href="#examples" title="Permalink to this heading"></a></h2>
-<div class="highlight-yaml+jinja notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Get facts</span><span class="w"></span>
-<span class="w">  </span><span class="nt">ansible.windows.setup</span><span class="p">:</span><span class="w"></span>
+<div class="highlight-yaml+jinja notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Get facts</span>
+<span class="w">  </span><span class="nt">ansible.windows.setup</span><span class="p">:</span>
 
-<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Add Pester module</span><span class="w"></span>
-<span class="w">  </span><span class="nt">action</span><span class="p">:</span><span class="w"></span>
-<span class="w">    </span><span class="nt">module_name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{{</span> <span class="s1">&#39;community.windows.win_psmodule&#39;</span> <span class="k">if</span> <span class="nv">ansible_powershell_version</span> <span class="o">&gt;=</span> <span class="m">5</span> <span class="k">else</span> <span class="s1">&#39;chocolatey.chocolatey.win_chocolatey&#39;</span> <span class="cp">}}</span><span class="s">&quot;</span><span class="w"></span>
-<span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Pester</span><span class="w"></span>
-<span class="w">    </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">present</span><span class="w"></span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Add Pester module</span>
+<span class="w">  </span><span class="nt">action</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">module_name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{{</span> <span class="s1">&#39;community.windows.win_psmodule&#39;</span> <span class="k">if</span> <span class="nv">ansible_powershell_version</span> <span class="o">&gt;=</span> <span class="m">5</span> <span class="k">else</span> <span class="s1">&#39;chocolatey.chocolatey.win_chocolatey&#39;</span> <span class="cp">}}</span><span class="s">&quot;</span>
+<span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Pester</span>
+<span class="w">    </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">present</span>
 
-<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Run the pester test provided in the path parameter.</span><span class="w"></span>
-<span class="w">  </span><span class="nt">community.windows.win_pester</span><span class="p">:</span><span class="w"></span>
-<span class="w">    </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">C:\Pester</span><span class="w"></span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Run the pester test provided in the path parameter.</span>
+<span class="w">  </span><span class="nt">community.windows.win_pester</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">C:\Pester</span>
 
-<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Run the pester tests only for the tags specified.</span><span class="w"></span>
-<span class="w">  </span><span class="nt">community.windows.win_pester</span><span class="p">:</span><span class="w"></span>
-<span class="w">    </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">C:\Pester\TestScript.tests</span><span class="w"></span>
-<span class="w">    </span><span class="nt">tags</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">CI,UnitTests</span><span class="w"></span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Run the pester tests only for the tags specified.</span>
+<span class="w">  </span><span class="nt">community.windows.win_pester</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">C:\Pester\TestScript.tests</span>
+<span class="w">    </span><span class="nt">tags</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">CI,UnitTests</span>
 
-<span class="c1"># Run pesters tests files that are present in the specified folder</span><span class="w"></span>
-<span class="c1"># ensure that the pester module version available is greater or equal to the version parameter.</span><span class="w"></span>
-<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Run the pester test present in a folder and check the Pester module version.</span><span class="w"></span>
-<span class="w">  </span><span class="nt">community.windows.win_pester</span><span class="p">:</span><span class="w"></span>
-<span class="w">    </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">C:\Pester\test01.test.ps1</span><span class="w"></span>
-<span class="w">    </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">4.1.0</span><span class="w"></span>
+<span class="c1"># Run pesters tests files that are present in the specified folder</span>
+<span class="c1"># ensure that the pester module version available is greater or equal to the version parameter.</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Run the pester test present in a folder and check the Pester module version.</span>
+<span class="w">  </span><span class="nt">community.windows.win_pester</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">C:\Pester\test01.test.ps1</span>
+<span class="w">    </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">4.1.0</span>
 
-<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Run the pester test present in a folder with given script parameters.</span><span class="w"></span>
-<span class="w">  </span><span class="nt">community.windows.win_pester</span><span class="p">:</span><span class="w"></span>
-<span class="w">    </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">C:\Pester\test04.test.ps1</span><span class="w"></span>
-<span class="w">    </span><span class="nt">test_parameters</span><span class="p">:</span><span class="w"></span>
-<span class="w">      </span><span class="nt">Process</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">lsass</span><span class="w"></span>
-<span class="w">      </span><span class="nt">Service</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">bits</span><span class="w"></span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Run the pester test present in a folder with given script parameters.</span>
+<span class="w">  </span><span class="nt">community.windows.win_pester</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">C:\Pester\test04.test.ps1</span>
+<span class="w">    </span><span class="nt">test_parameters</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">Process</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">lsass</span>
+<span class="w">      </span><span class="nt">Service</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">bits</span>
 
-<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Run the pester test present in a folder and generate NunitXML test result..</span><span class="w"></span>
-<span class="w">  </span><span class="nt">community.windows.win_pester</span><span class="p">:</span><span class="w"></span>
-<span class="w">    </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">C:\Pester\test04.test.ps1</span><span class="w"></span>
-<span class="w">    </span><span class="nt">output_file</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">c:\Pester\resullt\testresult.xml</span><span class="w"></span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Run the pester test present in a folder and generate NunitXML test result..</span>
+<span class="w">  </span><span class="nt">community.windows.win_pester</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">C:\Pester\test04.test.ps1</span>
+<span class="w">    </span><span class="nt">output_file</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">c:\Pester\resullt\testresult.xml</span>
 </pre></div>
 </div>
 </section>

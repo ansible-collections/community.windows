@@ -416,89 +416,89 @@ see <a class="reference internal" href="#ansible-collections-community-windows-p
 </section>
 <section id="examples">
 <h2><a class="toc-backref" href="#id6">Examples</a><a class="headerlink" href="#examples" title="Permalink to this heading"></a></h2>
-<div class="highlight-yaml+jinja notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Run a cmd.exe command</span><span class="w"></span>
-<span class="w">  </span><span class="nt">community.windows.psexec</span><span class="p">:</span><span class="w"></span>
-<span class="w">    </span><span class="nt">hostname</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">server</span><span class="w"></span>
-<span class="w">    </span><span class="nt">connection_username</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">username</span><span class="w"></span>
-<span class="w">    </span><span class="nt">connection_password</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">password</span><span class="w"></span>
-<span class="w">    </span><span class="nt">executable</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">cmd.exe</span><span class="w"></span>
-<span class="w">    </span><span class="nt">arguments</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/c echo Hello World</span><span class="w"></span>
+<div class="highlight-yaml+jinja notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Run a cmd.exe command</span>
+<span class="w">  </span><span class="nt">community.windows.psexec</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">hostname</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">server</span>
+<span class="w">    </span><span class="nt">connection_username</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">username</span>
+<span class="w">    </span><span class="nt">connection_password</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">password</span>
+<span class="w">    </span><span class="nt">executable</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">cmd.exe</span>
+<span class="w">    </span><span class="nt">arguments</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/c echo Hello World</span>
 
-<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Run a PowerShell command</span><span class="w"></span>
-<span class="w">  </span><span class="nt">community.windows.psexec</span><span class="p">:</span><span class="w"></span>
-<span class="w">    </span><span class="nt">hostname</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">server.domain.local</span><span class="w"></span>
-<span class="w">    </span><span class="nt">connection_username</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">username@DOMAIN.LOCAL</span><span class="w"></span>
-<span class="w">    </span><span class="nt">connection_password</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">password</span><span class="w"></span>
-<span class="w">    </span><span class="nt">executable</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">powershell.exe</span><span class="w"></span>
-<span class="w">    </span><span class="nt">arguments</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Write-Host Hello World</span><span class="w"></span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Run a PowerShell command</span>
+<span class="w">  </span><span class="nt">community.windows.psexec</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">hostname</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">server.domain.local</span>
+<span class="w">    </span><span class="nt">connection_username</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">username@DOMAIN.LOCAL</span>
+<span class="w">    </span><span class="nt">connection_password</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">password</span>
+<span class="w">    </span><span class="nt">executable</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">powershell.exe</span>
+<span class="w">    </span><span class="nt">arguments</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Write-Host Hello World</span>
 
-<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Send data through stdin</span><span class="w"></span>
-<span class="w">  </span><span class="nt">community.windows.psexec</span><span class="p">:</span><span class="w"></span>
-<span class="w">    </span><span class="nt">hostname</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">192.168.1.2</span><span class="w"></span>
-<span class="w">    </span><span class="nt">connection_username</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">username</span><span class="w"></span>
-<span class="w">    </span><span class="nt">connection_password</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">password</span><span class="w"></span>
-<span class="w">    </span><span class="nt">executable</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">powershell.exe</span><span class="w"></span>
-<span class="w">    </span><span class="nt">arguments</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;-&#39;</span><span class="w"></span>
-<span class="w">    </span><span class="nt">stdin</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span><span class="w"></span>
-<span class="w">      </span><span class="no">Write-Host Hello World</span><span class="w"></span>
-<span class="w">      </span><span class="no">Write-Error Error Message</span><span class="w"></span>
-<span class="w">      </span><span class="no">exit 0</span><span class="w"></span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Send data through stdin</span>
+<span class="w">  </span><span class="nt">community.windows.psexec</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">hostname</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">192.168.1.2</span>
+<span class="w">    </span><span class="nt">connection_username</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">username</span>
+<span class="w">    </span><span class="nt">connection_password</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">password</span>
+<span class="w">    </span><span class="nt">executable</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">powershell.exe</span>
+<span class="w">    </span><span class="nt">arguments</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;-&#39;</span>
+<span class="w">    </span><span class="nt">stdin</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
+<span class="w">      </span><span class="no">Write-Host Hello World</span>
+<span class="w">      </span><span class="no">Write-Error Error Message</span>
+<span class="w">      </span><span class="no">exit 0</span>
 
-<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Run the process as a different user</span><span class="w"></span>
-<span class="w">  </span><span class="nt">community.windows.psexec</span><span class="p">:</span><span class="w"></span>
-<span class="w">    </span><span class="nt">hostname</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">server</span><span class="w"></span>
-<span class="w">    </span><span class="nt">connection_user</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">username</span><span class="w"></span>
-<span class="w">    </span><span class="nt">connection_password</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">password</span><span class="w"></span>
-<span class="w">    </span><span class="nt">executable</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">whoami.exe</span><span class="w"></span>
-<span class="w">    </span><span class="nt">arguments</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/all</span><span class="w"></span>
-<span class="w">    </span><span class="nt">process_username</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">anotheruser</span><span class="w"></span>
-<span class="w">    </span><span class="nt">process_password</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">anotherpassword</span><span class="w"></span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Run the process as a different user</span>
+<span class="w">  </span><span class="nt">community.windows.psexec</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">hostname</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">server</span>
+<span class="w">    </span><span class="nt">connection_user</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">username</span>
+<span class="w">    </span><span class="nt">connection_password</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">password</span>
+<span class="w">    </span><span class="nt">executable</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">whoami.exe</span>
+<span class="w">    </span><span class="nt">arguments</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/all</span>
+<span class="w">    </span><span class="nt">process_username</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">anotheruser</span>
+<span class="w">    </span><span class="nt">process_password</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">anotherpassword</span>
 
-<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Run the process asynchronously</span><span class="w"></span>
-<span class="w">  </span><span class="nt">community.windows.psexec</span><span class="p">:</span><span class="w"></span>
-<span class="w">    </span><span class="nt">hostname</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">server</span><span class="w"></span>
-<span class="w">    </span><span class="nt">connection_username</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">username</span><span class="w"></span>
-<span class="w">    </span><span class="nt">connection_password</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">password</span><span class="w"></span>
-<span class="w">    </span><span class="nt">executable</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">cmd.exe</span><span class="w"></span>
-<span class="w">    </span><span class="nt">arguments</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/c rmdir C:\temp</span><span class="w"></span>
-<span class="w">    </span><span class="nt">asynchronous</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">yes</span><span class="w"></span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Run the process asynchronously</span>
+<span class="w">  </span><span class="nt">community.windows.psexec</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">hostname</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">server</span>
+<span class="w">    </span><span class="nt">connection_username</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">username</span>
+<span class="w">    </span><span class="nt">connection_password</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">password</span>
+<span class="w">    </span><span class="nt">executable</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">cmd.exe</span>
+<span class="w">    </span><span class="nt">arguments</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/c rmdir C:\temp</span>
+<span class="w">    </span><span class="nt">asynchronous</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">yes</span>
 
-<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Use Kerberos authentication for the connection (requires smbprotocol[kerberos])</span><span class="w"></span>
-<span class="w">  </span><span class="nt">community.windows.psexec</span><span class="p">:</span><span class="w"></span>
-<span class="w">    </span><span class="nt">hostname</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">host.domain.local</span><span class="w"></span>
-<span class="w">    </span><span class="nt">connection_username</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">user@DOMAIN.LOCAL</span><span class="w"></span>
-<span class="w">    </span><span class="nt">executable</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">C:\some\path\to\executable.exe</span><span class="w"></span>
-<span class="w">    </span><span class="nt">arguments</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/s</span><span class="w"></span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Use Kerberos authentication for the connection (requires smbprotocol[kerberos])</span>
+<span class="w">  </span><span class="nt">community.windows.psexec</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">hostname</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">host.domain.local</span>
+<span class="w">    </span><span class="nt">connection_username</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">user@DOMAIN.LOCAL</span>
+<span class="w">    </span><span class="nt">executable</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">C:\some\path\to\executable.exe</span>
+<span class="w">    </span><span class="nt">arguments</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/s</span>
 
-<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Disable encryption to work with WIndows 7/Server 2008 (R2)</span><span class="w"></span>
-<span class="w">  </span><span class="nt">community.windows.psexec</span><span class="p">:</span><span class="w"></span>
-<span class="w">    </span><span class="nt">hostanme</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">windows-pc</span><span class="w"></span>
-<span class="w">    </span><span class="nt">connection_username</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Administrator</span><span class="w"></span>
-<span class="w">    </span><span class="nt">connection_password</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Password01</span><span class="w"></span>
-<span class="w">    </span><span class="nt">encrypt</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">no</span><span class="w"></span>
-<span class="w">    </span><span class="nt">integrity_level</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">elevated</span><span class="w"></span>
-<span class="w">    </span><span class="nt">process_username</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Administrator</span><span class="w"></span>
-<span class="w">    </span><span class="nt">process_password</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Password01</span><span class="w"></span>
-<span class="w">    </span><span class="nt">executable</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">powershell.exe</span><span class="w"></span>
-<span class="w">    </span><span class="nt">arguments</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">(New-Object -ComObject Microsoft.Update.Session).CreateUpdateInstaller().IsBusy</span><span class="w"></span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Disable encryption to work with WIndows 7/Server 2008 (R2)</span>
+<span class="w">  </span><span class="nt">community.windows.psexec</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">hostanme</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">windows-pc</span>
+<span class="w">    </span><span class="nt">connection_username</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Administrator</span>
+<span class="w">    </span><span class="nt">connection_password</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Password01</span>
+<span class="w">    </span><span class="nt">encrypt</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">no</span>
+<span class="w">    </span><span class="nt">integrity_level</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">elevated</span>
+<span class="w">    </span><span class="nt">process_username</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Administrator</span>
+<span class="w">    </span><span class="nt">process_password</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Password01</span>
+<span class="w">    </span><span class="nt">executable</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">powershell.exe</span>
+<span class="w">    </span><span class="nt">arguments</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">(New-Object -ComObject Microsoft.Update.Session).CreateUpdateInstaller().IsBusy</span>
 
-<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Download and run ConfigureRemotingForAnsible.ps1 to setup WinRM</span><span class="w"></span>
-<span class="w">  </span><span class="nt">community.windows.psexec</span><span class="p">:</span><span class="w"></span>
-<span class="w">    </span><span class="nt">hostname</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">hostvars</span><span class="o">[</span><span class="nv">inventory_hostname</span><span class="o">][</span><span class="s2">&quot;ansible_host&quot;</span><span class="o">]</span> <span class="o">|</span> <span class="nf">default</span><span class="o">(</span><span class="nv">inventory_hostname</span><span class="o">)</span> <span class="cp">}}</span><span class="s">&#39;</span><span class="w"></span>
-<span class="w">    </span><span class="nt">connection_username</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">ansible_user</span> <span class="cp">}}</span><span class="s">&#39;</span><span class="w"></span>
-<span class="w">    </span><span class="nt">connection_password</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">ansible_password</span> <span class="cp">}}</span><span class="s">&#39;</span><span class="w"></span>
-<span class="w">    </span><span class="nt">encrypt</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">yes</span><span class="w"></span>
-<span class="w">    </span><span class="nt">executable</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">powershell.exe</span><span class="w"></span>
-<span class="w">    </span><span class="nt">arguments</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;-&#39;</span><span class="w"></span>
-<span class="w">    </span><span class="nt">stdin</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span><span class="w"></span>
-<span class="w">      </span><span class="no">$ErrorActionPreference = &quot;Stop&quot;</span><span class="w"></span>
-<span class="w">      </span><span class="no">$sec_protocols = [Net.ServicePointManager]::SecurityProtocol -bor [Net.SecurityProtocolType]::SystemDefault</span><span class="w"></span>
-<span class="w">      </span><span class="no">$sec_protocols = $sec_protocols -bor [Net.SecurityProtocolType]::Tls12</span><span class="w"></span>
-<span class="w">      </span><span class="no">[Net.ServicePointManager]::SecurityProtocol = $sec_protocols</span><span class="w"></span>
-<span class="w">      </span><span class="no">$url = &quot;https://github.com/ansible/ansible/raw/devel/examples/scripts/ConfigureRemotingForAnsible.ps1&quot;</span><span class="w"></span>
-<span class="w">      </span><span class="no">Invoke-Expression ((New-Object Net.WebClient).DownloadString($url))</span><span class="w"></span>
-<span class="w">      </span><span class="no">exit</span><span class="w"></span>
-<span class="w">  </span><span class="nt">delegate_to</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">localhost</span><span class="w"></span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Download and run ConfigureRemotingForAnsible.ps1 to setup WinRM</span>
+<span class="w">  </span><span class="nt">community.windows.psexec</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">hostname</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">hostvars</span><span class="o">[</span><span class="nv">inventory_hostname</span><span class="o">][</span><span class="s2">&quot;ansible_host&quot;</span><span class="o">]</span> <span class="o">|</span> <span class="nf">default</span><span class="o">(</span><span class="nv">inventory_hostname</span><span class="o">)</span> <span class="cp">}}</span><span class="s">&#39;</span>
+<span class="w">    </span><span class="nt">connection_username</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">ansible_user</span> <span class="cp">}}</span><span class="s">&#39;</span>
+<span class="w">    </span><span class="nt">connection_password</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">ansible_password</span> <span class="cp">}}</span><span class="s">&#39;</span>
+<span class="w">    </span><span class="nt">encrypt</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">yes</span>
+<span class="w">    </span><span class="nt">executable</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">powershell.exe</span>
+<span class="w">    </span><span class="nt">arguments</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;-&#39;</span>
+<span class="w">    </span><span class="nt">stdin</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
+<span class="w">      </span><span class="no">$ErrorActionPreference = &quot;Stop&quot;</span>
+<span class="w">      </span><span class="no">$sec_protocols = [Net.ServicePointManager]::SecurityProtocol -bor [Net.SecurityProtocolType]::SystemDefault</span>
+<span class="w">      </span><span class="no">$sec_protocols = $sec_protocols -bor [Net.SecurityProtocolType]::Tls12</span>
+<span class="w">      </span><span class="no">[Net.ServicePointManager]::SecurityProtocol = $sec_protocols</span>
+<span class="w">      </span><span class="no">$url = &quot;https://github.com/ansible/ansible/raw/devel/examples/scripts/ConfigureRemotingForAnsible.ps1&quot;</span>
+<span class="w">      </span><span class="no">Invoke-Expression ((New-Object Net.WebClient).DownloadString($url))</span>
+<span class="w">      </span><span class="no">exit</span>
+<span class="w">  </span><span class="nt">delegate_to</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">localhost</span>
 </pre></div>
 </div>
 </section>

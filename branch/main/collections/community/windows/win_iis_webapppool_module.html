@@ -221,64 +221,64 @@
 </section>
 <section id="examples">
 <h2><a class="toc-backref" href="#id4">Examples</a><a class="headerlink" href="#examples" title="Permalink to this heading"></a></h2>
-<div class="highlight-yaml+jinja notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Return information about an existing application pool</span><span class="w"></span>
-<span class="w">  </span><span class="nt">community.windows.win_iis_webapppool</span><span class="p">:</span><span class="w"></span>
-<span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">DefaultAppPool</span><span class="w"></span>
-<span class="w">    </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">present</span><span class="w"></span>
+<div class="highlight-yaml+jinja notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Return information about an existing application pool</span>
+<span class="w">  </span><span class="nt">community.windows.win_iis_webapppool</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">DefaultAppPool</span>
+<span class="w">    </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">present</span>
 
-<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Create a new application pool in &#39;Started&#39; state</span><span class="w"></span>
-<span class="w">  </span><span class="nt">community.windows.win_iis_webapppool</span><span class="p">:</span><span class="w"></span>
-<span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">AppPool</span><span class="w"></span>
-<span class="w">    </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">started</span><span class="w"></span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Create a new application pool in &#39;Started&#39; state</span>
+<span class="w">  </span><span class="nt">community.windows.win_iis_webapppool</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">AppPool</span>
+<span class="w">    </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">started</span>
 
-<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Stop an application pool</span><span class="w"></span>
-<span class="w">  </span><span class="nt">community.windows.win_iis_webapppool</span><span class="p">:</span><span class="w"></span>
-<span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">AppPool</span><span class="w"></span>
-<span class="w">    </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">stopped</span><span class="w"></span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Stop an application pool</span>
+<span class="w">  </span><span class="nt">community.windows.win_iis_webapppool</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">AppPool</span>
+<span class="w">    </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">stopped</span>
 
-<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Restart an application pool (non-idempotent)</span><span class="w"></span>
-<span class="w">  </span><span class="nt">community.windows.win_iis_webapppool</span><span class="p">:</span><span class="w"></span>
-<span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">AppPool</span><span class="w"></span>
-<span class="w">    </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">restarted</span><span class="w"></span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Restart an application pool (non-idempotent)</span>
+<span class="w">  </span><span class="nt">community.windows.win_iis_webapppool</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">AppPool</span>
+<span class="w">    </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">restarted</span>
 
-<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Change application pool attributes using new dict style</span><span class="w"></span>
-<span class="w">  </span><span class="nt">community.windows.win_iis_webapppool</span><span class="p">:</span><span class="w"></span>
-<span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">AppPool</span><span class="w"></span>
-<span class="w">    </span><span class="nt">attributes</span><span class="p">:</span><span class="w"></span>
-<span class="w">      </span><span class="nt">managedRuntimeVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">v4.0</span><span class="w"></span>
-<span class="w">      </span><span class="nt">autoStart</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">no</span><span class="w"></span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Change application pool attributes using new dict style</span>
+<span class="w">  </span><span class="nt">community.windows.win_iis_webapppool</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">AppPool</span>
+<span class="w">    </span><span class="nt">attributes</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">managedRuntimeVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">v4.0</span>
+<span class="w">      </span><span class="nt">autoStart</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">no</span>
 
-<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Creates an application pool, sets attributes and starts it</span><span class="w"></span>
-<span class="w">  </span><span class="nt">community.windows.win_iis_webapppool</span><span class="p">:</span><span class="w"></span>
-<span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">AnotherAppPool</span><span class="w"></span>
-<span class="w">    </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">started</span><span class="w"></span>
-<span class="w">    </span><span class="nt">attributes</span><span class="p">:</span><span class="w"></span>
-<span class="w">      </span><span class="nt">managedRuntimeVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">v4.0</span><span class="w"></span>
-<span class="w">      </span><span class="nt">autoStart</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">no</span><span class="w"></span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Creates an application pool, sets attributes and starts it</span>
+<span class="w">  </span><span class="nt">community.windows.win_iis_webapppool</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">AnotherAppPool</span>
+<span class="w">    </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">started</span>
+<span class="w">    </span><span class="nt">attributes</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">managedRuntimeVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">v4.0</span>
+<span class="w">      </span><span class="nt">autoStart</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">no</span>
 
-<span class="c1"># In the below example we are setting attributes in child element processModel</span><span class="w"></span>
-<span class="c1"># https://www.iis.net/configreference/system.applicationhost/applicationpools/add/processmodel</span><span class="w"></span>
-<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Manage child element and set identity of application pool</span><span class="w"></span>
-<span class="w">  </span><span class="nt">community.windows.win_iis_webapppool</span><span class="p">:</span><span class="w"></span>
-<span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">IdentitiyAppPool</span><span class="w"></span>
-<span class="w">    </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">started</span><span class="w"></span>
-<span class="w">    </span><span class="nt">attributes</span><span class="p">:</span><span class="w"></span>
-<span class="w">      </span><span class="nt">managedPipelineMode</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Classic</span><span class="w"></span>
-<span class="w">      </span><span class="nt">processModel.identityType</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">SpecificUser</span><span class="w"></span>
-<span class="w">      </span><span class="nt">processModel.userName</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;</span><span class="cp">{{</span><span class="nv">ansible_user</span><span class="cp">}}</span><span class="s">&#39;</span><span class="w"></span>
-<span class="w">      </span><span class="nt">processModel.password</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;</span><span class="cp">{{</span><span class="nv">ansible_password</span><span class="cp">}}</span><span class="s">&#39;</span><span class="w"></span>
-<span class="w">      </span><span class="nt">processModel.loadUserProfile</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
+<span class="c1"># In the below example we are setting attributes in child element processModel</span>
+<span class="c1"># https://www.iis.net/configreference/system.applicationhost/applicationpools/add/processmodel</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Manage child element and set identity of application pool</span>
+<span class="w">  </span><span class="nt">community.windows.win_iis_webapppool</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">IdentitiyAppPool</span>
+<span class="w">    </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">started</span>
+<span class="w">    </span><span class="nt">attributes</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">managedPipelineMode</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Classic</span>
+<span class="w">      </span><span class="nt">processModel.identityType</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">SpecificUser</span>
+<span class="w">      </span><span class="nt">processModel.userName</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;</span><span class="cp">{{</span><span class="nv">ansible_user</span><span class="cp">}}</span><span class="s">&#39;</span>
+<span class="w">      </span><span class="nt">processModel.password</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;</span><span class="cp">{{</span><span class="nv">ansible_password</span><span class="cp">}}</span><span class="s">&#39;</span>
+<span class="w">      </span><span class="nt">processModel.loadUserProfile</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
 
-<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Manage a timespan attribute</span><span class="w"></span>
-<span class="w">  </span><span class="nt">community.windows.win_iis_webapppool</span><span class="p">:</span><span class="w"></span>
-<span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">TimespanAppPool</span><span class="w"></span>
-<span class="w">    </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">started</span><span class="w"></span>
-<span class="w">    </span><span class="nt">attributes</span><span class="p">:</span><span class="w"></span>
-<span class="w">      </span><span class="c1"># Timespan with full string &quot;day:hour:minute:second.millisecond&quot;</span><span class="w"></span>
-<span class="w">      </span><span class="nt">recycling.periodicRestart.time</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;00:00:05:00.000000&quot;</span><span class="w"></span>
-<span class="w">      </span><span class="nt">recycling.periodicRestart.schedule</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&quot;00:10:00&quot;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&quot;05:30:00&quot;</span><span class="p p-Indicator">]</span><span class="w"></span>
-<span class="w">      </span><span class="c1"># Shortened timespan &quot;hour:minute:second&quot;</span><span class="w"></span>
-<span class="w">      </span><span class="nt">processModel.pingResponseTime</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;00:03:00&quot;</span><span class="w"></span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Manage a timespan attribute</span>
+<span class="w">  </span><span class="nt">community.windows.win_iis_webapppool</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">TimespanAppPool</span>
+<span class="w">    </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">started</span>
+<span class="w">    </span><span class="nt">attributes</span><span class="p">:</span>
+<span class="w">      </span><span class="c1"># Timespan with full string &quot;day:hour:minute:second.millisecond&quot;</span>
+<span class="w">      </span><span class="nt">recycling.periodicRestart.time</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;00:00:05:00.000000&quot;</span>
+<span class="w">      </span><span class="nt">recycling.periodicRestart.schedule</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&quot;00:10:00&quot;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&quot;05:30:00&quot;</span><span class="p p-Indicator">]</span>
+<span class="w">      </span><span class="c1"># Shortened timespan &quot;hour:minute:second&quot;</span>
+<span class="w">      </span><span class="nt">processModel.pingResponseTime</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;00:03:00&quot;</span>
 </pre></div>
 </div>
 </section>

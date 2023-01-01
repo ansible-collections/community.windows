@@ -256,65 +256,65 @@
 </section>
 <section id="examples">
 <h2><a class="toc-backref" href="#id4">Examples</a><a class="headerlink" href="#examples" title="Permalink to this heading"></a></h2>
-<div class="highlight-yaml+jinja notranslate"><div class="highlight"><pre><span></span><span class="c1"># Start a website</span><span class="w"></span>
+<div class="highlight-yaml+jinja notranslate"><div class="highlight"><pre><span></span><span class="c1"># Start a website</span>
 
-<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Acme IIS site</span><span class="w"></span>
-<span class="w">  </span><span class="nt">community.windows.win_iis_website</span><span class="p">:</span><span class="w"></span>
-<span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Acme</span><span class="w"></span>
-<span class="w">    </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">started</span><span class="w"></span>
-<span class="w">    </span><span class="nt">port</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">80</span><span class="w"></span>
-<span class="w">    </span><span class="nt">ip</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">127.0.0.1</span><span class="w"></span>
-<span class="w">    </span><span class="nt">hostname</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">acme.local</span><span class="w"></span>
-<span class="w">    </span><span class="nt">application_pool</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">acme</span><span class="w"></span>
-<span class="w">    </span><span class="nt">physical_path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">C:\sites\acme</span><span class="w"></span>
-<span class="w">    </span><span class="nt">parameters</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">logfile.directory:C:\sites\logs</span><span class="w"></span>
-<span class="w">  </span><span class="nt">register</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">website</span><span class="w"></span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Acme IIS site</span>
+<span class="w">  </span><span class="nt">community.windows.win_iis_website</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Acme</span>
+<span class="w">    </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">started</span>
+<span class="w">    </span><span class="nt">port</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">80</span>
+<span class="w">    </span><span class="nt">ip</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">127.0.0.1</span>
+<span class="w">    </span><span class="nt">hostname</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">acme.local</span>
+<span class="w">    </span><span class="nt">application_pool</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">acme</span>
+<span class="w">    </span><span class="nt">physical_path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">C:\sites\acme</span>
+<span class="w">    </span><span class="nt">parameters</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">logfile.directory:C:\sites\logs</span>
+<span class="w">  </span><span class="nt">register</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">website</span>
 
-<span class="c1"># Remove Default Web Site and the standard port 80 binding</span><span class="w"></span>
-<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Remove Default Web Site</span><span class="w"></span>
-<span class="w">  </span><span class="nt">community.windows.win_iis_website</span><span class="p">:</span><span class="w"></span>
-<span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Default</span><span class="nv"> </span><span class="s">Web</span><span class="nv"> </span><span class="s">Site&quot;</span><span class="w"></span>
-<span class="w">    </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">absent</span><span class="w"></span>
+<span class="c1"># Remove Default Web Site and the standard port 80 binding</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Remove Default Web Site</span>
+<span class="w">  </span><span class="nt">community.windows.win_iis_website</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Default</span><span class="nv"> </span><span class="s">Web</span><span class="nv"> </span><span class="s">Site&quot;</span>
+<span class="w">    </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">absent</span>
 
-<span class="c1"># Create a WebSite with custom Logging configuration (Logs Location, Format and Rolling Over).</span><span class="w"></span>
+<span class="c1"># Create a WebSite with custom Logging configuration (Logs Location, Format and Rolling Over).</span>
 
-<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Creating WebSite with Custom Log location, Format 3WC and rolling over every hour.</span><span class="w"></span>
-<span class="w">  </span><span class="nt">community.windows.win_iis_website</span><span class="p">:</span><span class="w"></span>
-<span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">MyCustom_Web_Shop_Site</span><span class="w"></span>
-<span class="w">    </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">started</span><span class="w"></span>
-<span class="w">    </span><span class="nt">port</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">80</span><span class="w"></span>
-<span class="w">    </span><span class="nt">ip</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;*&#39;</span><span class="w"></span>
-<span class="w">    </span><span class="nt">hostname</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;*&#39;</span><span class="w"></span>
-<span class="w">    </span><span class="nt">physical_path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">D:\wwwroot\websites\my-shop-site</span><span class="w"></span>
-<span class="w">    </span><span class="nt">parameters</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">logfile.directory:D:\IIS-LOGS\websites\my-shop-site|logfile.period:Hourly|logFile.logFormat:W3C</span><span class="w"></span>
-<span class="w">    </span><span class="nt">application_pool</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">my-shop-site</span><span class="w"></span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Creating WebSite with Custom Log location, Format 3WC and rolling over every hour.</span>
+<span class="w">  </span><span class="nt">community.windows.win_iis_website</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">MyCustom_Web_Shop_Site</span>
+<span class="w">    </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">started</span>
+<span class="w">    </span><span class="nt">port</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">80</span>
+<span class="w">    </span><span class="nt">ip</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;*&#39;</span>
+<span class="w">    </span><span class="nt">hostname</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;*&#39;</span>
+<span class="w">    </span><span class="nt">physical_path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">D:\wwwroot\websites\my-shop-site</span>
+<span class="w">    </span><span class="nt">parameters</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">logfile.directory:D:\IIS-LOGS\websites\my-shop-site|logfile.period:Hourly|logFile.logFormat:W3C</span>
+<span class="w">    </span><span class="nt">application_pool</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">my-shop-site</span>
 
-<span class="c1"># Some commandline examples:</span><span class="w"></span>
+<span class="c1"># Some commandline examples:</span>
 
-<span class="c1"># This return information about an existing host</span><span class="w"></span>
-<span class="c1"># $ ansible -i vagrant-inventory -m community.windows.win_iis_website -a &quot;name=&#39;Default Web Site&#39;&quot; window</span><span class="w"></span>
-<span class="c1"># host | success &gt;&gt; {</span><span class="w"></span>
-<span class="c1">#     &quot;changed&quot;: false,</span><span class="w"></span>
-<span class="c1">#     &quot;site&quot;: {</span><span class="w"></span>
-<span class="c1">#         &quot;ApplicationPool&quot;: &quot;DefaultAppPool&quot;,</span><span class="w"></span>
-<span class="c1">#         &quot;Bindings&quot;: [</span><span class="w"></span>
-<span class="c1">#             &quot;*:80:&quot;</span><span class="w"></span>
-<span class="c1">#         ],</span><span class="w"></span>
-<span class="c1">#         &quot;ID&quot;: 1,</span><span class="w"></span>
-<span class="c1">#         &quot;Name&quot;: &quot;Default Web Site&quot;,</span><span class="w"></span>
-<span class="c1">#         &quot;PhysicalPath&quot;: &quot;%SystemDrive%\\inetpub\\wwwroot&quot;,</span><span class="w"></span>
-<span class="c1">#         &quot;State&quot;: &quot;Stopped&quot;</span><span class="w"></span>
-<span class="c1">#     }</span><span class="w"></span>
-<span class="c1"># }</span><span class="w"></span>
+<span class="c1"># This return information about an existing host</span>
+<span class="c1"># $ ansible -i vagrant-inventory -m community.windows.win_iis_website -a &quot;name=&#39;Default Web Site&#39;&quot; window</span>
+<span class="c1"># host | success &gt;&gt; {</span>
+<span class="c1">#     &quot;changed&quot;: false,</span>
+<span class="c1">#     &quot;site&quot;: {</span>
+<span class="c1">#         &quot;ApplicationPool&quot;: &quot;DefaultAppPool&quot;,</span>
+<span class="c1">#         &quot;Bindings&quot;: [</span>
+<span class="c1">#             &quot;*:80:&quot;</span>
+<span class="c1">#         ],</span>
+<span class="c1">#         &quot;ID&quot;: 1,</span>
+<span class="c1">#         &quot;Name&quot;: &quot;Default Web Site&quot;,</span>
+<span class="c1">#         &quot;PhysicalPath&quot;: &quot;%SystemDrive%\\inetpub\\wwwroot&quot;,</span>
+<span class="c1">#         &quot;State&quot;: &quot;Stopped&quot;</span>
+<span class="c1">#     }</span>
+<span class="c1"># }</span>
 
-<span class="c1"># This stops an existing site.</span><span class="w"></span>
-<span class="c1"># $ ansible -i hosts -m community.windows.win_iis_website -a &quot;name=&#39;Default Web Site&#39; state=stopped&quot; host</span><span class="w"></span>
+<span class="c1"># This stops an existing site.</span>
+<span class="c1"># $ ansible -i hosts -m community.windows.win_iis_website -a &quot;name=&#39;Default Web Site&#39; state=stopped&quot; host</span>
 
-<span class="c1"># This creates a new site.</span><span class="w"></span>
-<span class="c1"># $ ansible -i hosts -m community.windows.win_iis_website -a &quot;name=acme physical_path=C:\\sites\\acme&quot; host</span><span class="w"></span>
+<span class="c1"># This creates a new site.</span>
+<span class="c1"># $ ansible -i hosts -m community.windows.win_iis_website -a &quot;name=acme physical_path=C:\\sites\\acme&quot; host</span>
 
-<span class="c1"># Change logfile.</span><span class="w"></span>
-<span class="c1"># $ ansible -i hosts -m community.windows.win_iis_website -a &quot;name=acme physical_path=C:\\sites\\acme&quot; host</span><span class="w"></span>
+<span class="c1"># Change logfile.</span>
+<span class="c1"># $ ansible -i hosts -m community.windows.win_iis_website -a &quot;name=acme physical_path=C:\\sites\\acme&quot; host</span>
 </pre></div>
 </div>
 <section id="authors">
