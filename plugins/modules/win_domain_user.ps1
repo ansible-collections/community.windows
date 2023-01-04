@@ -554,6 +554,15 @@ If ($user_obj) {
     $module.Result.groups = Get-PrincipalGroup $user_guid $extra_args
     $module.Result.msg = "User '$name' is present"
     $module.Result.state = "present"
+
+    # Append custom LDAP attributes to the module Result object
+    If ($null -ne $attributes) {
+        foreach ($attribute in $attributes.GetEnumerator()) {
+            If ((-not ($module.Result.Keys -contains $attribute.Key)) -and ( $user_obj.Contains($attribute.Key) )) {
+                $module.Result.$($attribute.Key) = $user_obj.$($attribute.Key)
+            }
+        }
+    }
 }
 else {
     $module.Result.name = $name
