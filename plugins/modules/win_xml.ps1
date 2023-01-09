@@ -191,7 +191,7 @@ if ($type -eq "element") {
             if ($node.get_NodeType() -eq "Document") {
                 $node = $node.get_DocumentElement()
             }
-            
+
             if ($node.ChildNodes.Count -eq 0) {
                 $elements = @()
                 $elements += $node
