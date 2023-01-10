@@ -66,6 +66,7 @@ $spec = @{
         domain_username = @{ type = 'str' }
         domain_password = @{ type = 'str'; no_log = $true }
         domain_server = @{ type = 'str' }
+        multi_domains = @{ type = "bool" ; default = $false }
         groups_action = @{
             type = 'str'
             choices = @('add', 'remove', 'replace')
@@ -143,6 +144,7 @@ $groups_action = $module.Params.groups_action
 $domain_username = $module.Params.domain_username
 $domain_password = $module.Params.domain_password
 $domain_server = $module.Params.domain_server
+$multi_domains = $module.Params.multi_domains
 
 # User account parameters
 $name = $module.Params.name
@@ -193,6 +195,10 @@ If (($null -ne $password_expired) -and ($null -ne $password_never_expires)) {
     $module.FailJson("password_expired and password_never_expires are mutually exclusive but have both been set")
 }
 
+If (($null -ne $domain_server) -and $multi_domains) {
+    $module.FailJson("domain_server and multi_domains are mutually exclusive. Either unset domain_server or set multi_domains to false")
+}
+
 $extra_args = @{}
 if ($null -ne $domain_username) {
     $domain_password = ConvertTo-SecureString $domain_password -AsPlainText -Force
@@ -200,37 +206,100 @@ if ($null -ne $domain_username) {
     $extra_args.Credential = $credential
 }
 
-if ($null -ne $domain_server) {
-    $extra_args.Server = $domain_server
+# Function to query the global catalog to get user's assigned groups with their
+# DistinguishedName, the domain they belong to, and a DC to query this domain
+Function Get-UserAccountGroupsList {
+    Param ($user_obj)
+
+    $dcgc = "$((Get-ADDomainController).Name):3268"
+
+    $user_groups = @(
+        foreach ($groupDN in (@( $user_obj.PrimaryGroup ) + $user_obj.MemberOf)) {
+            try {
+                Get-ADGroup -Identity $groupDN -Server $dcgc -Property CanonicalName |
+                    Select-Object *, @{Name = 'Domain'; Expression = { ($_.CanonicalName -split "/")[0] } } |
+                    Select-Object *, @{Name = 'DC'; Expression = { `
+                                Get-ADDomainController -Discover -Service "PrimaryDC" | Select-Object -ExpandProperty hostname }
+                    }
+            }
+            catch {
+                $module.Warn("Failed to enumerate user groups but continuing on: $($_.Exception.Message)")
+            }
+        }
+    )
+
+    return $user_groups
 }
 
-Function Get-PrincipalGroup {
-    Param ($identity, $args_extra)
-    try {
-        $groups = Get-ADPrincipalGroupMembership `
-            -Identity $identity @args_extra `
-            -ErrorAction Stop
-    }
-    catch {
-        $module.Warn("Failed to enumerate user groups but continuing on: $($_.Exception.Message)")
-        return @()
-    }
+Function Get-UserAccount {
+    Param ($identity, $extra_args)
 
-    $result_groups = foreach ($group in $groups) {
-        $group.DistinguishedName
-    }
-    return $result_groups
-}
-
-try {
-    $user_obj = Get-ADUser `
+    return Get-ADUser `
         -Identity $identity `
         -Properties ('*', 'msDS-PrincipalName') @extra_args
-    $user_guid = $user_obj.ObjectGUID
 }
-catch [Microsoft.ActiveDirectory.Management.ADIdentityNotFoundException] {
-    $user_obj = $null
-    $user_guid = $null
+
+
+# Build list of domain(s) controller(s) to query when looking
+# for user or groups
+$domains_controllers = @()
+
+if (-not $multi_domains) {
+    if ($null -ne $domain_server) {
+        $domains_controllers += @($domain_server)
+    }
+    else {
+        $domains_controllers += @(Get-ADDomainController `
+                -Discover `
+                -Service "PrimaryDC" |
+                Select-Object -ExpandProperty hostname)
+    }
+}
+else {
+    try {
+        foreach ($domain in $((Get-ADForest).domains)) {
+            try {
+                $domains_controllers += @(Get-ADDomainController `
+                        -Discover `
+                        -Domain $domain `
+                        -Service "PrimaryDC" |
+                        Select-Object -ExpandProperty hostname)
+            }
+            catch {
+                $module.Warn("Failed to get a domain controller for '$domain', but continuing on.: $($_.Exception.Message)")
+            }
+        }
+    }
+    catch {
+        $module.FailJson("Failed to enumerate forest domains: $($_.Exception.Message)")
+    }
+}
+
+# Look for user account on DC(s)
+ForEach ($dc in $domains_controllers) {
+    try {
+        $extra_args.Server = $dc
+        $user_obj = Get-UserAccount $identity $extra_args
+        $user_guid = $user_obj.ObjectGUID
+        break
+    }
+    catch [Microsoft.ActiveDirectory.Management.ADIdentityNotFoundException] {
+        # User account not found
+        $user_obj = $null
+        $user_guid = $null
+    }
+    catch {
+        # Other exceptions
+        # Only print warning if there are DC to query left, else fail
+        if ($($domains_controllers.indexOf($dc) + 1) -lt $domains_controllers.length) {
+            $module.Warn("Failed to look for user '$identity' in domain '$domain' (on DC $($extra_args.Server)) but continuing on..." `
+                    + "The exception was: $($_.Exception.Message)")
+        }
+        else {
+            $module.FailJson("Failed to look for user '$identity' in domain '$domain' (on DC $($extra_args.Server))." `
+                    + "No more domain controller left to query, aborting. The exception was: $($_.Exception.Message)")
+        }
+    }
 }
 
 If ($state -eq 'present') {
@@ -456,57 +525,95 @@ If ($state -eq 'present') {
 
     # Configure group assignment
     if ($null -ne $groups) {
+        $set_args = $extra_args.Clone()
+
         $group_list = $groups
 
+        # Groups, provided via module group parameter, may not be distinguished names...
+        # Then, we cannot query a global catalog. It is required to query a DC in each
+        # forest's domain
         $groups = @(
             Foreach ($group in $group_list) {
-                try {
-                    (Get-ADGroup -Identity $group @extra_args).DistinguishedName
-                }
-                catch {
-                    if ($groups_missing_behaviour -eq "fail") {
-                        $module.FailJson("Failed to locate group $($group): $($_.Exception.Message)", $_)
+                ForEach ($dc in $domains_controllers) {
+                    $set_args.Server = $dc
+
+                    try {
+                        Get-ADGroup -Identity $group @set_args | Select-Object *, @{Name = 'DC'; Expression = { "$dc" } }
+                        break
                     }
-                    elseif ($groups_missing_behaviour -eq "warn") {
-                        $module.Warn("Failed to locate group $($group) but continuing on: $($_.Exception.Message)")
+                    catch {
+                        # If there are DC to query left, and if the exception is not an ADIdentityNotFoundException, print a warning with the exception.
+                        # Else follow the $groups_missing_behaviour specified action
+                        if ($($domains_controllers.indexOf($dc) + 1) -lt $domains_controllers.length) {
+                            if ($_.CategoryInfo.Reason -ne "ADIdentityNotFoundException") {
+                                $module.Warn("Failed to look for group '$group' on DC $($set_args.Server)) but continuing on..." `
+                                        + "The exception was: $($_.Exception.Message)")
+                            }
+                        }
+                        else {
+                            if ($groups_missing_behaviour -eq "fail") {
+                                $module.FailJson("Failed to locate group $($group): $($_.Exception.Message)", $_)
+                            }
+                            elseif ($groups_missing_behaviour -eq "warn") {
+                                $module.Warn("Failed to locate group $($group) but continuing on: $($_.Exception.Message)")
+                            }
+                        }
                     }
                 }
             }
         )
 
-        $assigned_groups = Get-PrincipalGroup $user_guid $extra_args
+        $assigned_groups = Get-UserAccountGroupsList $user_obj
+
+        # Remove the 'Server' key from the $setArgs as we will explicitely
+        # set the DC in which we found the group for below queries
+        $set_args.Remove("Server")
 
         switch ($groups_action) {
             "add" {
                 Foreach ($group in $groups) {
-                    If (-not ($assigned_groups -Contains $group)) {
-                        Add-ADGroupMember -Identity $group -Members $user_guid -WhatIf:$check_mode @extra_args
-                        $user_obj = Get-ADUser -Identity $user_guid -Properties * @extra_args
+                    If (-not ($assigned_groups.DistinguishedName -Contains $group.DistinguishedName)) {
+                        Add-ADGroupMember `
+                            -Identity $group.ObjectGUID `
+                            -Members $user_obj `
+                            -Server $group.DC `
+                            -WhatIf:$check_mode @set_args
                         $module.Result.changed = $true
                     }
                 }
             }
             "remove" {
                 Foreach ($group in $groups) {
-                    If ($assigned_groups -Contains $group) {
-                        Remove-ADGroupMember -Identity $group -Members $user_guid -Confirm:$false -WhatIf:$check_mode @extra_args
-                        $user_obj = Get-ADUser -Identity $user_guid -Properties * @extra_args
+                    If ($assigned_groups.DistinguishedName -Contains $group.DistinguishedName) {
+                        Remove-ADGroupMember `
+                            -Identity $group.ObjectGUID `
+                            -Members $user_obj `
+                            -Confirm:$false `
+                            -Server $group.DC `
+                            -WhatIf:$check_mode @set_args
                         $module.Result.changed = $true
                     }
                 }
             }
             "replace" {
                 Foreach ($group in $assigned_groups) {
-                    If (($group -ne $user_obj.PrimaryGroup) -and -not ($groups -Contains $group)) {
-                        Remove-ADGroupMember -Identity $group -Members $user_guid -Confirm:$false -WhatIf:$check_mode @extra_args
-                        $user_obj = Get-ADUser -Identity $user_guid -Properties * @extra_args
+                    If (($group.DistinguishedName -ne $user_obj.PrimaryGroup) -and -not ($groups.DistinguishedName -Contains $group.DistinguishedName)) {
+                        Remove-ADGroupMember `
+                            -Identity $group.ObjectGUID `
+                            -Members $user_obj `
+                            -Confirm:$false `
+                            -Server $group.DC `
+                            -WhatIf:$check_mode @set_args
                         $module.Result.changed = $true
                     }
                 }
                 Foreach ($group in $groups) {
-                    If (-not ($assigned_groups -Contains $group)) {
-                        Add-ADGroupMember -Identity $group -Members $user_guid -WhatIf:$check_mode @extra_args
-                        $user_obj = Get-ADUser -Identity $user_guid -Properties * @extra_args
+                    If (-not ($assigned_groups.DistinguishedName -Contains $group.DistinguishedName)) {
+                        Add-ADGroupMember `
+                            -Identity $group.ObjectGUID `
+                            -Members $user_obj `
+                            -Server $group.DC `
+                            -WhatIf:$check_mode @set_args
                         $module.Result.changed = $true
                     }
                 }
@@ -551,7 +658,7 @@ If ($user_obj) {
     $module.Result.spn = [Array]$user_obj.ServicePrincipalNames
     $module.Result.upn = $user_obj.UserPrincipalName
     $module.Result.sam_account_name = $user_obj.SamAccountName
-    $module.Result.groups = Get-PrincipalGroup $user_guid $extra_args
+    $module.Result.groups = (Get-UserAccountGroupsList $user_obj).DistinguishedName
     $module.Result.msg = "User '$name' is present"
     $module.Result.state = "present"
 }

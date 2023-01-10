@@ -229,6 +229,15 @@ options:
     - If not specified then the value is based on the domain of the computer
       running PowerShell.
     type: str
+  multi_domains:
+    description:
+      - C(yes) look for user account in the whole Active Directory forest
+      - C(no) look for user account only in the domain which the server where
+        this module is executed belongs to, or in the domain specified by
+        parameter domain_server
+      - This parameter cannot be set to yes when domain_server is set
+    type: bool
+    default: no
 notes:
   - Works with Windows 2012R2 and newer.
   - If running on a server that is not a Domain Controller, credential
@@ -237,6 +246,10 @@ notes:
   - Note that some individuals have confirmed successful operation on Windows
     2008R2 servers with AD and AD Web Services enabled, but this has not
     received the same degree of testing as Windows 2012R2.
+  - Note that, in multi-domains environment, if you add/remove a user to/from
+    a universal group, the returned value 'groups' may not reflect changes. This
+    is due to Active Directory replication delays when working with objects
+    stored at the global catalog level.
 seealso:
 - module: ansible.windows.win_domain
 - module: ansible.windows.win_domain_controller
