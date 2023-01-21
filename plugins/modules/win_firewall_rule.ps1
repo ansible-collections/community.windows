@@ -305,13 +305,13 @@ try {
                                 }
 
                                 if (-not $check_mode) {
-                                    # Profiles value cannot be a uint32, but the "all profiles" value (0x7FFFFFFF) will often become a uint32, so must cast to [int]
-                                    # to prevent InvalidCastException under PS5+
+                                    # Profiles value cannot be a uint32, but the "all profiles" value (0x7FFFFFFF) will often become a uint32,
+                                    # so must cast to [int] to prevent InvalidCastException under PS5+
                                     If ($prop -eq 'Profiles') {
                                         $existingRule.Profiles = [int] $new_rule.$prop
                                     }
                                     # There is a fundamental problem with the COM binder in PowerShell and how it treats null values.
-                                    ElseIf($prop -eq 'ApplicationName') {
+                                    ElseIf ($prop -eq 'ApplicationName') {
                                         [Community.Windows.WinFirewallRule.NetFwRule]::PutApplicationName($existingRule, $new_rule.$prop)
                                     }
                                     Else {
