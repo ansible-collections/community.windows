@@ -13,7 +13,7 @@ $spec = @{
         state = @{ type = "str"; choices = "absent", "present"; default = "present" }
         ttl = @{ type = "int"; default = "3600" }
         aging = @{type = "bool"; default = $false}
-        type = @{ type = "str"; choices = "A", "AAAA", "CNAME", "NS", "PTR", "SRV", "TXT"; required = $true }
+        type = @{ type = "str"; choices = "A", "AAAA", "CNAME", "DHCID", "NS", "PTR", "SRV", "TXT"; required = $true }
         value = @{ type = "list"; elements = "str"; default = @() ; aliases = @( 'values' ) }
         weight = @{ type = "int" }
         zone = @{ type = "str"; required = $true }
@@ -22,6 +22,7 @@ $spec = @{
     required_if = @(, @("type", "SRV", @("port", "priority", "weight")))
     supports_check_mode = $true
 }
+
 $module = [Ansible.Basic.AnsibleModule]::Create($args, $spec)
 $name = $module.Params.name
 $port = $module.Params.port
@@ -35,9 +36,9 @@ $weight = $module.Params.weight
 $zone = $module.Params.zone
 $dns_computer_name = $module.Params.computer_name
 
-# If you add additional arguments, check that they are supported by all modules (Add-DnsServerResourceRecordCName and Add-DnsServerResourceRecord).
 $extra_args = @{}
 $extra_args_new_records = @{}
+
 if ($null -ne $dns_computer_name) {
     $extra_args.ComputerName = $dns_computer_name
 }
@@ -55,32 +56,51 @@ else {
         $module.FailJson("Parameter 'values' must be undefined or empty when state='absent'")
     }
 }
+
 # TODO: add warning for forest minTTL override -- see https://docs.microsoft.com/en-us/windows/desktop/ad/configuration-of-ttl-limits
 if ($ttl -lt 1 -or $ttl -gt 31557600) {
     $module.FailJson("Parameter 'ttl' must be between 1 and 31557600")
 }
+
 $ttl = New-TimeSpan -Seconds $ttl
+
 if (($type -eq 'CNAME' -or $type -eq 'NS' -or $type -eq 'PTR' -or $type -eq 'SRV') -and $null -ne $values -and $values.Count -gt 0 -and $zone[-1] -ne '.') {
     # CNAMEs and PTRs should be '.'-terminated, or record matching will fail
     $values = $values | ForEach-Object {
         if ($_ -Like "*.") { $_ } else { "$_." }
     }
 }
+
 $record_argument_name = @{
     A = "IPv4Address"
     AAAA = "IPv6Address"
     CNAME = "HostNameAlias"
+    DHCID = "DhcpIdentifier"
     # MX = "MailExchange"
     NS = "NameServer"
     PTR = "PtrDomainName"
     SRV = "DomainName"
     TXT = "DescriptiveText"
 }[$type]
+
+function Get-DnsServerResourceRecordDataPropertyName {
+    Switch -Exact ($type) {
+        'DHCID' {
+            'DhcId'
+        }
+        default {
+            $record_argument_name
+        }
+    }
+}
+
 $changes = @{
     before = ""
     after = ""
 }
+
 $records = Get-DnsServerResourceRecord -ZoneName $zone -Name $name -RRType $type -Node -ErrorAction:Ignore @extra_args | Sort-Object
+
 if ($null -ne $records) {
     # We use [Hashtable]$required_values below as a set rather than a map.
     # It provides quick lookup to test existing DNS record against. By removing
@@ -90,11 +110,12 @@ if ($null -ne $records) {
     foreach ($value in $values) {
         $required_values[$value.ToString()] = $null
     }
+
     foreach ($record in $records) {
         # check, if record is aging
         $record_aging_old = ($null -ne $record.Timestamp)
 
-        $record_value = $record.RecordData.$record_argument_name.ToString()
+        $record_value = $record.RecordData.$(Get-DnsServerResourceRecordDataPropertyName).ToString()
         if (-Not $required_values.ContainsKey($record_value) -or ($record_aging_old -eq $aging)) {
             $record | Remove-DnsServerResourceRecord -ZoneName $zone -Force -WhatIf:$module.CheckMode @extra_args
             $changes.before += "[$zone] $($record.HostName) $($record.TimeToLive.TotalSeconds) IN $type $record_value`n"
@@ -105,6 +126,7 @@ if ($null -ne $records) {
                 $record_port_old = $record.RecordData.Port.ToString()
                 $record_priority_old = $record.RecordData.Priority.ToString()
                 $record_weight_old = $record.RecordData.Weight.ToString()
+
                 if ($record.TimeToLive -ne $ttl -or $port -ne $record_port_old -or $priority -ne $record_priority_old -or $weight -ne $record_weight_old) {
                     $new_record = $record.Clone()
                     $new_record.TimeToLive = $ttl
@@ -118,17 +140,6 @@ if ($null -ne $records) {
                         "$type $record_value $record_port_old $record_weight_old $record_priority_old`n"
                     )
                     $changes.after += "[$zone] $($record.HostName) $($ttl.TotalSeconds) IN $type $record_value $port $weight $priority`n"
-                    $module.Result.changed = $true
-                }
-            }
-            elseif ($type -eq "TXT") {
-                $record_descriptivetext_old = $record.RecordData.DescriptiveText.ToString()
-                if ($value -ne $record_descriptivetext_old) {
-                    $new_record = $record.Clone()
-                    $new_record.RecordData.DescriptiveText = $value
-                    Set-DnsServerResourceRecord -ZoneName $zone -OldInputObject $record -NewInputObject $new_record -WhatIf:$module.CheckMode @extra_args
-                    $changes.before += "[$zone] $($record.HostName) $($record.TimeToLive.TotalSeconds) IN $type $record_value $record_descriptivetext_old`n"
-                    $changes.after += "[$zone] $($record.HostName) $($ttl.TotalSeconds) IN $type $record_value $value`n"
                     $module.Result.changed = $true
                 }
             }
@@ -150,6 +161,7 @@ if ($null -ne $records) {
         }
     }
 }
+
 if ($null -ne $values -and $values.Count -gt 0) {
     foreach ($value in $values) {
         $splat_args = @{ $type = $true; $record_argument_name = $value }
@@ -163,12 +175,6 @@ if ($null -ne $values -and $values.Count -gt 0) {
         try {
             if ($type -eq 'SRV') {
                 Add-DnsServerResourceRecord -SRV -Name $name -ZoneName $zone @srv_args @extra_args @extra_args_new_records -WhatIf:$module.CheckMode
-            }
-            elseif ($type -eq 'TXT') {
-                Add-DnsServerResourceRecord -TXT -Name $name -DescriptiveText $value -ZoneName $zone -TimeToLive $ttl @extra_args @extra_args_new_records -WhatIf:$module.CheckMode
-            }
-            elseif ($type -eq 'CNAME') {
-                Add-DnsServerResourceRecordCName -Name $name -HostNameAlias $value -ZoneName $zone -TimeToLive $ttl @extra_args @extra_args_new_records -WhatIf:$module.CheckMode
             }
             else {
                 Add-DnsServerResourceRecord -Name $name -AllowUpdateAny -ZoneName $zone -TimeToLive $ttl @splat_args -WhatIf:$module.CheckMode @extra_args @extra_args_new_records
@@ -191,10 +197,14 @@ else {
     # Real changes
     $records_end = Get-DnsServerResourceRecord -ZoneName $zone -Name $name -RRType $type -Node -ErrorAction:Ignore @extra_args | Sort-Object
     $module.Diff.before = @(
-        $records | ForEach-Object { "[$zone] $($_.HostName) $($_.TimeToLive.TotalSeconds) IN $type $($_.RecordData.$record_argument_name.ToString())`n" }
+        $records | ForEach-Object {
+            "[$zone] $($_.HostName) $($_.TimeToLive.TotalSeconds) IN $type $($_.RecordData.$(Get-DnsServerResourceRecordDataPropertyName).ToString())`n"
+        }
     ) -join ''
     $module.Diff.after = @(
-        $records_end | ForEach-Object { "[$zone] $($_.HostName) $($_.TimeToLive.TotalSeconds) IN $type $($_.RecordData.$record_argument_name.ToString())`n" }
+        $records_end | ForEach-Object {
+            "[$zone] $($_.HostName) $($_.TimeToLive.TotalSeconds) IN $type $($_.RecordData.$(Get-DnsServerResourceRecordDataPropertyName).ToString())`n"
+        }
     ) -join ''
 }
 

@@ -96,6 +96,7 @@ $spec = @{
         identity = @{ type = 'str' }
         firstname = @{ type = 'str' }
         surname = @{ type = 'str'; aliases = @('lastname') }
+        display_name = @{ type = 'str' }
         company = @{ type = 'str' }
         email = @{ type = 'str' }
         street = @{ type = 'str' }
@@ -170,6 +171,7 @@ if ($null -eq $identity) {
 $user_info = @{
     GivenName = $module.Params.firstname
     Surname = $module.Params.surname
+    DisplayName = $module.Params.display_name
     Company = $module.Params.company
     EmailAddress = $module.Params.email
     StreetAddress = $module.Params.street
@@ -529,6 +531,7 @@ If ($user_obj) {
     $module.Result.name = $user_obj.Name
     $module.Result.firstname = $user_obj.GivenName
     $module.Result.surname = $user_obj.Surname
+    $module.Result.display_name = $user_obj.DisplayName
     $module.Result.enabled = $user_obj.Enabled
     $module.Result.company = $user_obj.Company
     $module.Result.street = $user_obj.StreetAddress

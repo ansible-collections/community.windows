@@ -207,6 +207,25 @@ releases:
     - v1.11.1-release.yml
     - win_psmodule-bootstrapping.yml
     release_date: '2022-11-02'
+  1.12.0:
+    changes:
+      bugfixes:
+      - win_firewall_rule - fix problem in check mode with multiple ip addresses not
+        in same order
+      - win_partition - fix problem in auto assigning a drive letter should the user
+        use either a, u, t or o as a drive letter
+      minor_changes:
+      - win_dns_record - Added support for DHCID (RFC 4701) records
+      - win_domain_user - Added the ``display_name`` option to set the users display
+        name attribute
+      release_summary: Release summary for v1.12.0
+    fragments:
+    - 440-win_firewall_rule.yml
+    - 463-fix_win_partition_auto_assign.yaml
+    - release-summary.yml
+    - win_dns_record-dhcid-support.yaml
+    - win_domain_user-display_name.yml
+    release_date: '2022-12-20'
   1.2.0:
     changes:
       bugfixes:

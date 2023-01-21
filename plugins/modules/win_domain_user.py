@@ -136,6 +136,11 @@ options:
       - Configures the user's last name (surname).
     type: str
     aliases: [ lastname ]
+  display_name:
+    description:
+      - Configures the user's display name.
+    type: str
+    version_added: 1.12.0
   company:
     description:
       - Configures the user's company name.
@@ -251,6 +256,7 @@ EXAMPLES = r'''
     name: bob
     firstname: Bob
     surname: Smith
+    display_name: Mr. Bob Smith
     company: BobCo
     password: B0bP4ssw0rd
     state: present
@@ -359,6 +365,11 @@ description:
     returned: always
     type: str
     sample: Server Administrator
+display_name:
+    description: The user display name
+    returned: always
+    type: str
+    sample: Nick Doe
 distinguished_name:
     description: DN of the user account
     returned: always
