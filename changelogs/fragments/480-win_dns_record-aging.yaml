@@ -1,2 +1,2 @@
-- minor_changes:
-    - win_dns_record - Add parameter `aging` for creating non-static DNS records.
+minor_changes:
+  - win_dns_record - Add parameter `aging` for creating non-static DNS records.

@@ -12,7 +12,7 @@ $spec = @{
         priority = @{ type = "int" }
         state = @{ type = "str"; choices = "absent", "present"; default = "present" }
         ttl = @{ type = "int"; default = "3600" }
-        aging = @{type = "bool"; default = $false}
+        aging = @{ type = "bool"; default = $false }
         type = @{ type = "str"; choices = "A", "AAAA", "CNAME", "DHCID", "NS", "PTR", "SRV", "TXT"; required = $true }
         value = @{ type = "list"; elements = "str"; default = @() ; aliases = @( 'values' ) }
         weight = @{ type = "int" }
@@ -116,7 +116,7 @@ if ($null -ne $records) {
         $record_aging_old = ($null -ne $record.Timestamp)
 
         $record_value = $record.RecordData.$(Get-DnsServerResourceRecordDataPropertyName).ToString()
-        if (-Not $required_values.ContainsKey($record_value) -or ($record_aging_old -eq $aging)) {
+        if ((-Not $required_values.ContainsKey($record_value)) -Or (-Not $record_aging_old -eq $aging)) {
             $record | Remove-DnsServerResourceRecord -ZoneName $zone -Force -WhatIf:$module.CheckMode @extra_args
             $changes.before += "[$zone] $($record.HostName) $($record.TimeToLive.TotalSeconds) IN $type $record_value`n"
             $module.Result.changed = $true
@@ -177,7 +177,8 @@ if ($null -ne $values -and $values.Count -gt 0) {
                 Add-DnsServerResourceRecord -SRV -Name $name -ZoneName $zone @srv_args @extra_args @extra_args_new_records -WhatIf:$module.CheckMode
             }
             else {
-                Add-DnsServerResourceRecord -Name $name -AllowUpdateAny -ZoneName $zone -TimeToLive $ttl @splat_args -WhatIf:$module.CheckMode @extra_args @extra_args_new_records
+                Add-DnsServerResourceRecord -Name $name -AllowUpdateAny -ZoneName $zone -TimeToLive $ttl @splat_args -WhatIf:$module.CheckMode `
+                @extra_args @extra_args_new_records
             }
         }
         catch {
