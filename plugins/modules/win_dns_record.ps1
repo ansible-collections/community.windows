@@ -178,7 +178,7 @@ if ($null -ne $values -and $values.Count -gt 0) {
             }
             else {
                 Add-DnsServerResourceRecord -Name $name -AllowUpdateAny -ZoneName $zone -TimeToLive $ttl @splat_args -WhatIf:$module.CheckMode `
-                @extra_args @extra_args_new_records
+                    @extra_args @extra_args_new_records
             }
         }
         catch {
