@@ -1,0 +1,2 @@
+bugfixes:
+  - win_xml - Fixes the issue when no childnode is defined and will allow adding a new element to an empty element.

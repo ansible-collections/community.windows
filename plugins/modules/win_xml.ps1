@@ -191,7 +191,14 @@ if ($type -eq "element") {
             if ($node.get_NodeType() -eq "Document") {
                 $node = $node.get_DocumentElement()
             }
-            $elements = $node.get_ChildNodes()
+
+            if ($node.ChildNodes.Count -eq 0) {
+                $elements = @($node)
+            }
+            else {
+                $elements = $node.get_ChildNodes()
+            }
+
             [bool]$present = $false
             [bool]$changed = $false
             if ($elements.get_Count()) {
