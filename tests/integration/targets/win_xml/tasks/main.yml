@@ -100,6 +100,32 @@
     that:
     - not element_add_attribute_result_second is changed
 
+- name: try to add a new element in empty element
+  win_xml:
+    path: "{{ remote_tmp_dir }}\\config.xml"
+    xpath: '/config/setting'
+    fragment: "<property />"
+    type: element
+  register: element_add_empty_element
+
+- name: check element add in empty element result
+  assert:
+    that:
+    - element_add_empty_element is changed
+
+- name: try to add a new element in empty element again
+  win_xml:
+    path: "{{ remote_tmp_dir }}\\config.xml"
+    xpath: '/config/setting'
+    fragment: "<property />"
+    type: element
+  register: element_add_empty_element_second
+
+- name: check element add in empty element result
+  assert:
+    that:
+    - not element_add_empty_element_second is changed
+
 # This testing is for https://github.com/ansible/ansible/issues/48471
 # The issue was that an .xml with no encoding declaration, but a UTF8 BOM
 # with some UTF-8 characters was being written out with garbage characters.
