@@ -193,8 +193,7 @@ if ($type -eq "element") {
             }
 
             if ($node.ChildNodes.Count -eq 0) {
-                $elements = @()
-                $elements += $node
+                $elements = @($node)
             }
             else {
                 $elements = $node.get_ChildNodes()
