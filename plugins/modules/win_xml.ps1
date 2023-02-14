@@ -218,11 +218,11 @@ if ($type -eq "element") {
                         }
                     }
                 }
-                if (-Not $present -and ($state -eq "present")) {
-                    [void]$node.AppendChild($candidate)
-                    $result.msg = $result.msg + "xml added "
-                    $changed = $true
-                }
+            }
+            if (-Not $present -and ($state -eq "present")) {
+                [void]$node.AppendChild($candidate)
+                $result.msg = $result.msg + "xml added "
+                $changed = $true
             }
         }
     }
