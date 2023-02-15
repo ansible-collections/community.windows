@@ -50,7 +50,7 @@ Function Install-NugetProvider {
     $PackageProvider = Get-PackageProvider -ListAvailable | Where-Object { ($_.name -eq 'Nuget') -and ($_.version -ge "2.8.5.201") }
     if (-not($PackageProvider)) {
         try {
-            Install-PackageProvider -Name NuGet -MinimumVersion 2.8.5.201 -Force -WhatIf:$CheckMode | out-null
+            Install-PackageProvider -Name NuGet -MinimumVersion 2.8.5.201 -Force -WhatIf:$CheckMode | Out-Null
             $result.changed = $true
             $result.nuget_changed = $true
         }
@@ -76,58 +76,65 @@ Function Install-PrereqModule {
         PowerShellGet = '1.6.0'
     }
 
-    [Bool]$PrereqModulesInstalled = $true
+    $ExistingPrereqModule = Get-Module -Name @($PrereqModules.Keys) -ListAvailable |
+        Where-Object { $_.Version -ge $PreReqModules[$_.Name] } |
+        Select-Object -ExpandProperty Name -Unique
+    $toInstall = $PrereqModules.Keys |
+        Where-Object { $_ -notin $ExistingPrereqModule } |
+        Select-Object @{N = 'Name'; E = { $_ } }, @{N = 'Version'; E = { $PrereqModules[$_] } }
 
-    ForEach ( $Name in $PrereqModules.Keys ) {
+    if ($TestInstallationOnly) {
+        -not [bool]$toInstall
+    }
+    elseif ($toInstall) {
+        $result.changed = $true
+        if ($CheckMode) {
+            $result.output = "Skipped check mode run on win_psmodule as the pre-reqs need upgrading"
+            Exit-Json $result
+        }
 
-        $ExistingPrereqModule = Get-Module -ListAvailable | Where-Object { ($_.name -eq $Name) -and ($_.version -ge $PrereqModules[$Name]) }
+        # Need to run this in another process as importing PackageManagement at
+        # the older version is irreversible (you cannot load the same dll at
+        # different versions). Start-Job runs in a new process so it can safely
+        # use the older version to install our pre-reqs.
+        # https://github.com/ansible-collections/community.windows/issues/487
+        $job = Start-Job -ScriptBlock {
+            $ErrorActionPreference = 'Stop'
 
-        if ( -not $ExistingPrereqModule ) {
-            if ( $TestInstallationOnly ) {
-                $PrereqModulesInstalled = $false
-            }
-            else {
-                try {
-                    $install_params = @{
-                        Name = $Name
-                        MinimumVersion = $PrereqModules[$Name]
-                        Force = $true
-                        WhatIf = $CheckMode
-                    }
-                    $installCmd = Get-Command -Name Install-Module
-                    if ($installCmd.Parameters.ContainsKey('SkipPublisherCheck')) {
-                        $install_params.SkipPublisherCheck = $true
-                    }
-                    if ($installCmd.Parameters.ContainsKey('AllowClobber')) {
-                        $install_params.AllowClobber = $AllowClobber
-                    }
-                    if ($installCmd.Parameters.ContainsKey('AcceptLicense')) {
-                        $install_params.AcceptLicense = $AcceptLicense
-                    }
-                    if ($Repository) {
-                        $install_params.Repository = $Repository
-                    }
+            $Repository = $using:Repository
 
-                    Install-Module @install_params > $null
-
-                    if ( $Name -eq 'PowerShellGet' ) {
-                        # An order has to be reverted due to dependency
-                        Remove-Module -Name PowerShellGet, PackageManagement -Force
-                        Import-Module -Name PowerShellGet, PackageManagement -Force
-                    }
-
-                    $result.changed = $true
+            foreach ($info in $using:ToInstall) {
+                $install_params = @{
+                    Name = $info.Name
+                    MinimumVersion = $info.Version
+                    Force = $true
                 }
-                catch [ System.Exception ] {
-                    $ErrorMessage = "Problems adding a prerequisite module $Name $($_.Exception.Message)"
-                    Fail-Json $result $ErrorMessage
+                $installCmd = Get-Command -Name Install-Module
+                if ($installCmd.Parameters.ContainsKey('SkipPublisherCheck')) {
+                    $install_params.SkipPublisherCheck = $true
                 }
+                if ($installCmd.Parameters.ContainsKey('AllowClobber')) {
+                    $install_params.AllowClobber = $using:AllowClobber
+                }
+                if ($installCmd.Parameters.ContainsKey('AcceptLicense')) {
+                    $install_params.AcceptLicense = $using:AcceptLicense
+                }
+                if ($Repository) {
+                    $install_params.Repository = $Repository
+                }
+
+                Install-Module @install_params > $null
             }
         }
-    }
 
-    if ( $TestInstallationOnly ) {
-        $PrereqModulesInstalled
+        try {
+            $null = $job | Receive-Job -AutoRemoveJob -Wait -ErrorAction Stop
+        }
+        catch {
+            $ErrorMessage = "Problems adding a prerequisite module PackageManagement or PowerShellGet: $($_.Exception.Message)"
+            $result.exception = ($_ | Out-String) + "`r`n" + $_.ScriptStackTrace
+            Fail-Json $result $ErrorMessage
+        }
     }
 }
 
@@ -145,7 +152,7 @@ Function Get-PsModule {
         Version = ""
     }
 
-    $ExistingModules = Get-Module -Listavailable | Where-Object { ($_.name -eq $Name) }
+    $ExistingModules = Get-Module -ListAvailable | Where-Object { ($_.name -eq $Name) }
     $ExistingModulesCount = $($ExistingModules | Measure-Object).Count
 
     if ( $ExistingModulesCount -gt 0 ) {
@@ -250,7 +257,7 @@ Function Install-PsModule {
 
             $ht = Add-DefinedParameter -Hashtable $ht -ParametersNames $ParametersNames
 
-            Install-Module @ht -ErrorVariable ErrorDetails | out-null
+            Install-Module @ht -ErrorVariable ErrorDetails | Out-Null
 
             $result.changed = $true
             $result.output = "Module $($Name) installed"
@@ -275,7 +282,7 @@ Function Remove-PsModule {
         [Bool]$CheckMode
     )
     # If module is present, uninstalls it.
-    if (Get-Module -Listavailable | Where-Object { $_.name -eq $Name }) {
+    if (Get-Module -ListAvailable | Where-Object { $_.name -eq $Name }) {
         try {
             $ht = @{
                 Name = $Name
@@ -296,7 +303,7 @@ Function Remove-PsModule {
             if ( $ExistingModuleBefore.Exists) {
                 # The Force parameter overwrite the WhatIf parameter
                 if ( -not $CheckMode ) {
-                    Uninstall-Module @ht -ErrorVariable ErrorDetails | out-null
+                    Uninstall-Module @ht -ErrorVariable ErrorDetails | Out-Null
                 }
                 $result.changed = $true
                 $result.output = "Module $($Name) removed"
@@ -469,6 +476,8 @@ if ( ($allow_clobber -or $allow_prerelease -or $skip_publisher_check -or
         $required_version -or $minimum_version -or $maximum_version -or $accept_license) ) {
     # Update the PowerShellGet and PackageManagement modules.
     # It's required to support AllowClobber, AllowPrerelease parameters.
+    # This must occur before PackageManagement or PowerShellGet is imported in
+    # the current process.
     Install-PrereqModule -AllowClobber $allow_clobber -CheckMode $check_mode -AcceptLicense $accept_license -Repository $repo
 }
 
