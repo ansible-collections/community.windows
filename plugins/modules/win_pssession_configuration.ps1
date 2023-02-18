@@ -282,6 +282,9 @@ function Compare-ConfigFile {
         $existing_content = Import-PowerShellDataFile -LiteralPath $ConfigFilePath.FullName
         $desired_content = Import-PowerShellDataFile -LiteralPath $desired_config
 
+        $module.Diff.before.pscc = $existing_content
+        $module.Diff.after.pscc = $desired_content
+
         $regen = $false
         foreach ($ignorable_param in $UseExistingIfMissing) {
             # here we're checking for the parameters that shouldn't be compared if they are in the existing
@@ -355,19 +358,43 @@ function Compare-SessionOption {
             }
         } -Force -PassThru
 
+        # Determine diffs in diff mode
+        # AccessMode is not a property itself, it's a switch for the Register/Set command which changes some other config properties.
+        # Remove it from Diff because it cannot be determined...
+        $ignore_options_in_diff = @('AccessMode', 'RunAsCredential')
+
+        $smatch = $true
+        $after = @{}
+        $before = @{}
+
+        foreach ($opt in $session_configuration_options.GetEnumerator()) {
+            if ($opt.Name -in $ignore_options_in_diff) { continue }
+            $key = ConvertFrom-SnakeCase -SnakedString $optnamer.GetValueOrKey($opt.Name)
+            $before.Add($key, $ExistingOptions.($key))
+        }
+        $after = $before.Clone()
+
+        foreach ($opt in $DesiredOptions.GetEnumerator()) {
+            if ($opt.Name -in $ignore_options_in_diff) { continue }
+            $key = ConvertFrom-SnakeCase -SnakedString $optnamer.GetValueOrKey($opt.Name)
+            $after[$key] = $opt.Value
+
+            $smatch = $smatch -and (
+                $ExistingOptions.($optnamer.GetValueOrKey($opt.Name)) -ceq $opt.Value
+            )
+            if (-not $smatch -and -not $module.DiffMode) {
+                break
+            }
+        }
+
+        $module.Diff.before.session = $before
+        $module.Diff.after.session = $after
+
         if ($DesiredOptions.Contains('RunAsCredential')) {
             # since we can't retrieve/compare password, a change must always be made if a cred is specified
             return $false
         }
-        $smatch = $true
-        foreach ($opt in $DesiredOptions.GetEnumerator()) {
-            $smatch = $smatch -and (
-                $existing.($optnamer.GetValueOrKey($opt.Name)) -ceq $opt.Value
-            )
-            if (-not $smatch) {
-                break
-            }
-        }
+
         return $smatch
     }
 }
@@ -453,6 +480,9 @@ $opt_session = ConvertFrom-AnsibleOption -OptionSet $session_configuration_optio
 $existing = Get-PSSessionConfiguration -Name $opt_session.Name -ErrorAction SilentlyContinue
 
 try {
+    $module.Diff.before = @{ session = $null; pscc = $null; }
+    $module.Diff.after = @{ session = $null; pscc = $null; }
+
     if ($opt_pssc.Count) {
         # config file options were passed to the module, so generate a config file from those
         $desired_config = Write-GeneratedSessionConfiguration -ParameterSet $opt_pssc
