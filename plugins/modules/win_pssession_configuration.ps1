@@ -515,7 +515,7 @@ try {
     if (-not $module.CheckMode) {
         if ($remove) {
             # Wait-WinRMConnection
-            Unregister-PSSessionConfiguration -Name $opt_session.Name
+            $null = Unregister-PSSessionConfiguration -Name $opt_session.Name
         }
 
         if ($create) {
@@ -528,7 +528,7 @@ try {
         elseif ($session_change) {
             $psso = $opt_session
             # Wait-WinRMConnection
-            Set-PSSessionConfiguration @psso
+            $null = Set-PSSessionConfiguration @psso
         }
     }
 }
