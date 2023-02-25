@@ -1,5 +1,6 @@
 - name: 'TYPE=A - creation (check mode)'
-  win_dns_record: {zone: '{{ win_dns_record_zone }}', name: test1, value: 1.2.3.4, type: A}
+  win_dns_record:
+    { zone: '{{ win_dns_record_zone }}', name: test1, value: 1.2.3.4, type: A }
   register: cmd_result
   check_mode: yes
 
@@ -15,7 +16,8 @@
       - cmd_result_actual.stdout == 'absent\r\n'
 
 - name: 'TYPE=A - creation'
-  win_dns_record: {zone: '{{ win_dns_record_zone }}', name: test1, value: 1.2.3.4, type: A}
+  win_dns_record:
+    { zone: '{{ win_dns_record_zone }}', name: test1, value: 1.2.3.4, type: A }
   register: cmd_result
 
 - name: 'TYPE=A - creation get results'
@@ -30,7 +32,8 @@
       - cmd_result_actual.stdout == '1.2.3.4\r\n'
 
 - name: 'TYPE=A - creation (idempotent)'
-  win_dns_record: {zone: '{{ win_dns_record_zone }}', name: test1, value: 1.2.3.4, type: A}
+  win_dns_record:
+    { zone: '{{ win_dns_record_zone }}', name: test1, value: 1.2.3.4, type: A }
   register: cmd_result
 
 - name: 'TYPE=A - creation get results (idempotent)'
@@ -44,9 +47,9 @@
       - cmd_result is not changed
       - cmd_result_actual.stdout == '1.2.3.4\r\n'
 
-
 - name: 'TYPE=A - update address (check mode)'
-  win_dns_record: {zone: '{{ win_dns_record_zone }}', name: test1, value: 5.6.7.8, type: A}
+  win_dns_record:
+    { zone: '{{ win_dns_record_zone }}', name: test1, value: 5.6.7.8, type: A }
   register: cmd_result
   check_mode: yes
 
@@ -62,7 +65,8 @@
       - cmd_result_actual.stdout == '1.2.3.4\r\n'
 
 - name: 'TYPE=A - update address'
-  win_dns_record: {zone: '{{ win_dns_record_zone }}', name: test1, value: 5.6.7.8, type: A}
+  win_dns_record:
+    { zone: '{{ win_dns_record_zone }}', name: test1, value: 5.6.7.8, type: A }
   register: cmd_result
 
 - name: 'TYPE=A - update address get results'
@@ -77,7 +81,8 @@
       - cmd_result_actual.stdout == '5.6.7.8\r\n'
 
 - name: 'TYPE=A - update address (idempotent)'
-  win_dns_record: {zone: '{{ win_dns_record_zone }}', name: test1, value: 5.6.7.8, type: A}
+  win_dns_record:
+    { zone: '{{ win_dns_record_zone }}', name: test1, value: 5.6.7.8, type: A }
   register: cmd_result
 
 - name: 'TYPE=A - update address get results (idempotent)'
@@ -91,9 +96,15 @@
       - cmd_result is not changed
       - cmd_result_actual.stdout == '5.6.7.8\r\n'
 
-
 - name: 'TYPE=A - update TTL (check mode)'
-  win_dns_record: {zone: '{{ win_dns_record_zone }}', name: test1, value: 5.6.7.8, ttl: 7200, type: A}
+  win_dns_record:
+    {
+      zone: '{{ win_dns_record_zone }}',
+      name: test1,
+      value: 5.6.7.8,
+      ttl: 7200,
+      type: A,
+    }
   register: cmd_result
   check_mode: yes
 
@@ -109,7 +120,14 @@
       - cmd_result_actual.stdout == '3600\r\n'
 
 - name: 'TYPE=A - update TTL'
-  win_dns_record: {zone: '{{ win_dns_record_zone }}', name: test1, value: 5.6.7.8, ttl: 7200, type: A}
+  win_dns_record:
+    {
+      zone: '{{ win_dns_record_zone }}',
+      name: test1,
+      value: 5.6.7.8,
+      ttl: 7200,
+      type: A,
+    }
   register: cmd_result
 
 - name: 'TYPE=A - update TTL get results'
@@ -124,7 +142,14 @@
       - cmd_result_actual.stdout == '7200\r\n'
 
 - name: 'TYPE=A - update TTL (idempotent)'
-  win_dns_record: {zone: '{{ win_dns_record_zone }}', name: test1, value: 5.6.7.8, ttl: 7200, type: A}
+  win_dns_record:
+    {
+      zone: '{{ win_dns_record_zone }}',
+      name: test1,
+      value: 5.6.7.8,
+      ttl: 7200,
+      type: A,
+    }
   register: cmd_result
 
 - name: 'TYPE=A - update TTL get results (idempotent)'
@@ -138,9 +163,9 @@
       - cmd_result is not changed
       - cmd_result_actual.stdout == '7200\r\n'
 
-
 - name: 'TYPE=A - remove record (check mode)'
-  win_dns_record: {zone: '{{ win_dns_record_zone }}', name: test1, type: A, state: absent}
+  win_dns_record:
+    { zone: '{{ win_dns_record_zone }}', name: test1, type: A, state: absent }
   register: cmd_result
   check_mode: yes
 
@@ -156,7 +181,8 @@
       - cmd_result_actual.stdout == 'exists\r\n'
 
 - name: 'TYPE=A - remove record'
-  win_dns_record: {zone: '{{ win_dns_record_zone }}', name: test1, type: A, state: absent}
+  win_dns_record:
+    { zone: '{{ win_dns_record_zone }}', name: test1, type: A, state: absent }
   register: cmd_result
 
 - name: 'TYPE=A - remove record get results'
@@ -171,7 +197,8 @@
       - cmd_result_actual.stdout == 'absent\r\n'
 
 - name: 'TYPE=A - remove record (idempotent)'
-  win_dns_record: {zone: '{{ win_dns_record_zone }}', name: test1, type: A, state: absent}
+  win_dns_record:
+    { zone: '{{ win_dns_record_zone }}', name: test1, type: A, state: absent }
   register: cmd_result
 
 - name: 'TYPE=A - remove record get results (idempotent)'
@@ -184,3 +211,90 @@
     that:
       - cmd_result is not changed
       - cmd_result_actual.stdout == 'absent\r\n'
+
+# tests for aging
+# -----------------------------------------------------------------------------
+# create aging record
+- name: 'TYPE=A - add aging record'
+  win_dns_record:
+    zone: '{{ win_dns_record_zone }}'
+    name: testaging
+    value: 1.2.3.4
+    aging: true
+    type: A
+    state: present
+  register: cmd_result
+
+- name: 'Type=A - check if record is actually aging'
+  ansible.windows.win_command: >-
+    powershell.exe
+     "If ($null -eq (Get-DnsServerResourceRecord -ZoneName '{{ win_dns_record_zone }}' -Name 'testaging' -RRType A).Timestamp) {"aging"} else {"not aging"}"
+  register: cmd_result_actual
+
+- name: 'TYPE=A - check aging record results'
+  ansible.builtin.assert:
+    that:
+      - cmd_result is changed
+      - cmd_result_actual.stdout == 'aging\r\n'
+
+# check idempotency
+- name: 'TYPE=A - check aging record (idempotency)'
+  win_dns_record:
+    zone: '{{ win_dns_record_zone }}'
+    name: testaging
+    value: 1.2.3.4
+    aging: true
+    type: A
+    state: present
+  register: cmd_result
+
+- name: 'TYPE=A - check aging record'
+  ansible.builtin.assert:
+    that:
+      - cmd_result is not changed
+
+# change aging attribute
+- name: 'TYPE=A - aging record (change aging)'
+  win_dns_record:
+    zone: '{{ win_dns_record_zone }}'
+    name: testaging
+    aging: false
+    type: A
+    state: present
+  register: cmd_result
+
+- name: Type=A - check if record is not aging
+  ansible.windows.win_command: >-
+    powershell.exe
+     "If ($null -eq (Get-DnsServerResourceRecord -ZoneName '{{ win_dns_record_zone }}' -Name 'testaging' -RRType A).Timestamp) {"aging"} else {"not aging"}"
+  register: cmd_result_actual
+
+- name: 'TYPE=A - check not aging record results'
+  ansible.builtin.assert:
+    that:
+      - cmd_result is changed
+      - cmd_result_actual.stdout == 'not aging\r\n'
+
+# remove record again
+- name: 'TYPE=A - remove record'
+  win_dns_record:
+    zone: '{{ win_dns_record_zone }}'
+    name: testaging
+    type: A
+    state: absent
+  register: cmd_result
+
+- name: 'TYPE=A - remove record get results'
+  ansible.windows.win_command: >-
+    powershell.exe
+     "If (Get-DnsServerResourceRecord -ZoneName '{{ win_dns_record_zone }}' -Name 'testaging' -RRType A -Node -ErrorAction:Ignore)
+     { 'exists' } else { 'absent' }"
+  register: cmd_result_actual
+  changed_when: false
+
+- name: 'TYPE=A - remove record check results'
+  ansible.builtin.assert:
+    that:
+      - cmd_result is changed
+      - cmd_result_actual.stdout == 'absent\r\n'
+# -----------------------------------------------------------------------------
