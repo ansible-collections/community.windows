@@ -226,9 +226,7 @@
   register: cmd_result
 
 - name: 'Type=A - check if record is actually aging'
-  ansible.windows.win_command: >-
-    powershell.exe
-     "If ($null -eq (Get-DnsServerResourceRecord -ZoneName '{{ win_dns_record_zone }}' -Name 'testaging' -RRType A).Timestamp) {"aging"} else {"not aging"}"
+  ansible.windows.win_command: powershell.exe "If ($null -eq (Get-DnsServerResourceRecord -ZoneName '{{ win_dns_record_zone }}' -Name 'testaging' -RRType A).Timestamp) {"aging"} else {"not aging"}"
   register: cmd_result_actual
 
 - name: 'TYPE=A - check aging record results'
@@ -264,9 +262,7 @@
   register: cmd_result
 
 - name: Type=A - check if record is not aging
-  ansible.windows.win_command: >-
-    powershell.exe
-     "If ($null -eq (Get-DnsServerResourceRecord -ZoneName '{{ win_dns_record_zone }}' -Name 'testaging' -RRType A).Timestamp) {"aging"} else {"not aging"}"
+  ansible.windows.win_command: powershell.exe "If ($null -eq (Get-DnsServerResourceRecord -ZoneName '{{ win_dns_record_zone }}' -Name 'testaging' -RRType A).Timestamp) {"aging"} else {"not aging"}"
   register: cmd_result_actual
 
 - name: 'TYPE=A - check not aging record results'
@@ -285,10 +281,7 @@
   register: cmd_result
 
 - name: 'TYPE=A - remove record get results'
-  ansible.windows.win_command: >-
-    powershell.exe
-     "If (Get-DnsServerResourceRecord -ZoneName '{{ win_dns_record_zone }}' -Name 'testaging' -RRType A -Node -ErrorAction:Ignore)
-     { 'exists' } else { 'absent' }"
+  ansible.windows.win_command: powershell.exe "If (Get-DnsServerResourceRecord -ZoneName '{{ win_dns_record_zone }}' -Name 'testaging' -RRType A -Node -ErrorAction:Ignore) {'exists'} else {'absent'}"
   register: cmd_result_actual
   changed_when: false
 
