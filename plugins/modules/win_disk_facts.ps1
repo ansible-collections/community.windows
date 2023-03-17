@@ -211,7 +211,7 @@ foreach ($disk in $disks) {
     $disk_info.unique_id = $disk.UniqueId
     $disk_info.guid = $disk.Guid
     $disk_info.path = $disk.Path
-    if (("partitions" -in $module.Params.filter -or "volumes" -in $module.Params.filter) -and $disk.Number -ne $null) {
+    if (("partitions" -in $module.Params.filter -or "volumes" -in $module.Params.filter) -and ($disk.Number -ne $null)) {
         $parts = Get-Partition -DiskNumber $($disk.Number) -ErrorAction SilentlyContinue
         if ($parts) {
             $disk_info["partitions"] += @()
