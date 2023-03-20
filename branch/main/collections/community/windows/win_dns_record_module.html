@@ -169,6 +169,20 @@ see <a class="reference internal" href="#ansible-collections-community-windows-w
 </thead>
 <tbody>
 <tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-aging"></div><p class="ansible-option-title" id="ansible-collections-community-windows-win-dns-record-module-parameter-aging"><strong>aging</strong></p>
+<a class="ansibleOptionLink" href="#parameter-aging" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
+<p><span class="ansible-option-versionadded">added in community.windows 1.13.0</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Should aging be activated for the record.</p>
+<p>If set to <code class="docutils literal notranslate"><span class="pre">false</span></code>, the record will be static.</p>
+<p class="ansible-option-line"><span class="ansible-option-choices">Choices:</span></p>
+<ul class="simple">
+<li><p><code class="ansible-option-default-bold docutils literal notranslate"><span class="pre">false</span></code> <span class="ansible-option-choices-default-mark">← (default)</span></p></li>
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">true</span></code></p></li>
+</ul>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-computer_name"></div><p class="ansible-option-title" id="ansible-collections-community-windows-win-dns-record-module-parameter-computer-name"><strong>computer_name</strong></p>
 <a class="ansibleOptionLink" href="#parameter-computer_name" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
@@ -176,14 +190,14 @@ see <a class="reference internal" href="#ansible-collections-community-windows-w
 <p>You can specify an IP address or any value that resolves to an IP address, such as a fully qualified domain name (FQDN), host name, or NETBIOS name.</p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-name"></div><p class="ansible-option-title" id="ansible-collections-community-windows-win-dns-record-module-parameter-name"><strong>name</strong></p>
 <a class="ansibleOptionLink" href="#parameter-name" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span> / <span class="ansible-option-required">required</span></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>The name of the record.</p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-port"></div><p class="ansible-option-title" id="ansible-collections-community-windows-win-dns-record-module-parameter-port"><strong>port</strong></p>
 <a class="ansibleOptionLink" href="#parameter-port" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">integer</span></p>
 <p><span class="ansible-option-versionadded">added in community.windows 1.0.0</span></p>
@@ -193,7 +207,7 @@ see <a class="reference internal" href="#ansible-collections-community-windows-w
 <p>Supported only for <code class="docutils literal notranslate"><span class="pre">type=SRV</span></code>.</p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-priority"></div><p class="ansible-option-title" id="ansible-collections-community-windows-win-dns-record-module-parameter-priority"><strong>priority</strong></p>
 <a class="ansibleOptionLink" href="#parameter-priority" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">integer</span></p>
 <p><span class="ansible-option-versionadded">added in community.windows 1.0.0</span></p>
@@ -203,7 +217,7 @@ see <a class="reference internal" href="#ansible-collections-community-windows-w
 <p>Supported only for <code class="docutils literal notranslate"><span class="pre">type=SRV</span></code>.</p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-state"></div><p class="ansible-option-title" id="ansible-collections-community-windows-win-dns-record-module-parameter-state"><strong>state</strong></p>
 <a class="ansibleOptionLink" href="#parameter-state" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
@@ -215,7 +229,7 @@ see <a class="reference internal" href="#ansible-collections-community-windows-w
 </ul>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-ttl"></div><p class="ansible-option-title" id="ansible-collections-community-windows-win-dns-record-module-parameter-ttl"><strong>ttl</strong></p>
 <a class="ansibleOptionLink" href="#parameter-ttl" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">integer</span></p>
 </div></td>
@@ -226,7 +240,7 @@ see <a class="reference internal" href="#ansible-collections-community-windows-w
 <p class="ansible-option-line"><span class="ansible-option-default-bold">Default:</span> <code class="ansible-option-default docutils literal notranslate"><span class="pre">3600</span></code></p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-type"></div><p class="ansible-option-title" id="ansible-collections-community-windows-win-dns-record-module-parameter-type"><strong>type</strong></p>
 <a class="ansibleOptionLink" href="#parameter-type" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span> / <span class="ansible-option-required">required</span></p>
 </div></td>
@@ -248,7 +262,7 @@ see <a class="reference internal" href="#ansible-collections-community-windows-w
 </ul>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-value"></div>
 <div class="ansibleOptionAnchor" id="parameter-values"></div><p class="ansible-option-title" id="ansible-collections-community-windows-win-dns-record-module-parameter-values"><span id="ansible-collections-community-windows-win-dns-record-module-parameter-value"></span><strong>value</strong></p>
 <a class="ansibleOptionLink" href="#parameter-value" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-aliases">aliases: values</span></p>
@@ -260,7 +274,7 @@ see <a class="reference internal" href="#ansible-collections-community-windows-w
 <p class="ansible-option-line"><span class="ansible-option-default-bold">Default:</span> <code class="ansible-option-default docutils literal notranslate"><span class="pre">[]</span></code></p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-weight"></div><p class="ansible-option-title" id="ansible-collections-community-windows-win-dns-record-module-parameter-weight"><strong>weight</strong></p>
 <a class="ansibleOptionLink" href="#parameter-weight" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">integer</span></p>
 <p><span class="ansible-option-versionadded">added in community.windows 1.0.0</span></p>
@@ -270,7 +284,7 @@ see <a class="reference internal" href="#ansible-collections-community-windows-w
 <p>Supported only for <code class="docutils literal notranslate"><span class="pre">type=SRV</span></code>.</p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-zone"></div><p class="ansible-option-title" id="ansible-collections-community-windows-win-dns-record-module-parameter-zone"><strong>zone</strong></p>
 <a class="ansibleOptionLink" href="#parameter-zone" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span> / <span class="ansible-option-required">required</span></p>
 </div></td>
