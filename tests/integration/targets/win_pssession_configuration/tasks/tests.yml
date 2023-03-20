@@ -357,7 +357,7 @@
 #######
 
 - name: complex configuration for pwsh 5.1+
-  when: when: ansible_powershell_version > 4
+  when: ansible_powershell_version > 4
   block:
   - name: Create a complex configuration
     win_pssession_configuration:
