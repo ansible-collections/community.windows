@@ -325,8 +325,7 @@ from ansible.module_utils._text import to_bytes, to_text
 PYPSEXEC_IMP_ERR = None
 try:
     from pypsexec import client
-    from pypsexec.exceptions import PypsexecException, PAExecException, \
-        PDUException, SCMRException
+    from pypsexec.exceptions import PypsexecException, PDUException, SCMRException
     from pypsexec.paexec import ProcessPriority
     from smbprotocol.exceptions import SMBException, SMBAuthenticationError, \
         SMBResponseException
@@ -338,9 +337,9 @@ except ImportError:
 
 KERBEROS_IMP_ERR = None
 try:
-    import gssapi
+    import gssapi  # pylint: disable=unused-import
     # GSSAPI extension required for Kerberos Auth in SMB
-    from gssapi.raw import inquire_sec_context_by_oid
+    from gssapi.raw import inquire_sec_context_by_oid  # pylint: disable=unused-import
     HAS_KERBEROS = True
 except ImportError:
     KERBEROS_IMP_ERR = traceback.format_exc()
