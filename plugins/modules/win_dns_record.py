@@ -58,6 +58,7 @@ options:
     - If set to C(false), the record will be static.
     default: false
     type: bool
+    version_added: 1.13.0
   type:
     description:
     - The type of DNS record to manage.
