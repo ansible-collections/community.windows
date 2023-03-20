@@ -356,6 +356,63 @@
 
 #######
 
+- name: complex configuration for pwsh 5.1+
+  when: ansible_powershell_version > 4
+  block:
+  - name: Create a complex configuration
+    win_pssession_configuration:
+      name: "{{ config_name }}"
+      description: "{{ config_description }}"
+      modules_to_import: Microsoft.PowerShell.Utility
+      visible_aliases: []
+      visible_cmdlets: []
+      visible_external_commands: []
+      visible_functions: []
+      security_descriptor_sddl: "O:NSG:BAD:P(A;;GA;;;IU)(A;;GA;;;BA)(A;;GA;;;RM)S:P(AU;FA;GA;;;WD)(AU;SA;GXGW;;;WD)"
+    register: status
+
+  - name: Check for changed status
+    assert:
+      that: status is changed
+      quiet: yes
+
+  - name: Create a complex configuration again (check)
+    win_pssession_configuration:
+      name: "{{ config_name }}"
+      description: "{{ config_description }}"
+      modules_to_import: Microsoft.PowerShell.Utility
+      visible_aliases: []
+      visible_cmdlets: []
+      visible_external_commands: []
+      visible_functions: []
+      security_descriptor_sddl: "O:NSG:BAD:P(A;;GA;;;IU)(A;;GA;;;BA)(A;;GA;;;RM)S:P(AU;FA;GA;;;WD)(AU;SA;GXGW;;;WD)"
+    register: status
+    check_mode: yes
+
+  - name: Check for unchanged status
+    assert:
+      that: status is not changed
+      quiet: yes
+
+  - name: Create a complex configuration again
+    win_pssession_configuration:
+      name: "{{ config_name }}"
+      description: "{{ config_description }}"
+      modules_to_import: Microsoft.PowerShell.Utility
+      visible_aliases: []
+      visible_cmdlets: []
+      visible_external_commands: []
+      visible_functions: []
+      security_descriptor_sddl: "O:NSG:BAD:P(A;;GA;;;IU)(A;;GA;;;BA)(A;;GA;;;RM)S:P(AU;FA;GA;;;WD)(AU;SA;GXGW;;;WD)"
+    register: status
+
+  - name: Check for unchanged status
+    assert:
+      that: status is not changed
+      quiet: yes
+
+#######
+
 - name: Test session configuration removal (check)
   win_pssession_configuration:
     name: "{{ config_name }}"
