@@ -12,6 +12,7 @@ $spec = @{
         priority = @{ type = "int" }
         state = @{ type = "str"; choices = "absent", "present"; default = "present" }
         ttl = @{ type = "int"; default = "3600" }
+        aging = @{ type = "bool"; default = $false }
         type = @{ type = "str"; choices = "A", "AAAA", "CNAME", "DHCID", "NS", "PTR", "SRV", "TXT"; required = $true }
         value = @{ type = "list"; elements = "str"; default = @() ; aliases = @( 'values' ) }
         weight = @{ type = "int" }
@@ -28,15 +29,21 @@ $port = $module.Params.port
 $priority = $module.Params.priority
 $state = $module.Params.state
 $ttl = $module.Params.ttl
+$aging = $module.Params.aging
 $type = $module.Params.type
 $values = $module.Params.value
 $weight = $module.Params.weight
 $zone = $module.Params.zone
 $dns_computer_name = $module.Params.computer_name
+
 $extra_args = @{}
+$extra_args_new_records = @{}
 
 if ($null -ne $dns_computer_name) {
     $extra_args.ComputerName = $dns_computer_name
+}
+if ($aging -eq $true) {
+    $extra_args_new_records.AgeRecord = $true
 }
 
 if ($state -eq 'present') {
@@ -105,9 +112,11 @@ if ($null -ne $records) {
     }
 
     foreach ($record in $records) {
-        $record_value = $record.RecordData.$(Get-DnsServerResourceRecordDataPropertyName).ToString()
+        # check, if record is aging
+        $record_aging_old = ($null -ne $record.Timestamp)
 
-        if (-Not $required_values.ContainsKey($record_value)) {
+        $record_value = $record.RecordData.$(Get-DnsServerResourceRecordDataPropertyName).ToString()
+        if ((-Not $required_values.ContainsKey($record_value)) -Or (-Not $record_aging_old -eq $aging)) {
             $record | Remove-DnsServerResourceRecord -ZoneName $zone -Force -WhatIf:$module.CheckMode @extra_args
             $changes.before += "[$zone] $($record.HostName) $($record.TimeToLive.TotalSeconds) IN $type $record_value`n"
             $module.Result.changed = $true
@@ -165,10 +174,11 @@ if ($null -ne $values -and $values.Count -gt 0) {
         }
         try {
             if ($type -eq 'SRV') {
-                Add-DnsServerResourceRecord -SRV -Name $name -ZoneName $zone @srv_args @extra_args -WhatIf:$module.CheckMode
+                Add-DnsServerResourceRecord -SRV -Name $name -ZoneName $zone @srv_args @extra_args @extra_args_new_records -WhatIf:$module.CheckMode
             }
             else {
-                Add-DnsServerResourceRecord -Name $name -AllowUpdateAny -ZoneName $zone -TimeToLive $ttl @splat_args -WhatIf:$module.CheckMode @extra_args
+                Add-DnsServerResourceRecord -Name $name -AllowUpdateAny -ZoneName $zone -TimeToLive $ttl @splat_args -WhatIf:$module.CheckMode `
+                    @extra_args @extra_args_new_records
             }
         }
         catch {
