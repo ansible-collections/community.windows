@@ -86,6 +86,11 @@ options:
       - Specifies the description for reservation being created.
       - Only applicable to l(type=reservation).
     type: str
+  v6:
+    description:
+      - Specifies if IPv6 should be used.
+    type: bool
+    default: false
 '''
 
 EXAMPLES = r'''
