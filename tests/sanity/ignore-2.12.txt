@@ -11,5 +11,3 @@ tests/integration/targets/win_psmodule/files/module/template.psd1 pslint!skip
 tests/integration/targets/win_psmodule/files/module/template.psm1 pslint!skip
 tests/integration/targets/win_psmodule/files/setup_modules.ps1 pslint:PSCustomUseLiteralPath
 tests/integration/targets/win_regmerge/templates/win_line_ending.j2 line-endings
-tests/utils/shippable/check_matrix.py replace-urlopen
-tests/utils/shippable/timing.py shebang
