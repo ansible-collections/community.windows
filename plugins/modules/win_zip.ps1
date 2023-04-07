@@ -53,7 +53,7 @@ catch {
 Function Compress-Zip($src, $dest) {
     # Disable using backslash for Zip path. This works for .NET 4.6.1 or later
     [System.AppContext]::SetSwitch('Switch.System.IO.Compression.ZipFile.UseBackslash', $false)
-    
+
     If (-not $module.CheckMode) {
         If (Test-Path -LiteralPath $src -PathType Container) {
             [System.IO.Compression.ZipFile]::CreateFromDirectory($src, $dest, $compressionLevel, (-not $srcWildcard), $encoding)
