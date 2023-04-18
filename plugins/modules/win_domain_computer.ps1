@@ -55,7 +55,7 @@ try {
     Import-Module ActiveDirectory
 }
 catch {
-    $module.FailJson("The ActiveDirectory module failed to load properly: $($_.Exception.Message)", $_)
+    Fail-Json -obj $result -message "The ActiveDirectory module failed to load properly: $($_.Exception.Message)"
 }
 
 If ($state -eq "present") {
