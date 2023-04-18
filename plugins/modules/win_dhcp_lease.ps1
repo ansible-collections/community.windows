@@ -306,12 +306,22 @@ if ($state -eq "present") {
                 }
 
                 # Build a new lease object with remnants of the reservation
-                $lease_params = @{
-                    ClientId = $original_lease.ClientId
-                    IPAddress = $original_lease.IPAddress.IPAddressToString
-                    ScopeId = $original_lease.ScopeId.IPAddressToString
-                    HostName = $original_lease.HostName
-                    AddressState = 'Active'
+                if ($v6 -eq $true) {
+                    $lease_params = @{
+                        ClientDuid = $original_lease.ClientId
+                        IPAddress = $original_lease.IPAddress.IPAddressToString
+                        Prefix = $original_lease.ScopeId.IPAddressToString
+                        HostName = $original_lease.HostName
+                    }
+                }
+                else {
+                    $lease_params = @{
+                        ClientId = $original_lease.ClientId
+                        IPAddress = $original_lease.IPAddress.IPAddressToString
+                        ScopeId = $original_lease.ScopeId.IPAddressToString
+                        HostName = $original_lease.HostName
+                        AddressState = 'Active'
+                    }
                 }
 
                 # Create new lease
@@ -429,8 +439,7 @@ if ($state -eq "present") {
             $lease_params = @{
                 ClientDuid = $mac
                 IPAddress = $ip
-                ScopeId = $scope_id
-                AddressState = 'Active'
+                Prefix = $scope_id
                 Confirm = $false
             }
         }
