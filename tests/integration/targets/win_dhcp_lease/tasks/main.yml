@@ -17,7 +17,7 @@
 
   - name: Add the DHCP v6 scope
     ansible.windows.win_shell: |
-      Add-DhcpServerv6Scope -Name "TestNetworkv6" -Prefix {{ dhcpv6_prefix }}
+      Add-DhcpServerv6Scope -Name "TestNetworkv6" -Prefix {{ dhcp_prefix_v6 }}
 
   - name: Run tests without check mode
     include_tasks: tests.yml
