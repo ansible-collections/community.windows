@@ -258,7 +258,8 @@ Function Install-PsModule {
             # When module require License Acceptance, `-Force` is mandatory to skip interactive prompt
             if ((Find-Module @ht).AdditionalMetadata.requireLicenseAcceptance) {
                 $ht["Force"] = $true
-            } else {
+            }
+            else {
                 $ht["Force"] = $Force
             }
 
