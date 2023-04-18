@@ -50,3 +50,48 @@
   win_dhcp_lease:
     state: absent
     mac: "{{ dhcp_lease_mac }}"
+
+# IPv6
+- name: Remove DHCP Address by IP (IPv6)
+  win_dhcp_lease:
+    state: absent
+    ip: "{{ dhcp_lease_ipv6 }}"
+    v6: true
+  check_mode: true
+
+- name: Create Lease (IPv6)
+  win_dhcp_lease:
+    type: lease
+    ip: "{{ dhcp_lease_ipv6 }}"
+    scope_id: "{{ dhcp_prefix_v6 }}"
+    mac: "{{ dhcp_lease_mac }}"
+    v6: true
+    dns_hostname: "{{ dhcp_lease_hostname }}"
+    dns_regtype: noreg
+    description: This is a description!
+  check_mode: true
+
+- name: Create Reservation (IPv6)
+  win_dhcp_lease:
+    type: reservation
+    ip: "{{ dhcp_lease_ipv6 }}"
+    mac: "{{ dhcp_lease_mac }}"
+    scope_id: "{{ dhcp_prefix_v6 }}"
+    v6: true
+  check_mode: true
+
+- name: Create Reservation w/Description (IPv6)
+  win_dhcp_lease:
+    type: reservation
+    ip: "{{ dhcp_lease_ipv6 }}"
+    mac: "{{ dhcp_lease_mac }}"
+    scope_id: "{{ dhcp_prefix_v6 }}"
+    v6: true
+    description: This is a Description!
+  check_mode: true
+
+- name: Remove DHCP Reservation by MAC (IPv6)
+  win_dhcp_lease:
+    state: absent
+    mac: "{{ dhcp_lease_mac }}"
+    v6: true

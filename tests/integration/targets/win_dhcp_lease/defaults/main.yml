@@ -6,3 +6,5 @@ dhcp_scope_end: 172.16.98.254
 dhcp_scope_subnet_mask: 255.255.255.0
 dhcp_lease_mac: 0A-0B-0C-04-05-AA
 dhcp_lease_hostname: fancy-reservation
+dhcp_prefix_v6: "2001:4898:7020:1020::"
+dhcp_lease_ipv6: "2001:4898:7020:1020::1"
