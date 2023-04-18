@@ -5,6 +5,7 @@
 
 #AnsibleRequires -CSharpUtil Ansible.Basic
 #Requires -Module Ansible.ModuleUtils.AddType
+#Requires -Module ActiveDirectory
 
 $spec = @{
     options = @{
@@ -148,6 +149,14 @@ Function ConvertTo-OutputValue {
         # Syntax: (All Others) - The default serialization handling of other syntaxes are fine, don't do anything.
         $InputObject
     }
+}
+
+# attempt import of module
+try {
+    Import-Module ActiveDirectory
+}
+catch {
+    $module.FailJson("The ActiveDirectory module failed to load properly: $($_.Exception.Message)", $_)
 }
 
 <#

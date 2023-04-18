@@ -117,6 +117,7 @@ notes:
   - When using the ODJ BLOB to join a computer to the domain, it must be written out to a file.
   - The file must be UTF-16 encoded (in PowerShell this encoding is called C(Unicode)), and it must end in a null character. See examples.
   - The C(djoin.exe) part of the offline domain join process will not use I(domain_server), I(domain_username), or I(domain_password).
+  - This must be run on a host that has the ActiveDirectory powershell module installed.
 seealso:
 - module: ansible.windows.win_domain
 - module: ansible.windows.win_domain_controller

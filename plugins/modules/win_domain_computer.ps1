@@ -7,7 +7,7 @@
 #Requires -Module Ansible.ModuleUtils.Legacy
 #Requires -Module Ansible.ModuleUtils.ArgvParser
 #Requires -Module Ansible.ModuleUtils.CommandUtil
-
+#Requires -Module ActiveDirectory
 
 # ------------------------------------------------------------------------------
 $ErrorActionPreference = "Stop"
@@ -48,6 +48,14 @@ if ($null -ne $domain_username) {
 }
 if ($null -ne $domain_server) {
     $extra_args.Server = $domain_server
+}
+
+# attempt import of module
+try {
+    Import-Module ActiveDirectory
+}
+catch {
+    $module.FailJson("The ActiveDirectory module failed to load properly: $($_.Exception.Message)", $_)
 }
 
 If ($state -eq "present") {
