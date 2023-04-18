@@ -1,0 +1,2 @@
+bugfixes:
+- win_zip - fix source appears to use backslashes as path separators issue when extracting Zip archve in non-Windows environment - https://github.com/ansible-collections/community.windows/issues/442
