@@ -252,7 +252,7 @@ if ($state -eq "present") {
                 }
                 if (-not $check_mode) {
                     if ($v6 -eq $true) {
-                        $current_reservation = Get-DhcpServerv6Lease -ClientId $params.ClientId -ScopeId $current_lease.ScopeId
+                        $current_reservation = Get-DhcpServerv6Lease -ClientId $params.ClientId -Prefix $current_lease.ScopeId
                     }
                     else {
                         $current_reservation = Get-DhcpServerv4Lease -ClientId $params.ClientId -ScopeId $current_lease.ScopeId
@@ -269,7 +269,7 @@ if ($state -eq "present") {
 
                 if (-not $check_mode) {
                     if ($v6 -eq $true) {
-                        $updated_reservation = Get-DhcpServerv6Lease -ClientId $params.ClientId -ScopeId $current_reservation.ScopeId
+                        $updated_reservation = Get-DhcpServerv6Lease -ClientId $params.ClientId -Prefix $current_reservation.ScopeId
                     }
                     else {
                         $updated_reservation = Get-DhcpServerv4Lease -ClientId $params.ClientId -ScopeId $current_reservation.ScopeId
@@ -331,7 +331,7 @@ if ($state -eq "present") {
                 if (-not $check_mode) {
                     Try {
                         if ($v6 -eq $true) {
-                            $new_lease = Get-DhcpServerv6Lease -ClientId $lease_params.ClientId -ScopeId $lease_params.ScopeId
+                            $new_lease = Get-DhcpServerv6Lease -ClientId $lease_params.ClientId -Prefix $lease_params.ScopeId
                         }
                         else {
                             $new_lease = Get-DhcpServerv4Lease -ClientId $lease_params.ClientId -ScopeId $lease_params.ScopeId
@@ -397,7 +397,7 @@ if ($state -eq "present") {
 
             if (-not $check_mode) {
                 if ($v6 -eq $true) {
-                    $reservation = Get-DhcpServerv6Lease -ClientId $current_lease.ClientId -ScopeId $current_lease.ScopeId
+                    $reservation = Get-DhcpServerv6Lease -ClientId $current_lease.ClientId -Prefix $current_lease.ScopeId
                     $module.Result.changed = Compare-DhcpLease -Original $original_lease -Updated $reservation
                     $module.Result.lease = Convert-ReturnValue -Object $reservation
                 }
@@ -462,7 +462,7 @@ if ($state -eq "present") {
             # Retreive the lease
             if (-not $check_mode) {
                 if ($v6 -eq $true) {
-                    $new_lease = Get-DhcpServerv6Lease -ClientId $mac -ScopeId $scope_id
+                    $new_lease = Get-DhcpServerv6Lease -ClientId $mac -Prefix $scope_id
                     $module.Result.lease = Convert-ReturnValue -Object $new_lease
                 }
                 else {
@@ -497,7 +497,7 @@ if ($state -eq "present") {
                     if ($check_mode) {
                         # In check mode, a lease won't exist for conversion, make one manually
                         if ($v6 -eq $true) {
-                            Add-DhcpServerv6Reservation -ScopeId $scope_id -ClientId $mac -IPAddress $ip -WhatIf:$check_mode
+                            Add-DhcpServerv6Reservation -Prefix $scope_id -ClientId $mac -IPAddress $ip -WhatIf:$check_mode
                         }
                         else {
                             Add-DhcpServerv4Reservation -ScopeId $scope_id -ClientId $mac -IPAddress $ip -WhatIf:$check_mode
@@ -521,7 +521,7 @@ if ($state -eq "present") {
                 if (-not $check_mode) {
                     # Get DHCP reservation object
                     if ($v6 -eq $true) {
-                        $new_lease = Get-DhcpServerv6Reservation -ClientId $mac -ScopeId $scope_id
+                        $new_lease = Get-DhcpServerv6Reservation -ClientId $mac -Prefix $scope_id
                         $module.Result.lease = Convert-ReturnValue -Object $new_lease
                     }
                     else {
