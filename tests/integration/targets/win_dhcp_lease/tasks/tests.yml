@@ -130,7 +130,6 @@
     mac: "{{ dhcp_lease_mac }}"
     dns_hostname: "{{ dhcp_lease_hostname }}"
     v6: true
-    dns_regtype: noreg
     description: This is a description!
 
 - name: Create New DHCP Lease (Idempotentcy Check) - Changed should equal false (IPv6)
@@ -141,10 +140,9 @@
     mac: "{{ dhcp_lease_mac }}"
     v6: true
     dns_hostname: "{{ dhcp_lease_hostname }}"
-    dns_regtype: noreg
     description: This is a description!
-  register: create_lease
-  failed_when: create_lease.changed != false
+  register: create_lease_v6
+  failed_when: create_lease_v6.changed != false
 
 - name: Validate the Lease (IPv6)
   ansible.windows.win_shell: |

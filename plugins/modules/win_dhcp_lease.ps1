@@ -440,9 +440,14 @@ if ($state -eq "present") {
         if ($dns_hostname) {
             $lease_params.HostName = $dns_hostname
         }
-
-        if ($dns_regtype) {
-            $lease_params.DnsRR = $dns_regtype
+        
+        # DNS registration is not possible with IPv6
+        # see: https://learn.microsoft.com/en-us/powershell/module/dhcpserver/add-dhcpserverv6lease?view=windowsserver2022-ps
+        # and compare with: https://learn.microsoft.com/en-us/powershell/module/dhcpserver/add-dhcpserverv4lease?view=windowsserver2022-ps#-dnsregistration
+        if ($v6 -eq $false) {
+            if ($dns_regtype) {
+                $lease_params.DnsRR = $dns_regtype
+            }
         }
 
         if ($description) {

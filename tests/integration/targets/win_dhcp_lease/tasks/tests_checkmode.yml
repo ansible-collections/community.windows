@@ -67,7 +67,6 @@
     mac: "{{ dhcp_lease_mac }}"
     v6: true
     dns_hostname: "{{ dhcp_lease_hostname }}"
-    dns_regtype: noreg
     description: This is a description!
   check_mode: true
 
