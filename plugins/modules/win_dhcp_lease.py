@@ -91,6 +91,7 @@ options:
       - Specifies if IPv6 should be used.
     type: bool
     default: false
+    version_added: 1.13.0
 '''
 
 EXAMPLES = r'''
