@@ -116,7 +116,7 @@
     - zip is changed
     - zip_actual.output | length == 1
     # Should contain the original base directory
-    - zip_actual.output[0]['FullName'] == "src\\" + win_zip_name + '.txt'
+    - zip_actual.output[0]['FullName'] == "src/" + win_zip_name + '.txt'
     - zip_actual.output[0]['Length'] == 21
 
 - name: compress a directories contents
