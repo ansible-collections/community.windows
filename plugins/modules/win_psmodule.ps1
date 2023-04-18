@@ -249,14 +249,25 @@ Function Install-PsModule {
 
             $ht = @{
                 Name = $Name
-                WhatIf = $CheckMode
-                Force = $Force
-                AcceptLicense = $AcceptLicense
             }
 
             [String[]]$ParametersNames = @("RequiredVersion", "MinimumVersion", "MaximumVersion", "AllowPrerelease",
-                "AllowClobber", "SkipPublisherCheck", "Repository", "Credential")
+                "Repository", "Credential")
+            $ht = Add-DefinedParameter -Hashtable $ht -ParametersNames $ParametersNames
 
+            # When module require License Acceptance, `-Force` is mandatory to skip interactive prompt
+            if ((Find-Module @ht).AdditionalMetadata.requireLicenseAcceptance) {
+                $ht["Force"] = $true
+            } else {
+                $ht["Force"] = $Force
+            }
+
+            $ht = $ht + @{
+                WhatIf = $CheckMode
+                AcceptLicense = $AcceptLicense
+            }
+
+            [String[]]$ParametersNames = @("AllowClobber", "SkipPublisherCheck")
             $ht = Add-DefinedParameter -Hashtable $ht -ParametersNames $ParametersNames
 
             Install-Module @ht -ErrorVariable ErrorDetails | Out-Null
