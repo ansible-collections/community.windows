@@ -209,7 +209,9 @@ try {
     # We run this in a custom PowerShell pipeline so that users of this module can't use any of the variables defined
     # above in their filter. While the cmdlet won't execute sub expressions we don't want anyone implicitly relying on
     # a defined variable in this module in case we ever change the name or remove it.
-    $ps = [PowerShell]::Create()
+    $iss = [InitialSessionState]::CreateDefault()
+    $iss.ImportPSModule("ActiveDirectory")
+    $ps = [PowerShell]::Create($iss)
     $null = $ps.AddCommand('Get-ADObject').AddParameters($commonParams).AddParameters($getParams)
     $null = $ps.AddCommand('Select-Object').AddParameter('Property', @('DistinguishedName', 'ObjectGUID'))
 
