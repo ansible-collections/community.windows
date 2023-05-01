@@ -1,4 +1,0 @@
-bugfixes:
-- 'win_pssession_configuration - Fix parser error (Invalid JSON primitive: icrosoft.WSMan.Management.WSManConfigContainerElement)'
-minor_changes:
-- win_pssession_configuration - Add diff mode support
