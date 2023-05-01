@@ -24,6 +24,7 @@ $allow_clobber = Get-AnsibleParam -obj $params -name "allow_clobber" -type "bool
 $skip_publisher_check = Get-AnsibleParam -obj $params -name "skip_publisher_check" -type "bool" -default $false
 $allow_prerelease = Get-AnsibleParam -obj $params -name "allow_prerelease" -type "bool" -default $false
 $accept_license = Get-AnsibleParam -obj $params -name "accept_license" -type "bool" -default $false
+$force = Get-AnsibleParam -obj $params -name "force" -type "bool" -default $false
 
 $result = @{changed = $false
     output = ""
@@ -229,7 +230,8 @@ Function Install-PsModule {
         [Bool]$SkipPublisherCheck,
         [Bool]$AllowPrerelease,
         [Bool]$CheckMode,
-        [Bool]$AcceptLicense
+        [Bool]$AcceptLicense,
+        [Bool]$Force
     )
 
     $getParams = @{
@@ -247,14 +249,26 @@ Function Install-PsModule {
 
             $ht = @{
                 Name = $Name
-                WhatIf = $CheckMode
-                Force = $true
-                AcceptLicense = $AcceptLicense
             }
 
             [String[]]$ParametersNames = @("RequiredVersion", "MinimumVersion", "MaximumVersion", "AllowPrerelease",
-                "AllowClobber", "SkipPublisherCheck", "Repository", "Credential")
+                "Repository", "Credential")
+            $ht = Add-DefinedParameter -Hashtable $ht -ParametersNames $ParametersNames
 
+            # When module require License Acceptance, `-Force` is mandatory to skip interactive prompt
+            if ((Find-Module @ht).AdditionalMetadata.requireLicenseAcceptance) {
+                $ht["Force"] = $true
+            }
+            else {
+                $ht["Force"] = $Force
+            }
+
+            $ht = $ht + @{
+                WhatIf = $CheckMode
+                AcceptLicense = $AcceptLicense
+            }
+
+            [String[]]$ParametersNames = @("AllowClobber", "SkipPublisherCheck")
             $ht = Add-DefinedParameter -Hashtable $ht -ParametersNames $ParametersNames
 
             Install-Module @ht -ErrorVariable ErrorDetails | Out-Null
@@ -504,6 +518,7 @@ if ($state -eq "present") {
             CheckMode = $check_mode
             Credential = $repo_credential
             AcceptLicense = $accept_license
+            Force = $force
         }
         Install-PsModule @ht
     }
@@ -538,7 +553,7 @@ elseif ( $state -eq "latest") {
 
     $ExistingModule = Get-PsModule $Name
 
-    if ( $LatestVersion.Version -ne $ExistingModule.Version ) {
+    if ( ($LatestVersion.Version -ne $ExistingModule.Version) -or $force ) {
 
         $ht = @{
             Name = $Name
@@ -550,6 +565,7 @@ elseif ( $state -eq "latest") {
             CheckMode = $check_mode
             Credential = $repo_credential
             AcceptLicense = $accept_license
+            Force = $force
         }
         Install-PsModule @ht
     }

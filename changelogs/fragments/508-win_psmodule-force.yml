@@ -1,0 +1,2 @@
+minor_changes:
+  - win_psmodule - add ``force`` option to allow overwriting/updating existing module dependency only if requested
