@@ -1,2 +1,0 @@
-bugfixes:
-- win_disk_facts - Fix issue when enumerating non-physical disks or disks without numbers - https://github.com/ansible-collections/community.windows/issues/474

@@ -226,6 +226,41 @@ releases:
     - win_dns_record-dhcid-support.yaml
     - win_domain_user-display_name.yml
     release_date: '2022-12-20'
+  1.13.0:
+    changes:
+      bugfixes:
+      - win_disk_facts - Fix issue when enumerating non-physical disks or disks without
+        numbers - https://github.com/ansible-collections/community.windows/issues/474
+      - win_firewall_rule - fix program cannot be set to any on existing rules.
+      - win_psmodule - Fix missing AcceptLicense parameter that occurs when the pre-reqs
+        have been installed - https://github.com/ansible-collections/community.windows/issues/487
+      - 'win_pssession_configuration - Fix parser error (Invalid JSON primitive: icrosoft.WSMan.Management.WSManConfigContainerElement)'
+      - win_xml - Fixes the issue when no childnode is defined and will allow adding
+        a new element to an empty element.
+      - win_zip - fix source appears to use backslashes as path separators issue when
+        extracting Zip archve in non-Windows environment - https://github.com/ansible-collections/community.windows/issues/442
+      minor_changes:
+      - Raise minimum Ansible version to ``2.12`` or newer
+      - win_dns_record - Add parameter ``aging`` for creating non-static DNS records.
+      - win_domain_computer - Add ActiveDirectory module import
+      - win_domain_object_info - Add ActiveDirectory module import
+      - win_psmodule - add ``force`` option to allow overwriting/updating existing
+        module dependency only if requested
+      - win_pssession_configuration - Add diff mode support
+      release_summary: Release summary for v1.13.0
+    fragments:
+    - 442-win_zip-backslash.yml
+    - 472-win_firewall_rule.yml
+    - 480-win_dns_record-aging.yaml
+    - 482-win_xml-no-childnode.yml
+    - 491-win_pssession_configuration.yml
+    - 508-win_psmodule-force.yml
+    - 509-import-activedirectory-module.yml
+    - ansible-min.yml
+    - release-1.13.0.yml
+    - win_disk_facts-non-physical-disk.yml
+    - win_psmodule-prereqs.yml
+    release_date: '2023-05-02'
   1.2.0:
     changes:
       bugfixes:

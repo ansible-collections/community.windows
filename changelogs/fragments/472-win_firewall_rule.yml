@@ -1,2 +1,0 @@
-bugfixes:
-- win_firewall_rule - fix program cannot be set to any on existing rules.

@@ -5,6 +5,34 @@ Community Windows Release Notes
 .. contents:: Topics
 
 
+v1.13.0
+=======
+
+Release Summary
+---------------
+
+Release summary for v1.13.0
+
+Minor Changes
+-------------
+
+- Raise minimum Ansible version to ``2.12`` or newer
+- win_dns_record - Add parameter ``aging`` for creating non-static DNS records.
+- win_domain_computer - Add ActiveDirectory module import
+- win_domain_object_info - Add ActiveDirectory module import
+- win_psmodule - add ``force`` option to allow overwriting/updating existing module dependency only if requested
+- win_pssession_configuration - Add diff mode support
+
+Bugfixes
+--------
+
+- win_disk_facts - Fix issue when enumerating non-physical disks or disks without numbers - https://github.com/ansible-collections/community.windows/issues/474
+- win_firewall_rule - fix program cannot be set to any on existing rules.
+- win_psmodule - Fix missing AcceptLicense parameter that occurs when the pre-reqs have been installed - https://github.com/ansible-collections/community.windows/issues/487
+- win_pssession_configuration - Fix parser error (Invalid JSON primitive: icrosoft.WSMan.Management.WSManConfigContainerElement)
+- win_xml - Fixes the issue when no childnode is defined and will allow adding a new element to an empty element.
+- win_zip - fix source appears to use backslashes as path separators issue when extracting Zip archve in non-Windows environment - https://github.com/ansible-collections/community.windows/issues/442
+
 v1.12.0
 =======
 

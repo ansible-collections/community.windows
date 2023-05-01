@@ -1,3 +1,0 @@
-minor_changes:
-- win_domain_computer - Add ActiveDirectory module import
-- win_domain_object_info - Add ActiveDirectory module import
