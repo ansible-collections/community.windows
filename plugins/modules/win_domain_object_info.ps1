@@ -5,6 +5,7 @@
 
 #AnsibleRequires -CSharpUtil Ansible.Basic
 #Requires -Module Ansible.ModuleUtils.AddType
+#Requires -Module ActiveDirectory
 
 $spec = @{
     options = @{
@@ -150,6 +151,14 @@ Function ConvertTo-OutputValue {
     }
 }
 
+# attempt import of module
+try {
+    Import-Module ActiveDirectory
+}
+catch {
+    $module.FailJson("The ActiveDirectory module failed to load properly: $($_.Exception.Message)", $_)
+}
+
 <#
 Calling Get-ADObject that returns multiple objects with -Properties * will only return the properties that were set on
 the first found object. To counter this problem we will first call Get-ADObject to list all the objects that match the
@@ -200,7 +209,9 @@ try {
     # We run this in a custom PowerShell pipeline so that users of this module can't use any of the variables defined
     # above in their filter. While the cmdlet won't execute sub expressions we don't want anyone implicitly relying on
     # a defined variable in this module in case we ever change the name or remove it.
-    $ps = [PowerShell]::Create()
+    $iss = [InitialSessionState]::CreateDefault()
+    $iss.ImportPSModule("ActiveDirectory")
+    $ps = [PowerShell]::Create($iss)
     $null = $ps.AddCommand('Get-ADObject').AddParameters($commonParams).AddParameters($getParams)
     $null = $ps.AddCommand('Select-Object').AddParameter('Property', @('DistinguishedName', 'ObjectGUID'))
 
