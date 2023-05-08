@@ -91,6 +91,12 @@ options:
     - The zone must already exist.
     required: yes
     type: str
+  zone_scope:
+    description:
+    - The name of the zone scope to manage (eg C(ScopeAZ)).
+    - The zone must already exist.
+    required: no
+    type: str
   computer_name:
     description:
       - Specifies a DNS server.
@@ -193,6 +199,16 @@ EXAMPLES = r'''
     type: "TXT"
     value: "justavalue"
     zone: "example.com"
+
+# Demostrate creating a A record to Zone Scope
+
+- name: Create database server record
+  community.windows.win_dns_record:
+    name: "cgyl1404p.amer.example.com"
+    type: "A"
+    value: "10.1.1.1"
+    zone: "amer.example.com"
+    zone_scope: "external"
 '''
 
 RETURN = r'''
