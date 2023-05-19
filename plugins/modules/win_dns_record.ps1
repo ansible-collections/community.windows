@@ -124,7 +124,7 @@ if ($null -ne $records) {
         if ((-Not $required_values.ContainsKey($record_value)) -Or (-Not $record_aging_old -eq $aging)) {
             $record | Remove-DnsServerResourceRecord -ZoneName $zone -Force -WhatIf:$module.CheckMode @extra_args
             $changes.before += "[$zone{0}] $($record.HostName) $($record.TimeToLive.TotalSeconds) IN $type $record_value`n" `
-                -f ("","/$zone_scope")[$null -ne $zone_scope]
+                -f ("", "/$zone_scope")[$null -ne $zone_scope]
             $module.Result.changed = $true
         }
         else {
@@ -143,11 +143,11 @@ if ($null -ne $records) {
 
                     $changes.before += -join @(
                         "[$zone{0}] $($record.HostName) $($record.TimeToLive.TotalSeconds) IN " `
-                            -f ("","/$zone_scope")[$null -ne $zone_scope]
+                            -f ("", "/$zone_scope")[$null -ne $zone_scope]
                         "$type $record_value $record_port_old $record_weight_old $record_priority_old`n"
                     )
                     $changes.after += "[$zone{0}] $($record.HostName) $($ttl.TotalSeconds) IN $type $record_value $port $weight $priority`n" `
-                        -f ("","/$zone_scope")[$null -ne $zone_scope]
+                        -f ("", "/$zone_scope")[$null -ne $zone_scope]
                     $module.Result.changed = $true
                 }
             }
@@ -158,9 +158,9 @@ if ($null -ne $records) {
                     $new_record.TimeToLive = $ttl
                     Set-DnsServerResourceRecord -ZoneName $zone -OldInputObject $record -NewInputObject $new_record -WhatIf:$module.CheckMode @extra_args
                     $changes.before += "[$zone{0}] $($record.HostName) $($record.TimeToLive.TotalSeconds) IN $type $record_value`n" `
-                        -f ("","/$zone_scope")[$null -ne $zone_scope]
+                        -f ("", "/$zone_scope")[$null -ne $zone_scope]
                     $changes.after += "[$zone{0}] $($record.HostName) $($ttl.TotalSeconds) IN $type $record_value`n" `
-                        -f ("","/$zone_scope")[$null -ne $zone_scope]
+                        -f ("", "/$zone_scope")[$null -ne $zone_scope]
                     $module.Result.changed = $true
                 }
             }
@@ -195,7 +195,7 @@ if ($null -ne $values -and $values.Count -gt 0) {
             $module.FailJson("Error adding DNS $type resource $name in zone $zone with value $value", $_)
         }
         $changes.after += "[$zone{0}] $name $($ttl.TotalSeconds) IN $type $value`n" `
-            -f ("","/$zone_scope")[$null -ne $zone_scope]
+            -f ("", "/$zone_scope")[$null -ne $zone_scope]
     }
     $module.Result.changed = $true
 }
@@ -211,13 +211,13 @@ else {
     $module.Diff.before = @(
         $records | ForEach-Object {
             "[$zone{0}] $($_.HostName) $($_.TimeToLive.TotalSeconds) IN $type $($_.RecordData.$(Get-DnsServerResourceRecordDataPropertyName).ToString())`n" `
-                -f ("","/$zone_scope")[$null -ne $zone_scope]
+                -f ("", "/$zone_scope")[$null -ne $zone_scope]
         }
     ) -join ''
     $module.Diff.after = @(
         $records_end | ForEach-Object {
             "[$zone{0}] $($_.HostName) $($_.TimeToLive.TotalSeconds) IN $type $($_.RecordData.$(Get-DnsServerResourceRecordDataPropertyName).ToString())`n" `
-                -f ("","/$zone_scope")[$null -ne $zone_scope]
+                -f ("", "/$zone_scope")[$null -ne $zone_scope]
         }
     ) -join ''
 }
