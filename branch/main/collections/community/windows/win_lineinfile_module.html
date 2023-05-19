@@ -204,7 +204,7 @@
 <a class="ansibleOptionLink" href="#parameter-encoding" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>Specifies the encoding of the source text file to operate on (and thus what the output encoding will be). The default of <code class="docutils literal notranslate"><span class="pre">auto</span></code> will cause the module to auto-detect the encoding of the source file and ensure that the modified file is written with the same encoding.</p>
-<p>An explicit encoding can be passed as a string that is a valid value to pass to the .NET framework System.Text.Encoding.GetEncoding() method - see <a class="reference external" href="https://msdn.microsoft.com/en-us/library/system.text.encoding%28v%3Dvs.110%29.aspx">https://msdn.microsoft.com/en-us/library/system.text.encoding%28v%3Dvs.110%29.aspx</a>.</p>
+<p>An explicit encoding can be passed as a string that is a valid value to pass to the .NET framework System.Text.Encoding.GetEncoding() method - see <a class="reference external" href="https://msdn.microsoft.com/en-us/library/system.text.encoding%2528v=vs.110%2529.aspx">https://msdn.microsoft.com/en-us/library/system.text.encoding%2528v=vs.110%2529.aspx</a>.</p>
 <p>This is mostly useful with <code class="docutils literal notranslate"><span class="pre">create=yes</span></code> if you want to create a new file with a specific encoding. If <code class="docutils literal notranslate"><span class="pre">create=yes</span></code> is specified without a specific encoding, the default encoding (UTF-8, no BOM) will be used.</p>
 <p class="ansible-option-line"><span class="ansible-option-default-bold">Default:</span> <code class="ansible-option-default docutils literal notranslate"><span class="pre">&quot;auto&quot;</span></code></p>
 </div></td>
@@ -273,7 +273,7 @@
 <a class="ansibleOptionLink" href="#parameter-regex" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-aliases">aliases: regexp</span></p>
 <p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
-<td><div class="ansible-option-cell"><p>The regular expression to look for in every line of the file. For <code class="docutils literal notranslate"><span class="pre">state=present</span></code>, the pattern to replace if found; only the last line found will be replaced. For <code class="docutils literal notranslate"><span class="pre">state=absent</span></code>, the pattern of the line to remove. Uses .NET compatible regular expressions; see <a class="reference external" href="https://msdn.microsoft.com/en-us/library/hs600312%28v%3Dvs.110%29.aspx">https://msdn.microsoft.com/en-us/library/hs600312%28v%3Dvs.110%29.aspx</a>.</p>
+<td><div class="ansible-option-cell"><p>The regular expression to look for in every line of the file. For <code class="docutils literal notranslate"><span class="pre">state=present</span></code>, the pattern to replace if found; only the last line found will be replaced. For <code class="docutils literal notranslate"><span class="pre">state=absent</span></code>, the pattern of the line to remove. Uses .NET compatible regular expressions; see <a class="reference external" href="https://msdn.microsoft.com/en-us/library/hs600312%2528v=vs.110%2529.aspx">https://msdn.microsoft.com/en-us/library/hs600312%2528v=vs.110%2529.aspx</a>.</p>
 </div></td>
 </tr>
 <tr class="row-even"><td><div class="ansible-option-cell">
