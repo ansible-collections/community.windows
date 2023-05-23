@@ -56,17 +56,10 @@ options:
     description:
       - Path to receive error output.
     type: path
-  app_parameters:
-    description:
-      - A string representing a dictionary of parameters to be passed to the application when it starts.
-      - DEPRECATED since v2.8, please use I(arguments) instead.
-      - This is mutually exclusive with I(arguments).
-    type: str
   arguments:
     description:
       - Parameters to be passed to the application when it starts.
       - This can be either a simple string or a list.
-      - This is mutually exclusive with I(app_parameters).
     aliases: [ app_parameters_free_form ]
     type: str
   dependencies:

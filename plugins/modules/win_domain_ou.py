@@ -18,6 +18,10 @@ description:
   - Manage Active Directory Organizational Units
   - Adds, Removes and Modifies Active Directory Organizational Units
   - Task should be delegated to a Windows Active Directory Domain Controller
+deprecated:
+  removed_in: 3.0.0
+  why: This module has been moved into the C(microsoft.ad) collection.
+  alternative: Use the M(microsoft.ad.ou) module instead.
 options:
   name:
     description:

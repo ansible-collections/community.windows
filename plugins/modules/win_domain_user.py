@@ -9,6 +9,10 @@ module: win_domain_user
 short_description: Manages Windows Active Directory user accounts
 description:
      - Manages Windows Active Directory user accounts.
+deprecated:
+  removed_in: 3.0.0
+  why: This module has been moved into the C(microsoft.ad) collection.
+  alternative: Use the M(microsoft.ad.user) module instead.
 options:
   name:
     description:

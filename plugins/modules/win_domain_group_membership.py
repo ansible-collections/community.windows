@@ -11,6 +11,10 @@ short_description: Manage Windows domain group membership
 description:
      - Allows the addition and removal of domain users
        and domain groups from/to a domain group.
+deprecated:
+  removed_in: 3.0.0
+  why: This module has been moved into the C(microsoft.ad) collection.
+  alternative: Use the M(microsoft.ad.group) module instead.
 options:
   name:
     description:

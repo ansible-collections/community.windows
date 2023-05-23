@@ -11,6 +11,10 @@ short_description: Creates, modifies or removes domain groups
 description:
 - Creates, modifies or removes groups in Active Directory.
 - For local groups, use the M(ansible.windows.win_group) module instead.
+deprecated:
+  removed_in: 3.0.0
+  why: This module has been moved into the C(microsoft.ad) collection.
+  alternative: Use the M(microsoft.ad.group) module instead.
 options:
   attributes:
     description:
