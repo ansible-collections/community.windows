@@ -97,6 +97,7 @@ options:
     - The zone must already exist.
     required: no
     type: str
+    version_added: 2.0.0
   computer_name:
     description:
       - Specifies a DNS server.
