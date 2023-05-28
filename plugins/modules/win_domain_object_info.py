@@ -10,6 +10,10 @@ module: win_domain_object_info
 short_description: Gather information an Active Directory object
 description:
 - Gather information about multiple Active Directory object(s).
+deprecated:
+  removed_in: 3.0.0
+  why: This module has been moved into the C(microsoft.ad) collection.
+  alternative: Use the M(microsoft.ad.object_info) module instead.
 options:
   domain_password:
     description:

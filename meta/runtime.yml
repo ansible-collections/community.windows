@@ -1,1 +1,27 @@
 requires_ansible: '>=2.12'
+plugin_routing:
+  modules:
+    win_domain_computer:
+      deprecation:
+        removal_version: 3.0.0
+        warning_text: Use microsoft.ad.computer instead.
+    win_domain_group_membership:
+      deprecation:
+        removal_version: 3.0.0
+        warning_text: Use microsoft.ad.group instead.
+    win_domain_group:
+      deprecation:
+        removal_version: 3.0.0
+        warning_text: Use microsoft.ad.group instead.
+    win_domain_object_info:
+      deprecation:
+        removal_version: 3.0.0
+        warning_text: Use microsoft.ad.object_info instead.
+    win_domain_ou:
+      deprecation:
+        removal_version: 3.0.0
+        warning_text: Use microsoft.ad.ou instead.
+    win_domain_user:
+      deprecation:
+        removal_version: 3.0.0
+        warning_text: Use microsoft.ad.user instead.

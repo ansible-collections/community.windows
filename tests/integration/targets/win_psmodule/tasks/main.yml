@@ -6,25 +6,6 @@
 - name: setup test repos and modules
   import_tasks: setup.yml
 
-# Remove the below task in Ansible 2.12
-- name: ensure warning is fired when adding a repo
-  win_psmodule:
-    name: ansible-test1
-    repository: some repo
-    url: '{{ remote_tmp_dir }}'
-    state: present
-  register: dep_repo_add
-  ignore_errors: yes  # will fail because this repo doesn't actually have this module
-  check_mode: yes
-
-- name: assert warning is fired when adding a repo
-  assert:
-    that:
-    - dep_repo_add is changed
-    - dep_repo_add.deprecations|length == 1
-    - dep_repo_add.deprecations[0].msg == 'Adding a repo with this module is deprecated, the repository parameter should only be used to select a repo. Use community.windows.win_psrepository to manage repos'
-    - dep_repo_add.deprecations[0].date == '2021-07-01'
-
 ### licensed module checks
 # it is not known in check mode that a module requires
 # license acceptance, so we don't do check mode tests

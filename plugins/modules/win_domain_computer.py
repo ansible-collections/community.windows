@@ -13,6 +13,10 @@ description:
   - Create, read, update and delete computers in Active Directory using a
     windows bridge computer to launch New-ADComputer, Get-ADComputer,
     Set-ADComputer, Remove-ADComputer and Move-ADObject powershell commands.
+deprecated:
+  removed_in: 3.0.0
+  why: This module has been moved into the C(microsoft.ad) collection.
+  alternative: Use the M(microsoft.ad.computer) module instead.
 options:
   name:
     description:

@@ -95,12 +95,6 @@ options:
     required: no
     default: false
     version_added: '1.13.0'
-  url:
-    description:
-      - URL of the custom repository to register.
-      - DEPRECATED, will be removed in a major release after C(2021-07-01), please use the
-        M(community.windows.win_psrepository) module instead.
-    type: str
 notes:
   - PowerShell modules needed
       - PowerShellGet >= 1.6.0

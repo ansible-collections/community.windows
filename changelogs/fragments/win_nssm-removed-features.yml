@@ -1,0 +1,2 @@
+removed_features:
+- win_nssm - Removed the deprecated module option ``app_parameters``, use ``arguments`` instead.

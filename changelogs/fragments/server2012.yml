@@ -1,0 +1,4 @@
+removed_features:
+- >-
+  Removed testing for Server 2012 and Server 2012 R2 as they are reaching End of Life status from Microsoft. These OS
+  versions may continue to work but will not be tested in CI.

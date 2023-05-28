@@ -31,7 +31,6 @@ $description = Get-AnsibleParam -obj $params -name 'description' -type 'str'
 
 $application = Get-AnsibleParam -obj $params -name "application" -type "path"
 $appDirectory = Get-AnsibleParam -obj $params -name "working_directory" -aliases "app_directory", "chdir" -type "path"
-$appParameters = Get-AnsibleParam -obj $params -name "app_parameters"
 $appArguments = Get-AnsibleParam -obj $params -name "arguments" -aliases "app_parameters_free_form"
 
 $stdoutFile = Get-AnsibleParam -obj $params -name "stdout_file" -type "path"
@@ -46,7 +45,6 @@ $app_rotate_online = Get-AnsibleParam -obj $params -name "app_rotate_online" -ty
 $app_stop_method_console = Get-AnsibleParam -obj $params -name "app_stop_method_console" -type "int"
 $app_stop_method_skip = Get-AnsibleParam -obj $params -name "app_stop_method_skip" -type "int" -validateset 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15
 
-# Deprecated options, will be removed in a major release after 2021-07-01.
 $startMode = Get-AnsibleParam -obj $params -name "start_mode" -type "str" -default "auto" -validateset $start_modes_map.Keys -resultobj $result
 $dependencies = Get-AnsibleParam -obj $params -name "dependencies" -type "list"
 $user = Get-AnsibleParam -obj $params -name "username" -type "str" -aliases "user"
@@ -297,27 +295,6 @@ function Stop-NssmService {
     }
 }
 
-function Add-DepByDate {
-    [CmdletBinding()]
-    param(
-        [Parameter(Mandatory = $true)]
-        [String]$Message,
-
-        [Parameter(Mandatory = $true)]
-        [String]$Date
-    )
-
-    # Legacy doesn't natively support deprecate by date, need to do this manually until we use Ansible.Basic
-    if (-not $result.ContainsKey('deprecations')) {
-        $result.deprecations = @()
-    }
-    $result.deprecations += @{
-        msg = $Message
-        date = $Date
-        collection_name = "community.windows"
-    }
-}
-
 Function ConvertTo-NormalizedUser {
     [CmdletBinding()]
     param (
@@ -378,38 +355,6 @@ Function ConvertTo-NormalizedUser {
     else {
         $sid.Translate([System.Security.Principal.NTAccount]).Value
     }
-}
-
-if (($null -ne $appParameters) -and ($null -ne $appArguments)) {
-    Fail-Json $result "'app_parameters' and 'arguments' are mutually exclusive but have both been set."
-}
-
-# Backward compatibility for old parameters style. Remove the block bellow in 2.12
-if ($null -ne $appParameters) {
-    $dep = @{
-        Message = "The parameter 'app_parameters' will be removed soon, use 'arguments' instead"
-        Date = "2022-07-01"
-    }
-    Add-DepByDate @dep
-
-    if ($appParameters -isnot [string]) {
-        Fail-Json -obj $result -message "The app_parameters parameter must be a string representing a dictionary."
-    }
-
-    # Convert dict-as-string form to list
-    $escapedAppParameters = $appParameters.TrimStart("@").TrimStart("{").TrimEnd("}").Replace("; ", "`n").Replace("\", "\\")
-    $appParametersHash = ConvertFrom-StringData -StringData $escapedAppParameters
-
-    $appParamsArray = @()
-    $appParametersHash.GetEnumerator() | Foreach-Object {
-        if ($_.Name -ne "_") {
-            $appParamsArray += $_.Name
-        }
-        $appParamsArray += $_.Value
-    }
-    $appArguments = @($appParamsArray)
-
-    # The rest of the code should use only the new $appArguments variable
 }
 
 if ($state -ne 'absent') {
