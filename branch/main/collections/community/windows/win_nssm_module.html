@@ -134,7 +134,7 @@
 <h1>community.windows.win_nssm module – Install a service using NSSM<a class="headerlink" href="#community-windows-win-nssm-module-install-a-service-using-nssm" title="Permalink to this heading"></a></h1>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/community/windows">community.windows collection</a> (version 1.13.0).</p>
+<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/community/windows">community.windows collection</a> (version 2.0.0).</p>
 <p>To install it, use: <code class="code docutils literal notranslate"><span class="pre">ansible-galaxy</span> <span class="pre">collection</span> <span class="pre">install</span> <span class="pre">community.windows</span></code>.
 You need further requirements to be able to use this module,
 see <a class="reference internal" href="#ansible-collections-community-windows-win-nssm-module-requirements"><span class="std std-ref">Requirements</span></a> for details.</p>
@@ -182,15 +182,6 @@ see <a class="reference internal" href="#ansible-collections-community-windows-w
 </div></td>
 </tr>
 <tr class="row-odd"><td><div class="ansible-option-cell">
-<div class="ansibleOptionAnchor" id="parameter-app_parameters"></div><p class="ansible-option-title" id="ansible-collections-community-windows-win-nssm-module-parameter-app-parameters"><strong>app_parameters</strong></p>
-<a class="ansibleOptionLink" href="#parameter-app_parameters" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
-</div></td>
-<td><div class="ansible-option-cell"><p>A string representing a dictionary of parameters to be passed to the application when it starts.</p>
-<p>DEPRECATED since v2.8, please use <em>arguments</em> instead.</p>
-<p>This is mutually exclusive with <em>arguments</em>.</p>
-</div></td>
-</tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-app_rotate_bytes"></div><p class="ansible-option-title" id="ansible-collections-community-windows-win-nssm-module-parameter-app-rotate-bytes"><strong>app_rotate_bytes</strong></p>
 <a class="ansibleOptionLink" href="#parameter-app_rotate_bytes" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">integer</span></p>
 </div></td>
@@ -198,7 +189,7 @@ see <a class="reference internal" href="#ansible-collections-community-windows-w
 <p class="ansible-option-line"><span class="ansible-option-default-bold">Default:</span> <code class="ansible-option-default docutils literal notranslate"><span class="pre">104858</span></code></p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-app_rotate_online"></div><p class="ansible-option-title" id="ansible-collections-community-windows-win-nssm-module-parameter-app-rotate-online"><strong>app_rotate_online</strong></p>
 <a class="ansibleOptionLink" href="#parameter-app_rotate_online" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">integer</span></p>
 </div></td>
@@ -210,14 +201,14 @@ see <a class="reference internal" href="#ansible-collections-community-windows-w
 </ul>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-app_stop_method_console"></div><p class="ansible-option-title" id="ansible-collections-community-windows-win-nssm-module-parameter-app-stop-method-console"><strong>app_stop_method_console</strong></p>
 <a class="ansibleOptionLink" href="#parameter-app_stop_method_console" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">integer</span></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>Time to wait after sending Control-C.</p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-app_stop_method_skip"></div><p class="ansible-option-title" id="ansible-collections-community-windows-win-nssm-module-parameter-app-stop-method-skip"><strong>app_stop_method_skip</strong></p>
 <a class="ansibleOptionLink" href="#parameter-app_stop_method_skip" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">integer</span></p>
 </div></td>
@@ -246,7 +237,7 @@ see <a class="reference internal" href="#ansible-collections-community-windows-w
 </ul>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-application"></div><p class="ansible-option-title" id="ansible-collections-community-windows-win-nssm-module-parameter-application"><strong>application</strong></p>
 <a class="ansibleOptionLink" href="#parameter-application" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">path</span></p>
 </div></td>
@@ -254,7 +245,7 @@ see <a class="reference internal" href="#ansible-collections-community-windows-w
 <p>Required when <em>state</em> is <code class="docutils literal notranslate"><span class="pre">present</span></code>, <code class="docutils literal notranslate"><span class="pre">started</span></code>, <code class="docutils literal notranslate"><span class="pre">stopped</span></code>, or <code class="docutils literal notranslate"><span class="pre">restarted</span></code>.</p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-arguments"></div>
 <div class="ansibleOptionAnchor" id="parameter-app_parameters_free_form"></div><p class="ansible-option-title" id="ansible-collections-community-windows-win-nssm-module-parameter-arguments"><span id="ansible-collections-community-windows-win-nssm-module-parameter-app-parameters-free-form"></span><strong>arguments</strong></p>
 <a class="ansibleOptionLink" href="#parameter-arguments" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-aliases">aliases: app_parameters_free_form</span></p>
@@ -262,31 +253,30 @@ see <a class="reference internal" href="#ansible-collections-community-windows-w
 </div></td>
 <td><div class="ansible-option-cell"><p>Parameters to be passed to the application when it starts.</p>
 <p>This can be either a simple string or a list.</p>
-<p>This is mutually exclusive with <em>app_parameters</em>.</p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-dependencies"></div><p class="ansible-option-title" id="ansible-collections-community-windows-win-nssm-module-parameter-dependencies"><strong>dependencies</strong></p>
 <a class="ansibleOptionLink" href="#parameter-dependencies" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">list</span> / <span class="ansible-option-elements">elements=string</span></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>Service dependencies that has to be started to trigger startup, separated by comma.</p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-description"></div><p class="ansible-option-title" id="ansible-collections-community-windows-win-nssm-module-parameter-description"><strong>description</strong></p>
 <a class="ansibleOptionLink" href="#parameter-description" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>The description to set for the service.</p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-display_name"></div><p class="ansible-option-title" id="ansible-collections-community-windows-win-nssm-module-parameter-display-name"><strong>display_name</strong></p>
 <a class="ansibleOptionLink" href="#parameter-display_name" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>The display name to set for the service.</p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-executable"></div><p class="ansible-option-title" id="ansible-collections-community-windows-win-nssm-module-parameter-executable"><strong>executable</strong></p>
 <a class="ansibleOptionLink" href="#parameter-executable" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">path</span></p>
 </div></td>
@@ -294,14 +284,14 @@ see <a class="reference internal" href="#ansible-collections-community-windows-w
 <p class="ansible-option-line"><span class="ansible-option-default-bold">Default:</span> <code class="ansible-option-default docutils literal notranslate"><span class="pre">&quot;nssm.exe&quot;</span></code></p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-name"></div><p class="ansible-option-title" id="ansible-collections-community-windows-win-nssm-module-parameter-name"><strong>name</strong></p>
 <a class="ansibleOptionLink" href="#parameter-name" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span> / <span class="ansible-option-required">required</span></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>Name of the service to operate on.</p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-password"></div><p class="ansible-option-title" id="ansible-collections-community-windows-win-nssm-module-parameter-password"><strong>password</strong></p>
 <a class="ansibleOptionLink" href="#parameter-password" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
@@ -309,7 +299,7 @@ see <a class="reference internal" href="#ansible-collections-community-windows-w
 <p>This is not required for the well known service accounts and group managed service accounts.</p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-start_mode"></div><p class="ansible-option-title" id="ansible-collections-community-windows-win-nssm-module-parameter-start-mode"><strong>start_mode</strong></p>
 <a class="ansibleOptionLink" href="#parameter-start_mode" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
@@ -326,7 +316,7 @@ see <a class="reference internal" href="#ansible-collections-community-windows-w
 </ul>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-state"></div><p class="ansible-option-title" id="ansible-collections-community-windows-win-nssm-module-parameter-state"><strong>state</strong></p>
 <a class="ansibleOptionLink" href="#parameter-state" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
@@ -341,21 +331,21 @@ see <a class="reference internal" href="#ansible-collections-community-windows-w
 </ul>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-stderr_file"></div><p class="ansible-option-title" id="ansible-collections-community-windows-win-nssm-module-parameter-stderr-file"><strong>stderr_file</strong></p>
 <a class="ansibleOptionLink" href="#parameter-stderr_file" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">path</span></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>Path to receive error output.</p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-stdout_file"></div><p class="ansible-option-title" id="ansible-collections-community-windows-win-nssm-module-parameter-stdout-file"><strong>stdout_file</strong></p>
 <a class="ansibleOptionLink" href="#parameter-stdout_file" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">path</span></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>Path to receive output.</p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-username"></div>
 <div class="ansibleOptionAnchor" id="parameter-user"></div><p class="ansible-option-title" id="ansible-collections-community-windows-win-nssm-module-parameter-username"><span id="ansible-collections-community-windows-win-nssm-module-parameter-user"></span><strong>username</strong></p>
 <a class="ansibleOptionLink" href="#parameter-username" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-aliases">aliases: user</span></p>
@@ -366,7 +356,7 @@ see <a class="reference internal" href="#ansible-collections-community-windows-w
 <p>Before <code class="docutils literal notranslate"><span class="pre">1.8.0</span></code>, this parameter was just <code class="docutils literal notranslate"><span class="pre">user</span></code>.</p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-working_directory"></div>
 <div class="ansibleOptionAnchor" id="parameter-app_directory"></div>
 <div class="ansibleOptionAnchor" id="parameter-chdir"></div><p class="ansible-option-title" id="ansible-collections-community-windows-win-nssm-module-parameter-working-directory"><span id="ansible-collections-community-windows-win-nssm-module-parameter-chdir"></span><span id="ansible-collections-community-windows-win-nssm-module-parameter-app-directory"></span><strong>working_directory</strong></p>
