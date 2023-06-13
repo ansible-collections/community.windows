@@ -1,4 +1,0 @@
-removed_features:
-- >-
-  win_scheduled_tasks - Removed support for a trigger ``repetition`` to be defined as a list of dictionary entries.
-  Specify the ``repetition`` as a dictionary value rather than a list of dictionaries.
