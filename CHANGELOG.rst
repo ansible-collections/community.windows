@@ -5,6 +5,43 @@ Community Windows Release Notes
 .. contents:: Topics
 
 
+v2.0.0
+======
+
+Release Summary
+---------------
+
+Version ``2.0.0`` is a major release of the ``community.windows`` collection that removes some deprecated features. Please review the changelog to see what deprecated features have been removed in this release.
+
+Minor Changes
+-------------
+
+- win_dns_record - Added ``zone_scope`` option to manage a record in a specific zone scope
+
+Deprecated Features
+-------------------
+
+- win_domain_computer - Module is deprecated in favour of the ``microsoft.ad.computer`` module, the ``community.windows.win_domain_computer`` module will be removed in the ``3.0.0`` release of this collection.
+- win_domain_group - Module is deprecated in favour of the ``microsoft.ad.group`` module, the ``community.windows.win_domain_group`` module will be removed in the ``3.0.0`` release of this collection.
+- win_domain_group_membership - Module is deprecated in favour of the ``microsoft.ad.group`` module, the ``community.windows.win_domain_group_membership`` module will be removed in the ``3.0.0`` release of this collection.
+- win_domain_object_info - Module is deprecated in favour of the ``microsoft.ad.object_info`` module, the ``community.windows.win_domain_object_info`` module will be removed in the ``3.0.0`` release of this collection.
+- win_domain_ou - Module is deprecated in favour of the ``microsoft.ad.ou`` module, the ``community.windows.win_domain_ou`` module will be removed in the ``3.0.0`` release of this collection.
+- win_domain_user - Module is deprecated in favour of the ``microsoft.ad.user`` module, the ``community.windows.win_domain_user`` module will be removed in the ``3.0.0`` release of this collection.
+
+Removed Features (previously deprecated)
+----------------------------------------
+
+- Removed testing for Server 2012 and Server 2012 R2 as they are reaching End of Life status from Microsoft. These OS versions may continue to work but will not be tested in CI.
+- win_nssm - Removed the deprecated module option ``app_parameters``, use ``arguments`` instead.
+- win_psmodule - Removed the deprecated module option ``url``, use ``community.windows.win_psrepository`` to manage repositories instead
+- win_psmodule - Will no longer remove the ``repository`` specified when ``state: absent``, use ``community.windows.win_psrepository`` to manage repositories instead
+- win_scheduled_tasks - Removed support for a trigger ``repetition`` to be defined as a list of dictionary entries. Specify the ``repetition`` as a dictionary value rather than a list of dictionaries.
+
+Bugfixes
+--------
+
+- win_psmodule - fix requireLicenseAcceptance test so that it is no longer always true
+
 v1.13.0
 =======
 

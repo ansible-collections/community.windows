@@ -1,7 +1,0 @@
-removed_features:
-- >-
-  win_psmodule - Removed the deprecated module option ``url``, use ``community.windows.win_psrepository`` to manage
-  repositories instead
-- >-
-  win_psmodule - Will no longer remove the ``repository`` specified when ``state: absent``, use
-  ``community.windows.win_psrepository`` to manage repositories instead
