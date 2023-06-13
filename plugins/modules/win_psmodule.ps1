@@ -255,7 +255,7 @@ Function Install-PsModule {
             $ht = Add-DefinedParameter -Hashtable $ht -ParametersNames $ParametersNames
 
             # When module require License Acceptance, `-Force` is mandatory to skip interactive prompt
-            if ((Find-Module @ht).AdditionalMetadata.requireLicenseAcceptance) {
+            if ((Find-Module @ht).AdditionalMetadata.requireLicenseAcceptance -eq "True") {
                 $ht["Force"] = $true
             }
             else {
