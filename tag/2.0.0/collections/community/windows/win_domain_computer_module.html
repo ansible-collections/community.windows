@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>community.windows.win_domain_computer module – Manage computers in Active Directory &mdash; Ansible collections  documentation</title>
+      <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/ansible.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/antsibull-minimal.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/rtd-ethical-ads.css" type="text/css" />
+    <link rel="shortcut icon" href="../../../_static/images/Ansible-Mark-RGB_Black.png"/>
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/sphinx_highlight.js"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="community.windows.win_domain_group module – Creates, modifies or removes domain groups" href="win_domain_group_module.html" />
+    <link rel="prev" title="community.windows.win_dns_zone module – Manage Windows Server DNS Zones" href="win_dns_zone_module.html" /><!-- extra head elements for Ansible beyond RTD Sphinx Theme -->
+
+
+
+
+</head>
+
+<body class="wy-body-for-nav"><!-- extra body elements for Ansible beyond RTD Sphinx Theme -->
+
+<div class="DocSite-globalNav ansibleNav">
+  <ul>
+    <li><a href="https://www.ansible.com/ansiblefest" target="_blank">AnsibleFest</a></li>
+    <li><a href="https://www.ansible.com/tower" target="_blank">Products</a></li>
+    <li><a href="https://www.ansible.com/community" target="_blank">Community</a></li>
+    <li><a href="https://www.ansible.com/webinars-training" target="_blank">Webinars & Training</a></li>
+    <li><a href="https://www.ansible.com/blog" target="_blank">Blog</a></li>
+  </ul>
+</div>
+
+<a class="DocSite-nav" href="/" style="padding-bottom: 30px;">
+
+  <img class="DocSiteNav-logo"
+    src="../../../_static/images/Ansible-Mark-RGB_White.png"
+    alt="Ansible Logo">
+  <div class="DocSiteNav-title">Ansible Collections Documentation</div>
+</a>
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            Ansible collections
+          </a><!--- Based on https://github.com/rtfd/sphinx_rtd_theme/pull/438/files -->
+
+<div class="version">
+  
+    
+  
+</div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <label class="sr-only" for="q">Search docs:</label>
+    <input type="text" class="st-default-search-input" id="q" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+  
+              <p class="caption" role="heading"><span class="caption-text">Collections:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../../index.html">Collection Index</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="../index.html">Collections in the Community Namespace</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="index.html">Community.Windows</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="index.html#description">Description</a></li>
+<li class="toctree-l4"><a class="reference internal" href="index.html#communication">Communication</a></li>
+<li class="toctree-l4 current"><a class="reference internal" href="index.html#plugin-index">Plugin Index</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Plugin indexes:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../index_lookup.html">Index of all Lookup Plugins</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../index_module.html">Index of all Modules</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Reference indexes:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../environment_variables.html">Index of all Collection Environment Variables</a></li>
+</ul>
+<!-- extra nav elements for Ansible beyond RTD Sphinx Theme -->
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">Ansible collections</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Collection Index</a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Collections in the Community Namespace</a></li>
+          <li class="breadcrumb-item"><a href="index.html">Community.Windows</a></li>
+      <li class="breadcrumb-item active">community.windows.win_domain_computer module – Manage computers in Active Directory</li>
+      <li class="wy-breadcrumbs-aside">
+              <!-- User defined GitHub URL -->
+              <a href="https://github.com/ansible-collections/community.windows/edit/main/plugins/modules/win_domain_computer.py?description=%23%23%23%23%23%20SUMMARY%0A%3C!—%20Your%20description%20here%20–%3E%0A%0A%0A%23%23%23%23%23%20ISSUE%20TYPE%0A-%20Docs%20Pull%20Request%0A%0A%2Blabel:%20docsite_pr" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+
+  
+           <div itemprop="articleBody">
+             
+  <span class="target" id="ansible-collections-community-windows-win-domain-computer-module"></span><section id="community-windows-win-domain-computer-module-manage-computers-in-active-directory">
+<h1>community.windows.win_domain_computer module – Manage computers in Active Directory<a class="headerlink" href="#community-windows-win-domain-computer-module-manage-computers-in-active-directory" title="Permalink to this heading"></a></h1>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/community/windows">community.windows collection</a> (version 2.0.0).</p>
+<p>To install it, use: <code class="code docutils literal notranslate"><span class="pre">ansible-galaxy</span> <span class="pre">collection</span> <span class="pre">install</span> <span class="pre">community.windows</span></code>.</p>
+<p>To use it in a playbook, specify: <code class="code docutils literal notranslate"><span class="pre">community.windows.win_domain_computer</span></code>.</p>
+</div>
+<nav class="contents local" id="contents">
+<ul class="simple">
+<li><p><a class="reference internal" href="#deprecated" id="id1">DEPRECATED</a></p></li>
+<li><p><a class="reference internal" href="#synopsis" id="id2">Synopsis</a></p></li>
+<li><p><a class="reference internal" href="#parameters" id="id3">Parameters</a></p></li>
+<li><p><a class="reference internal" href="#notes" id="id4">Notes</a></p></li>
+<li><p><a class="reference internal" href="#see-also" id="id5">See Also</a></p></li>
+<li><p><a class="reference internal" href="#examples" id="id6">Examples</a></p></li>
+<li><p><a class="reference internal" href="#return-values" id="id7">Return Values</a></p></li>
+<li><p><a class="reference internal" href="#status" id="id8">Status</a></p></li>
+</ul>
+</nav>
+<section id="deprecated">
+<h2><a class="toc-backref" href="#id1" role="doc-backlink">DEPRECATED</a><a class="headerlink" href="#deprecated" title="Permalink to this heading"></a></h2>
+<dl class="field-list simple">
+<dt class="field-odd">Removed in<span class="colon">:</span></dt>
+<dd class="field-odd"><p>version 3.0.0</p>
+</dd>
+<dt class="field-even">Why<span class="colon">:</span></dt>
+<dd class="field-even"><p>This module has been moved into the <code class="docutils literal notranslate"><span class="pre">microsoft.ad</span></code> collection.</p>
+</dd>
+<dt class="field-odd">Alternative<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Use the <a class="reference external" href="https://docs.ansible.com/ansible/devel/collections/microsoft/ad/computer_module.html#ansible-collections-microsoft-ad-computer-module" title="(in Ansible vdevel)"><span class="xref std std-ref">microsoft.ad.computer</span></a> module instead.</p>
+</dd>
+</dl>
+</section>
+<section id="synopsis">
+<h2><a class="toc-backref" href="#id2" role="doc-backlink">Synopsis</a><a class="headerlink" href="#synopsis" title="Permalink to this heading"></a></h2>
+<ul class="simple">
+<li><p>Create, read, update and delete computers in Active Directory using a windows bridge computer to launch New-ADComputer, Get-ADComputer, Set-ADComputer, Remove-ADComputer and Move-ADObject powershell commands.</p></li>
+</ul>
+</section>
+<section id="parameters">
+<h2><a class="toc-backref" href="#id3" role="doc-backlink">Parameters</a><a class="headerlink" href="#parameters" title="Permalink to this heading"></a></h2>
+<table class="ansible-option-table docutils align-default" style="width: 100%">
+<thead>
+<tr class="row-odd"><th class="head"><p>Parameter</p></th>
+<th class="head"><p>Comments</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-description"></div><p class="ansible-option-title" id="ansible-collections-community-windows-win-domain-computer-module-parameter-description"><strong>description</strong></p>
+<a class="ansibleOptionLink" href="#parameter-description" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Specifies a description of the object.</p>
+<p>This parameter sets the value of the Description property for the object.</p>
+<p>The LDAP display name (ldapDisplayName) for this property is description.</p>
+<p class="ansible-option-line"><span class="ansible-option-default-bold">Default:</span> <code class="ansible-option-default docutils literal notranslate"><span class="pre">&quot;&quot;</span></code></p>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-dns_hostname"></div><p class="ansible-option-title" id="ansible-collections-community-windows-win-domain-computer-module-parameter-dns-hostname"><strong>dns_hostname</strong></p>
+<a class="ansibleOptionLink" href="#parameter-dns_hostname" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Specifies the fully qualified domain name (FQDN) of the computer.</p>
+<p>This parameter sets the DNSHostName property for a computer object.</p>
+<p>The LDAP display name for this property is dNSHostName.</p>
+<p>Required when <em>state=present</em>.</p>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-domain_password"></div><p class="ansible-option-title" id="ansible-collections-community-windows-win-domain-computer-module-parameter-domain-password"><strong>domain_password</strong></p>
+<a class="ansibleOptionLink" href="#parameter-domain_password" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>The password for <em>username</em>.</p>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-domain_server"></div><p class="ansible-option-title" id="ansible-collections-community-windows-win-domain-computer-module-parameter-domain-server"><strong>domain_server</strong></p>
+<a class="ansibleOptionLink" href="#parameter-domain_server" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Specifies the Active Directory Domain Services instance to connect to.</p>
+<p>Can be in the form of an FQDN or NetBIOS name.</p>
+<p>If not specified then the value is based on the domain of the computer running PowerShell.</p>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-domain_username"></div><p class="ansible-option-title" id="ansible-collections-community-windows-win-domain-computer-module-parameter-domain-username"><strong>domain_username</strong></p>
+<a class="ansibleOptionLink" href="#parameter-domain_username" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>The username to use when interacting with AD.</p>
+<p>If this is not set then the user Ansible used to log in with will be used instead when using CredSSP or Kerberos with credential delegation.</p>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-enabled"></div><p class="ansible-option-title" id="ansible-collections-community-windows-win-domain-computer-module-parameter-enabled"><strong>enabled</strong></p>
+<a class="ansibleOptionLink" href="#parameter-enabled" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Specifies if an account is enabled.</p>
+<p>An enabled account requires a password.</p>
+<p>This parameter sets the Enabled property for an account object.</p>
+<p>This parameter also sets the ADS_UF_ACCOUNTDISABLE flag of the Active Directory User Account Control (UAC) attribute.</p>
+<p class="ansible-option-line"><span class="ansible-option-choices">Choices:</span></p>
+<ul class="simple">
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">false</span></code></p></li>
+<li><p><code class="ansible-option-default-bold docutils literal notranslate"><span class="pre">true</span></code> <span class="ansible-option-choices-default-mark">← (default)</span></p></li>
+</ul>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-managed_by"></div><p class="ansible-option-title" id="ansible-collections-community-windows-win-domain-computer-module-parameter-managed-by"><strong>managed_by</strong></p>
+<a class="ansibleOptionLink" href="#parameter-managed_by" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+<p><span class="ansible-option-versionadded">added in community.windows 1.3.0</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>The value to be assigned to the LDAP <code class="docutils literal notranslate"><span class="pre">managedBy</span></code> attribute.</p>
+<p>This value can be in the forms <code class="docutils literal notranslate"><span class="pre">Distinguished</span> <span class="pre">Name</span></code>, <code class="docutils literal notranslate"><span class="pre">objectGUID</span></code>, <code class="docutils literal notranslate"><span class="pre">objectSid</span></code> or <code class="docutils literal notranslate"><span class="pre">sAMAccountName</span></code>, see examples for more details.</p>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-name"></div><p class="ansible-option-title" id="ansible-collections-community-windows-win-domain-computer-module-parameter-name"><strong>name</strong></p>
+<a class="ansibleOptionLink" href="#parameter-name" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span> / <span class="ansible-option-required">required</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Specifies the name of the object.</p>
+<p>This parameter sets the Name property of the Active Directory object.</p>
+<p>The LDAP display name (ldapDisplayName) of this property is name.</p>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-odj_blob_path"></div><p class="ansible-option-title" id="ansible-collections-community-windows-win-domain-computer-module-parameter-odj-blob-path"><strong>odj_blob_path</strong></p>
+<a class="ansibleOptionLink" href="#parameter-odj_blob_path" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>The path to the file where the BLOB will be saved. If omitted, a temporary file will be used.</p>
+<p>If <em>offline_domain_join=output</em> the file will be deleted after its contents are returned.</p>
+<p>The parent directory for the BLOB file must exist; intermediate directories will not be created.</p>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-offline_domain_join"></div><p class="ansible-option-title" id="ansible-collections-community-windows-win-domain-computer-module-parameter-offline-domain-join"><strong>offline_domain_join</strong></p>
+<a class="ansibleOptionLink" href="#parameter-offline_domain_join" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Provisions a computer in the directory and provides a BLOB file that can be used on the target computer/image to join it to the domain while offline.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">none</span></code> value doesn’t do any offline join operations.</p>
+<p><code class="docutils literal notranslate"><span class="pre">output</span></code> returns the BLOB in output. The BLOB should be treated as secret (it contains the machine password) so use <code class="docutils literal notranslate"><span class="pre">no_log</span></code> when using this option.</p>
+<p><code class="docutils literal notranslate"><span class="pre">path</span></code> preserves the offline domain join BLOB file on the target machine for later use. The path will be returned.</p>
+<p>If the computer already exists, no BLOB will be created/returned, and the module will operate as it would have without offline domain join.</p>
+<p class="ansible-option-line"><span class="ansible-option-choices">Choices:</span></p>
+<ul class="simple">
+<li><p><code class="ansible-option-default-bold docutils literal notranslate"><span class="pre">&quot;none&quot;</span></code> <span class="ansible-option-choices-default-mark">← (default)</span></p></li>
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">&quot;output&quot;</span></code></p></li>
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">&quot;path&quot;</span></code></p></li>
+</ul>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-ou"></div><p class="ansible-option-title" id="ansible-collections-community-windows-win-domain-computer-module-parameter-ou"><strong>ou</strong></p>
+<a class="ansibleOptionLink" href="#parameter-ou" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Specifies the X.500 path of the Organizational Unit (OU) or container where the new object is created. Required when <em>state=present</em>.</p>
+<p>Special characters must be escaped, see <a class="reference external" href="https://docs.microsoft.com/en-us/previous-versions/windows/desktop/ldap/distinguished-names">Distinguished Names</a> for details.</p>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-sam_account_name"></div><p class="ansible-option-title" id="ansible-collections-community-windows-win-domain-computer-module-parameter-sam-account-name"><strong>sam_account_name</strong></p>
+<a class="ansibleOptionLink" href="#parameter-sam_account_name" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Specifies the Security Account Manager (SAM) account name of the computer.</p>
+<p>It maximum is 256 characters, 15 is advised for older operating systems compatibility.</p>
+<p>The LDAP display name (ldapDisplayName) for this property is sAMAccountName.</p>
+<p>If ommitted the value is the same as <code class="docutils literal notranslate"><span class="pre">name</span></code>.</p>
+<p>Note that all computer SAMAccountNames need to end with a <code class="docutils literal notranslate"><span class="pre">$</span></code>.</p>
+<p>If <code class="docutils literal notranslate"><span class="pre">$</span></code> is omitted, it will be added to the end.</p>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-state"></div><p class="ansible-option-title" id="ansible-collections-community-windows-win-domain-computer-module-parameter-state"><strong>state</strong></p>
+<a class="ansibleOptionLink" href="#parameter-state" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Specified whether the computer should be <code class="docutils literal notranslate"><span class="pre">present</span></code> or <code class="docutils literal notranslate"><span class="pre">absent</span></code> in Active Directory.</p>
+<p class="ansible-option-line"><span class="ansible-option-choices">Choices:</span></p>
+<ul class="simple">
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">&quot;absent&quot;</span></code></p></li>
+<li><p><code class="ansible-option-default-bold docutils literal notranslate"><span class="pre">&quot;present&quot;</span></code> <span class="ansible-option-choices-default-mark">← (default)</span></p></li>
+</ul>
+</div></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="notes">
+<h2><a class="toc-backref" href="#id4" role="doc-backlink">Notes</a><a class="headerlink" href="#notes" title="Permalink to this heading"></a></h2>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<ul class="simple">
+<li><p>For more information on Offline Domain Join see <a class="reference external" href="https://docs.microsoft.com/en-us/previous-versions/windows/it-pro/windows-server-2008-R2-and-2008/dd392267%2528v=ws.10%2529">the step-by-step guide</a>.</p></li>
+<li><p>When using the ODJ BLOB to join a computer to the domain, it must be written out to a file.</p></li>
+<li><p>The file must be UTF-16 encoded (in PowerShell this encoding is called <code class="docutils literal notranslate"><span class="pre">Unicode</span></code>), and it must end in a null character. See examples.</p></li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">djoin.exe</span></code> part of the offline domain join process will not use <em>domain_server</em>, <em>domain_username</em>, or <em>domain_password</em>.</p></li>
+<li><p>This must be run on a host that has the ActiveDirectory powershell module installed.</p></li>
+</ul>
+</div>
+</section>
+<section id="see-also">
+<h2><a class="toc-backref" href="#id5" role="doc-backlink">See Also</a><a class="headerlink" href="#see-also" title="Permalink to this heading"></a></h2>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<dl class="simple">
+<dt><a class="reference external" href="https://docs.ansible.com/ansible/devel/collections/ansible/windows/win_domain_module.html#ansible-collections-ansible-windows-win-domain-module" title="(in Ansible vdevel)"><span class="xref std std-ref">ansible.windows.win_domain</span></a></dt><dd><p>The official documentation on the <strong>ansible.windows.win_domain</strong> module.</p>
+</dd>
+<dt><a class="reference external" href="https://docs.ansible.com/ansible/devel/collections/ansible/windows/win_domain_controller_module.html#ansible-collections-ansible-windows-win-domain-controller-module" title="(in Ansible vdevel)"><span class="xref std std-ref">ansible.windows.win_domain_controller</span></a></dt><dd><p>The official documentation on the <strong>ansible.windows.win_domain_controller</strong> module.</p>
+</dd>
+<dt><a class="reference internal" href="win_domain_group_module.html#ansible-collections-community-windows-win-domain-group-module"><span class="std std-ref">community.windows.win_domain_group</span></a></dt><dd><p>Creates, modifies or removes domain groups.</p>
+</dd>
+<dt><a class="reference external" href="https://docs.ansible.com/ansible/devel/collections/ansible/windows/win_domain_membership_module.html#ansible-collections-ansible-windows-win-domain-membership-module" title="(in Ansible vdevel)"><span class="xref std std-ref">ansible.windows.win_domain_membership</span></a></dt><dd><p>The official documentation on the <strong>ansible.windows.win_domain_membership</strong> module.</p>
+</dd>
+<dt><a class="reference internal" href="win_domain_user_module.html#ansible-collections-community-windows-win-domain-user-module"><span class="std std-ref">community.windows.win_domain_user</span></a></dt><dd><p>Manages Windows Active Directory user accounts.</p>
+</dd>
+</dl>
+</div>
+</section>
+<section id="examples">
+<h2><a class="toc-backref" href="#id6" role="doc-backlink">Examples</a><a class="headerlink" href="#examples" title="Permalink to this heading"></a></h2>
+<div class="highlight-yaml+jinja notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Add linux computer to Active Directory OU using a windows machine</span>
+<span class="w">  </span><span class="nt">community.windows.win_domain_computer</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">one_linux_server</span>
+<span class="w">    </span><span class="nt">sam_account_name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">linux_server$</span>
+<span class="w">    </span><span class="nt">dns_hostname</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">one_linux_server.my_org.local</span>
+<span class="w">    </span><span class="nt">ou</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;OU=servers,DC=my_org,DC=local&quot;</span>
+<span class="w">    </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Example of linux server</span>
+<span class="w">    </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">yes</span>
+<span class="w">    </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">present</span>
+<span class="w">  </span><span class="nt">delegate_to</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">my_windows_bridge.my_org.local</span>
+
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Remove linux computer from Active Directory using a windows machine</span>
+<span class="w">  </span><span class="nt">community.windows.win_domain_computer</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">one_linux_server</span>
+<span class="w">    </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">absent</span>
+<span class="w">  </span><span class="nt">delegate_to</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">my_windows_bridge.my_org.local</span>
+
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Provision a computer for offline domain join</span>
+<span class="w">  </span><span class="nt">community.windows.win_domain_computer</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">newhost</span>
+<span class="w">    </span><span class="nt">dns_hostname</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">newhost.ansible.local</span>
+<span class="w">    </span><span class="nt">ou</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;OU=A</span><span class="nv"> </span><span class="s">great\,</span><span class="nv"> </span><span class="s">big</span><span class="nv"> </span><span class="s">organizational</span><span class="nv"> </span><span class="s">unit</span><span class="nv"> </span><span class="s">name,DC=ansible,DC=local&#39;</span>
+<span class="w">    </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">present</span>
+<span class="w">    </span><span class="nt">offline_domain_join</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">yes</span>
+<span class="w">    </span><span class="nt">odj_return_blob</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">yes</span>
+<span class="w">  </span><span class="nt">register</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">computer_status</span>
+<span class="w">  </span><span class="nt">delegate_to</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">windc.ansible.local</span>
+
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Join a workgroup computer to the domain</span>
+<span class="w">  </span><span class="nt">vars</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">target_blob_file</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;C:\ODJ\blob.txt&#39;</span>
+<span class="w">  </span><span class="nt">ansible.windows.win_shell</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
+<span class="w">    </span><span class="no">$blob = [Convert]::FromBase64String(&#39;</span><span class="cp">{{</span> <span class="nv">computer_status.odj_blob</span> <span class="cp">}}</span><span class="no">&#39;)</span>
+<span class="w">    </span><span class="no">[IO.File]::WriteAllBytes(&#39;</span><span class="cp">{{</span> <span class="nv">target_blob_file</span> <span class="cp">}}</span><span class="no">&#39;, $blob)</span>
+<span class="w">    </span><span class="no">&amp; djoin.exe --% /RequestODJ /LoadFile &#39;</span><span class="cp">{{</span> <span class="nv">target_blob_file</span> <span class="cp">}}</span><span class="no">&#39; /LocalOS /WindowsPath &quot;%SystemRoot%&quot;</span>
+
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Restart to complete domain join</span>
+<span class="w">  </span><span class="nt">ansible.windows.win_restart</span><span class="p">:</span>
+</pre></div>
+</div>
+</section>
+<section id="return-values">
+<h2><a class="toc-backref" href="#id7" role="doc-backlink">Return Values</a><a class="headerlink" href="#return-values" title="Permalink to this heading"></a></h2>
+<p>Common return values are documented <a class="reference external" href="https://docs.ansible.com/ansible/devel/reference_appendices/common_return_values.html#common-return-values" title="(in Ansible vdevel)"><span class="xref std std-ref">here</span></a>, the following are the fields unique to this module:</p>
+<table class="ansible-option-table docutils align-default" style="width: 100%">
+<thead>
+<tr class="row-odd"><th class="head"><p>Key</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="return-djoin"></div><p class="ansible-option-title" id="ansible-collections-community-windows-win-domain-computer-module-return-djoin"><strong>djoin</strong></p>
+<a class="ansibleOptionLink" href="#return-djoin" title="Permalink to this return value"></a><p class="ansible-option-type-line"><span class="ansible-option-type">dictionary</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Information about the invocation of djoin.exe.</p>
+<p class="ansible-option-line"><span class="ansible-option-returned-bold">Returned:</span> when offline_domain_join is True and the computer didn’t exist</p>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="return-djoin/invocation"></div><p class="ansible-option-title" id="ansible-collections-community-windows-win-domain-computer-module-return-djoin-invocation"><strong>invocation</strong></p>
+<a class="ansibleOptionLink" href="#return-djoin/invocation" title="Permalink to this return value"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+</div></td>
+<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>The full command line used to call djoin.exe</p>
+<p class="ansible-option-line"><span class="ansible-option-returned-bold">Returned:</span> always</p>
+<p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> <code class="ansible-option-sample docutils literal notranslate"><span class="pre">&quot;djoin.exe</span> <span class="pre">/PROVISION</span> <span class="pre">/MACHINE</span> <span class="pre">compname</span> <span class="pre">/MACHINEOU</span> <span class="pre">OU=Hosts,DC=ansible,DC=local</span> <span class="pre">/DOMAIN</span> <span class="pre">ansible.local</span> <span class="pre">/SAVEFILE</span> <span class="pre">blobfile.txt&quot;</span></code></p>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="return-djoin/rc"></div><p class="ansible-option-title" id="ansible-collections-community-windows-win-domain-computer-module-return-djoin-rc"><strong>rc</strong></p>
+<a class="ansibleOptionLink" href="#return-djoin/rc" title="Permalink to this return value"></a><p class="ansible-option-type-line"><span class="ansible-option-type">integer</span></p>
+</div></td>
+<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>The return code from djoin.exe</p>
+<p class="ansible-option-line"><span class="ansible-option-returned-bold">Returned:</span> when not check mode</p>
+<p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> <code class="ansible-option-sample docutils literal notranslate"><span class="pre">87</span></code></p>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="return-djoin/stderr"></div><p class="ansible-option-title" id="ansible-collections-community-windows-win-domain-computer-module-return-djoin-stderr"><strong>stderr</strong></p>
+<a class="ansibleOptionLink" href="#return-djoin/stderr" title="Permalink to this return value"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+</div></td>
+<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>The stderr from djoin.exe</p>
+<p class="ansible-option-line"><span class="ansible-option-returned-bold">Returned:</span> when not check mode</p>
+<p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> <code class="ansible-option-sample docutils literal notranslate"><span class="pre">&quot;Invalid</span> <span class="pre">input</span> <span class="pre">parameter</span> <span class="pre">combination.&quot;</span></code></p>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="return-djoin/stdout"></div><p class="ansible-option-title" id="ansible-collections-community-windows-win-domain-computer-module-return-djoin-stdout"><strong>stdout</strong></p>
+<a class="ansibleOptionLink" href="#return-djoin/stdout" title="Permalink to this return value"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+</div></td>
+<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>The stdout from djoin.exe</p>
+<p class="ansible-option-line"><span class="ansible-option-returned-bold">Returned:</span> when not check mode</p>
+<p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> <code class="ansible-option-sample docutils literal notranslate"><span class="pre">&quot;Computer</span> <span class="pre">provisioning</span> <span class="pre">completed</span> <span class="pre">successfully.&quot;</span></code></p>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="return-odj_blob"></div><p class="ansible-option-title" id="ansible-collections-community-windows-win-domain-computer-module-return-odj-blob"><strong>odj_blob</strong></p>
+<a class="ansibleOptionLink" href="#return-odj_blob" title="Permalink to this return value"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>The offline domain join BLOB. This is an empty string when in check mode or when offline_domain_join is ‘path’.</p>
+<p>This field contains the base64 encoded raw bytes of the offline domain join BLOB file.</p>
+<p class="ansible-option-line"><span class="ansible-option-returned-bold">Returned:</span> when offline_domain_join is not ‘none’ and the computer didn’t exist</p>
+<p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> <code class="ansible-option-sample docutils literal notranslate"><span class="pre">&quot;&lt;a</span> <span class="pre">long</span> <span class="pre">base64</span> <span class="pre">string&gt;&quot;</span></code></p>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="return-odj_blob_file"></div><p class="ansible-option-title" id="ansible-collections-community-windows-win-domain-computer-module-return-odj-blob-file"><strong>odj_blob_file</strong></p>
+<a class="ansibleOptionLink" href="#return-odj_blob_file" title="Permalink to this return value"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>The path to the offline domain join BLOB file on the target host. If odj_blob_path was specified, this will match that path.</p>
+<p class="ansible-option-line"><span class="ansible-option-returned-bold">Returned:</span> when offline_domain_join is ‘path’ and the computer didn’t exist</p>
+<p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> <code class="ansible-option-sample docutils literal notranslate"><span class="pre">&quot;C:\\Users\\admin\\AppData\\Local\\Temp\\e4vxonty.rkb&quot;</span></code></p>
+</div></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="status">
+<h2><a class="toc-backref" href="#id8" role="doc-backlink">Status</a><a class="headerlink" href="#status" title="Permalink to this heading"></a></h2>
+<ul class="simple">
+<li><p>This module will be removed in version 3.0.0.
+<em>[deprecated]</em></p></li>
+<li><p>For more information see <a class="reference internal" href="#deprecated">DEPRECATED</a>.</p></li>
+</ul>
+<section id="authors">
+<h3>Authors<a class="headerlink" href="#authors" title="Permalink to this heading"></a></h3>
+<ul class="simple">
+<li><p>Daniel Sánchez Fábregas (&#64;Daniel-Sanchez-Fabregas)</p></li>
+<li><p>Brian Scholer (&#64;briantist)</p></li>
+</ul>
+</section>
+<section id="collection-links">
+<h3>Collection links<a class="headerlink" href="#collection-links" title="Permalink to this heading"></a></h3>
+<p class="ansible-links">
+  <a href="https://github.com/ansible-collections/community.windows/issues" aria-role="button" target="_blank" rel="noopener external">Issue Tracker</a>
+  <a href="https://github.com/ansible-collections/community.windows" aria-role="button" target="_blank" rel="noopener external">Repository (Sources)</a>
+  <a href="./#communication-for-community-windows" aria-role="button" target="_blank">Communication</a>
+</p></section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          
+
+<footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="win_dns_zone_module.html" class="btn btn-neutral float-left" title="community.windows.win_dns_zone module – Manage Windows Server DNS Zones" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="win_domain_group_module.html" class="btn btn-neutral float-right" title="community.windows.win_domain_group module – Creates, modifies or removes domain groups" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright Ansible contributors.</p>
+  </div>
+
+  
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script><!-- extra footer elements for Ansible beyond RTD Sphinx Theme -->
+
+</body>
+</html>
