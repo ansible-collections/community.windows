@@ -254,8 +254,11 @@ Function Install-PsModule {
                 "Repository", "Credential")
             $ht = Add-DefinedParameter -Hashtable $ht -ParametersNames $ParametersNames
 
-            # When module require License Acceptance, `-Force` is mandatory to skip interactive prompt
-            if ((Find-Module @ht).AdditionalMetadata.requireLicenseAcceptance) {
+            # When module require License Acceptance, or repository is Untrusted.
+            # `-Force` is mandatory to skip interactive prompt
+            $psgetModuleInfo = Find-Module @ht
+            if (($psgetModuleInfo.AdditionalMetadata.requireLicenseAcceptance -eq "True") -or
+                ((Get-PSRepository -Name $psgetModuleInfo.Repository).InstallationPolicy -eq "Untrusted")) {
                 $ht["Force"] = $true
             }
             else {

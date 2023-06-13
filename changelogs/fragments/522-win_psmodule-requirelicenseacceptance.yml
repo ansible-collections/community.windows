@@ -1,0 +1,2 @@
+bugfixes:
+  - win_psmodule - fix requireLicenseAcceptance test so that it is no longer always true
