@@ -1,0 +1,2 @@
+bugfixes:
+  - win_xml - Fix issue where it was not possible to add a new element in empty element.
