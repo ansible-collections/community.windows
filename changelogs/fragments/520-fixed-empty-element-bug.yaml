@@ -1,2 +1,2 @@
-bugfixes:
-  - win_xml - Fix issue where it was not possible to add a new element in empty element.
+minor_changes:
+  - win_xml - Revert fix from pull request 482 and move element presence check outside of element matching code.
