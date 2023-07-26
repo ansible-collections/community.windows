@@ -498,7 +498,7 @@ see <a class="reference internal" href="#ansible-collections-community-windows-p
 <span class="w">      </span><span class="no">$sec_protocols = [Net.ServicePointManager]::SecurityProtocol -bor [Net.SecurityProtocolType]::SystemDefault</span>
 <span class="w">      </span><span class="no">$sec_protocols = $sec_protocols -bor [Net.SecurityProtocolType]::Tls12</span>
 <span class="w">      </span><span class="no">[Net.ServicePointManager]::SecurityProtocol = $sec_protocols</span>
-<span class="w">      </span><span class="no">$url = &quot;https://github.com/ansible/ansible/raw/devel/examples/scripts/ConfigureRemotingForAnsible.ps1&quot;</span>
+<span class="w">      </span><span class="no">$url = &quot;https://github.com/ansible/ansible-documentation/raw/devel/examples/scripts/ConfigureRemotingForAnsible.ps1&quot;</span>
 <span class="w">      </span><span class="no">Invoke-Expression ((New-Object Net.WebClient).DownloadString($url))</span>
 <span class="w">      </span><span class="no">exit</span>
 <span class="w">  </span><span class="nt">delegate_to</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">localhost</span>
