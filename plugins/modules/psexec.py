@@ -283,7 +283,7 @@ EXAMPLES = r'''
       $sec_protocols = [Net.ServicePointManager]::SecurityProtocol -bor [Net.SecurityProtocolType]::SystemDefault
       $sec_protocols = $sec_protocols -bor [Net.SecurityProtocolType]::Tls12
       [Net.ServicePointManager]::SecurityProtocol = $sec_protocols
-      $url = "https://github.com/ansible/ansible/raw/devel/examples/scripts/ConfigureRemotingForAnsible.ps1"
+      $url = "https://github.com/ansible/ansible-documentation/raw/devel/examples/scripts/ConfigureRemotingForAnsible.ps1"
       Invoke-Expression ((New-Object Net.WebClient).DownloadString($url))
       exit
   delegate_to: localhost
