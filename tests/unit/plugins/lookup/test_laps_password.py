@@ -10,8 +10,8 @@ import os
 import platform
 import pytest
 import sys
+from unittest.mock import MagicMock
 
-from ansible_collections.community.windows.tests.unit.compat.mock import MagicMock
 
 from ansible.errors import AnsibleLookupError
 from ansible.plugins.loader import lookup_loader
