@@ -1,0 +1,2 @@
+bugfixes:
+  - community.windows.win_psmodule_info - exception thrown when host has no Installed Module. Fix now checks that variable $installedModules is not null before calling the .Contains(..) function on it.
