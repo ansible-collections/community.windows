@@ -140,6 +140,11 @@ if ($null -ne $user_groups) {
     $user_groups = @($user_groups)
 }
 
+# Ensure RemoteDesktopServices module is loaded
+if ($null -eq (Get-Module -Name RemoteDesktopServices -ErrorAction SilentlyContinue)) {
+    Import-Module -Name RemoteDesktopServices
+}
+
 # Validate computer group parameter
 if ($computer_group_type -eq "allow_any" -and $null -ne $computer_group) {
     Add-Warning -obj $result -message "Parameter 'computer_group' ignored because the computer_group_type is set to allow_any."
@@ -163,11 +168,6 @@ if ($null -ne $allowed_ports) {
             Fail-Json -obj $result -message "$port is not a valid port number."
         }
     }
-}
-
-# Ensure RemoteDesktopServices module is loaded
-if ($null -eq (Get-Module -Name RemoteDesktopServices -ErrorAction SilentlyContinue)) {
-    Import-Module -Name RemoteDesktopServices
 }
 
 # Check if a RAP with the given name already exists
