@@ -263,7 +263,7 @@ function Add-ModuleRepositoryInfo {
     Process {
         $moduleName = $InputObject.Name
 
-        $installed = if ($installedModules.Contains($moduleName)) {
+        $installed = if ($installedModules -and $installedModules.Contains($moduleName)) {
             # we know at least one version of this module was installed from PowerShellGet
             # if the version of this local modle matches what we got it in the initial installed module list
             # use it
