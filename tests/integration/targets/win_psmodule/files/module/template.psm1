@@ -1,4 +1,17 @@
-Function --- FUNCTION --- {
+Function Get-Function {
+    <#
+    .SYNOPSIS
+    Help for Get-Function
+
+    .DESCRIPTION
+    Description for Get-Function
+
+    .EXAMPLE
+    Get-Function
+
+    .NOTES
+    Notes for Get-Function
+    #>
     return [PSCustomObject]@{
         Name = "--- NAME ---"
         Version = "--- VERSION ---"
@@ -6,5 +19,5 @@ Function --- FUNCTION --- {
     }
 }
 
-Export-ModuleMember -Function --- FUNCTION ---
+Export-ModuleMember -Function Get-Function
 

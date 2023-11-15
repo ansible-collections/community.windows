@@ -5,6 +5,10 @@
 
 #Requires -Module Ansible.ModuleUtils.Legacy
 
+[System.Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSCustomUseLiteralPath', '',
+    Justification = 'This module has supported wildcard comparison since it was created')]
+param()
+
 $params = Parse-Args $args -supports_check_mode $true
 $check_mode = Get-AnsibleParam -obj $params -name "_ansible_check_mode" -type "bool" -default $false
 
@@ -33,12 +37,12 @@ Function SearchForError($cmd_output, $default_msg) {
         }
 
         if ($separator_count -ne 3) {
-            if (Select-String -InputObject $line -pattern "^(\s+)?(\-+)(\s+)?$") {
+            if (Select-String -InputObject $line -Pattern "^(\s+)?(\-+)(\s+)?$") {
                 $separator_count += 1
             }
         }
         else {
-            if (Select-String -InputObject $line -pattern "error") {
+            if (Select-String -InputObject $line -Pattern "error") {
                 $error_msg = $line
                 break
             }
