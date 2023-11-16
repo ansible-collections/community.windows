@@ -1,2 +1,0 @@
-bugfixes:
-  - win_rds_rap - The module crashed when creating a RAP with Gateway Managed Computer Group (https://github.com/ansible-collections/community.windows/issues/184).
