@@ -6,33 +6,30 @@
 #Requires -Module Ansible.ModuleUtils.Legacy
 
 function Get-EnabledPlugin($rabbitmq_plugins_cmd) {
-    $list_plugins_cmd = "$rabbitmq_plugins_cmd list -E -m"
     try {
-        $enabled_plugins = @(Invoke-Expression "& $list_plugins_cmd" | Where-Object { $_ })
+        $enabled_plugins = @(& $rabbitmq_plugins_cmd list -E -m | Where-Object { $_ })
         return , $enabled_plugins
     }
     catch {
-        Fail-Json -obj $result -message "Can't execute `"$($list_plugins_cmd)`": $($_.Exception.Message)"
+        Fail-Json -obj $result -message "Can't execute '$rabbitmq_plugins_cmd list -E -m': $($_.Exception.Message)"
     }
 }
 
 function Enable-Plugin($rabbitmq_plugins_cmd, $plugin_name) {
-    $enable_plugin_cmd = "$rabbitmq_plugins_cmd enable $plugin_name"
     try {
-        Invoke-Expression "& $enable_plugin_cmd"
+        & $rabbitmq_plugins_cmd enable $plugin_name
     }
     catch {
-        Fail-Json -obj $result -message "Can't execute `"$($enable_plugin_cmd)`": $($_.Exception.Message)"
+        Fail-Json -obj $result -message "Can't execute '$rabbitmq_plugins_cmd enable $plugin_name': $($_.Exception.Message)"
     }
 }
 
 function Disable-Plugin($rabbitmq_plugins_cmd, $plugin_name) {
-    $enable_plugin_cmd = "$rabbitmq_plugins_cmd disable $plugin_name"
     try {
-        Invoke-Expression "& $enable_plugin_cmd"
+        & $rabbitmq_plugins_cmd disable $plugin_name
     }
     catch {
-        Fail-Json -obj $result -message "Can't execute `"$($enable_plugin_cmd)`": $($_.Exception.Message)"
+        Fail-Json -obj $result -message "Can't execute '$rabbitmq_plugins_cmd disable $plugin_name': $($_.Exception.Message)"
     }
 }
 

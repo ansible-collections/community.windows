@@ -28,8 +28,8 @@ $packages = @(
 
 foreach ($package in $packages) {
     $tmp_dir = Join-Path -Path $template_path -ChildPath $package.name
-    if (Test-Path -Path $tmp_dir) {
-        Remove-Item -Path $tmp_dir -Force -Recurse
+    if (Test-Path -LiteralPath $tmp_dir) {
+        Remove-Item -LiteralPath $tmp_dir -Force -Recurse
     }
     New-Item -Path $tmp_dir -ItemType Directory > $null
 
@@ -50,15 +50,15 @@ foreach ($package in $packages) {
         $manifest = $manifest.Replace('--- NAME ---', $package.name).Replace('--- VERSION ---', $package.version)
         $manifest = $manifest.Replace('--- GUID ---', [Guid]::NewGuid()).Replace('--- FUNCTION ---', $package.function)
 
-        $manifest = $manifest.Replace('--- PS_DATA ---', $ps_data -join "`n")
+        $manifest = $manifest.Replace('PSData = @{}', "PSData = @{`n$($ps_data -join "`n")`n}")
         $manifest_path = Join-Path -Path $tmp_dir -ChildPath "$($package.name).psd1"
-        Set-Content -Path $manifest_path -Value $manifest
+        Set-Content -LiteralPath $manifest_path -Value $manifest
 
         $script = [System.IO.File]::ReadAllText($template_script)
         $script = $script.Replace('--- NAME ---', $package.name).Replace('--- VERSION ---', $package.version)
-        $script = $script.Replace('--- REPO ---', $package.repo).Replace('--- FUNCTION ---', $package.function)
+        $script = $script.Replace('--- REPO ---', $package.repo).Replace('Get-Function', $package.function)
         $script_path = Join-Path -Path $tmp_dir -ChildPath "$($package.name).psm1"
-        Set-Content -Path $script_path -Value $script
+        Set-Content -LiteralPath $script_path -Value $script
 
         $signed = if ($package.ContainsKey("signed")) { $package.signed } else { $true }
         if ($signed) {
@@ -74,16 +74,16 @@ foreach ($package in $packages) {
         $nuspec = $nuspec.Replace('--- NAME ---', $package.name).Replace('--- VERSION ---', $nuget_version)
         $nuspec = $nuspec.Replace('--- FUNCTION ---', $package.function)
         $nuspec = $nuspec.Replace('--- LICACC ---', ($package.require_license -as [bool]).ToString().ToLower())
-        Set-Content -Path (Join-Path -Path $tmp_dir -ChildPath "$($package.name).nuspec") -Value $nuspec
+        Set-Content -LiteralPath (Join-Path -Path $tmp_dir -ChildPath "$($package.name).nuspec") -Value $nuspec
 
         &$nuget_exe pack "$tmp_dir\$($package.name).nuspec" -outputdirectory $tmp_dir
 
         $repo_path = Join-Path -Path $template_path -ChildPath $package.repo
         $nupkg_filename = "$($package.name).$($nuget_version).nupkg"
-        Copy-Item -Path (Join-Path -Path $tmp_dir -ChildPath $nupkg_filename) `
+        Copy-Item -LiteralPath (Join-Path -Path $tmp_dir -ChildPath $nupkg_filename) `
             -Destination (Join-Path -Path $repo_path -ChildPath $nupkg_filename)
     }
     finally {
-        Remove-Item -Path $tmp_dir -Force -Recurse
+        Remove-Item -LiteralPath $tmp_dir -Force -Recurse
     }
 }

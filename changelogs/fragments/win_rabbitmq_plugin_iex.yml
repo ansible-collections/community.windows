@@ -1,0 +1,2 @@
+bugfixes:
+- win_rabbitmq_plugin - Avoid using ``Invoke-Expression`` when running external commands

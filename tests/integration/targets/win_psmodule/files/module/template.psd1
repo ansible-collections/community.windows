@@ -10,8 +10,6 @@
         "--- FUNCTION ---"
     )
     PrivateData = @{
-        PSData = @{
---- PS_DATA ---
-        }
+        PSData = @{}
     }
 }
