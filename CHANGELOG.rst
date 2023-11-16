@@ -5,6 +5,27 @@ Community Windows Release Notes
 .. contents:: Topics
 
 
+v2.1.0
+======
+
+Release Summary
+---------------
+
+Release summary for v2.1.0
+
+Minor Changes
+-------------
+
+- Set minimum supported Ansible version to 2.14 to align with the versions still supported by Ansible.
+
+Bugfixes
+--------
+
+- Remove some code which is no longer valid for dotnet 5+
+- community.windows.win_psmodule_info - exception thrown when host has no Installed Module. Fix now checks that variable $installedModules is not null before calling the .Contains(..) function on it.
+- win_rabbitmq_plugin - Avoid using ``Invoke-Expression`` when running external commands
+- win_rds_rap - The module crashed when creating a RAP with Gateway Managed Computer Group (https://github.com/ansible-collections/community.windows/issues/184).
+
 v2.0.0
 ======
 

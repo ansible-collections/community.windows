@@ -516,3 +516,26 @@ releases:
     - win_psmodule-removed-features.yml
     - win_scheduled_task-removed-features.yml
     release_date: '2023-06-14'
+  2.1.0:
+    changes:
+      bugfixes:
+      - Remove some code which is no longer valid for dotnet 5+
+      - community.windows.win_psmodule_info - exception thrown when host has no Installed
+        Module. Fix now checks that variable $installedModules is not null before
+        calling the .Contains(..) function on it.
+      - win_rabbitmq_plugin - Avoid using ``Invoke-Expression`` when running external
+        commands
+      - win_rds_rap - The module crashed when creating a RAP with Gateway Managed
+        Computer Group (https://github.com/ansible-collections/community.windows/issues/184).
+      minor_changes:
+      - Set minimum supported Ansible version to 2.14 to align with the versions still
+        supported by Ansible.
+      release_summary: Release summary for v2.1.0
+    fragments:
+    - 534-rds-rap-fix-gw-managed-comp-groups.yml
+    - ansible_support.yml
+    - dotnet-preparation.yml
+    - release_summary.yml
+    - win_psmodule_info.yml
+    - win_rabbitmq_plugin_iex.yml
+    release_date: '2023-11-16'
