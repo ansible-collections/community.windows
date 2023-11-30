@@ -74,7 +74,8 @@ function Get-AnsibleVolume {
 
     if ($null -ne $DriveLetter) {
         try {
-            $volume = Get-Volume -DriveLetter $DriveLetter
+            $partition = Get-Partition -DriveLetter $DriveLetter | Where-Object { $null -ne $_.DiskNumber }
+            $volume = Get-Volume -Partition $partition
         }
         catch {
             $module.FailJson("There was an error retrieving the volume using drive_letter $($DriveLetter): $($_.Exception.Message)", $_)
