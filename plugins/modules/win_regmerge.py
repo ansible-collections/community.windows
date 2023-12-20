@@ -25,7 +25,7 @@ options:
     description:
       - When used instead of O(path), merges the value specified into the Windows registry
     type: str
-  compare_key:
+  compare_to:
     description:
       - The parent key to use when comparing the contents of the registry to the contents of the file.  Needs to be in HKLM or HKCU part of registry.
         Use a PS-Drive style path for example HKLM:\SOFTWARE not HKEY_LOCAL_MACHINE\SOFTWARE
