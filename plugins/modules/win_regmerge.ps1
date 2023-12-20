@@ -32,15 +32,15 @@ $path = Get-AnsibleParam -obj $params -name "path" -type "path" -resultobj $resu
 $content = Get-AnsibleParam -obj $params -name "content" -type "content" -resultobj $result
 $compare_to = Get-AnsibleParam -obj $params -name "compare_to" -type "str" -resultobj $result
 
-if(!$path -and !$content) {
+if( !$path -and !$content ) {
     Fail-Json -obj $result -message "Missing required arguments: path or content. At lease one must be provided."
 }
 
-if($path -and $content) {
+if( $path -and $content ) {
     Fail-Json -obj $result -message "Extra arguments: path or content. Only one must be provided."
 }
 
-if($content) {
+if( $content ) {
     $guid = [guid]::NewGuid()
     $path = $env:TEMP + "\" + $guid.ToString() + 'ansible_win_regmerge_content.reg'
 
@@ -54,7 +54,7 @@ if($content) {
 
 $do_comparison = $False
 
-If ($compare_to) {
+If ( $compare_to ) {
     $compare_to_key = $params.compare_to.ToString()
     If (Test-Path $compare_to_key -PathType container ) {
         $do_comparison = $True
@@ -118,7 +118,7 @@ Else {
     $result.compared = $false
 }
 
-if($remove_path) {
+if( $remove_path ) {
     Remove-Item $path
 }
 
