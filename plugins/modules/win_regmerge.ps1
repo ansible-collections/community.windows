@@ -28,8 +28,26 @@ $result = @{
 }
 $params = Parse-Args $args
 
-$path = Get-AnsibleParam -obj $params -name "path" -type "path" -failifempty $true -resultobj $result
+$path = Get-AnsibleParam -obj $params -name "path" -type "path" -resultobj $result
+$content = Get-AnsibleParam -obj $params -name "content" -type "content" -resultobj $result
 $compare_to = Get-AnsibleParam -obj $params -name "compare_to" -type "str" -resultobj $result
+
+if(!$path -and !$content) {
+    Fail-Json -obj $result -message "Missing required arguments: path or content. At lease one must be provided."
+}
+
+if($path -and $content) {
+    Fail-Json -obj $result -message "Extra arguments: path or content. Only one must be provided."
+}
+
+if($content) {
+    $guid = [guid]::NewGuid()
+    $path = $env:TEMP + "\" + $guid.ToString() + 'ansible_win_regmerge_content.reg'
+
+    $content | Out-File -FilePath $path
+
+    $remove_path = $True
+}
 
 # check it looks like a reg key, warn if key not present - will happen first time
 # only accepting PS-Drive style key names (starting with HKLM etc, not HKEY_LOCAL_MACHINE etc)
@@ -98,6 +116,10 @@ Else {
     }
     $result.changed = $true
     $result.compared = $false
+}
+
+if($remove_path) {
+    Remove-Item $path
 }
 
 Exit-Json $result
