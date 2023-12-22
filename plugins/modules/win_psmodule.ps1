@@ -395,7 +395,7 @@ if ( $allow_prerelease -and $state -eq "absent" ) {
 
 if ( ($state -eq "latest") -and
     ( $required_version -or $minimum_version -or $maximum_version ) ) {
-    $ErrorMessage = "When the parameter state is equal 'latest' you can use any of required_version, minimum_version, maximum_version."
+    $ErrorMessage = "When the parameter state is equal to 'latest' you can't use any of required_version, minimum_version, maximum_version."
     Fail-Json $result $ErrorMessage
 }
 
