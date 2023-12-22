@@ -23,7 +23,7 @@ options:
     type: path
   content:
     description:
-      - When used instead of O(path), merges the value specified into the Windows registry
+      - When used instead of O(path), merges the value specified into the Windows registry. It must not include the Byte Order Mark.
     type: str
     version_added: 2.2.0
   compare_to:
