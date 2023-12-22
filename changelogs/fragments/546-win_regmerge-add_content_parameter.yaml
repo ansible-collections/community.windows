@@ -1,0 +1,2 @@
+minor_changes:
+  - win_regmerge - Add content 'content' parameter for specifying registry file contents directly
