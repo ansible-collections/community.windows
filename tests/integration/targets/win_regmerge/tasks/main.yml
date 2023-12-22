@@ -130,7 +130,7 @@
      - settings2.reg
      - settings3.reg
 
-# re-run all tests above using 'content' parameter instead of 'path'
+# re-run all tests above using 'content' parameter instead of 'path' using similar reg files but without the BOM
 
 # clear the area of the registry we are using for tests
 - name: remove setting
@@ -142,7 +142,7 @@
 # merge in REG_SZ
 - name: test 1 merge in a setting
   win_regmerge:
-    content: "{{ lookup('file', 'settings1.reg') }}"
+    content: "{{ lookup('file', 'settings1c.reg') }}"
   register: merge11_result
 
 - assert:
@@ -152,7 +152,7 @@
 # re run the merge
 - name: test 1 merge in the setting again
   win_regmerge:
-    content: "{{ lookup('file', 'settings1.reg') }}"
+    content: "{{ lookup('file', 'settings1c.reg') }}"
   register: merge12_result
 
 # without a compare to key, should always report changed
@@ -172,7 +172,7 @@
 #
 - name: test 2 merge in a setting
   win_regmerge:
-    content: "{{ lookup('file', 'settings1.reg') }}"
+    content: "{{ lookup('file', 'settings1c.reg') }}"
     compare_to: 'HKLM:\SOFTWARE\Wow6432Node\Cow Corp\Moosic\ILikeToMooveIt'
   register: merge21_result
 
@@ -183,7 +183,7 @@
 # re run the merge
 - name: test 2 merge in the setting again but with compare_key
   win_regmerge:
-    content: "{{ lookup('file', 'settings1.reg') }}"
+    content: "{{ lookup('file', 'settings1c.reg') }}"
     compare_to: 'HKLM:\SOFTWARE\Wow6432Node\Cow Corp\Moosic\ILikeToMooveIt'
   register: merge22_result
 
@@ -202,7 +202,7 @@
 # test 3 merge in more complex settings
 - name: test 3 merge in a setting
   win_regmerge:
-    content: "{{ lookup('file', 'settings3.reg') }}"
+    content: "{{ lookup('file', 'settings3c.reg') }}"
     compare_to: 'HKLM:\SOFTWARE\Wow6432Node\Cow Corp\Moo Monitor'
   register: merge31_result
 
@@ -213,7 +213,7 @@
 # re run the merge
 - name: test 3 merge in the setting again but with compare_key check
   win_regmerge:
-    content: "{{ lookup('file', 'settings3.reg') }}"
+    content: "{{ lookup('file', 'settings3c.reg') }}"
     compare_to: 'HKLM:\SOFTWARE\Wow6432Node\Cow Corp\Moo Monitor'
   register: merge32_result
 
