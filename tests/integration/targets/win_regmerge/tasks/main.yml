@@ -140,7 +140,7 @@
 
 # test 1 -  basic test of changed behaviour
 # merge in REG_SZ
-- name: test 1 merge in a setting
+- name: test 1 merge in a setting using 'content'
   win_regmerge:
     content: "{{ lookup('file', 'settings1c.reg') }}"
   register: merge11_result
@@ -150,7 +150,7 @@
       - "merge11_result.changed == true"
 
 # re run the merge
-- name: test 1 merge in the setting again
+- name: test 1 merge in the setting again using 'content'
   win_regmerge:
     content: "{{ lookup('file', 'settings1c.reg') }}"
   register: merge12_result
@@ -170,7 +170,7 @@
 #
 # test 2, observe behaviour when compare_to param is set
 #
-- name: test 2 merge in a setting
+- name: test 2 merge in a setting using 'content'
   win_regmerge:
     content: "{{ lookup('file', 'settings1c.reg') }}"
     compare_to: 'HKLM:\SOFTWARE\Wow6432Node\Cow Corp\Moosic\ILikeToMooveIt'
@@ -181,7 +181,7 @@
       - "merge21_result.changed == true"
 
 # re run the merge
-- name: test 2 merge in the setting again but with compare_key
+- name: test 2 merge in the setting again but with compare_key using 'content'
   win_regmerge:
     content: "{{ lookup('file', 'settings1c.reg') }}"
     compare_to: 'HKLM:\SOFTWARE\Wow6432Node\Cow Corp\Moosic\ILikeToMooveIt'
@@ -200,7 +200,7 @@
     state: absent
 
 # test 3 merge in more complex settings
-- name: test 3 merge in a setting
+- name: test 3 merge in a setting using 'content'
   win_regmerge:
     content: "{{ lookup('file', 'settings3c.reg') }}"
     compare_to: 'HKLM:\SOFTWARE\Wow6432Node\Cow Corp\Moo Monitor'
@@ -211,7 +211,7 @@
       - "merge31_result.changed == true"
 
 # re run the merge
-- name: test 3 merge in the setting again but with compare_key check
+- name: test 3 merge in the setting again but with compare_key check using 'content'
   win_regmerge:
     content: "{{ lookup('file', 'settings3c.reg') }}"
     compare_to: 'HKLM:\SOFTWARE\Wow6432Node\Cow Corp\Moo Monitor'
