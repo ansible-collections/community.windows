@@ -29,7 +29,7 @@ $result = @{
 $params = Parse-Args $args
 
 $path = Get-AnsibleParam -obj $params -name "path" -type "path" -resultobj $result
-$content = Get-AnsibleParam -obj $params -name "content" -type "content" -resultobj $result
+$content = Get-AnsibleParam -obj $params -name "content" -type "str" -resultobj $result
 $compare_to = Get-AnsibleParam -obj $params -name "compare_to" -type "str" -resultobj $result
 
 if ( !$path -and !$content ) {
@@ -41,10 +41,9 @@ if (  $path -and $content ) {
 }
 
 if ( $content ) {
-    $guid = [guid]::NewGuid()
-    $path = $env:TEMP + "\" + $guid.ToString() + 'ansible_win_regmerge_content.reg'
+    $path = [System.IO.Path]::GetTempFileName()
 
-    $content | Out-File -FilePath $path
+    Set-Content -LiteralPath $path -Value $content
 
     $remove_path = $True
 }
