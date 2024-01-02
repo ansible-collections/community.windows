@@ -172,15 +172,23 @@ To check whether it is installed, run <code class="code docutils literal notrans
 </thead>
 <tbody>
 <tr class="row-even"><td><div class="ansible-option-cell">
-<div class="ansibleOptionAnchor" id="parameter-compare_key"></div><p class="ansible-option-title" id="ansible-collections-community-windows-win-regmerge-module-parameter-compare-key"><strong>compare_key</strong></p>
-<a class="ansibleOptionLink" href="#parameter-compare_key" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+<div class="ansibleOptionAnchor" id="parameter-compare_to"></div><p class="ansible-option-title" id="ansible-collections-community-windows-win-regmerge-module-parameter-compare-to"><strong>compare_to</strong></p>
+<a class="ansibleOptionLink" href="#parameter-compare_to" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>The parent key to use when comparing the contents of the registry to the contents of the file.  Needs to be in HKLM or HKCU part of registry. Use a PS-Drive style path for example HKLM:\SOFTWARE not HKEY_LOCAL_MACHINE\SOFTWARE If not supplied, or the registry key is not found, no comparison will be made, and the module will report changed.</p>
 </div></td>
 </tr>
 <tr class="row-odd"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-content"></div><p class="ansible-option-title" id="ansible-collections-community-windows-win-regmerge-module-parameter-content"><strong>content</strong></p>
+<a class="ansibleOptionLink" href="#parameter-content" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+<p><em class="ansible-option-versionadded">added in community.windows 2.2.0</em></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>When used instead of <code class="ansible-option docutils literal notranslate"><strong><a class="reference internal" href="#ansible-collections-community-windows-win-regmerge-module-parameter-path"><span class="std std-ref"><span class="pre">path</span></span></a></strong></code>, merges the value specified into the Windows registry. It must not include the Byte Order Mark.</p>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-path"></div><p class="ansible-option-title" id="ansible-collections-community-windows-win-regmerge-module-parameter-path"><strong>path</strong></p>
-<a class="ansibleOptionLink" href="#parameter-path" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">path</span> / <span class="ansible-option-required">required</span></p>
+<a class="ansibleOptionLink" href="#parameter-path" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">path</span></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>The full path including file name to the registry file on the remote machine to be merged</p>
 </div></td>
@@ -220,6 +228,23 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Compare and merge registry file</span>
 <span class="w">  </span><span class="nt">community.windows.win_regmerge</span><span class="p">:</span>
 <span class="w">    </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">C:\autodeploy\myCompany-settings.reg</span>
+<span class="w">    </span><span class="nt">compare_to</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">HKLM:\SOFTWARE\myCompany</span>
+
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Merge in a registry file specified as content without comparing to current registry</span>
+<span class="w">  </span><span class="nt">community.windows.win_regmerge</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">content</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
+<span class="w">      </span><span class="no">Windows Registry Editor Version 5.00</span>
+
+<span class="w">      </span><span class="no">[HKEY_LOCAL_MACHINE\SOFTWARE\myCompany]</span>
+<span class="w">      </span><span class="no">&quot;ExampleKey&quot;=dword:00000001</span>
+
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Compare and merge registry file specified as content</span>
+<span class="w">  </span><span class="nt">community.windows.win_regmerge</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">content</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
+<span class="w">      </span><span class="no">Windows Registry Editor Version 5.00</span>
+
+<span class="w">      </span><span class="no">[HKEY_LOCAL_MACHINE\SOFTWARE\myCompany]</span>
+<span class="w">      </span><span class="no">&quot;ExampleKey&quot;=dword:00000001</span>
 <span class="w">    </span><span class="nt">compare_to</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">HKLM:\SOFTWARE\myCompany</span>
 </pre></div>
 </div>
