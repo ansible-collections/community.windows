@@ -1,0 +1,2 @@
+bugfixes:
+- win_psmodule - Fix up error message with ``state=latest``
