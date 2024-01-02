@@ -79,7 +79,7 @@ else {
 }
 
 $result.flags = $flags
-$result.cmd = "$robocopy $robocopy_opts"
+$result.cmd = "robocopy $robocopy_opts"
 
 Try {
     $robocopy_output = &robocopy $robocopy_opts

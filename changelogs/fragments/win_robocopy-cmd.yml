@@ -1,0 +1,2 @@
+bugfixes:
+- win_robocopy - Fix up ``cmd`` return value to include the executable ``robocopy``
