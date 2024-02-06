@@ -66,8 +66,16 @@
   delegate_to: localhost
   register: output_dir_abs
 
+- name: check if we can use the default AES encryption
+  ansible.windows.win_powershell:
+    script: |
+      $osVersion = [Version](Get-Item -LiteralPath "$env:SystemRoot\System32\kernel32.dll").VersionInfo.ProductVersion
+      $osVersion -ge [Version]"10.0.17763"
+  changed_when: false
+  register: aes256_support
+
 - name: create certificates for code signing
-  script: setup_certs.sh
+  script: setup_certs.sh {{ '' if aes256_support.output[0] else '-use-legacy' }}
   args:
     chdir: '{{ output_dir_abs.stdout }}'
   delegate_to: localhost
