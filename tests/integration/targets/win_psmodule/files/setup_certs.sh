@@ -16,4 +16,8 @@ openssl req -new -key sign.key -out sign.csr -subj "/CN=Ansible Sign" -config op
 openssl x509 -req -in sign.csr -CA ca.pem -CAkey ca.key -CAcreateserial -out sign.pem -days 365 -extfile openssl.conf -extensions req_sign -passin pass:password
 
 # Create pfx that includes signing cert and cert with the pass 'password'
-openssl pkcs12 -export -out sign.pfx -inkey sign.key -in sign.pem -passin pass:password -passout pass:password
+pfx_args=()
+if [ "${1}" == "-use-legacy" ]; then
+    pfx_args=("-certpbe" "PBE-SHA1-3DES" "-keypbe" "PBE-SHA1-3DES" "-macalg" "SHA1")
+fi
+openssl pkcs12 -export -out sign.pfx -inkey sign.key -in sign.pem -passin pass:password -passout pass:password "${pfx_args[@]}"
