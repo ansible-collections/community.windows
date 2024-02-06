@@ -3,19 +3,19 @@ name: windows
 version: 2.1.0
 readme: README.md
 authors:
-- Jordan Borean @jborean93
-- Matt Davis @nitzmahone
+  - Jordan Borean @jborean93
+  - Matt Davis @nitzmahone
 description: |
   Ansible collection for community Windows plugins.
 license_file: COPYING
 tags:
-- windows
+  - windows
 dependencies:
-  ansible.windows: '>=1.0.0,<3.0.0'
+  ansible.windows: ">=1.0.0,<3.0.0"
 repository: https://github.com/ansible-collections/community.windows
 documentation: https://docs.ansible.com/ansible/devel/collections/community/windows
 homepage: https://github.com/ansible-collections/community.windows
 issues: https://github.com/ansible-collections/community.windows/issues
 build_ignore:
-- tests/integration/inventory*
-- changelogs/.plugin-cache.yaml
+  - tests/integration/inventory*
+  - changelogs/.plugin-cache.yaml
