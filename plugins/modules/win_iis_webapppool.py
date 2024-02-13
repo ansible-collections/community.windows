@@ -94,6 +94,14 @@ EXAMPLES = r'''
       managedRuntimeVersion: v4.0
       autoStart: no
 
+- name: Creates an application pool with "No Managed Code" for .Net compatibility
+  community.windows.win_iis_webapppool:
+    name: AnotherAppPool
+    state: started
+    attributes:
+      managedRuntimeVersion: ''
+      autoStart: false
+
 # In the below example we are setting attributes in child element processModel
 # https://www.iis.net/configreference/system.applicationhost/applicationpools/add/processmodel
 - name: Manage child element and set identity of application pool
