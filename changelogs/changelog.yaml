@@ -539,3 +539,20 @@ releases:
     - win_psmodule_info.yml
     - win_rabbitmq_plugin_iex.yml
     release_date: '2023-11-16'
+  2.2.0:
+    changes:
+      bugfixes:
+      - win_format, win_partition - Add support for Windows failover cluster disks
+      - win_psmodule - Fix up error message with ``state=latest``
+      - win_robocopy - Fix up ``cmd`` return value to include the executable ``robocopy``
+      minor_changes:
+      - win_regmerge - Add content 'content' parameter for specifying registry file
+        contents directly
+      release_summary: Release summary for v2.2.0
+    fragments:
+    - 543-support_for_failover_cluster.yaml
+    - 546-win_regmerge-add_content_parameter.yaml
+    - release-summary.yml
+    - win_psmodule-error.yml
+    - win_robocopy-cmd.yml
+    release_date: '2024-03-20'

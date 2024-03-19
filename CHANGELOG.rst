@@ -4,6 +4,25 @@ Community Windows Release Notes
 
 .. contents:: Topics
 
+v2.2.0
+======
+
+Release Summary
+---------------
+
+Release summary for v2.2.0
+
+Minor Changes
+-------------
+
+- win_regmerge - Add content 'content' parameter for specifying registry file contents directly
+
+Bugfixes
+--------
+
+- win_format, win_partition - Add support for Windows failover cluster disks
+- win_psmodule - Fix up error message with ``state=latest``
+- win_robocopy - Fix up ``cmd`` return value to include the executable ``robocopy``
 
 v2.1.0
 ======
@@ -383,7 +402,6 @@ Release Summary
 
 This is the first proper release of the ``community.windows`` collection on 2020-07-18.
 The changelog describes all changes made to the modules and plugins included in this collection since Ansible 2.9.0.
-
 
 Minor Changes
 -------------

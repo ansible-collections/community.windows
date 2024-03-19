@@ -1,3 +1,0 @@
----
-bugfixes:
-  - win_format, win_partition - Add support for Windows failover cluster disks
