@@ -1,0 +1,5 @@
+plugins/modules/win_audit_rule.ps1 pslint:PSCustomUseLiteralPath  # Unsure if we can fix this or not so keep ignoring for now
+tests/integration/targets/win_lineinfile/files/expectations/23_utf8_bom.txt shebang
+tests/integration/targets/win_lineinfile/files/expectations/24_utf8_bom_line_added.txt shebang
+tests/integration/targets/win_lineinfile/files/expectations/30_linebreaks_checksum_bad.txt line-endings
+tests/integration/targets/win_regmerge/templates/win_line_ending.j2 line-endings
