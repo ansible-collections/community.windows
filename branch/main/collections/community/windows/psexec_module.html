@@ -467,7 +467,7 @@ see <a class="reference internal" href="#ansible-collections-community-windows-p
 <span class="w">    </span><span class="nt">connection_password</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">password</span>
 <span class="w">    </span><span class="nt">executable</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">cmd.exe</span>
 <span class="w">    </span><span class="nt">arguments</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/c rmdir C:\temp</span>
-<span class="w">    </span><span class="nt">asynchronous</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">yes</span>
+<span class="w">    </span><span class="nt">asynchronous</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
 
 <span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Use Kerberos authentication for the connection (requires smbprotocol[kerberos])</span>
 <span class="w">  </span><span class="nt">community.windows.psexec</span><span class="p">:</span>
@@ -481,7 +481,7 @@ see <a class="reference internal" href="#ansible-collections-community-windows-p
 <span class="w">    </span><span class="nt">hostanme</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">windows-pc</span>
 <span class="w">    </span><span class="nt">connection_username</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Administrator</span>
 <span class="w">    </span><span class="nt">connection_password</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Password01</span>
-<span class="w">    </span><span class="nt">encrypt</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">no</span>
+<span class="w">    </span><span class="nt">encrypt</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
 <span class="w">    </span><span class="nt">integrity_level</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">elevated</span>
 <span class="w">    </span><span class="nt">process_username</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Administrator</span>
 <span class="w">    </span><span class="nt">process_password</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Password01</span>
@@ -493,7 +493,7 @@ see <a class="reference internal" href="#ansible-collections-community-windows-p
 <span class="w">    </span><span class="nt">hostname</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">hostvars</span><span class="o">[</span><span class="nv">inventory_hostname</span><span class="o">][</span><span class="s2">&quot;ansible_host&quot;</span><span class="o">]</span> <span class="o">|</span> <span class="nf">default</span><span class="o">(</span><span class="nv">inventory_hostname</span><span class="o">)</span> <span class="cp">}}</span><span class="s">&#39;</span>
 <span class="w">    </span><span class="nt">connection_username</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">ansible_user</span> <span class="cp">}}</span><span class="s">&#39;</span>
 <span class="w">    </span><span class="nt">connection_password</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">ansible_password</span> <span class="cp">}}</span><span class="s">&#39;</span>
-<span class="w">    </span><span class="nt">encrypt</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">yes</span>
+<span class="w">    </span><span class="nt">encrypt</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
 <span class="w">    </span><span class="nt">executable</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">powershell.exe</span>
 <span class="w">    </span><span class="nt">arguments</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;-&#39;</span>
 <span class="w">    </span><span class="nt">stdin</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span>

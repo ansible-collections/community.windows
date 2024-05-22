@@ -306,13 +306,13 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <span class="w">  </span><span class="nt">community.windows.win_domain_object_info</span><span class="p">:</span>
 <span class="w">    </span><span class="nt">filter</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ObjectClass -eq &#39;user&#39; -and objectCategory -eq &#39;Person&#39;</span>
 <span class="w">    </span><span class="nt">properties</span><span class="p">:</span>
-<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">objectSid</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">objectSid</span>
 
 <span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Get the SID for all user accounts as a LDAP filter</span>
 <span class="w">  </span><span class="nt">community.windows.win_domain_object_info</span><span class="p">:</span>
 <span class="w">    </span><span class="nt">ldap_filter</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">(&amp;(objectClass=user)(objectCategory=Person))</span>
 <span class="w">    </span><span class="nt">properties</span><span class="p">:</span>
-<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">objectSid</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">objectSid</span>
 
 <span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Search all computer accounts in a specific path that were added after February 1st</span>
 <span class="w">  </span><span class="nt">community.windows.win_domain_object_info</span><span class="p">:</span>
