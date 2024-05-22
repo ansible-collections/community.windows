@@ -76,43 +76,42 @@ seealso:
 EXAMPLES = r'''
 - name: Apply our filter to Tomcat web.xml
   community.windows.win_xml:
-   path: C:\apache-tomcat\webapps\myapp\WEB-INF\web.xml
-   fragment: '<filter><filter-name>MyFilter</filter-name><filter-class>com.example.MyFilter</filter-class></filter>'
-   xpath: '/*'
+    path: C:\apache-tomcat\webapps\myapp\WEB-INF\web.xml
+    fragment: '<filter><filter-name>MyFilter</filter-name><filter-class>com.example.MyFilter</filter-class></filter>'
+    xpath: '/*'
 
 - name: Apply sslEnabledProtocols to Tomcat's server.xml
   community.windows.win_xml:
-   path: C:\Tomcat\conf\server.xml
-   xpath: '//Server/Service[@name="Catalina"]/Connector[@port="9443"]'
-   attribute: 'sslEnabledProtocols'
-   fragment: 'TLSv1,TLSv1.1,TLSv1.2'
-   type: attribute
+    path: C:\Tomcat\conf\server.xml
+    xpath: '//Server/Service[@name="Catalina"]/Connector[@port="9443"]'
+    attribute: 'sslEnabledProtocols'
+    fragment: 'TLSv1,TLSv1.1,TLSv1.2'
+    type: attribute
 
 - name: remove debug configuration nodes from nlog.conf
   community.windows.win_xml:
-   path: C:\IISApplication\nlog.conf
-   xpath: /nlog/rules/logger[@name="debug"]/descendant::*
-   state: absent
+    path: C:\IISApplication\nlog.conf
+    xpath: /nlog/rules/logger[@name="debug"]/descendant::*
+    state: absent
 
 - name: count configured connectors in Tomcat's server.xml
   community.windows.win_xml:
-   path: C:\Tomcat\conf\server.xml
-   xpath: //Server/Service/Connector
-   count: yes
+    path: C:\Tomcat\conf\server.xml
+    xpath: //Server/Service/Connector
+    count: true
   register: connector_count
 
 - name: show connector count
-  debug:
-    msg="Connector count is {{connector_count.count}}"
+  ansible.builtin.debug:
+    msg: Connector count is {{ connector_count.count }}
 
 - name: ensure all lang=en attributes to lang=nl
   community.windows.win_xml:
-   path: C:\Data\Books.xml
-   xpath: //@[lang="en"]
-   attribute: lang
-   fragment: nl
-   type: attribute
-
+    path: C:\Data\Books.xml
+    xpath: //@[lang="en"]
+    attribute: lang
+    fragment: nl
+    type: attribute
 '''
 
 RETURN = r'''

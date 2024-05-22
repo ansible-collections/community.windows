@@ -104,13 +104,13 @@ EXAMPLES = r'''
   community.windows.win_domain_object_info:
     filter: ObjectClass -eq 'user' -and objectCategory -eq 'Person'
     properties:
-    - objectSid
+      - objectSid
 
 - name: Get the SID for all user accounts as a LDAP filter
   community.windows.win_domain_object_info:
     ldap_filter: (&(objectClass=user)(objectCategory=Person))
     properties:
-    - objectSid
+      - objectSid
 
 - name: Search all computer accounts in a specific path that were added after February 1st
   community.windows.win_domain_object_info:

@@ -115,12 +115,12 @@ EXAMPLES = r'''
       - BUILTIN\users
     session_timeout: 30
     session_timeout_action: disconnect
-    allow_only_sdrts_servers: yes
-    redirect_clipboard: yes
-    redirect_drives: no
-    redirect_printers: no
-    redirect_serial: no
-    redirect_pnp: no
+    allow_only_sdrts_servers: true
+    redirect_clipboard: true
+    redirect_drives: false
+    redirect_printers: false
+    redirect_serial: false
+    redirect_pnp: false
     state: enabled
 '''
 

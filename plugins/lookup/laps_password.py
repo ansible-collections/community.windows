@@ -134,7 +134,7 @@ EXAMPLES = """
     command: kinit username@ANSIBLE.COM
     responses:
       (?i)password: SecretPass1
-  no_log: True
+  no_log: true
 
 - name: Get the LAPS password using Kerberos auth, relies on kinit already being called
   set_fact:

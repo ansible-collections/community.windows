@@ -100,7 +100,6 @@ EXAMPLES = r'''
     members:
       - DomainBBB.cloud\UserInDomainBBB
     state: Present
-
 '''
 
 RETURN = r'''

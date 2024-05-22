@@ -62,20 +62,20 @@ EXAMPLES = r'''
   community.windows.win_robocopy:
     src: C:\DirectoryOne
     dest: C:\DirectoryTwo
-    recurse: yes
+    recurse: true
 
 - name: Sync the contents of one directory to another, and remove any files/directories found in destination that do not exist in the source
   community.windows.win_robocopy:
     src: C:\DirectoryOne
     dest: C:\DirectoryTwo
-    purge: yes
+    purge: true
 
 - name: Sync content in recursive mode, removing any files/directories found in destination that do not exist in the source
   community.windows.win_robocopy:
     src: C:\DirectoryOne
     dest: C:\DirectoryTwo
-    recurse: yes
-    purge: yes
+    recurse: true
+    purge: true
 
 - name: Sync two directories in recursive and purging mode, specifying additional special flags
   community.windows.win_robocopy:

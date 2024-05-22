@@ -137,7 +137,7 @@ EXAMPLES = r'''
 - name: Create file if it doesn't exist with a specific encoding
   community.windows.win_lineinfile:
     path: C:\Temp\utf16.txt
-    create: yes
+    create: true
     encoding: utf-16
     line: This is a utf-16 encoded file
 
@@ -150,7 +150,7 @@ EXAMPLES = r'''
 - name: Update a line using backrefs
   community.windows.win_lineinfile:
     path: C:\Temp\example.conf
-    backrefs: yes
+    backrefs: true
     regex: '(^name=)'
     line: '$1JohnDoe'
 '''

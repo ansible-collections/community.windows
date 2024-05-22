@@ -49,5 +49,4 @@ EXAMPLES = r'''
   community.windows.win_zip:
     src: C:\Users\hiyoko\log\*
     dest: C:\Users\hiyoko\log.zip
-
 '''

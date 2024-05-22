@@ -184,7 +184,7 @@ EXAMPLES = r'''
 - name: Configure and start the foo service using win_service
   ansible.windows.win_service:
     name: foo
-    dependencies: [ adf, tcpip ]
+    dependencies: [adf, tcpip]
     username: foouser
     password: secret
     start_mode: manual

@@ -133,7 +133,7 @@ EXAMPLES = r'''
   community.windows.win_domain_group:
     name: Cow
     state: absent
-    ignore_protection: yes
+    ignore_protection: true
 
 - name: Create group with delete protection enabled and custom attributes
   community.windows.win_domain_group:
@@ -143,14 +143,14 @@ EXAMPLES = r'''
     attributes:
       mail: helpdesk@ansible.com
       wWWHomePage: www.ansible.com
-    ignore_protection: yes
+    ignore_protection: true
 
 - name: Change the OU of a group using the SID and ignore the protection flag
   community.windows.win_domain_group:
     name: S-1-5-21-2171456218-3732823212-122182344-1189
     scope: global
     organizational_unit: OU=groups,DC=ansible,DC=local
-    ignore_protection: yes
+    ignore_protection: true
 
 - name: Add managed_by user
   community.windows.win_domain_group:

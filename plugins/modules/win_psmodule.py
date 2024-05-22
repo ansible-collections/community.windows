@@ -131,7 +131,7 @@ EXAMPLES = r'''
 - name: Install newer version of built-in Windows module
   community.windows.win_psmodule:
     name: Pester
-    skip_publisher_check: yes
+    skip_publisher_check: true
     state: present
 
 - name: Add a PowerShell module and register a repository
