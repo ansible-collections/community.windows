@@ -77,8 +77,8 @@ EXAMPLES = r'''
   community.windows.win_unzip:
     src: C:\Downloads\ApplicationLogs.zip
     dest: C:\Application\Logs
-    recurse: yes
-    delete_archive: yes
+    recurse: true
+    delete_archive: true
 
 - name: Install PSCX
   community.windows.win_psmodule:
@@ -90,7 +90,7 @@ EXAMPLES = r'''
     src: C:\Downloads\ApplicationLogs.7z
     dest: C:\Application\Logs
     password: abcd
-    delete_archive: yes
+    delete_archive: true
 '''
 
 RETURN = r'''

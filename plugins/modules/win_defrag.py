@@ -48,11 +48,11 @@ author:
 EXAMPLES = r'''
 - name: Defragment all local volumes (in parallel)
   community.windows.win_defrag:
-    parallel: yes
+    parallel: true
 
 - name: 'Defragment all local volumes, except C: and D:'
   community.windows.win_defrag:
-    exclude_volumes: [ C, D ]
+    exclude_volumes: [C, D]
 
 - name: 'Defragment volume D: with normal priority'
   community.windows.win_defrag:
@@ -61,7 +61,7 @@ EXAMPLES = r'''
 
 - name: Consolidate free space (useful when reducing volumes)
   community.windows.win_defrag:
-    freespace_consolidation: yes
+    freespace_consolidation: true
 '''
 
 RETURN = r'''

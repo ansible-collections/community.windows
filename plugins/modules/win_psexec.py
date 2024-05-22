@@ -116,15 +116,15 @@ EXAMPLES = r'''
 - name: Run regedit.exe locally (on target node) as SYSTEM and interactively
   community.windows.win_psexec:
     command: regedit.exe
-    interactive: yes
-    system: yes
+    interactive: true
+    system: true
 
 - name: Run the setup.exe installer on multiple servers using the Domain Administrator
   community.windows.win_psexec:
     command: E:\setup.exe /i /IACCEPTEULA
     hostnames:
-    - remote_server1
-    - remote_server2
+      - remote_server1
+      - remote_server2
     username: DOMAIN\Administrator
     password: some_password
     priority: high
@@ -133,7 +133,7 @@ EXAMPLES = r'''
   community.windows.win_psexec:
     command: netsh advfirewall set allprofiles state off
     executable: C:\Program Files\sysinternals\psexec.exe
-    hostnames: [ remote_server ]
+    hostnames: [remote_server]
     password: some_password
     priority: low
 '''

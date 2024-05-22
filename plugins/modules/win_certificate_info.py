@@ -60,7 +60,7 @@ EXAMPLES = r'''
     path: C:\Temp\cert.pfx
     state: present
     password: VeryStrongPasswordHere!
-  become: yes
+  become: true
   become_method: runas
   register: mycert
 

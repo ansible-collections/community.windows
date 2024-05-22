@@ -52,18 +52,17 @@ EXAMPLES = r'''
 - name: enable multiple interfaces of multiple interfaces
   community.windows.win_net_adapter_feature:
     interface:
-    - 'Ethernet0'
-    - 'Ethernet1'
+      - 'Ethernet0'
+      - 'Ethernet1'
     state: enabled
     component_id:
-    - ms_tcpip6
-    - ms_server
+      - ms_tcpip6
+      - ms_server
 
 - name: Enable ms_tcpip6 of all the Interface
   community.windows.win_net_adapter_feature:
     interface: '*'
     state: enabled
     component_id:
-    - ms_tcpip6
-
+      - ms_tcpip6
 '''

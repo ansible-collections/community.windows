@@ -138,7 +138,7 @@ EXAMPLES = r'''
     installation_policy: untrusted
     source_location: https://myrepo.example/module/feed
     publish_location: https://myrepo.example/api/module/publish
-    force: True
+    force: true
 
 - name: Register a PowerShell repository with credentials
   community.windows.win_psrepository:

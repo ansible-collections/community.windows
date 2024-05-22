@@ -249,7 +249,7 @@ EXAMPLES = r'''
     connection_password: password
     executable: cmd.exe
     arguments: /c rmdir C:\temp
-    asynchronous: yes
+    asynchronous: true
 
 - name: Use Kerberos authentication for the connection (requires smbprotocol[kerberos])
   community.windows.psexec:
@@ -263,7 +263,7 @@ EXAMPLES = r'''
     hostanme: windows-pc
     connection_username: Administrator
     connection_password: Password01
-    encrypt: no
+    encrypt: false
     integrity_level: elevated
     process_username: Administrator
     process_password: Password01
@@ -275,7 +275,7 @@ EXAMPLES = r'''
     hostname: '{{ hostvars[inventory_hostname]["ansible_host"] | default(inventory_hostname) }}'
     connection_username: '{{ ansible_user }}'
     connection_password: '{{ ansible_password }}'
-    encrypt: yes
+    encrypt: true
     executable: powershell.exe
     arguments: '-'
     stdin: |

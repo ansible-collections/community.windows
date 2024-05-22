@@ -134,44 +134,44 @@ author:
 '''
 
 EXAMPLES = r'''
-  - name: Add linux computer to Active Directory OU using a windows machine
-    community.windows.win_domain_computer:
-      name: one_linux_server
-      sam_account_name: linux_server$
-      dns_hostname: one_linux_server.my_org.local
-      ou: "OU=servers,DC=my_org,DC=local"
-      description: Example of linux server
-      enabled: yes
-      state: present
-    delegate_to: my_windows_bridge.my_org.local
+- name: Add linux computer to Active Directory OU using a windows machine
+  community.windows.win_domain_computer:
+    name: one_linux_server
+    sam_account_name: linux_server$
+    dns_hostname: one_linux_server.my_org.local
+    ou: "OU=servers,DC=my_org,DC=local"
+    description: Example of linux server
+    enabled: true
+    state: present
+  delegate_to: my_windows_bridge.my_org.local
 
-  - name: Remove linux computer from Active Directory using a windows machine
-    community.windows.win_domain_computer:
-      name: one_linux_server
-      state: absent
-    delegate_to: my_windows_bridge.my_org.local
+- name: Remove linux computer from Active Directory using a windows machine
+  community.windows.win_domain_computer:
+    name: one_linux_server
+    state: absent
+  delegate_to: my_windows_bridge.my_org.local
 
-  - name: Provision a computer for offline domain join
-    community.windows.win_domain_computer:
-      name: newhost
-      dns_hostname: newhost.ansible.local
-      ou: 'OU=A great\, big organizational unit name,DC=ansible,DC=local'
-      state: present
-      offline_domain_join: yes
-      odj_return_blob: yes
-    register: computer_status
-    delegate_to: windc.ansible.local
+- name: Provision a computer for offline domain join
+  community.windows.win_domain_computer:
+    name: newhost
+    dns_hostname: newhost.ansible.local
+    ou: 'OU=A great\, big organizational unit name,DC=ansible,DC=local'
+    state: present
+    offline_domain_join: true
+    odj_return_blob: true
+  register: computer_status
+  delegate_to: windc.ansible.local
 
-  - name: Join a workgroup computer to the domain
-    vars:
-      target_blob_file: 'C:\ODJ\blob.txt'
-    ansible.windows.win_shell: |
-      $blob = [Convert]::FromBase64String('{{ computer_status.odj_blob }}')
-      [IO.File]::WriteAllBytes('{{ target_blob_file }}', $blob)
-      & djoin.exe --% /RequestODJ /LoadFile '{{ target_blob_file }}' /LocalOS /WindowsPath "%SystemRoot%"
+- name: Join a workgroup computer to the domain
+  vars:
+    target_blob_file: 'C:\ODJ\blob.txt'
+  ansible.windows.win_shell: |
+    $blob = [Convert]::FromBase64String('{{ computer_status.odj_blob }}')
+    [IO.File]::WriteAllBytes('{{ target_blob_file }}', $blob)
+    & djoin.exe --% /RequestODJ /LoadFile '{{ target_blob_file }}' /LocalOS /WindowsPath "%SystemRoot%"
 
-  - name: Restart to complete domain join
-    ansible.windows.win_restart:
+- name: Restart to complete domain join
+  ansible.windows.win_restart:
 '''
 
 RETURN = r'''

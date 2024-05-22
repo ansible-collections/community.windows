@@ -84,7 +84,7 @@ EXAMPLES = r'''
     name: AppPool
     attributes:
       managedRuntimeVersion: v4.0
-      autoStart: no
+      autoStart: false
 
 - name: Creates an application pool, sets attributes and starts it
   community.windows.win_iis_webapppool:
@@ -92,7 +92,7 @@ EXAMPLES = r'''
     state: started
     attributes:
       managedRuntimeVersion: v4.0
-      autoStart: no
+      autoStart: false
 
 - name: Creates an application pool with "No Managed Code" for .Net compatibility
   community.windows.win_iis_webapppool:

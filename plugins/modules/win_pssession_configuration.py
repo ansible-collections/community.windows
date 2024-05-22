@@ -344,7 +344,7 @@ EXAMPLES = r'''
   community.windows.win_pssession_configuration:
     name: RBAC.Endpoint
     session_type: restricted_remote_server
-    run_as_virtual_account: True
+    run_as_virtual_account: true
     transcript_directory: '\\server\share\Transcripts'
     language_mode: no_language
     execution_policy: restricted
