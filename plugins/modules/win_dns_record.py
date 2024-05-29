@@ -112,7 +112,7 @@ EXAMPLES = r'''
 
 - name: Create database server record
   community.windows.win_dns_record:
-    name: "cgyl1404p.amer.example.com"
+    name: "cgyl1404p"
     type: "A"
     value: "10.1.1.1"
     zone: "amer.example.com"
