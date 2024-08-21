@@ -4,6 +4,14 @@
     name: NSSM
     state: present
 
+- name: restart sshd after env var was updated by chocolatey
+  win_service:
+    name: sshd
+    state: restarted
+  when: ansible_connection == 'ssh'
+
+- meta: reset_connection
+
 - name: ensure testing folder exists
   ansible.windows.win_file:
     path: '{{test_win_nssm_path}}'
