@@ -2,7 +2,7 @@
 <html class="writer-html5" lang="en" data-content_root="../../../">
 <head>
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
-<meta content="2.12.0" name="antsibull-docs" />
+<meta content="2.13.0" name="antsibull-docs" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>community.windows.win_say module – Text to speech module for Windows to speak messages and optionally play sounds &mdash; Ansible collections  documentation</title>
@@ -154,7 +154,7 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <section id="synopsis">
 <h2><a class="toc-backref" href="#id1" role="doc-backlink">Synopsis</a><a class="headerlink" href="#synopsis" title="Link to this heading"></a></h2>
 <ul class="simple">
-<li><p>Uses .NET libraries to convert text to speech and optionally play .wav sounds.  Audio Service needs to be running and some kind of speakers or headphones need to be attached to the windows target(s) for the speech to be audible.</p></li>
+<li><p>Uses .NET libraries to convert text to speech and optionally play .wav sounds. Audio Service needs to be running and some kind of speakers or headphones need to be attached to the windows target(s) for the speech to be audible.</p></li>
 </ul>
 </section>
 <section id="parameters">
@@ -225,14 +225,13 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <h2><a class="toc-backref" href="#id3" role="doc-backlink">Notes</a><a class="headerlink" href="#notes" title="Link to this heading"></a></h2>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<ul>
+<ul class="simple">
 <li><p>Needs speakers or headphones to do anything useful.</p></li>
-<li><p>To find which voices are installed, run the following Powershell commands.</p>
-<p>Add-Type -AssemblyName System.Speech
+<li><p>To find which voices are installed, run the following Powershell commands.
+Add-Type -AssemblyName System.Speech
 $speech = New-Object -TypeName System.Speech.Synthesis.SpeechSynthesizer
 $speech.GetInstalledVoices() | ForEach-Object { $_.VoiceInfo }
-$speech.Dispose()</p>
-</li>
+$speech.Dispose()</p></li>
 <li><p>Speech can be surprisingly slow, so it’s best to keep message text short.</p></li>
 </ul>
 </div>

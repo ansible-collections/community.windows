@@ -2,7 +2,7 @@
 <html class="writer-html5" lang="en" data-content_root="../../../">
 <head>
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
-<meta content="2.12.0" name="antsibull-docs" />
+<meta content="2.13.0" name="antsibull-docs" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>community.windows.win_regmerge module – Merges the contents of a registry file into the Windows registry &mdash; Ansible collections  documentation</title>
@@ -175,7 +175,7 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <div class="ansibleOptionAnchor" id="parameter-compare_to"></div><p class="ansible-option-title" id="ansible-collections-community-windows-win-regmerge-module-parameter-compare-to"><strong>compare_to</strong></p>
 <a class="ansibleOptionLink" href="#parameter-compare_to" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
-<td><div class="ansible-option-cell"><p>The parent key to use when comparing the contents of the registry to the contents of the file.  Needs to be in HKLM or HKCU part of registry. Use a PS-Drive style path for example HKLM:\SOFTWARE not HKEY_LOCAL_MACHINE\SOFTWARE If not supplied, or the registry key is not found, no comparison will be made, and the module will report changed.</p>
+<td><div class="ansible-option-cell"><p>The parent key to use when comparing the contents of the registry to the contents of the file. Needs to be in HKLM or HKCU part of registry. Use a PS-Drive style path for example HKLM:\SOFTWARE not HKEY_LOCAL_MACHINE\SOFTWARE If not supplied, or the registry key is not found, no comparison will be made, and the module will report changed.</p>
 </div></td>
 </tr>
 <tr class="row-odd"><td><div class="ansible-option-cell">
@@ -202,7 +202,7 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <p class="admonition-title">Note</p>
 <ul class="simple">
 <li><p>Organise your registry files so that they contain a single root registry key if you want to use the compare_to functionality.</p></li>
-<li><p>This module does not force registry settings to be in the state described in the file.  If registry settings have been modified externally the module will merge the contents of the file but continue to report differences on subsequent runs.</p></li>
+<li><p>This module does not force registry settings to be in the state described in the file. If registry settings have been modified externally the module will merge the contents of the file but continue to report differences on subsequent runs.</p></li>
 <li><p>To force registry change, use <a class="reference external" href="https://docs.ansible.com/ansible/devel/collections/ansible/windows/win_regedit_module.html#ansible-collections-ansible-windows-win-regedit-module" title="(in Ansible vdevel)"><span class="xref std std-ref">ansible.windows.win_regedit</span></a> with <code class="docutils literal notranslate"><span class="pre">state=absent</span></code> before using <code class="docutils literal notranslate"><span class="pre">community.windows.win_regmerge</span></code>.</p></li>
 </ul>
 </div>
