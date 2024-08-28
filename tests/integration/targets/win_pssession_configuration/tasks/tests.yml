@@ -306,7 +306,7 @@
 - name: "RunAs Tests"
   vars:
     runas_user: "{{ ansible_user }}"
-    runas_pass: "{{ ansible_password }}"
+    runas_pass: "{{ ansible_password | default(ansible_test_connection_password) }}"
   block:
     - name: Change runas credential (check)
       win_pssession_configuration:

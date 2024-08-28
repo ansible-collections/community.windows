@@ -18,7 +18,7 @@
   set_fact:
     psexec_hostname: '{{ansible_host}}'
     psexec_username: '{{ansible_user}}'
-    psexec_password: '{{ansible_password}}'
+    psexec_password: '{{ ansible_password | default(ansible_test_connection_password) }}'
     psexec_encrypt: '{{encryption_supported_raw.stdout_lines[0]|bool}}'
 
 - name: create test rule to allow SMB traffic inbound

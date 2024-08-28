@@ -10,7 +10,7 @@
 - name: download Pester module from S3 bucket
   ansible.windows.win_get_url:
     # this was downloaded straight off the Pester GitHub release page and uploaded to the S3 bucket
-    # https://github.com/pester/Pester/releases 
+    # https://github.com/pester/Pester/releases
     url: 'https://ansible-ci-files.s3.amazonaws.com/test/integration/roles/test_win_pester/Pester-4.3.1.zip'
     dest: '{{test_win_pester_path}}\Pester-4.3.1.zip'
   register: download_res
@@ -34,6 +34,8 @@
     elements:
     - '{{test_win_pester_path}}\Modules'
 
+- meta: reset_connection
+
 - name: copy test files
   ansible.windows.win_copy:
     src: files/
@@ -53,6 +55,8 @@
       state: absent
       elements:
       - '{{test_win_pester_path}}\Modules'
+
+  - meta: reset_connection
 
   - name: delete test folder
     ansible.windows.win_file:
