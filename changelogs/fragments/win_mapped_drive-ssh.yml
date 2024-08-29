@@ -1,3 +1,0 @@
-bugfixes:
-  - >-
-    win_mapped_drive - better handle failures when attempting to set mapped drive that already exists but was seen as a local path.

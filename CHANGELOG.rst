@@ -4,6 +4,25 @@ Community Windows Release Notes
 
 .. contents:: Topics
 
+v2.3.0
+======
+
+Release Summary
+---------------
+
+Release summary for v2.3.0
+
+Minor Changes
+-------------
+
+- Set minimum supported Ansible version to 2.15 to align with the versions still supported by Asnible.
+
+Bugfixes
+--------
+
+- win_mapped_drive - Use correct P/Invoke signature to fix mapped network drives on 32 Bit OS.
+- win_mapped_drive - better handle failures when attempting to set mapped drive that already exists but was seen as a local path.
+
 v2.2.0
 ======
 
