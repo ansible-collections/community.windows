@@ -1,3 +1,0 @@
----
-bugfixes:
-  - win_mapped_drive - Use correct P/Invoke signature to fix mapped network drives on 32 Bit OS.

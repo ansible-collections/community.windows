@@ -556,3 +556,20 @@ releases:
     - win_psmodule-error.yml
     - win_robocopy-cmd.yml
     release_date: '2024-03-20'
+  2.3.0:
+    changes:
+      bugfixes:
+      - win_mapped_drive - Use correct P/Invoke signature to fix mapped network drives
+        on 32 Bit OS.
+      - win_mapped_drive - better handle failures when attempting to set mapped drive
+        that already exists but was seen as a local path.
+      minor_changes:
+      - Set minimum supported Ansible version to 2.15 to align with the versions still
+        supported by Asnible.
+      release_summary: Release summary for v2.3.0
+    fragments:
+    - 578-win_mapped_drive.yml
+    - ansible-version.yml
+    - release-summary.yml
+    - win_mapped_drive-ssh.yml
+    release_date: '2024-08-30'
