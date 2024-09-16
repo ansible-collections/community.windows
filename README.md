@@ -58,10 +58,6 @@ Currently we welcome bugfixes or feature requests to plugins in this collection 
 
 See [Developing modules for Windows](https://docs.ansible.com/ansible/latest/dev_guide/developing_modules_general_windows.html#developing-modules-general-windows) for specifics on Windows modules.
 
-You can also join us on:
-
-IRC - ``#ansible-windows`` [irc.libera.chat](https://libera.chat/) channel
-
 See the [Ansible Community Guide](https://docs.ansible.com/ansible/latest/community/index.html) for details on contributing to Ansible.
 
 
