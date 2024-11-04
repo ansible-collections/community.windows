@@ -70,6 +70,9 @@ Function Install-PrereqModule {
         [string]$Repository
     )
 
+    # Install NuGet provider if needed.
+    Install-NugetProvider -CheckMode $CheckMode
+
     # Those are minimum required versions of modules.
     $PrereqModules = @{
         PackageManagement = '1.1.7'
@@ -108,7 +111,6 @@ Function Install-PrereqModule {
                     Name = $info.Name
                     MinimumVersion = $info.Version
                     Force = $true
-                    Confirm = $false
                 }
                 $installCmd = Get-Command -Name Install-Module
                 if ($installCmd.Parameters.ContainsKey('SkipPublisherCheck')) {
