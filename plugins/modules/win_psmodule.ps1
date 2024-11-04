@@ -108,6 +108,7 @@ Function Install-PrereqModule {
                     Name = $info.Name
                     MinimumVersion = $info.Version
                     Force = $true
+                    Confirm = $false
                 }
                 $installCmd = Get-Command -Name Install-Module
                 if ($installCmd.Parameters.ContainsKey('SkipPublisherCheck')) {
