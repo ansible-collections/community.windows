@@ -1,25 +1,40 @@
 # I dislike this but 2008 doesn't support the Win32_PowerPlan WMI provider
+- name: set fact for getting plan info
+  ansible.builtin.set_fact:
+    plan_info_script: |
+      $infoPattern = 'Power Scheme GUID: (?<guid>[a-fA-F0-9]{8}-(?>[a-fA-F0-9]{4}-){3}[a-fA-F0-9]{12})\s+\((?<name>.*)\)(?<active>\s+\*)?'
+
+      powercfg.exe /list | ForEach-Object {
+        if ($_ -match $infoPattern) {
+          [PSCustomObject]@{
+            name = $Matches['name']
+            guid = $Matches['guid']
+            active = (-not [string]::IsNullOrEmpty($Matches['active']))
+          }
+        }
+      } | Sort-Object -Property active -Descending
+
 - name: get current plan details
-  ansible.windows.win_shell: |
-      $plan_info = powercfg.exe /list
-      ($plan_info | Select-String -Pattern '\(([\w\s]*)\) \*$').Matches.Groups[1].Value
-      ($plan_info | Select-String -Pattern '\(([\w\s]*)\)$').Matches.Groups[1].Value
+  ansible.windows.win_powershell:
+    script: '{{ plan_info_script }}'
+  changed_when: False
   register: plan_info
 
 - set_fact:
-    original_plan: '{{ plan_info.stdout_lines[0] }}'
-    name: '{{ plan_info.stdout_lines[1] }}'
+    original_plan: '{{ plan_info.output[0] }}'
+    new_plan: '{{ plan_info.output[1] }}'
 
 - block:
   #Test that plan detects change is needed, but doesn't actually apply change
   - name: set power plan (check mode)
     win_power_plan:
-      name: "{{ name }}"
+      name: "{{ new_plan.name }}"
     register: set_plan_check
     check_mode: yes
 
   - name: get result of set power plan (check mode)
-    ansible.windows.win_shell: (powercfg.exe /list | Select-String -Pattern '\({{ name }}\)').Line
+    ansible.windows.win_powershell:
+      script: '{{ plan_info_script }}'
     register: set_plan_check_result
     changed_when: False
 
@@ -28,16 +43,17 @@
     assert:
       that:
       - set_plan_check is changed
-      - not set_plan_check_result.stdout_lines[0].endswith('*')
+      - set_plan_check_result.output[0].guid == original_plan.guid
 
   #Test that setting plan and that change is applied
   - name: set power plan
     win_power_plan:
-      name: "{{ name }}"
+      name: "{{ new_plan.name }}"
     register: set_plan
 
   - name: get result of set power plan
-    ansible.windows.win_shell: (powercfg.exe /list | Select-String -Pattern '\({{ name }}\)').Line
+    ansible.windows.win_powershell:
+      script: '{{ plan_info_script }}'
     register: set_plan_result
     changed_when: False
 
@@ -45,12 +61,12 @@
     assert:
       that:
       - set_plan is changed
-      - set_plan_result.stdout_lines[0].endswith('*')
+      - set_plan_result.output[0].guid == new_plan.guid
 
   #Test that plan doesn't apply change if it is already set
   - name: set power plan (idempotent)
     win_power_plan:
-      name: "{{ name }}"
+      name: "{{ new_plan.name }}"
     register: set_plan_idempotent
 
   - name: assert setting plan (idempotent)
@@ -61,29 +77,19 @@
   always:
   - name: always change back plan to the original when done testing
     win_power_plan:
-      name: '{{ original_plan }}'
-
-- name: get current plan guid details
-  ansible.windows.win_shell: |
-      $plan_info = powercfg.exe /list
-      ($plan_info | Select-String -Pattern '([a-z0-9]+\-[a-z0-9]+\-[a-z0-9]+\-[a-z0-9]+\-[a-z0-9]+).+\*').Matches.Groups[1].Value
-      ($plan_info | Select-String -Pattern '([a-z0-9]+\-[a-z0-9]+\-[a-z0-9]+\-[a-z0-9]+\-[a-z0-9]+)').Matches.Groups[1].Value
-  register: guid_plan_info
-
-- set_fact:
-    original_plan: '{{ guid_plan_info.stdout_lines[0] }}'
-    name: '{{ guid_plan_info.stdout_lines[1] }}'
+      name: '{{ original_plan.name }}'
 
 - block:
   #Test that plan detects change is needed, but doesn't actually apply change
   - name: set power plan guid (check mode)
     win_power_plan:
-      guid: "{{ name }}"
+      guid: "{{ new_plan.guid }}"
     register: set_plan_check_guid
     check_mode: yes
 
   - name: get result of set power plan guid (check mode)
-    ansible.windows.win_shell: (powercfg.exe /list | Select-String -Pattern '{{ name }}').Line
+    ansible.windows.win_powershell:
+      script: '{{ plan_info_script }}'
     register: set_plan_check_result_guid
     changed_when: False
 
@@ -92,16 +98,17 @@
     assert:
       that:
       - set_plan_check_guid is changed
-      - not set_plan_check_result_guid.stdout_lines[0].endswith('*')
+      - set_plan_check_result_guid.output[0].guid == original_plan.guid
 
   #Test that setting plan and that change is applied
   - name: set power plan guid
     win_power_plan:
-      guid: "{{ name }}"
+      guid: "{{ new_plan.guid }}"
     register: set_plan_guid
 
   - name: get result of set power plan guid
-    ansible.windows.win_shell: (powercfg.exe /list | Select-String -Pattern '{{ name }}').Line
+    ansible.windows.win_powershell:
+      script: '{{ plan_info_script }}'
     register: set_plan_result_guid
     changed_when: False
 
@@ -109,12 +116,12 @@
     assert:
       that:
       - set_plan_guid is changed
-      - set_plan_result_guid.stdout_lines[0].endswith('*')
+      - set_plan_result_guid.output[0].guid == new_plan.guid
 
   #Test that plan doesn't apply change if it is already set
   - name: set power plan guid (idempotent)
     win_power_plan:
-      guid: "{{ name }}"
+      guid: "{{ new_plan.guid }}"
     register: set_plan_idempotent_guid
 
   - name: assert setting plan guid (idempotent)
@@ -125,4 +132,4 @@
   always:
   - name: always change back plan to the original when done testing guid
     win_power_plan:
-      guid: '{{ original_plan }}'
+      guid: '{{ original_plan.guid }}'
