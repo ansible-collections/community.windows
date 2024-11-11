@@ -1,0 +1,3 @@
+---
+minor_changes:
+  - This issue fixes installation of requirements as it requires a confirmation when installed as a depedency to PowershellGet. Installing it by itself prevents this confirmation dialog and allows required components to be installed (https://github.com/ansible-collections/community.windows/issues/147).
