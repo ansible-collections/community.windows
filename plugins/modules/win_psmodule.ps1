@@ -101,7 +101,7 @@ Function Install-PrereqModule {
         $job = Start-Job -ScriptBlock {
             $ErrorActionPreference = 'Stop'
 
-            if (-not (Get-PackageProvider -ListAvailable -ErrorAction SilentlyContinue | Where-Object { ($_.name -eq 'Nuget') -and ($_.version -ge "2.8.5.201") }) ) {
+            if (-not (Get-PackageProvider -ListAvailable | Where-Object { ($_.name -eq 'Nuget') -and ($_.version -ge "2.8.5.201") }) ) {
                 Install-PackageProvider -Name NuGet -MinimumVersion 2.8.5.201 -Force | Out-Null
             }
 
