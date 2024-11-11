@@ -70,9 +70,6 @@ Function Install-PrereqModule {
         [string]$Repository
     )
 
-    # Install NuGet provider if needed.
-    Install-NugetProvider -CheckMode $CheckMode
-
     # Those are minimum required versions of modules.
     $PrereqModules = @{
         PackageManagement = '1.1.7'
@@ -103,6 +100,10 @@ Function Install-PrereqModule {
         # https://github.com/ansible-collections/community.windows/issues/487
         $job = Start-Job -ScriptBlock {
             $ErrorActionPreference = 'Stop'
+
+            if (-not (Get-PackageProvider -ListAvailable -ErrorAction SilentlyContinue | Where-Object { ($_.name -eq 'Nuget') -and ($_.version -ge "2.8.5.201") }) ) {
+                Install-PackageProvider -Name NuGet -MinimumVersion 2.8.5.201 -Force | Out-Null
+            }
 
             $Repository = $using:Repository
 
