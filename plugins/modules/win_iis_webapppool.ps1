@@ -108,7 +108,7 @@ Function Compare-Value($current, $new) {
 
 Function Convert-ToPropertyValue($pool, $attribute_key, $attribute_value) {
     # Will convert the new value to the enum value expected and cast accordingly to the type
-    if ([bool]($attribute_value.PSobject.Properties -match "Value")) {
+    if ([bool]($attribute_value.PSobject.Properties.Name -match "Value")) {
         $attribute_value = $attribute_value.Value
     }
     $attribute_key_split = $attribute_key -split "\."
