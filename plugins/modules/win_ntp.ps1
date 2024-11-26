@@ -12,7 +12,7 @@ $spec = @{
       time_zone = @{ type= "str"; default= "UTC" }
       factory_default = @{ type= "bool"; default= "False" }
       type = @{ type= "str"; choices = "NTP","NT5DS","NoSync","AllSync"; }
-      cross_site_sync_flags = @{ type= "str"; choices = "0","1","2" }
+      cross_site_sync_flags = @{ type= "str"; choices = "none","pdc-only","all" }
       sync_clock = @{ type= "bool"; default= "False" }
   }
   supports_check_mode = $true
@@ -25,8 +25,17 @@ $enabled = $module.Params.enabled
 $time_zone = $module.Params.time_zone
 $factory_default = $module.Params.factory_default
 $type = $module.Params.type
-$cross_site_sync_flags = $module.Params.cross_site_sync_flags
+$cross_site_sync_str = $module.Params.cross_site_sync_flags
 $sync_clock = $module.Params.sync_clock
+
+$cross_site_sync_flags = $null
+if ($cross_site_sync_str -eq "none") {
+  $cross_site_sync_flags = 0
+} elseif ($cross_site_sync_str -eq "pdc-only") {
+  $cross_site_sync_flags = 1
+} elseif ($cross_site_sync_str -eq "all") {
+  $cross_site_sync_flags = 2
+}
 
 $outputItem = [PsCustomObject]@{
   ComputerNameFQDN = $null

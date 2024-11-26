@@ -4,7 +4,7 @@
 # Copyright: 2020, Sakar Mehra (@sakar97) <sakar.mehra@gslab.com>
 # GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 
-DOCUMENTATION = r'''
+DOCUMENTATION = r"""
 ---
 module: win_ntp
 short_description: Manage Windows NTP Server
@@ -44,19 +44,20 @@ options:
     default: false
   cross_site_sync_flags:
     description:
-      - Determines whether the service chooses synchronization partners outside the domain of the computer.
+      - Determines which synchronization partners the service may choose within the domain.
+      - pdc-only means the service may only choose the primary domain controller.
       - This value is ignored if C(type=NT5DS) is not set.
     type: str
-    choices: [ 0, 1, 2 ]
+    choices: [ none, pdc-only, all ]
   sync_clock:
     description:
       - It resynchronize its clock as soon as possible.
       - To update the ntp server with new peerlist.
     type: bool
     default: false
-'''
+"""
 
-EXAMPLES = r'''
+EXAMPLES = r"""
 - name: Enable ntpclient from the machine
   community.windows.win_ntp:
     peerlist: time.google.com
@@ -86,11 +87,11 @@ EXAMPLES = r'''
 - name: Setting the nt5ds type
   community.windows.win_ntp:
     type: NT5DS
-    cross_site_sync_flags: 1
+    cross_site_sync_flags: pdc-only
     sync_clock: true
-'''
+"""
 
-RETURN = r'''
+RETURN = r"""
 source_name:
     description: Current source of ntp client
     returned: always
@@ -106,4 +107,4 @@ synced:
     returned: always
     type: bool
     sample: true
-'''
+"""
