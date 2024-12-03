@@ -33,7 +33,10 @@ options:
 """
 
 EXAMPLES = """
-
+  - name: Connect to test my listening socket
+    community.windows.win_net_tcp:
+      port: 3001
+      dest: 'localhost'
 """
 
 

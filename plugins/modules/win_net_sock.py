@@ -43,7 +43,11 @@ options:
 """
 
 EXAMPLES = """
-
+  - name: Start listening on the server
+    community.windows.win_net_sock:
+      port: 3000
+      state: 'present'
+      type: 'tcp'
 """
 
 
