@@ -26,16 +26,16 @@ try{
   $result.result = "connected"
 }
 catch [System.Management.Automation.MethodInvocationException] {
-  if ($_ -like "*target machine actively refused it*") {
+  if ("$($Error[0])" -like "*target machine actively refused it*") {
     $result.state = "fail"
     $result.status = "refused"
-    $result.info = $_
+    $result.info = "$($Error[0])"
   }
-  else if ($_ -like "*A connection attempt failed because the connected party did not properly respond after a period of time*") {
+  elseif ("$($Error[0])" -like "*A connection attempt failed because the connected party did not properly respond after a period of time*") {
     $result.status = "fail"
     $result.status = "timeout"
-    $result.info = $_
+    $result.info = "$($Error[0])"
   }
 }
 
-return $result
+Exit-Json $result
