@@ -11,22 +11,31 @@ $port = Get-AnsibleParam -obj $params -name "port" -type "int"
 
 $result = @{
     changed = $false
-    msg = ""
+    state = ""
+    status = ""
+    info = ""
 }
 
 $socket = new-object Net.Sockets.TcpClient
 
 try{
+  # This would trigger tcp handshake
   $socket.Connect($dest, $port)
+  $result.changed = $true
+  $result.status = "success"
+  $result.result = "connected"
 }
 catch [System.Management.Automation.MethodInvocationException] {
   if ($_ -like "*target machine actively refused it*") {
-    $result.msg = "The connection was actively refused!"
+    $result.state = "fail"
+    $result.status = "refused"
+    $result.info = $_
   }
   else if ($_ -like "*A connection attempt failed because the connected party did not properly respond after a period of time*") {
-    $result.msg = "The connection timed out because the partner did not respond"
+    $result.status = "fail"
+    $result.status = "timeout"
+    $result.info = $_
   }
-  "ok"
 }
 
-
+return $result

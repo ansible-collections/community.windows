@@ -12,7 +12,7 @@ __metaclass__ = type
 
 
 DOCUMENTATION = """
-module: net_tcp
+module: win_net_tcp
 author: Yannnyan
 short_description: Open a socket to check connectivity from one machine to a destination machine
 description:
@@ -21,10 +21,6 @@ description:
   automation.
 version_added: 1.0.0
 options:
-  src: 
-    description:
-    - Specifies the source machine to open the socket from
-    required: true
   dest:
     description:
     - Specifies the destination machine to connect the socket to
