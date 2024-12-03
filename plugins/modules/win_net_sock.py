@@ -13,30 +13,32 @@ __metaclass__ = type
 
 DOCUMENTATION = """
 module: win_net_sock
-author: Yannnyan
+author:
+  - Yan (@Yannnyan)
 short_description: Create a listening socket in the remote machine
 description:
-- The following module provides a way to automate in ansible creating a listening sockets in both udp and tcp for testing of 
+- The following module provides a way to automate in ansible creating a listening sockets in both udp and tcp for testing of
   networking.
 version_added: 1.0.0
 options:
   state:
     description:
-    - describes whether to kill the process running a specific socket on port or start a new socket
-    options:
-    - absent
-    - present
+      - describes whether to kill the process running a specific socket on port or start a new socket
+    type: list
+    elements: str
     required: true
+    choices: [ absent, present ]
   type:
     description:
-    - Specifies the type of the socket can be either TCP or UDP socket type
-    options:
-    - tcp
-    - udp
+      - Specifies the type of the socket can be either TCP or UDP socket type
+    type: list
+    elements: str
     required: true
+    choices: [ tcp, udp]
   port:
     description:
-    - Specifies on which port to open the socket to
+      - Specifies on which port to open the socket to
+    type: int
     required: true
 """
 

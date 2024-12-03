@@ -1,5 +1,8 @@
 #!powershell
 
+# Copyright: (c) 2024, Yannnyan
+# Copyright: (c) 2024, Ansible Project
+# GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 #Requires -Module Ansible.ModuleUtils.Legacy
 
 $params = Parse-Args $args -supports_check_mode $true
@@ -13,8 +16,7 @@ $result = @{
     msg = ""
 }
 
-if (($port -le 0) -or ($port -gt 65535))
-{
+if (($port -le 0) -or ($port -gt 65535)) {
     Fail-Json -obj "Port $port, out of range. Port should be 16 bit integer."
 }
 
@@ -27,39 +29,37 @@ if (($state -ne 'absent') -and ($state -ne 'present')) {
 }
 
 
-if ($state -eq 'present')
-{
+if ($state -eq 'present') {
 
     $script = {
-        if ($type -eq 'tcp')
-        {
-            $Listener = [System.Net.Sockets.TcpListener]$port;
+        if ($type -eq 'tcp') {
+            $Listener = [System.Net.Sockets.TcpListener]$port
             $Listener.start()
-            while ($true)
-            {
+            while ($true) {
                 $Listener.AcceptTcpClient()
             }
         }
-        
-        elseif ($type -eq 'udp')
-        {
+
+        elseif ($type -eq 'udp') {
             $endpoint = New-Object System.Net.IPEndPoint ([IPAddress]::Any, $port)
             try {
-                while($true) {
+                while ($true) {
                     $socket = New-Object System.Net.Sockets.UdpClient $port
                     $content = $socket.Receive([ref]$endpoint)
                     $socket.Close()
                     [Text.Encoding]::ASCII.GetString($content)
                 }
-            } catch {
+            }
+            catch {
                 Fail-Json -obj $result -message "$($Error[0])"
             }
         }
-    }.toString()
-    $script = $script.replace("`$port", $port).replace("`$type","`"$type`"")
-    echo $script > 'script.ps1'
-    try{
-        $script_dir = (pwd).path
+    }
+    $script = $script.toString()
+    $script = $script.replace("`$port", $port).replace("`$type", "`"$type`"")
+    Write-Output $script > 'script.ps1'
+    try {
+        $script_dir = (Get-Location).path
         # almost lost my mind trying to create completely detached process
         Invoke-WmiMethod -Path 'Win32_Process' -Name Create -ArgumentList "powershell.exe $script_dir\script.ps1"
         Start-Sleep 1
@@ -75,10 +75,14 @@ if ($state -eq 'present')
     }
 }
 
-elseif ($state -eq 'absent')
-{
+elseif ($state -eq 'absent') {
     try {
-        $procId = (Get-NetTCPConnection -LocalPort $port).OwningProcess
+        if ($type -eq 'tcp') {
+            $procId = (Get-NetTCPConnection -LocalPort $port).OwningProcess
+        }
+        elseif ($type -eq 'udp') {
+            $procId = (Get-NetUDPEndpoint  | where-object {$_.localport -eq 5353}).OwningProcess
+        }
         Stop-Process -Id $procId -Force
         $result.changed = $true
         $result.msg = "Success stopping the process with pid $procId"

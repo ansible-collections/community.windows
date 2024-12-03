@@ -13,11 +13,12 @@ __metaclass__ = type
 
 DOCUMENTATION = """
 module: win_net_tcp
-author: Yannnyan
+author:
+  - Yan (@Yannnyan)
 short_description: Open a socket to check connectivity from one machine to a destination machine
 description:
-- The following module provides details about connection from the source machine to the destination as quickly as possible. 
-  The details would cover standard tcp protocol responses. Allowing network administrators to troubleshoot connections via 
+- The following module provides details about connection from the source machine to the destination as quickly as possible.
+  The details would cover standard tcp protocol responses. Allowing network administrators to troubleshoot connections via
   automation.
 version_added: 1.0.0
 options:
