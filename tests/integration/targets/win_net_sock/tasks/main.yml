@@ -1,0 +1,35 @@
+---
+- name: Create a socket on port 3002
+  community.windows.win_net_sock:
+    state: present
+    type: tcp
+    port: 3002
+  register: sock_3002
+
+- name: Assert port 3002 created
+  ansible.builtin.assert:
+    that:
+      - sock_3002.changed == true
+
+- name: Run a tcp check to test connection
+  community.windows.win_net_tcp:
+    dest: localhost
+    port: 3002
+  register: client_3002
+
+- name: Assert connection was made
+  ansible.builtin.assert:
+    that:
+      - client_3002.state == "success"
+
+- name: Kill the process running the socket
+  community.windows.win_net_sock:
+    state: absent
+    type: tcp
+    port: 3002
+  register: sock_3002_deleted
+
+- name: Assert sock deleted
+  ansible.builtin.assert:
+    that:
+      - sock_3002_deleted.changed == true

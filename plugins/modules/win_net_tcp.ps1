@@ -22,8 +22,8 @@ try {
     # This would trigger tcp handshake
     $socket.Connect($dest, $port)
     $result.changed = $true
-    $result.status = "success"
-    $result.result = "connected"
+    $result.state = "success"
+    $result.status = "connected"
 }
 catch [System.Management.Automation.MethodInvocationException] {
     if ("$($Error[0])" -like "*target machine actively refused it*") {
@@ -32,7 +32,7 @@ catch [System.Management.Automation.MethodInvocationException] {
         $result.info = "$($Error[0])"
     }
     elseif ("$($Error[0])" -like "*A connection attempt failed because the connected party did not properly respond after a period of time*") {
-        $result.status = "fail"
+        $result.state = "fail"
         $result.status = "timeout"
         $result.info = "$($Error[0])"
     }

@@ -1,0 +1,30 @@
+---
+- name: Try connecting to non listening port
+  community.windows.win_net_tcp:
+    dest: localhost
+    port: 3001
+  register: non_listen
+
+- name: Check state is refused
+  ansible.builtin.assert:
+    that:
+      - non_listen.status == 'refused'
+      - non_listen.state == 'fail'
+
+- name: Start listening on port 3000
+  community.windows.win_net_sock:
+    state: present
+    type: tcp
+    port: 3000
+
+- name: Test connection to port 3000
+  community.windows.win_net_tcp:
+    dest: localhost
+    port: 3000
+  register: connected_out
+
+- name: Check state is connected
+  ansible.builtin.assert:
+    that:
+      - connected_out.status == 'connected'
+      - connected_out.state == 'success'

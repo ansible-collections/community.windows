@@ -63,7 +63,6 @@ if ($state -eq 'present') {
         # almost lost my mind trying to create completely detached process
         Invoke-WmiMethod -Path 'Win32_Process' -Name Create -ArgumentList "powershell.exe $script_dir\script.ps1"
         Start-Sleep 1
-        Remove-Item -Force 'script.ps1'
         $procId = (Get-NetTCPConnection -LocalPort $port).OwningProcess
         $result.changed = $true
         $result.msg = "Running process on port $port on pid $procId"
