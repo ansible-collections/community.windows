@@ -39,6 +39,10 @@ $spec = @{
                 'NetworkService'
             )
         }
+        force = @{
+            type = 'bool'
+            default = $false
+        }
     }
 }
 
@@ -206,17 +210,22 @@ foreach ($user in $profiles) {
         $cur_repos = @{}
     }
 
-    $new_repos = $cur_repos.Clone()
     $updated = $false
-
-    $src_repos.Keys |
-        Select-Wildcard -Include $module.Params.name -Exclude $module.Params.exclude |
-        ForEach-Object -Process {
-            # explicit scope used inside ForEach-Object to satisfy lint (PSUseDeclaredVarsMoreThanAssignment)
-            # see https://github.com/PowerShell/PSScriptAnalyzer/issues/827
-            $Script:updated = $true
-            $Script:new_repos[$_] = $Script:src_repos[$_]
-        }
+    if ($module.Params.force) {
+        $new_repos = $src_repos.Clone()
+        $updated = $true
+    }
+    else {
+        $new_repos = $cur_repos.Clone()
+        $src_repos.Keys |
+            Select-Wildcard -Include $module.Params.name -Exclude $module.Params.exclude |
+            ForEach-Object -Process {
+                # explicit scope used inside ForEach-Object to satisfy lint (PSUseDeclaredVarsMoreThanAssignment)
+                # see https://github.com/PowerShell/PSScriptAnalyzer/issues/827
+                $Script:updated = $true
+                $Script:new_repos[$_] = $Script:src_repos[$_]
+            }
+    } 
 
     $module.Diff.before[$username] = $cur_repos
     $module.Diff.after[$username] = $new_repos
