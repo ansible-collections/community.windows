@@ -225,7 +225,7 @@ foreach ($user in $profiles) {
                 $Script:updated = $true
                 $Script:new_repos[$_] = $Script:src_repos[$_]
             }
-    } 
+    }
 
     $module.Diff.before[$username] = $cur_repos
     $module.Diff.after[$username] = $new_repos
