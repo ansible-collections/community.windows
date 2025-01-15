@@ -13,7 +13,7 @@
   ansible.windows.win_copy:
     src: UserCustomRepositories.xml
     dest: "{{ remote_tmp_dir }}"
-    force: yes
+    force: true
 
 - name: Set UserCustomRepositories for users
   community.windows.win_psrepository_copy:
@@ -23,7 +23,7 @@
   community.windows.win_psrepository_copy:
     force: true
   register: status
-  check_mode: yes
+  check_mode: true
 
 - assert:
     that: status is changed
@@ -59,4 +59,4 @@
     state: absent
 
 ## End force copy repo (inclusive) tests
-#####################################o
+#####################################
