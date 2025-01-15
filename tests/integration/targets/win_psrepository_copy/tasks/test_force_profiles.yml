@@ -1,0 +1,62 @@
+# This file is part of Ansible
+
+# Copyright: (c) 2025, Tony Goetheyn <@tgoetheyn>
+# GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
+---
+#####################################
+## Begin force copy repo (inclusive) tests
+
+- name: Reset
+  import_tasks: reset.yml
+
+- name: Put User Custom repofile in place
+  ansible.windows.win_copy:
+    src: UserCustomRepositories.xml
+    dest: "{{ remote_tmp_dir }}"
+    force: true
+
+- name: Set UserCustomRepositories for users
+  community.windows.win_psrepository_copy:
+    source: '{{ remote_tmp_dir }}\UserCustomRepositories.xml'
+
+- name: Force copy repos - check
+  community.windows.win_psrepository_copy:
+    force: true
+  register: status
+  check_mode: true
+
+- assert:
+    that: status is changed
+
+- name: Force copy repos
+  community.windows.win_psrepository_copy:
+    force: true
+  register: status
+
+- assert:
+    that: status is changed
+
+- name: Force copy repos - again
+  community.windows.win_psrepository_copy:
+    force: true
+  register: status
+
+- assert:
+    that: status is not changed
+
+- name: Test if only the repos in the SampleRepositories.xml are present
+  include_tasks:
+    file: test_by_user.yml
+    apply:
+      vars:
+        user: "{{ item }}"
+        expected_repos: "{{ test_repos }}"
+  loop: "{{ test_users | map(attribute='name') | list }}"
+
+- name: Remove UserCustomRepositories file
+  ansible.windows.win_file:
+    path: '{{ remote_tmp_dir }}\UserCustomRepositories.xml'
+    state: absent
+
+## End force copy repo (inclusive) tests
+#####################################

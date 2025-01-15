@@ -76,6 +76,8 @@
 
     - import_tasks: test_include_repo.yml
 
+    - import_tasks: test_force_profiles.yml
+
   always:
     - name: Reset
       import_tasks: reset.yml

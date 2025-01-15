@@ -1,0 +1,94 @@
+<Objs Version="1.1.0.1" xmlns="http://schemas.microsoft.com/powershell/2004/04">
+  <Obj RefId="0">
+    <TN RefId="0">
+      <T>System.Collections.Hashtable</T>
+      <T>System.Object</T>
+    </TN>
+    <DCT>
+      <En>
+        <S N="Key">CustomUserRepo</S>
+        <Obj N="Value" RefId="1">
+          <TN RefId="1">
+            <T>Microsoft.PowerShell.Commands.PSRepository</T>
+            <T>System.Management.Automation.PSCustomObject</T>
+            <T>System.Object</T>
+          </TN>
+          <MS>
+            <S N="Name">CustomUserRepo</S>
+            <S N="SourceLocation">\\domain\share\CustomUserRepo\</S>
+            <S N="PublishLocation">\\domain\share\CustomUserRepo\</S>
+            <S N="ScriptSourceLocation">\\domain\share\CustomUserRepo\</S>
+            <S N="ScriptPublishLocation">\\domain\share\CustomUserRepo\</S>
+            <B N="Trusted">false</B>
+            <B N="Registered">true</B>
+            <S N="InstallationPolicy">Untrusted</S>
+            <S N="PackageManagementProvider">NuGet</S>
+            <Obj N="ProviderOptions" RefId="2">
+              <TNRef RefId="0" />
+              <DCT />
+            </Obj>
+          </MS>
+        </Obj>
+      </En>
+      <En>
+        <S N="Key">PSGallery</S>
+        <Obj N="Value" RefId="3">
+          <TN RefId="2">
+            <T>Deserialized.Microsoft.PowerShell.Commands.PSRepository</T>
+            <T>Deserialized.System.Management.Automation.PSCustomObject</T>
+            <T>Deserialized.System.Object</T>
+          </TN>
+          <MS>
+            <S N="Name">PSGallery</S>
+            <S N="SourceLocation">https://www.powershellgallery.com/api/v2</S>
+            <S N="PublishLocation">https://www.powershellgallery.com/api/v2/package/</S>
+            <S N="ScriptSourceLocation">https://www.powershellgallery.com/api/v2/items/psscript</S>
+            <S N="ScriptPublishLocation">https://www.powershellgallery.com/api/v2/package/</S>
+            <Obj N="Trusted" RefId="4">
+              <TN RefId="3">
+                <T>System.Management.Automation.SwitchParameter</T>
+                <T>System.ValueType</T>
+                <T>System.Object</T>
+              </TN>
+              <ToString>False</ToString>
+              <Props>
+                <B N="IsPresent">false</B>
+              </Props>
+            </Obj>
+            <B N="Registered">true</B>
+            <S N="InstallationPolicy">Untrusted</S>
+            <S N="PackageManagementProvider">NuGet</S>
+            <Obj N="ProviderOptions" RefId="5">
+              <TN RefId="4">
+                <T>Deserialized.System.Collections.Hashtable</T>
+                <T>Deserialized.System.Object</T>
+              </TN>
+              <DCT />
+            </Obj>
+          </MS>
+        </Obj>
+      </En>
+      <En>
+        <S N="Key">FakeGet</S>
+        <Obj N="Value" RefId="6">
+          <TNRef RefId="2" />
+          <MS>
+            <S N="Name">FakeGet</S>
+            <S N="SourceLocation">https://www.example.org/api/nuget/v2</S>
+            <S N="PublishLocation">https://www.example.org/api/nuget/v2/package/</S>
+            <S N="ScriptSourceLocation">https://www.exampe.org/api/nuget/v2/items/psscript</S>
+            <S N="ScriptPublishLocation">https://www.example.org/api/nuget/v2/package/</S>
+            <B N="Trusted">true</B>
+            <B N="Registered">true</B>
+            <S N="InstallationPolicy">Trusted</S>
+            <S N="PackageManagementProvider">NuGet</S>
+            <Obj N="ProviderOptions" RefId="7">
+              <TNRef RefId="4" />
+              <DCT />
+            </Obj>
+          </MS>
+        </Obj>
+      </En>
+    </DCT>
+  </Obj>
+</Objs>
