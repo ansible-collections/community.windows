@@ -60,6 +60,7 @@ options:
       - If C(True), this deletes repositories that are not present in the source.
     type: bool
     default: False
+    version_added: 2.4.0
 notes:
   - Does not require the C(PowerShellGet) module or any other external dependencies.
   - User profiles are loaded from the registry. If a given path does not exist (like if the profile directory was deleted), it is silently skipped.
