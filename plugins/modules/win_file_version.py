@@ -36,38 +36,43 @@ EXAMPLES = r'''
 '''
 
 RETURN = r'''
-path:
-  description: file path
-  returned: always
-  type: str
-
-file_version:
-  description: File version number..
-  returned: no error
-  type: str
-
-product_version:
-  description: The version of the product this file is distributed with.
-  returned: no error
-  type: str
-
-file_major_part:
-  description: the major part of the version number.
-  returned: no error
-  type: str
-
-file_minor_part:
-  description: the minor part of the version number of the file.
-  returned: no error
-  type: str
-
-file_build_part:
-  description: build number of the file.
-  returned: no error
-  type: str
-
-file_private_part:
-  description: file private part number.
-  returned: no error
-  type: str
+changed:
+    description: Whether anything was changed
+    returned: always
+    type: bool
+    sample: true
+win_file_version:
+    description: dictionary containing all the version data
+    returned: success
+    type: complex
+    contains:
+        file_build_part:
+          description: build number of the file.
+          returned: no error
+          type: str
+        file_major_part:
+          description: the major part of the version number.
+          returned: no error
+          type: str
+        file_minor_part:
+          description: the minor part of the version number of the file.
+          returned: no error
+          type: str
+        file_private_part:
+          description: file private part number.
+          returned: no error
+          type: str
+        file_version:
+          description: File version number..
+          returned: no error
+          type: str
+        path:
+          description: file path
+          returned: always
+          type: str
+        product_version:
+          description: The version of the product this file is distributed with.
+          returned: no error
+          type: str
+          sample: "0.34.0+6fb2e41a0452b5e976c84c17722b6f8d91972cfd"
 '''
