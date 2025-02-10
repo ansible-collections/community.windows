@@ -48,7 +48,7 @@ Try {
     If ($null -eq $file_private_part) {
         $file_private_part = ''
     }
-	$file_version_raw = $_version_fields.FileVersionRaw
+    $file_version_raw = $_version_fields.FileVersionRaw
     If ($null -eq $file_version_raw) {
         $file_version_raw = ''
     }
