@@ -23,6 +23,7 @@ seealso:
 - module: ansible.windows.win_file
 author:
 - Sam Liu (@SamLiu79)
+- Mikhail Samodurov (@EasyMoney322)
 '''
 
 EXAMPLES = r'''
@@ -32,15 +33,10 @@ EXAMPLES = r'''
   register: exe_file_version
 
 - debug:
-    msg: '{{ exe_file_version }}'
+    msg: '{{ exe_file_version }}.win_file_version'
 '''
 
 RETURN = r'''
-changed:
-    description: Whether anything was changed
-    returned: always
-    type: bool
-    sample: true
 win_file_version:
     description: dictionary containing all the version data
     returned: success
@@ -50,22 +46,32 @@ win_file_version:
           description: build number of the file.
           returned: no error
           type: str
+          sample: "0"
         file_major_part:
           description: the major part of the version number.
           returned: no error
           type: str
+          sample: "0"
         file_minor_part:
           description: the minor part of the version number of the file.
           returned: no error
           type: str
+          sample: "34"
         file_private_part:
           description: file private part number.
           returned: no error
           type: str
+          sample: "0"
         file_version:
-          description: File version number..
+          description: File version number.
           returned: no error
           type: str
+          sample: "0.34.0"
+        file_version_raw:
+          description: File version number that may not match the file_version
+          returned: no error
+          type: str
+          sample: "0.34.0"
         path:
           description: file path
           returned: always
