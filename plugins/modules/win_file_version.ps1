@@ -19,7 +19,7 @@ If (-Not (Test-Path -LiteralPath $path -PathType Leaf)) {
 }
 $ext = [System.IO.Path]::GetExtension($path)
 If ( $ext -notin '.exe', '.dll') {
-    Fail-Json $result "Specified path $path is not a valid file type; Must be DLL or EXE."
+    Fail-Json $result "Specified path $path is not a valid file type; must be DLL or EXE."
 }
 
 Try {
