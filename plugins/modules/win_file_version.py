@@ -33,7 +33,7 @@ EXAMPLES = r'''
   register: exe_file_version
 
 - debug:
-    msg: '{{ exe_file_version }}.win_file_version'
+    msg: '{{ exe_file_version.win_file_version }}'
 '''
 
 RETURN = r'''
