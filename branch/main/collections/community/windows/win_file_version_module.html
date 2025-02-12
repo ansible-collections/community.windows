@@ -202,7 +202,7 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <span class="w">  </span><span class="nt">register</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">exe_file_version</span>
 
 <span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">debug</span><span class="p">:</span>
-<span class="w">    </span><span class="nt">msg</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">exe_file_version</span> <span class="cp">}}</span><span class="s">&#39;</span>
+<span class="w">    </span><span class="nt">msg</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">exe_file_version.win_file_version</span> <span class="cp">}}</span><span class="s">&#39;</span>
 </pre></div>
 </div>
 </section>
@@ -217,15 +217,6 @@ To check whether it is installed, run <code class="code docutils literal notrans
 </thead>
 <tbody>
 <tr class="row-even"><td><div class="ansible-option-cell">
-<div class="ansibleOptionAnchor" id="return-changed"></div><p class="ansible-option-title" id="ansible-collections-community-windows-win-file-version-module-return-changed"><strong>changed</strong></p>
-<a class="ansibleOptionLink" href="#return-changed" title="Permalink to this return value"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
-</div></td>
-<td><div class="ansible-option-cell"><p>Whether anything was changed</p>
-<p class="ansible-option-line"><strong class="ansible-option-returned-bold">Returned:</strong> always</p>
-<p class="ansible-option-line ansible-option-sample"><strong class="ansible-option-sample-bold">Sample:</strong> <code class="ansible-option-sample docutils literal notranslate"><span class="pre">true</span></code></p>
-</div></td>
-</tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="return-win_file_version"></div><p class="ansible-option-title" id="ansible-collections-community-windows-win-file-version-module-return-win-file-version"><strong>win_file_version</strong></p>
 <a class="ansibleOptionLink" href="#return-win_file_version" title="Permalink to this return value"></a><p class="ansible-option-type-line"><span class="ansible-option-type">complex</span></p>
 </div></td>
@@ -233,44 +224,58 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <p class="ansible-option-line"><strong class="ansible-option-returned-bold">Returned:</strong> success</p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="return-win_file_version/file_build_part"></div><p class="ansible-option-title" id="ansible-collections-community-windows-win-file-version-module-return-win-file-version-file-build-part"><strong>file_build_part</strong></p>
 <a class="ansibleOptionLink" href="#return-win_file_version/file_build_part" title="Permalink to this return value"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
 <td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>build number of the file.</p>
 <p class="ansible-option-line"><strong class="ansible-option-returned-bold">Returned:</strong> no error</p>
+<p class="ansible-option-line ansible-option-sample"><strong class="ansible-option-sample-bold">Sample:</strong> <code class="ansible-option-sample docutils literal notranslate"><span class="pre">&quot;2&quot;</span></code></p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="return-win_file_version/file_major_part"></div><p class="ansible-option-title" id="ansible-collections-community-windows-win-file-version-module-return-win-file-version-file-major-part"><strong>file_major_part</strong></p>
 <a class="ansibleOptionLink" href="#return-win_file_version/file_major_part" title="Permalink to this return value"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
 <td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>the major part of the version number.</p>
 <p class="ansible-option-line"><strong class="ansible-option-returned-bold">Returned:</strong> no error</p>
+<p class="ansible-option-line ansible-option-sample"><strong class="ansible-option-sample-bold">Sample:</strong> <code class="ansible-option-sample docutils literal notranslate"><span class="pre">&quot;0&quot;</span></code></p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="return-win_file_version/file_minor_part"></div><p class="ansible-option-title" id="ansible-collections-community-windows-win-file-version-module-return-win-file-version-file-minor-part"><strong>file_minor_part</strong></p>
 <a class="ansibleOptionLink" href="#return-win_file_version/file_minor_part" title="Permalink to this return value"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
 <td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>the minor part of the version number of the file.</p>
 <p class="ansible-option-line"><strong class="ansible-option-returned-bold">Returned:</strong> no error</p>
+<p class="ansible-option-line ansible-option-sample"><strong class="ansible-option-sample-bold">Sample:</strong> <code class="ansible-option-sample docutils literal notranslate"><span class="pre">&quot;30&quot;</span></code></p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="return-win_file_version/file_private_part"></div><p class="ansible-option-title" id="ansible-collections-community-windows-win-file-version-module-return-win-file-version-file-private-part"><strong>file_private_part</strong></p>
 <a class="ansibleOptionLink" href="#return-win_file_version/file_private_part" title="Permalink to this return value"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
 <td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>file private part number.</p>
 <p class="ansible-option-line"><strong class="ansible-option-returned-bold">Returned:</strong> no error</p>
+<p class="ansible-option-line ansible-option-sample"><strong class="ansible-option-sample-bold">Sample:</strong> <code class="ansible-option-sample docutils literal notranslate"><span class="pre">&quot;0&quot;</span></code></p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="return-win_file_version/file_version"></div><p class="ansible-option-title" id="ansible-collections-community-windows-win-file-version-module-return-win-file-version-file-version"><strong>file_version</strong></p>
 <a class="ansibleOptionLink" href="#return-win_file_version/file_version" title="Permalink to this return value"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
-<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>File version number..</p>
+<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>File version number.</p>
 <p class="ansible-option-line"><strong class="ansible-option-returned-bold">Returned:</strong> no error</p>
+<p class="ansible-option-line ansible-option-sample"><strong class="ansible-option-sample-bold">Sample:</strong> <code class="ansible-option-sample docutils literal notranslate"><span class="pre">&quot;v0.30.2&quot;</span></code></p>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="return-win_file_version/file_version_raw"></div><p class="ansible-option-title" id="ansible-collections-community-windows-win-file-version-module-return-win-file-version-file-version-raw"><strong>file_version_raw</strong></p>
+<a class="ansibleOptionLink" href="#return-win_file_version/file_version_raw" title="Permalink to this return value"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+</div></td>
+<td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>File version number that may not match the file_version</p>
+<p class="ansible-option-line"><strong class="ansible-option-returned-bold">Returned:</strong> no error</p>
+<p class="ansible-option-line ansible-option-sample"><strong class="ansible-option-sample-bold">Sample:</strong> <code class="ansible-option-sample docutils literal notranslate"><span class="pre">&quot;0.30.2.0&quot;</span></code></p>
 </div></td>
 </tr>
 <tr class="row-odd"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
@@ -287,7 +292,7 @@ To check whether it is installed, run <code class="code docutils literal notrans
 </div></td>
 <td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>The version of the product this file is distributed with.</p>
 <p class="ansible-option-line"><strong class="ansible-option-returned-bold">Returned:</strong> no error</p>
-<p class="ansible-option-line ansible-option-sample"><strong class="ansible-option-sample-bold">Sample:</strong> <code class="ansible-option-sample docutils literal notranslate"><span class="pre">&quot;0.34.0+6fb2e41a0452b5e976c84c17722b6f8d91972cfd&quot;</span></code></p>
+<p class="ansible-option-line ansible-option-sample"><strong class="ansible-option-sample-bold">Sample:</strong> <code class="ansible-option-sample docutils literal notranslate"><span class="pre">&quot;0.30.2+b4a594409fc9e79e7c5161763cf1c4328e9c5a5d&quot;</span></code></p>
 </div></td>
 </tr>
 </tbody>
@@ -296,6 +301,7 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <h3>Authors<a class="headerlink" href="#authors" title="Link to this heading"></a></h3>
 <ul class="simple">
 <li><p>Sam Liu (&#64;SamLiu79)</p></li>
+<li><p>Mikhail Samodurov (&#64;EasyMoney322)</p></li>
 </ul>
 </section>
 <section id="collection-links">
