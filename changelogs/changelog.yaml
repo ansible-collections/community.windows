@@ -573,3 +573,25 @@ releases:
     - release-summary.yml
     - win_mapped_drive-ssh.yml
     release_date: '2024-08-30'
+  2.4.0:
+    changes:
+      minor_changes:
+      - Added support for Windows Server 2025
+      - This issue fixes installation of requirements as it requires a confirmation
+        when installed as a depedency to PowershellGet. Installing it by itself prevents
+        this confirmation dialog and allows required components to be installed (https://github.com/ansible-collections/community.windows/issues/147).
+      - win_file_version - Add file_version_raw result for cases where file_version
+        might be empty or in not in the right format.
+      - win_iis_webapppool  - this pull request fixes the portion where building an
+        app pool with the word "value" in it fails unexpectedly. https://github.com/ansible-collections/community.windows/issues/410.
+      - win_psrepository_copy - Add Force option that deletes repositories that are
+        not present in the source
+      release_summary: Release summary for v2.4.0
+    fragments:
+    - 588-nuget-requirement-patch.yaml
+    - 588-win_iis_webapppool.yaml
+    - add-file-version-raw-result-to-win_file_version.yaml
+    - add-force-option-to-win_psrepository_copy.yaml
+    - release-summary.yml
+    - win-2025.yml
+    release_date: '2025-03-14'

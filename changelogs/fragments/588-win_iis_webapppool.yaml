@@ -1,4 +1,0 @@
----
-minor_changes:
-  - win_iis_webapppool  - this pull request fixes the portion where building an app pool with the word "value" in it fails unexpectedly.
-    https://github.com/ansible-collections/community.windows/issues/410.

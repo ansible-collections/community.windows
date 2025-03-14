@@ -72,6 +72,7 @@ win_file_version:
           returned: no error
           type: str
           sample: "0.30.2.0"
+          version_added: 2.4.0
         path:
           description: file path
           returned: always

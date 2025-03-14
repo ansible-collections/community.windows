@@ -4,6 +4,23 @@ Community Windows Release Notes
 
 .. contents:: Topics
 
+v2.4.0
+======
+
+Release Summary
+---------------
+
+Release summary for v2.4.0
+
+Minor Changes
+-------------
+
+- Added support for Windows Server 2025
+- This issue fixes installation of requirements as it requires a confirmation when installed as a depedency to PowershellGet. Installing it by itself prevents this confirmation dialog and allows required components to be installed (https://github.com/ansible-collections/community.windows/issues/147).
+- win_file_version - Add file_version_raw result for cases where file_version might be empty or in not in the right format.
+- win_iis_webapppool  - this pull request fixes the portion where building an app pool with the word "value" in it fails unexpectedly. https://github.com/ansible-collections/community.windows/issues/410.
+- win_psrepository_copy - Add Force option that deletes repositories that are not present in the source
+
 v2.3.0
 ======
 
