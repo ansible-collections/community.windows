@@ -168,6 +168,10 @@ if (
     $module.FailJson($msg)
 }
 
+if ($null -eq $Path) {
+    $Path = $ansible_volume.Path
+}
+
 foreach ($access_path in $ansible_partition.AccessPaths) {
     if ($access_path -eq $Path) {
         if ($null -ne $file_system -and
