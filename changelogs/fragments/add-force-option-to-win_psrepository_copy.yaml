@@ -1,3 +1,0 @@
----
-minor_changes:
-  - win_psrepository_copy - Add Force option that deletes repositories that are not present in the source
