@@ -169,7 +169,7 @@ if (
 }
 
 foreach ($access_path in $ansible_partition.AccessPaths) {
-    if ($access_path -ne $Path) {
+    if ($access_path -eq $Path) {
         if ($null -ne $file_system -and
             -not [string]::IsNullOrEmpty($ansible_file_system) -and
             $file_system -ne $ansible_file_system) {
