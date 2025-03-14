@@ -166,15 +166,11 @@ if (
     $module.FailJson($msg)
 }
 
-if ($null -eq $Path) {
-    $Path = $ansible_volume.Path
-}
-
 if ($null -ne $file_system -and
     -not [string]::IsNullOrEmpty($ansible_file_system) -and
     $file_system -ne $ansible_file_system) {
     if (-not $force_format) {
-        $no_files_in_volume = (Get-ChildItem -LiteralPath $Path -ErrorAction SilentlyContinue | Measure-Object).Count -eq 0
+        $no_files_in_volume = (Get-ChildItem -LiteralPath $ansible_volume.Path -ErrorAction SilentlyContinue | Measure-Object).Count -eq 0
         if ($no_files_in_volume) {
             $msg = -join @(
                 "Force format must be specified since target file system: $($file_system) "
