@@ -11,6 +11,11 @@ module: win_iis_webbinding
 short_description: Configures a IIS Web site binding
 description:
      - Creates, removes and configures a binding to an existing IIS Web site.
+deprecated:
+    removed_in: 4.0.0
+    why: >-
+      This module has been deprecated and an alternative supported module is available in the C(microsoft.iis) collection.
+    alternative: Use M(microsoft.iis.website) instead.
 options:
   name:
     description:

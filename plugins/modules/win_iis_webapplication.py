@@ -10,6 +10,11 @@ module: win_iis_webapplication
 short_description: Configures IIS web applications
 description:
 - Creates, removes, and configures IIS web applications.
+deprecated:
+  removed_in: 4.0.0
+  why: >-
+    This module has been deprecated and an alternative supported module is available in the C(microsoft.iis) collection.
+  alternative: Use M(microsoft.iis.web_application) instead.
 options:
   name:
     description:
