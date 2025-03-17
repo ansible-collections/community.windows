@@ -22,6 +22,7 @@ jobs:
       init-lenient: false
       init-fail-on-error: true
       build-ref: refs/pull/${{ github.event.number }}/merge
+      extra-collections: microsoft.ad microsoft.iis
 
   # The build job runs with the most lenient settings to ensure the best chance of getting
   # a rendered docsite that can be looked at.
