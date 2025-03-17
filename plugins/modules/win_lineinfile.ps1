@@ -34,7 +34,7 @@ function WriteLines($outlines, $path, $linesep, $encodingobj, $validate, $check_
         If ($process.ExitCode -ne 0) {
             [string] $output = $process.StandardOutput.ReadToEnd()
             [string] $error = $process.StandardError.ReadToEnd()
-            Remove-Item -LiteralPath $temppath -force
+            Remove-Item -LiteralPath $temppath -Force
             Fail-Json @{} "failed to validate $cmdname $cmdargs with error: $output $error"
         }
 
@@ -215,8 +215,6 @@ function Present {
         # Write backup file if backup == "yes"
         If ($backup) {
             $result.backup_file = Backup-File -path $path -WhatIf:$check_mode
-            # Ensure backward compatibility (deprecate in future)
-            $result.backup = $result.backup_file
         }
 
         if ($endswithnewline) {
@@ -314,8 +312,6 @@ function Absent($path, $regex, $line, $backup, $validate, $encodingobj, $linesep
         # Write backup file if backup == "yes"
         If ($backup) {
             $result.backup_file = Backup-File -path $path -WhatIf:$check_mode
-            # Ensure backward compatibility (deprecate in future)
-            $result.backup = $result.backup_file
         }
 
         $writelines_params = @{
