@@ -60,7 +60,7 @@
     - backup_file.stat.exists == true
 
 - name: stat the backup file
-  ansible.windows.win_stat: path={{result.backup}}
+  ansible.windows.win_stat: path={{result.backup_file}}
   register: result
 
 - name: assert the backup file matches the previous hash
@@ -722,7 +722,7 @@
   ansible.windows.win_stat:
     path: "{{ remote_tmp_dir }}/test_linebreak.txt"
   register: result
-    
+
 - name: assert that one line is literal and the other has breaks
   assert:
     that:
@@ -780,7 +780,7 @@
         - backup_file.stat.exists == true
 
     - name: stat the backup file
-      ansible.windows.win_stat: path={{result.backup}}
+      ansible.windows.win_stat: path={{result.backup_file}}
       register: result
 
     - name: assert the backup file matches the previous hash
