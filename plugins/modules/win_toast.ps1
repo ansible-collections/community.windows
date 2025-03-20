@@ -48,12 +48,12 @@ $result = @{
 if ((Get-Process -Name explorer -ErrorAction SilentlyContinue).Count -gt 0) {
 
     [Windows.UI.Notifications.ToastNotificationManager, Windows.UI.Notifications, ContentType = WindowsRuntime] > $null
-    $template = [Windows.UI.Notifications.ToastNotificationManager]::GetTemplateContent([Windows.UI.Notifications.ToastTemplateType]::ToastText01)
+    $template = [Windows.UI.Notifications.ToastNotificationManager]::GetTemplateContent([Windows.UI.Notifications.ToastTemplateType]::ToastText02)
 
     #Convert to .NET type for XML manipulation
     $toastXml = [xml] $template.GetXml()
-    $toastXml.GetElementsByTagName("text").AppendChild($toastXml.CreateTextNode($title)) > $null
-    # TODO add subtitle
+    $toastXml.GetElementsByTagName("text").Item(0).AppendChild($toastXml.CreateTextNode($title)) > $null
+    $toastXml.GetElementsByTagName("text").Item(1).AppendChild($toastXml.CreateTextNode($msg)) > $null
 
     #Convert back to WinRT type
     $xml = New-Object Windows.Data.Xml.Dom.XmlDocument
@@ -66,7 +66,7 @@ if ((Get-Process -Name explorer -ErrorAction SilentlyContinue).Count -gt 0) {
     $toast.SuppressPopup = -not $popup
 
     try {
-        $notifier = [Windows.UI.Notifications.ToastNotificationManager]::CreateToastNotifier($msg)
+        $notifier = [Windows.UI.Notifications.ToastNotificationManager]::CreateToastNotifier('Ansible')
         if (-not $check_mode) {
             $notifier.Show($toast)
             $result.toast_sent = $true
