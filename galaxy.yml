@@ -1,6 +1,6 @@
 namespace: community
 name: windows
-version: 2.4.0
+version: 3.0.0
 readme: README.md
 authors:
   - Jordan Borean @jborean93
@@ -11,7 +11,8 @@ license_file: COPYING
 tags:
   - windows
 dependencies:
-  ansible.windows: ">=1.0.0,<3.0.0"
+  # FIXME: This needs to be set to >=3.0.0,<4.0.0 once ansible.windows is released at that version
+  ansible.windows: ">=2.0.0,<4.0.0"
 repository: https://github.com/ansible-collections/community.windows
 documentation: https://docs.ansible.com/ansible/devel/collections/community/windows
 homepage: https://github.com/ansible-collections/community.windows

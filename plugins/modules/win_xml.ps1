@@ -87,8 +87,6 @@ function Save-ChangedXml($xmlorig, $result, $message, $check_mode, $backup) {
     if (-Not $check_mode) {
         if ($backup) {
             $result.backup_file = Backup-File -path $dest -WhatIf:$check_mode
-            # Ensure backward compatibility (deprecate in future)
-            $result.backup = $result.backup_file
         }
         $xmlorig.Save($dest)
         $result.msg = $message

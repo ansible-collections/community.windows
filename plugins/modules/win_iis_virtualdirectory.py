@@ -10,6 +10,11 @@ module: win_iis_virtualdirectory
 short_description: Configures a virtual directory in IIS
 description:
      - Creates, Removes and configures a virtual directory in IIS.
+deprecated:
+  removed_in: 4.0.0
+  why: >-
+    This module has been deprecated and an alternative supported module is available in the C(microsoft.iis) collection.
+  alternative: Use C(microsoft.iis.virtual_directory) instead.
 options:
   name:
     description:
