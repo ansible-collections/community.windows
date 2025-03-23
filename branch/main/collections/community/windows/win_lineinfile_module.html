@@ -22,7 +22,7 @@
       <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../_static/js/theme.js"></script>
     <link rel="search" title="Search" href="../../../search.html" />
-    <link rel="next" title="community.windows.win_listen_ports_facts module – Recopilates the facts of the listening ports of the machine" href="win_listen_ports_facts_module.html" />
+    <link rel="next" title="community.windows.win_msg module – Sends a message to logged in users on Windows hosts" href="win_msg_module.html" />
     <link rel="prev" title="community.windows.win_initialize_disk module – Initializes disks on Windows Server" href="win_initialize_disk_module.html" /><!-- extra head elements for Ansible beyond RTD Sphinx Theme -->
 
 
@@ -133,7 +133,7 @@
 <h1>community.windows.win_lineinfile module – Ensure a particular line is in a file, or replace an existing line using a back-referenced regular expression<a class="headerlink" href="#community-windows-win-lineinfile-module-ensure-a-particular-line-is-in-a-file-or-replace-an-existing-line-using-a-back-referenced-regular-expression" title="Link to this heading"></a></h1>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/community/windows/">community.windows collection</a> (version 2.4.0).</p>
+<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/community/windows/">community.windows collection</a> (version 3.0.0).</p>
 <p>It is not included in <code class="docutils literal notranslate"><span class="pre">ansible-core</span></code>.
 To check whether it is installed, run <code class="code docutils literal notranslate"><span class="pre">ansible-galaxy</span> <span class="pre">collection</span> <span class="pre">list</span></code>.</p>
 <p>To install it, use: <code class="code docutils literal notranslate"><span class="pre">ansible-galaxy</span> <span class="pre">collection</span> <span class="pre">install</span> <span class="pre">community.windows</span></code>.</p>
@@ -381,16 +381,6 @@ To check whether it is installed, run <code class="code docutils literal notrans
 </thead>
 <tbody>
 <tr class="row-even"><td><div class="ansible-option-cell">
-<div class="ansibleOptionAnchor" id="return-backup"></div><p class="ansible-option-title" id="ansible-collections-community-windows-win-lineinfile-module-return-backup"><strong>backup</strong></p>
-<a class="ansibleOptionLink" href="#return-backup" title="Permalink to this return value"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
-</div></td>
-<td><div class="ansible-option-cell"><p>Name of the backup file that was created.</p>
-<p>This is now deprecated, use <code class="docutils literal notranslate"><span class="pre">backup_file</span></code> instead.</p>
-<p class="ansible-option-line"><strong class="ansible-option-returned-bold">Returned:</strong> if backup=yes</p>
-<p class="ansible-option-line ansible-option-sample"><strong class="ansible-option-sample-bold">Sample:</strong> <code class="ansible-option-sample docutils literal notranslate"><span class="pre">&quot;C:\\Path\\To\\File.txt.11540.20150212-220915.bak&quot;</span></code></p>
-</div></td>
-</tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="return-backup_file"></div><p class="ansible-option-title" id="ansible-collections-community-windows-win-lineinfile-module-return-backup-file"><strong>backup_file</strong></p>
 <a class="ansibleOptionLink" href="#return-backup_file" title="Permalink to this return value"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
@@ -425,7 +415,7 @@ To check whether it is installed, run <code class="code docutils literal notrans
 
 <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="win_initialize_disk_module.html" class="btn btn-neutral float-left" title="community.windows.win_initialize_disk module – Initializes disks on Windows Server" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="win_listen_ports_facts_module.html" class="btn btn-neutral float-right" title="community.windows.win_listen_ports_facts module – Recopilates the facts of the listening ports of the machine" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="win_msg_module.html" class="btn btn-neutral float-right" title="community.windows.win_msg module – Sends a message to logged in users on Windows hosts" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>
