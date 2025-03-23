@@ -14,7 +14,7 @@ deprecated:
   removed_in: 4.0.0
   why: >-
     This module has been deprecated and an alternative supported module is available in the C(microsoft.iis) collection.
-  alternative: Use M(microsoft.iis.virtual_directory) instead.
+  alternative: Use C(microsoft.iis.virtual_directory) instead.
 options:
   name:
     description:
