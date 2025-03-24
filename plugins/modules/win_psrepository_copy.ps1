@@ -195,6 +195,16 @@ catch {
     $module.FailJson("There was an error loading the source file '$src': $($_.Exception.Message).", $_)
 }
 
+if ($null -eq $src_repos) {
+    $exists = Test-Path -LiteralPath $src
+    $msg = "src_repos is null, path '$src', exists $exists"
+    if ($exists) {
+        $msg += "`n$(Get-Content -LiteralPath $src -Raw)"
+    }
+    $module.Warn($msg)
+    $src_repos = @{}
+}
+
 $profiles = Get-ProfileDirectory -Include $module.Params.profiles -Exclude $module.Params.exclude_profiles
 
 foreach ($user in $profiles) {
@@ -207,6 +217,16 @@ foreach ($user in $profiles) {
         $cur_repos = Import-Clixml -LiteralPath $repo_path
     }
     else {
+        $cur_repos = @{}
+    }
+
+    if ($null -eq $cur_repos) {
+        $exists = Test-Path -LiteralPath $repo_path
+        $msg = "cur_repos for '$user' is null, path '$repo_path', exists $exists"
+        if ($exists) {
+            $msg += "`n$(Get-Content -LiteralPath $repo_path -Raw)"
+        }
+        $module.Warn($msg)
         $cur_repos = @{}
     }
 
