@@ -108,19 +108,19 @@
     - https_no_header is changed
     - https_no_header.operation_type == 'added'
     - https_no_header.binding_info is defined
-    - https_no_header.binding_info.protocol == "{{ https_vars.protocol }}"
-    - https_no_header.binding_info.ip == "{{ https_vars.ip }}"
-    - https_no_header.binding_info.port == {{ https_vars.port }}
+    - https_no_header.binding_info.protocol == https_vars.protocol
+    - https_no_header.binding_info.ip == https_vars.ip
+    - https_no_header.binding_info.port == https_vars.port
     - https_no_header.binding_info.hostheader == ''
-    - https_no_header.binding_info.certificateHash == "{{ thumbprint1.stdout_lines[0] }}"
+    - https_no_header.binding_info.certificateHash == thumbprint1.stdout_lines[0]
     - https_header is changed
     - https_header.operation_type == 'added'
     - https_header.binding_info is defined
-    - https_header.binding_info.hostheader == "{{ https_header_vars.header }}"
-    - https_header.binding_info.protocol == "{{ https_header_vars.protocol }}"
-    - https_header.binding_info.ip == "{{ https_header_vars.ip }}"
-    - https_header.binding_info.port == {{ https_header_vars.port }}
-    - https_header.binding_info.certificateHash == "{{ thumbprint1.stdout_lines[0] }}"
+    - https_header.binding_info.hostheader == https_header_vars.header
+    - https_header.binding_info.protocol == https_header_vars.protocol
+    - https_header.binding_info.ip == https_header_vars.ip
+    - https_header.binding_info.port == https_header_vars.port
+    - https_header.binding_info.certificateHash == thumbprint1.stdout_lines[0]
     - https_header.binding_info.sslFlags == 1
 
 ################
@@ -190,18 +190,18 @@
     - https_header is changed
     - https_header.operation_type == 'updated'
     - https_header.binding_info is defined
-    - https_header.binding_info.ip == "{{ https_header_vars.ip }}"
-    - https_header.binding_info.port == {{ https_header_vars.port }}
-    - https_header.binding_info.protocol == "{{ https_header_vars.protocol }}"
-    - https_header.binding_info.hostheader == "{{ https_header_vars.header }}"
-    - https_header.binding_info.certificateHash == "{{ thumbprint1.stdout_lines[0] }}"
+    - https_header.binding_info.ip == https_header_vars.ip
+    - https_header.binding_info.port == https_header_vars.port
+    - https_header.binding_info.protocol == https_header_vars.protocol
+    - https_header.binding_info.hostheader == https_header_vars.header
+    - https_header.binding_info.certificateHash == thumbprint1.stdout_lines[0]
     - https_header.binding_info.sslFlags == 1
     - get_https_header.binding is defined
-    - get_https_header.binding.ip == "{{ https_header_vars.ip }}"
-    - get_https_header.binding.port == {{ https_header_vars.port }}
-    - get_https_header.binding.protocol == "{{ https_header_vars.protocol }}"
-    - get_https_header.binding.hostheader == "{{ https_header_vars.header }}"
-    - get_https_header.binding.certificateHash == "{{ thumbprint1.stdout_lines[0] }}"
+    - get_https_header.binding.ip == https_header_vars.ip
+    - get_https_header.binding.port == https_header_vars.port
+    - get_https_header.binding.protocol == https_header_vars.protocol
+    - get_https_header.binding.hostheader == https_header_vars.header
+    - get_https_header.binding.certificateHash == thumbprint1.stdout_lines[0]
     - get_https_header.binding.sslFlags == 1
 
 ##############
@@ -236,18 +236,18 @@
     - https_header is changed
     - https_header.operation_type == 'updated'
     - https_header.binding_info is defined
-    - https_header.binding_info.ip == "{{ https_header_vars.ip }}"
-    - https_header.binding_info.port == {{ https_header_vars.port }}
-    - https_header.binding_info.protocol == "{{ https_header_vars.protocol }}"
-    - https_header.binding_info.hostheader == "{{ https_header_vars.header }}"
-    - https_header.binding_info.certificateHash == "{{ thumbprint2.stdout_lines[0] }}"
+    - https_header.binding_info.ip == https_header_vars.ip
+    - https_header.binding_info.port == https_header_vars.port
+    - https_header.binding_info.protocol == https_header_vars.protocol
+    - https_header.binding_info.hostheader == https_header_vars.header
+    - https_header.binding_info.certificateHash == thumbprint2.stdout_lines[0]
     - https_header.binding_info.sslFlags == 1
     - get_https_header.binding is defined
-    - get_https_header.binding.ip == "{{ https_header_vars.ip }}"
-    - get_https_header.binding.port == {{ https_header_vars.port }}
-    - get_https_header.binding.protocol == "{{ https_header_vars.protocol }}"
-    - get_https_header.binding.hostheader == "{{ https_header_vars.header }}"
-    - get_https_header.binding.certificateHash == "{{ thumbprint2.stdout_lines[0] }}"
+    - get_https_header.binding.ip == https_header_vars.ip
+    - get_https_header.binding.port == https_header_vars.port
+    - get_https_header.binding.protocol == https_header_vars.protocol
+    - get_https_header.binding.hostheader == https_header_vars.header
+    - get_https_header.binding.certificateHash == thumbprint2.stdout_lines[0]
     - get_https_header.binding.sslFlags == 1
 
 ###################
@@ -323,27 +323,27 @@
     - https_no_header is changed
     - https_no_header.operation_type == 'removed'
     - https_no_header.binding_info is defined
-    - https_no_header.binding_info.ip == "{{ https_vars.ip }}"
-    - https_no_header.binding_info.port == {{ https_vars.port }}
-    - https_no_header.binding_info.protocol == "{{ https_vars.protocol }}"
+    - https_no_header.binding_info.ip == https_vars.ip
+    - https_no_header.binding_info.port == https_vars.port
+    - https_no_header.binding_info.protocol == https_vars.protocol
     - get_https_no_header.binding is defined
-    - get_https_no_header.binding.ip == "{{ https_vars.ip }}"
-    - get_https_no_header.binding.port == {{ https_vars.port }}
-    - get_https_no_header.binding.protocol == "{{ https_vars.protocol }}"
-    - get_https_no_header.binding.certificateHash == "{{ thumbprint1.stdout_lines[0] }}"
+    - get_https_no_header.binding.ip == https_vars.ip
+    - get_https_no_header.binding.port == https_vars.port
+    - get_https_no_header.binding.protocol == https_vars.protocol
+    - get_https_no_header.binding.certificateHash == thumbprint1.stdout_lines[0]
     - https_header is changed
     - https_header.binding_info is defined
     - https_header.operation_type == 'removed'
-    - https_header.binding_info.ip == "{{ https_header_vars.ip }}"
-    - https_header.binding_info.port == {{ https_header_vars.port }}
-    - https_header.binding_info.protocol == "{{ https_header_vars.protocol }}"
-    - https_header.binding_info.hostheader == "{{ https_header_vars.header }}"
+    - https_header.binding_info.ip == https_header_vars.ip
+    - https_header.binding_info.port == https_header_vars.port
+    - https_header.binding_info.protocol == https_header_vars.protocol
+    - https_header.binding_info.hostheader == https_header_vars.header
     - get_https_header.binding is defined
-    - get_https_header.binding.ip == "{{ https_header_vars.ip }}"
-    - get_https_header.binding.port == {{ https_header_vars.port }}
-    - get_https_header.binding.protocol == "{{ https_header_vars.protocol }}"
-    - get_https_header.binding.hostheader == "{{ https_header_vars.header }}"
-    - get_https_header.binding.certificateHash == "{{ thumbprint2.stdout_lines[0] }}"
+    - get_https_header.binding.ip == https_header_vars.ip
+    - get_https_header.binding.port == https_header_vars.port
+    - get_https_header.binding.protocol == https_header_vars.protocol
+    - get_https_header.binding.hostheader == https_header_vars.header
+    - get_https_header.binding.certificateHash == thumbprint2.stdout_lines[0]
 
 ##############
 ### remove ###
@@ -393,17 +393,17 @@
     - https_no_header is changed
     - https_no_header.binding_info is defined
     - https_no_header.operation_type == 'removed'
-    - https_no_header.binding_info.ip == "{{ https_vars.ip }}"
-    - https_no_header.binding_info.port == {{ https_vars.port }}
-    - https_no_header.binding_info.protocol == "{{ https_vars.protocol }}"
+    - https_no_header.binding_info.ip == https_vars.ip
+    - https_no_header.binding_info.port == https_vars.port
+    - https_no_header.binding_info.protocol == https_vars.protocol
     - get_https_no_header.binding is not defined
     - https_header is changed
     - https_header.binding_info is defined
     - https_header.operation_type == 'removed'
-    - https_header.binding_info.ip == "{{ https_header_vars.ip }}"
-    - https_header.binding_info.port == {{ https_header_vars.port }}
-    - https_header.binding_info.protocol == "{{ https_header_vars.protocol }}"
-    - https_header.binding_info.hostheader == "{{ https_header_vars.header }}"
+    - https_header.binding_info.ip == https_header_vars.ip
+    - https_header.binding_info.port == https_header_vars.port
+    - https_header.binding_info.protocol == https_header_vars.protocol
+    - https_header.binding_info.hostheader == https_header_vars.header
     - get_https_header.binding is not defined
 
 ###################

@@ -1,20 +1,8 @@
 ---
-# Cannot use win_feature to install IIS on Server 2008.
-# Run a brief check and skip hosts that don't support
-# that operation
-#seems "raw" is the only module that works on 2008 non-r2. win_command and win_shell both failed
-- name: register os version (seems integration tests don't gather this fact)
-  raw: powershell.exe "gwmi Win32_OperatingSystem | select -expand version"
-  register: os_version
-  changed_when: False
-
 - block:
   - include_tasks: setup.yml
   - include_tasks: http.yml
-  - include_tasks: https-lt6.2.yml
-    when: os_version.stdout_lines[0]  is version('6.2','lt')
   - include_tasks: https-ge6.2.yml
-    when: os_version.stdout_lines[0]  is version('6.2','ge')
   - include_tasks: failures.yml
 
   always:
@@ -59,4 +47,3 @@
   - name: reboot after feature install
     ansible.windows.win_reboot:
     when: feature_uninstall.reboot_required
-  when: os_version.stdout_lines[0]  is version('6.1','gt')
