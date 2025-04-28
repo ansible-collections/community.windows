@@ -1,0 +1,614 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta content="2.16.3" name="antsibull-docs" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>community.windows.psexec module – Runs commands on a remote Windows host based on the PsExec model &mdash; Ansible collections  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=41de9001" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/ansible.css?v=c5b67dd2" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/antsibull-minimal.css" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/rtd-ethical-ads.css?v=289b023e" />
+
+  
+    <link rel="shortcut icon" href="../../../_static/images/Ansible-Mark-RGB_Black.png"/>
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=7f41d439"></script>
+      <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="community.windows.win_data_deduplication module – Module to enable Data Deduplication on a volume." href="win_data_deduplication_module.html" />
+    <link rel="prev" title="Community.Windows" href="index.html" /><!-- extra head elements for Ansible beyond RTD Sphinx Theme -->
+
+
+
+
+</head>
+
+<body class="wy-body-for-nav"><!-- extra body elements for Ansible beyond RTD Sphinx Theme -->
+
+<div class="DocSite-globalNav ansibleNav">
+  <ul>
+    <li><a href="https://www.ansible.com/blog" target="_blank">Blog</a></li>
+    <li><a href="https://forum.ansible.com/" target="_blank">Ansible community forum</a></li>
+    <li><a href="https://docs.ansible.com/" target="_blank">Documentation</a></li>
+  </ul>
+</div>
+
+<a class="DocSite-nav" href="/" style="padding-bottom: 30px;">
+
+  <img class="DocSiteNav-logo"
+    src="../../../_static/images/Ansible-Mark-RGB_White.png"
+    alt="Ansible Logo">
+  <div class="DocSiteNav-title">Ansible Collections Documentation</div>
+</a>
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            Ansible collections
+          </a><!--- Based on https://github.com/rtfd/sphinx_rtd_theme/pull/438/files -->
+
+<div class="version">
+  
+    
+  
+</div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <label class="sr-only" for="q">Search docs:</label>
+    <input type="text" class="st-default-search-input" id="q" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+  
+              <p class="caption" role="heading"><span class="caption-text">Collections:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../../index.html">Collection Index</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="../index.html">Collections in the Community Namespace</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="index.html">Community.Windows</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="index.html#description">Description</a></li>
+<li class="toctree-l4"><a class="reference internal" href="index.html#communication">Communication</a></li>
+<li class="toctree-l4 current"><a class="reference internal" href="index.html#plugin-index">Plugin Index</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Plugin indexes:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../index_lookup.html">Index of all Lookup Plugins</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../index_module.html">Index of all Modules</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Reference indexes:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../environment_variables.html">Index of all Collection Environment Variables</a></li>
+</ul>
+<!-- extra nav elements for Ansible beyond RTD Sphinx Theme -->
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">Ansible collections</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Collection Index</a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Collections in the Community Namespace</a></li>
+          <li class="breadcrumb-item"><a href="index.html">Community.Windows</a></li>
+      <li class="breadcrumb-item active">community.windows.psexec module – Runs commands on a remote Windows host based on the PsExec model</li>
+      <li class="wy-breadcrumbs-aside">
+              <!-- User defined GitHub URL -->
+              <a href="https://github.com/ansible-collections/community.windows/edit/main/plugins/modules/psexec.py?description=%23%23%23%23%23%20SUMMARY%0A%3C!—%20Your%20description%20here%20–%3E%0A%0A%0A%23%23%23%23%23%20ISSUE%20TYPE%0A-%20Docs%20Pull%20Request%0A%0A%2Blabel:%20docsite_pr" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+
+  
+           <div itemprop="articleBody">
+             
+  <span class="target" id="ansible-collections-community-windows-psexec-module"></span><section id="community-windows-psexec-module-runs-commands-on-a-remote-windows-host-based-on-the-psexec-model">
+<h1>community.windows.psexec module – Runs commands on a remote Windows host based on the PsExec model<a class="headerlink" href="#community-windows-psexec-module-runs-commands-on-a-remote-windows-host-based-on-the-psexec-model" title="Link to this heading"></a></h1>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/community/windows/">community.windows collection</a> (version 3.0.0).</p>
+<p>It is not included in <code class="docutils literal notranslate"><span class="pre">ansible-core</span></code>.
+To check whether it is installed, run <code class="code docutils literal notranslate"><span class="pre">ansible-galaxy</span> <span class="pre">collection</span> <span class="pre">list</span></code>.</p>
+<p>To install it, use: <code class="code docutils literal notranslate"><span class="pre">ansible-galaxy</span> <span class="pre">collection</span> <span class="pre">install</span> <span class="pre">community.windows</span></code>.
+You need further requirements to be able to use this module,
+see <a class="reference internal" href="#ansible-collections-community-windows-psexec-module-requirements"><span class="std std-ref">Requirements</span></a> for details.</p>
+<p>To use it in a playbook, specify: <code class="code docutils literal notranslate"><span class="pre">community.windows.psexec</span></code>.</p>
+</div>
+<nav class="contents local" id="contents">
+<ul class="simple">
+<li><p><a class="reference internal" href="#synopsis" id="id1">Synopsis</a></p></li>
+<li><p><a class="reference internal" href="#requirements" id="id2">Requirements</a></p></li>
+<li><p><a class="reference internal" href="#parameters" id="id3">Parameters</a></p></li>
+<li><p><a class="reference internal" href="#notes" id="id4">Notes</a></p></li>
+<li><p><a class="reference internal" href="#see-also" id="id5">See Also</a></p></li>
+<li><p><a class="reference internal" href="#examples" id="id6">Examples</a></p></li>
+<li><p><a class="reference internal" href="#return-values" id="id7">Return Values</a></p></li>
+</ul>
+</nav>
+<section id="synopsis">
+<h2><a class="toc-backref" href="#id1" role="doc-backlink">Synopsis</a><a class="headerlink" href="#synopsis" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>Runs a remote command from a Linux host to a Windows host without WinRM being set up.</p></li>
+<li><p>Can be run on the Ansible controller to bootstrap Windows hosts to get them ready for WinRM.</p></li>
+</ul>
+</section>
+<section id="requirements">
+<span id="ansible-collections-community-windows-psexec-module-requirements"></span><h2><a class="toc-backref" href="#id2" role="doc-backlink">Requirements</a><a class="headerlink" href="#requirements" title="Link to this heading"></a></h2>
+<p>The below requirements are needed on the host that executes this module.</p>
+<ul class="simple">
+<li><p>pypsexec</p></li>
+<li><p>smbprotocol[kerberos] for optional Kerberos authentication</p></li>
+</ul>
+</section>
+<section id="parameters">
+<h2><a class="toc-backref" href="#id3" role="doc-backlink">Parameters</a><a class="headerlink" href="#parameters" title="Link to this heading"></a></h2>
+<table class="longtable ansible-option-table docutils align-default" style="width: 100%">
+<thead>
+<tr class="row-odd"><th class="head"><p>Parameter</p></th>
+<th class="head"><p>Comments</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-arguments"></div><p class="ansible-option-title" id="ansible-collections-community-windows-psexec-module-parameter-arguments"><strong>arguments</strong></p>
+<a class="ansibleOptionLink" href="#parameter-arguments" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Any arguments as a single string to use when running the executable.</p>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-asynchronous"></div><p class="ansible-option-title" id="ansible-collections-community-windows-psexec-module-parameter-asynchronous"><strong>asynchronous</strong></p>
+<a class="ansibleOptionLink" href="#parameter-asynchronous" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Will run the command as a detached process and the module returns immediately after starting the process while the process continues to run in the background.</p>
+<p>The <em>stdout</em> and <em>stderr</em> return values will be null when this is set to <code class="docutils literal notranslate"><span class="pre">yes</span></code>.</p>
+<p>The <em>stdin</em> option does not work with this type of process.</p>
+<p>The <em>rc</em> return value is not set when this is <code class="docutils literal notranslate"><span class="pre">yes</span></code></p>
+<p class="ansible-option-line"><strong class="ansible-option-choices">Choices:</strong></p>
+<ul class="simple">
+<li><p><code class="ansible-option-default-bold docutils literal notranslate"><strong><span class="pre">false</span></strong></code> <span class="ansible-option-choices-default-mark">← (default)</span></p></li>
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">true</span></code></p></li>
+</ul>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-connection_password"></div><p class="ansible-option-title" id="ansible-collections-community-windows-psexec-module-parameter-connection-password"><strong>connection_password</strong></p>
+<a class="ansibleOptionLink" href="#parameter-connection_password" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>The password for <em>connection_user</em>.</p>
+<p>Required if the Kerberos requirements are not installed or the username is a local account to the Windows host.</p>
+<p>Can be omitted to use a Kerberos principal ticket for the principal set by <em>connection_user</em> if the Kerberos library is installed and the ticket has already been retrieved with the <code class="docutils literal notranslate"><span class="pre">kinit</span></code> command before.</p>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-connection_timeout"></div><p class="ansible-option-title" id="ansible-collections-community-windows-psexec-module-parameter-connection-timeout"><strong>connection_timeout</strong></p>
+<a class="ansibleOptionLink" href="#parameter-connection_timeout" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">integer</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>The timeout in seconds to wait when receiving the initial SMB negotiate response from the server.</p>
+<p class="ansible-option-line"><strong class="ansible-option-default-bold">Default:</strong> <code class="ansible-option-default docutils literal notranslate"><span class="pre">60</span></code></p>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-connection_username"></div><p class="ansible-option-title" id="ansible-collections-community-windows-psexec-module-parameter-connection-username"><strong>connection_username</strong></p>
+<a class="ansibleOptionLink" href="#parameter-connection_username" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>The username to use when connecting to the remote Windows host.</p>
+<p>This user must be a member of the <code class="docutils literal notranslate"><span class="pre">Administrators</span></code> group of the Windows host.</p>
+<p>Required if the Kerberos requirements are not installed or the username is a local account to the Windows host.</p>
+<p>Can be omitted to use the default Kerberos principal ticket in the local credential cache if the Kerberos library is installed.</p>
+<p>If <em>process_username</em> is not specified, then the remote process will run under a Network Logon under this account.</p>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-encrypt"></div><p class="ansible-option-title" id="ansible-collections-community-windows-psexec-module-parameter-encrypt"><strong>encrypt</strong></p>
+<a class="ansibleOptionLink" href="#parameter-encrypt" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Will use SMB encryption to encrypt the SMB messages sent to and from the host.</p>
+<p>This requires the SMB 3 protocol which is only supported from Windows Server 2012 or Windows 8, older versions like Windows 7 or Windows Server 2008 (R2) must set this to <code class="docutils literal notranslate"><span class="pre">no</span></code> and use no encryption.</p>
+<p>When setting to <code class="docutils literal notranslate"><span class="pre">no</span></code>, the packets are in plaintext and can be seen by anyone sniffing the network, any process options are included in this.</p>
+<p class="ansible-option-line"><strong class="ansible-option-choices">Choices:</strong></p>
+<ul class="simple">
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">false</span></code></p></li>
+<li><p><code class="ansible-option-default-bold docutils literal notranslate"><strong><span class="pre">true</span></strong></code> <span class="ansible-option-choices-default-mark">← (default)</span></p></li>
+</ul>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-executable"></div><p class="ansible-option-title" id="ansible-collections-community-windows-psexec-module-parameter-executable"><strong>executable</strong></p>
+<a class="ansibleOptionLink" href="#parameter-executable" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span> / <span class="ansible-option-required">required</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>The executable to run on the Windows host.</p>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-hostname"></div><p class="ansible-option-title" id="ansible-collections-community-windows-psexec-module-parameter-hostname"><strong>hostname</strong></p>
+<a class="ansibleOptionLink" href="#parameter-hostname" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span> / <span class="ansible-option-required">required</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>The remote Windows host to connect to, can be either an IP address or a hostname.</p>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-integrity_level"></div><p class="ansible-option-title" id="ansible-collections-community-windows-psexec-module-parameter-integrity-level"><strong>integrity_level</strong></p>
+<a class="ansibleOptionLink" href="#parameter-integrity_level" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>The integrity level of the process when <em>process_username</em> is defined and is not equal to <code class="docutils literal notranslate"><span class="pre">System</span></code>.</p>
+<p>When <code class="docutils literal notranslate"><span class="pre">default</span></code>, the default integrity level based on the system setup.</p>
+<p>When <code class="docutils literal notranslate"><span class="pre">elevated</span></code>, the command will be run with Administrative rights.</p>
+<p>When <code class="docutils literal notranslate"><span class="pre">limited</span></code>, the command will be forced to run with non-Administrative rights.</p>
+<p class="ansible-option-line"><strong class="ansible-option-choices">Choices:</strong></p>
+<ul class="simple">
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">&quot;limited&quot;</span></code></p></li>
+<li><p><code class="ansible-option-default-bold docutils literal notranslate"><strong><span class="pre">&quot;default&quot;</span></strong></code> <span class="ansible-option-choices-default-mark">← (default)</span></p></li>
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">&quot;elevated&quot;</span></code></p></li>
+</ul>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-interactive"></div><p class="ansible-option-title" id="ansible-collections-community-windows-psexec-module-parameter-interactive"><strong>interactive</strong></p>
+<a class="ansibleOptionLink" href="#parameter-interactive" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Will run the process as an interactive process that shows a process Window of the Windows session specified by <em>interactive_session</em>.</p>
+<p>The <em>stdout</em> and <em>stderr</em> return values will be null when this is set to <code class="docutils literal notranslate"><span class="pre">yes</span></code>.</p>
+<p>The <em>stdin</em> option does not work with this type of process.</p>
+<p class="ansible-option-line"><strong class="ansible-option-choices">Choices:</strong></p>
+<ul class="simple">
+<li><p><code class="ansible-option-default-bold docutils literal notranslate"><strong><span class="pre">false</span></strong></code> <span class="ansible-option-choices-default-mark">← (default)</span></p></li>
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">true</span></code></p></li>
+</ul>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-interactive_session"></div><p class="ansible-option-title" id="ansible-collections-community-windows-psexec-module-parameter-interactive-session"><strong>interactive_session</strong></p>
+<a class="ansibleOptionLink" href="#parameter-interactive_session" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">integer</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>The Windows session ID to use when displaying the interactive process on the remote Windows host.</p>
+<p>This is only valid when <em>interactive</em> is <code class="docutils literal notranslate"><span class="pre">yes</span></code>.</p>
+<p>The default is <code class="docutils literal notranslate"><span class="pre">0</span></code> which is the console session of the Windows host.</p>
+<p class="ansible-option-line"><strong class="ansible-option-default-bold">Default:</strong> <code class="ansible-option-default docutils literal notranslate"><span class="pre">0</span></code></p>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-load_profile"></div><p class="ansible-option-title" id="ansible-collections-community-windows-psexec-module-parameter-load-profile"><strong>load_profile</strong></p>
+<a class="ansibleOptionLink" href="#parameter-load_profile" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Runs the remote command with the user’s profile loaded.</p>
+<p class="ansible-option-line"><strong class="ansible-option-choices">Choices:</strong></p>
+<ul class="simple">
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">false</span></code></p></li>
+<li><p><code class="ansible-option-default-bold docutils literal notranslate"><strong><span class="pre">true</span></strong></code> <span class="ansible-option-choices-default-mark">← (default)</span></p></li>
+</ul>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-port"></div><p class="ansible-option-title" id="ansible-collections-community-windows-psexec-module-parameter-port"><strong>port</strong></p>
+<a class="ansibleOptionLink" href="#parameter-port" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">integer</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>The port that the remote SMB service is listening on.</p>
+<p class="ansible-option-line"><strong class="ansible-option-default-bold">Default:</strong> <code class="ansible-option-default docutils literal notranslate"><span class="pre">445</span></code></p>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-priority"></div><p class="ansible-option-title" id="ansible-collections-community-windows-psexec-module-parameter-priority"><strong>priority</strong></p>
+<a class="ansibleOptionLink" href="#parameter-priority" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Set the command’s priority on the Windows host.</p>
+<p>See <a class="reference external" href="https://msdn.microsoft.com/en-us/library/windows/desktop/ms683211.aspx">https://msdn.microsoft.com/en-us/library/windows/desktop/ms683211.aspx</a> for more details.</p>
+<p class="ansible-option-line"><strong class="ansible-option-choices">Choices:</strong></p>
+<ul class="simple">
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">&quot;above_normal&quot;</span></code></p></li>
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">&quot;below_normal&quot;</span></code></p></li>
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">&quot;high&quot;</span></code></p></li>
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">&quot;idle&quot;</span></code></p></li>
+<li><p><code class="ansible-option-default-bold docutils literal notranslate"><strong><span class="pre">&quot;normal&quot;</span></strong></code> <span class="ansible-option-choices-default-mark">← (default)</span></p></li>
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">&quot;realtime&quot;</span></code></p></li>
+</ul>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-process_password"></div><p class="ansible-option-title" id="ansible-collections-community-windows-psexec-module-parameter-process-password"><strong>process_password</strong></p>
+<a class="ansibleOptionLink" href="#parameter-process_password" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>The password for <em>process_username</em>.</p>
+<p>Required if <em>process_username</em> is defined and not <code class="docutils literal notranslate"><span class="pre">System</span></code>.</p>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-process_timeout"></div><p class="ansible-option-title" id="ansible-collections-community-windows-psexec-module-parameter-process-timeout"><strong>process_timeout</strong></p>
+<a class="ansibleOptionLink" href="#parameter-process_timeout" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">integer</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>The timeout in seconds that is placed upon the running process.</p>
+<p>A value of <code class="docutils literal notranslate"><span class="pre">0</span></code> means no timeout.</p>
+<p class="ansible-option-line"><strong class="ansible-option-default-bold">Default:</strong> <code class="ansible-option-default docutils literal notranslate"><span class="pre">0</span></code></p>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-process_username"></div><p class="ansible-option-title" id="ansible-collections-community-windows-psexec-module-parameter-process-username"><strong>process_username</strong></p>
+<a class="ansibleOptionLink" href="#parameter-process_username" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>The user to run the process as.</p>
+<p>This can be set to run the process under an Interactive logon of the specified account which bypasses limitations of a Network logon used when this isn’t specified.</p>
+<p>If omitted then the process is run under the same account as <em>connection_username</em> with a Network logon.</p>
+<p>Set to <code class="docutils literal notranslate"><span class="pre">System</span></code> to run as the builtin SYSTEM account, no password is required with this account.</p>
+<p>If <em>encrypt</em> is <code class="docutils literal notranslate"><span class="pre">no</span></code>, the username and password are sent as a simple XOR scrambled byte string that is not encrypted. No special tools are required to get the username and password just knowledge of the protocol.</p>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-show_ui_on_logon_screen"></div><p class="ansible-option-title" id="ansible-collections-community-windows-psexec-module-parameter-show-ui-on-logon-screen"><strong>show_ui_on_logon_screen</strong></p>
+<a class="ansibleOptionLink" href="#parameter-show_ui_on_logon_screen" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Shows the process UI on the Winlogon secure desktop when <em>process_username</em> is <code class="docutils literal notranslate"><span class="pre">System</span></code>.</p>
+<p class="ansible-option-line"><strong class="ansible-option-choices">Choices:</strong></p>
+<ul class="simple">
+<li><p><code class="ansible-option-default-bold docutils literal notranslate"><strong><span class="pre">false</span></strong></code> <span class="ansible-option-choices-default-mark">← (default)</span></p></li>
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">true</span></code></p></li>
+</ul>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-stdin"></div><p class="ansible-option-title" id="ansible-collections-community-windows-psexec-module-parameter-stdin"><strong>stdin</strong></p>
+<a class="ansibleOptionLink" href="#parameter-stdin" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Data to send on the stdin pipe once the process has started.</p>
+<p>This option has no effect when <em>interactive</em> or <em>asynchronous</em> is <code class="docutils literal notranslate"><span class="pre">yes</span></code>.</p>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-working_directory"></div><p class="ansible-option-title" id="ansible-collections-community-windows-psexec-module-parameter-working-directory"><strong>working_directory</strong></p>
+<a class="ansibleOptionLink" href="#parameter-working_directory" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Changes the working directory set when starting the process.</p>
+<p class="ansible-option-line"><strong class="ansible-option-default-bold">Default:</strong> <code class="ansible-option-default docutils literal notranslate"><span class="pre">&quot;C:\\Windows\\System32&quot;</span></code></p>
+</div></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="notes">
+<h2><a class="toc-backref" href="#id4" role="doc-backlink">Notes</a><a class="headerlink" href="#notes" title="Link to this heading"></a></h2>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<ul class="simple">
+<li><p>This module requires the Windows host to have SMB configured and enabled, and port 445 opened on the firewall.</p></li>
+<li><p>This module will wait until the process is finished unless <em>asynchronous</em> is <code class="docutils literal notranslate"><span class="pre">yes</span></code>, ensure the process is run as a non-interactive command to avoid infinite hangs waiting for input.</p></li>
+<li><p>The <em>connection_username</em> must be a member of the local Administrator group of the Windows host. For non-domain joined hosts, the <code class="docutils literal notranslate"><span class="pre">LocalAccountTokenFilterPolicy</span></code> should be set to <code class="docutils literal notranslate"><span class="pre">1</span></code> to ensure this works, see <a class="reference external" href="https://support.microsoft.com/en-us/help/951016/description-of-user-account-control-and-remote-restrictions-in-windows">https://support.microsoft.com/en-us/help/951016/description-of-user-account-control-and-remote-restrictions-in-windows</a>.</p></li>
+<li><p>For more information on this module and the various host requirements, see <a class="reference external" href="https://github.com/jborean93/pypsexec">https://github.com/jborean93/pypsexec</a>.</p></li>
+</ul>
+</div>
+</section>
+<section id="see-also">
+<h2><a class="toc-backref" href="#id5" role="doc-backlink">See Also</a><a class="headerlink" href="#see-also" title="Link to this heading"></a></h2>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<dl class="simple">
+<dt><a class="reference external" href="https://docs.ansible.com/ansible/devel/collections/ansible/builtin/raw_module.html#ansible-collections-ansible-builtin-raw-module" title="(in Ansible vdevel)"><span class="xref std std-ref">ansible.builtin.raw</span></a></dt><dd><p>The official documentation on the <strong>ansible.builtin.raw</strong> module.</p>
+</dd>
+<dt><a class="reference external" href="https://docs.ansible.com/ansible/devel/collections/ansible/windows/win_command_module.html#ansible-collections-ansible-windows-win-command-module" title="(in Ansible vdevel)"><span class="xref std std-ref">ansible.windows.win_command</span></a></dt><dd><p>The official documentation on the <strong>ansible.windows.win_command</strong> module.</p>
+</dd>
+<dt><a class="reference internal" href="win_psexec_module.html#ansible-collections-community-windows-win-psexec-module"><span class="std std-ref">community.windows.win_psexec</span></a></dt><dd><p>Runs commands (remotely) as another (privileged) user.</p>
+</dd>
+<dt><a class="reference external" href="https://docs.ansible.com/ansible/devel/collections/ansible/windows/win_shell_module.html#ansible-collections-ansible-windows-win-shell-module" title="(in Ansible vdevel)"><span class="xref std std-ref">ansible.windows.win_shell</span></a></dt><dd><p>The official documentation on the <strong>ansible.windows.win_shell</strong> module.</p>
+</dd>
+</dl>
+</div>
+</section>
+<section id="examples">
+<h2><a class="toc-backref" href="#id6" role="doc-backlink">Examples</a><a class="headerlink" href="#examples" title="Link to this heading"></a></h2>
+<div class="highlight-yaml+jinja notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Run a cmd.exe command</span>
+<span class="w">  </span><span class="nt">community.windows.psexec</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">hostname</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">server</span>
+<span class="w">    </span><span class="nt">connection_username</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">username</span>
+<span class="w">    </span><span class="nt">connection_password</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">password</span>
+<span class="w">    </span><span class="nt">executable</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">cmd.exe</span>
+<span class="w">    </span><span class="nt">arguments</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/c echo Hello World</span>
+
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Run a PowerShell command</span>
+<span class="w">  </span><span class="nt">community.windows.psexec</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">hostname</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">server.domain.local</span>
+<span class="w">    </span><span class="nt">connection_username</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">username@DOMAIN.LOCAL</span>
+<span class="w">    </span><span class="nt">connection_password</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">password</span>
+<span class="w">    </span><span class="nt">executable</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">powershell.exe</span>
+<span class="w">    </span><span class="nt">arguments</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Write-Host Hello World</span>
+
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Send data through stdin</span>
+<span class="w">  </span><span class="nt">community.windows.psexec</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">hostname</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">192.168.1.2</span>
+<span class="w">    </span><span class="nt">connection_username</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">username</span>
+<span class="w">    </span><span class="nt">connection_password</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">password</span>
+<span class="w">    </span><span class="nt">executable</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">powershell.exe</span>
+<span class="w">    </span><span class="nt">arguments</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;-&#39;</span>
+<span class="w">    </span><span class="nt">stdin</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
+<span class="w">      </span><span class="no">Write-Host Hello World</span>
+<span class="w">      </span><span class="no">Write-Error Error Message</span>
+<span class="w">      </span><span class="no">exit 0</span>
+
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Run the process as a different user</span>
+<span class="w">  </span><span class="nt">community.windows.psexec</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">hostname</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">server</span>
+<span class="w">    </span><span class="nt">connection_user</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">username</span>
+<span class="w">    </span><span class="nt">connection_password</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">password</span>
+<span class="w">    </span><span class="nt">executable</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">whoami.exe</span>
+<span class="w">    </span><span class="nt">arguments</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/all</span>
+<span class="w">    </span><span class="nt">process_username</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">anotheruser</span>
+<span class="w">    </span><span class="nt">process_password</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">anotherpassword</span>
+
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Run the process asynchronously</span>
+<span class="w">  </span><span class="nt">community.windows.psexec</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">hostname</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">server</span>
+<span class="w">    </span><span class="nt">connection_username</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">username</span>
+<span class="w">    </span><span class="nt">connection_password</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">password</span>
+<span class="w">    </span><span class="nt">executable</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">cmd.exe</span>
+<span class="w">    </span><span class="nt">arguments</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/c rmdir C:\temp</span>
+<span class="w">    </span><span class="nt">asynchronous</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Use Kerberos authentication for the connection (requires smbprotocol[kerberos])</span>
+<span class="w">  </span><span class="nt">community.windows.psexec</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">hostname</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">host.domain.local</span>
+<span class="w">    </span><span class="nt">connection_username</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">user@DOMAIN.LOCAL</span>
+<span class="w">    </span><span class="nt">executable</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">C:\some\path\to\executable.exe</span>
+<span class="w">    </span><span class="nt">arguments</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/s</span>
+
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Disable encryption to work with WIndows 7/Server 2008 (R2)</span>
+<span class="w">  </span><span class="nt">community.windows.psexec</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">hostanme</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">windows-pc</span>
+<span class="w">    </span><span class="nt">connection_username</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Administrator</span>
+<span class="w">    </span><span class="nt">connection_password</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Password01</span>
+<span class="w">    </span><span class="nt">encrypt</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
+<span class="w">    </span><span class="nt">integrity_level</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">elevated</span>
+<span class="w">    </span><span class="nt">process_username</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Administrator</span>
+<span class="w">    </span><span class="nt">process_password</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Password01</span>
+<span class="w">    </span><span class="nt">executable</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">powershell.exe</span>
+<span class="w">    </span><span class="nt">arguments</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">(New-Object -ComObject Microsoft.Update.Session).CreateUpdateInstaller().IsBusy</span>
+
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Download and run ConfigureRemotingForAnsible.ps1 to setup WinRM</span>
+<span class="w">  </span><span class="nt">community.windows.psexec</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">hostname</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">hostvars</span><span class="o">[</span><span class="nv">inventory_hostname</span><span class="o">][</span><span class="s2">&quot;ansible_host&quot;</span><span class="o">]</span> <span class="o">|</span> <span class="nf">default</span><span class="o">(</span><span class="nv">inventory_hostname</span><span class="o">)</span> <span class="cp">}}</span><span class="s">&#39;</span>
+<span class="w">    </span><span class="nt">connection_username</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">ansible_user</span> <span class="cp">}}</span><span class="s">&#39;</span>
+<span class="w">    </span><span class="nt">connection_password</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;</span><span class="cp">{{</span> <span class="nv">ansible_password</span> <span class="cp">}}</span><span class="s">&#39;</span>
+<span class="w">    </span><span class="nt">encrypt</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">    </span><span class="nt">executable</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">powershell.exe</span>
+<span class="w">    </span><span class="nt">arguments</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;-&#39;</span>
+<span class="w">    </span><span class="nt">stdin</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
+<span class="w">      </span><span class="no">$ErrorActionPreference = &quot;Stop&quot;</span>
+<span class="w">      </span><span class="no">$sec_protocols = [Net.ServicePointManager]::SecurityProtocol -bor [Net.SecurityProtocolType]::SystemDefault</span>
+<span class="w">      </span><span class="no">$sec_protocols = $sec_protocols -bor [Net.SecurityProtocolType]::Tls12</span>
+<span class="w">      </span><span class="no">[Net.ServicePointManager]::SecurityProtocol = $sec_protocols</span>
+<span class="w">      </span><span class="no">$url = &quot;https://github.com/ansible/ansible-documentation/raw/devel/examples/scripts/ConfigureRemotingForAnsible.ps1&quot;</span>
+<span class="w">      </span><span class="no">Invoke-Expression ((New-Object Net.WebClient).DownloadString($url))</span>
+<span class="w">      </span><span class="no">exit</span>
+<span class="w">  </span><span class="nt">delegate_to</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">localhost</span>
+</pre></div>
+</div>
+</section>
+<section id="return-values">
+<h2><a class="toc-backref" href="#id7" role="doc-backlink">Return Values</a><a class="headerlink" href="#return-values" title="Link to this heading"></a></h2>
+<p>Common return values are documented <a class="reference external" href="https://docs.ansible.com/ansible/devel/reference_appendices/common_return_values.html#common-return-values" title="(in Ansible vdevel)"><span class="xref std std-ref">here</span></a>, the following are the fields unique to this module:</p>
+<table class="longtable ansible-option-table docutils align-default" style="width: 100%">
+<thead>
+<tr class="row-odd"><th class="head"><p>Key</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="return-msg"></div><p class="ansible-option-title" id="ansible-collections-community-windows-psexec-module-return-msg"><strong>msg</strong></p>
+<a class="ansibleOptionLink" href="#return-msg" title="Permalink to this return value"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Any exception details when trying to run the process</p>
+<p class="ansible-option-line"><strong class="ansible-option-returned-bold">Returned:</strong> module failed</p>
+<p class="ansible-option-line ansible-option-sample"><strong class="ansible-option-sample-bold">Sample:</strong> <code class="ansible-option-sample docutils literal notranslate"><span class="pre">&quot;Received</span> <span class="pre">exception</span> <span class="pre">from</span> <span class="pre">remote</span> <span class="pre">PAExec</span> <span class="pre">service:</span> <span class="pre">Failed</span> <span class="pre">to</span> <span class="pre">start</span> <span class="pre">\&quot;invalid.exe\&quot;.</span> <span class="pre">The</span> <span class="pre">system</span> <span class="pre">cannot</span> <span class="pre">find</span> <span class="pre">the</span> <span class="pre">file</span> <span class="pre">specified.</span> <span class="pre">[Err=0x2,</span> <span class="pre">2]&quot;</span></code></p>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="return-pid"></div><p class="ansible-option-title" id="ansible-collections-community-windows-psexec-module-return-pid"><strong>pid</strong></p>
+<a class="ansibleOptionLink" href="#return-pid" title="Permalink to this return value"></a><p class="ansible-option-type-line"><span class="ansible-option-type">integer</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>The process ID of the asynchronous process that was created</p>
+<p class="ansible-option-line"><strong class="ansible-option-returned-bold">Returned:</strong> success and asynchronous is ‘yes’</p>
+<p class="ansible-option-line ansible-option-sample"><strong class="ansible-option-sample-bold">Sample:</strong> <code class="ansible-option-sample docutils literal notranslate"><span class="pre">719</span></code></p>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="return-rc"></div><p class="ansible-option-title" id="ansible-collections-community-windows-psexec-module-return-rc"><strong>rc</strong></p>
+<a class="ansibleOptionLink" href="#return-rc" title="Permalink to this return value"></a><p class="ansible-option-type-line"><span class="ansible-option-type">integer</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>The return code of the remote process</p>
+<p class="ansible-option-line"><strong class="ansible-option-returned-bold">Returned:</strong> success and asynchronous is ‘no’</p>
+<p class="ansible-option-line ansible-option-sample"><strong class="ansible-option-sample-bold">Sample:</strong> <code class="ansible-option-sample docutils literal notranslate"><span class="pre">0</span></code></p>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="return-stderr"></div><p class="ansible-option-title" id="ansible-collections-community-windows-psexec-module-return-stderr"><strong>stderr</strong></p>
+<a class="ansibleOptionLink" href="#return-stderr" title="Permalink to this return value"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>The stderr from the remote process</p>
+<p class="ansible-option-line"><strong class="ansible-option-returned-bold">Returned:</strong> success and interactive or asynchronous is ‘no’</p>
+<p class="ansible-option-line ansible-option-sample"><strong class="ansible-option-sample-bold">Sample:</strong> <code class="ansible-option-sample docutils literal notranslate"><span class="pre">&quot;Error</span> <span class="pre">[10]</span> <span class="pre">running</span> <span class="pre">process&quot;</span></code></p>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="return-stdout"></div><p class="ansible-option-title" id="ansible-collections-community-windows-psexec-module-return-stdout"><strong>stdout</strong></p>
+<a class="ansibleOptionLink" href="#return-stdout" title="Permalink to this return value"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>The stdout from the remote process</p>
+<p class="ansible-option-line"><strong class="ansible-option-returned-bold">Returned:</strong> success and interactive or asynchronous is ‘no’</p>
+<p class="ansible-option-line ansible-option-sample"><strong class="ansible-option-sample-bold">Sample:</strong> <code class="ansible-option-sample docutils literal notranslate"><span class="pre">&quot;Hello</span> <span class="pre">World&quot;</span></code></p>
+</div></td>
+</tr>
+</tbody>
+</table>
+<section id="authors">
+<h3>Authors<a class="headerlink" href="#authors" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>Jordan Borean (&#64;jborean93)</p></li>
+</ul>
+</section>
+<section id="collection-links">
+<h3>Collection links<a class="headerlink" href="#collection-links" title="Link to this heading"></a></h3>
+<ul class="ansible-links">
+<li><span><a aria-role="button" class="ansible-link reference external" href="https://github.com/ansible-collections/community.windows/issues" rel="noopener external" target="_blank">Issue Tracker</a></span></li>
+<li><span><a aria-role="button" class="ansible-link reference external" href="https://github.com/ansible-collections/community.windows" rel="noopener external" target="_blank">Repository (Sources)</a></span></li>
+<li><span><a class="reference internal" href="index.html#communication-for-community-windows"><span class="std std-ref">Communication</span></a></span></li>
+</ul>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          
+
+<footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="index.html" class="btn btn-neutral float-left" title="Community.Windows" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="win_data_deduplication_module.html" class="btn btn-neutral float-right" title="community.windows.win_data_deduplication module – Module to enable Data Deduplication on a volume." accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright Ansible contributors.</p>
+  </div>
+
+  
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script><!-- extra footer elements for Ansible beyond RTD Sphinx Theme -->
+
+</body>
+</html>
