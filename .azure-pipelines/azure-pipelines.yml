@@ -26,17 +26,12 @@ variables:
     value: ansible_collections/community/windows
   - name: coverageBranches
     value: main
-  - name: pipelinesCoverage
-    value: coverage-powershell
   - name: entryPoint
-    value: tests/utils/shippable/shippable.sh
+    value: .azure-pipelines/commands/entry-point.sh
   - name: fetchDepth
     value: 0
-
-resources:
-  containers:
-    - container: default
-      image: quay.io/ansible/azure-pipelines-test-container:6.0.0
+  - name: defaultContainer
+    value: quay.io/ansible/azure-pipelines-test-container:6.0.0
 
 pool: Standard
 
@@ -71,6 +66,20 @@ stages:
         parameters:
           nameFormat: "{0}"
           testFormat: "devel/{0}"
+          targets:
+            - name: Sanity
+              test: sanity
+            - name: Units
+              test: units
+  - stage: Ansible_2_19
+    displayName: Ansible 2.19
+    dependsOn:
+      - Dependencies
+    jobs:
+      - template: templates/matrix.yml
+        parameters:
+          nameFormat: "{0}"
+          testFormat: "2.19/{0}"
           targets:
             - name: Sanity
               test: sanity
@@ -115,20 +124,6 @@ stages:
         parameters:
           nameFormat: "{0}"
           testFormat: "2.16/{0}"
-          targets:
-            - name: Sanity
-              test: sanity
-            - name: Units
-              test: units
-  - stage: Ansible_2_15
-    displayName: Ansible 2.15
-    dependsOn:
-      - Dependencies
-    jobs:
-      - template: templates/matrix.yml
-        parameters:
-          nameFormat: "{0}"
-          testFormat: "2.15/{0}"
           targets:
             - name: Sanity
               test: sanity
@@ -248,10 +243,10 @@ stages:
     condition: succeededOrFailed()
     dependsOn:
       - Ansible_devel
+      - Ansible_2_19
       - Ansible_2_18
       - Ansible_2_17
       - Ansible_2_16
-      - Ansible_2_15
       - Windows_1
       - Windows_2
       - Windows_3
