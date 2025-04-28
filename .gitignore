@@ -512,3 +512,6 @@ changelogs/.plugin-cache.yaml
 
 # ansible-test ignores
 tests/integration/inventory*
+
+# Ansible dev tools
+.ansible/
