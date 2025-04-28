@@ -1,0 +1,3 @@
+---
+bugfixes:
+  - win_format - fix crash when using path parameter without force option (https://github.com/ansible-collections/community.windows/pull/615).
