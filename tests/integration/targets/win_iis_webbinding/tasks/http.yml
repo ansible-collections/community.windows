@@ -96,16 +96,16 @@
     - http_no_header is changed
     - http_no_header.binding_info is defined
     - http_no_header.operation_type == 'added'
-    - http_no_header.binding_info.ip == "{{ http_vars.ip }}"
-    - http_no_header.binding_info.port == {{ http_vars.port }}
-    - http_no_header.binding_info.protocol == "{{ http_vars.protocol }}"
+    - http_no_header.binding_info.ip == http_vars.ip
+    - http_no_header.binding_info.port == http_vars.port
+    - http_no_header.binding_info.protocol == http_vars.protocol
     - http_header is changed
     - http_header.binding_info is defined
     - http_header.operation_type == 'added'
-    - http_header.binding_info.ip == "{{ http_header_vars.ip }}"
-    - http_header.binding_info.port == {{ http_header_vars.port }}
-    - http_header.binding_info.protocol == "{{ http_header_vars.protocol }}"
-    - http_header.binding_info.hostheader == "{{ http_header_vars.header }}"
+    - http_header.binding_info.ip == http_header_vars.ip
+    - http_header.binding_info.port == http_header_vars.port
+    - http_header.binding_info.protocol == http_header_vars.protocol
+    - http_header.binding_info.hostheader == http_header_vars.header
 
 #add idem
 #changed false
@@ -186,25 +186,25 @@
     - http_no_header is changed
     - http_no_header.binding_info is defined
     - http_no_header.operation_type == 'removed'
-    - http_no_header.binding_info.ip == "{{ http_vars.ip }}"
-    - http_no_header.binding_info.port == {{ http_vars.port }}
-    - http_no_header.binding_info.protocol == "{{ http_vars.protocol }}"
+    - http_no_header.binding_info.ip == http_vars.ip
+    - http_no_header.binding_info.port == http_vars.port
+    - http_no_header.binding_info.protocol == http_vars.protocol
     - get_http_no_header.binding is defined
-    - get_http_no_header.binding.ip == "{{ http_vars.ip }}"
-    - get_http_no_header.binding.port == {{ http_vars.port }}
-    - get_http_no_header.binding.protocol == "{{ http_vars.protocol }}"
+    - get_http_no_header.binding.ip == http_vars.ip
+    - get_http_no_header.binding.port == http_vars.port
+    - get_http_no_header.binding.protocol == http_vars.protocol
     - http_header is changed
     - http_header.binding_info is defined
     - http_header.operation_type == 'removed'
-    - http_header.binding_info.ip == "{{ http_header_vars.ip }}"
-    - http_header.binding_info.port == {{ http_header_vars.port }}
-    - http_header.binding_info.protocol == "{{ http_header_vars.protocol }}"
-    - http_header.binding_info.hostheader == "{{ http_header_vars.header }}"
+    - http_header.binding_info.ip == http_header_vars.ip
+    - http_header.binding_info.port == http_header_vars.port
+    - http_header.binding_info.protocol == http_header_vars.protocol
+    - http_header.binding_info.hostheader == http_header_vars.header
     - get_http_header.binding is defined
-    - get_http_header.binding.ip == "{{ http_header_vars.ip }}"
-    - get_http_header.binding.port == {{ http_header_vars.port }}
-    - get_http_header.binding.protocol == "{{ http_header_vars.protocol }}"
-    - get_http_header.binding.hostheader == "{{ http_header_vars.header }}"
+    - get_http_header.binding.ip == http_header_vars.ip
+    - get_http_header.binding.port == http_header_vars.port
+    - get_http_header.binding.protocol == http_header_vars.protocol
+    - get_http_header.binding.hostheader == http_header_vars.header
 
 
 #remove
@@ -253,17 +253,17 @@
     - http_no_header is changed
     - http_no_header.operation_type == 'removed'
     - http_no_header.binding_info is defined
-    - http_no_header.binding_info.ip == "{{ http_vars.ip }}"
-    - http_no_header.binding_info.port == {{ http_vars.port }}
-    - http_no_header.binding_info.protocol == "{{ http_vars.protocol }}"
+    - http_no_header.binding_info.ip == http_vars.ip
+    - http_no_header.binding_info.port == http_vars.port
+    - http_no_header.binding_info.protocol == http_vars.protocol
     - get_http_no_header.binding is not defined
     - http_header is changed
     - http_header.binding_info is defined
     - http_header.operation_type == 'removed'
-    - http_header.binding_info.ip == "{{ http_header_vars.ip }}"
-    - http_header.binding_info.port == {{ http_header_vars.port }}
-    - http_header.binding_info.protocol == "{{ http_header_vars.protocol }}"
-    - http_header.binding_info.hostheader == "{{ http_header_vars.header }}"
+    - http_header.binding_info.ip == http_header_vars.ip
+    - http_header.binding_info.port == http_header_vars.port
+    - http_header.binding_info.protocol == http_header_vars.protocol
+    - http_header.binding_info.hostheader == http_header_vars.header
     - get_http_header.binding is not defined
 
 #remove idem
