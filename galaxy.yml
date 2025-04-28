@@ -11,8 +11,7 @@ license_file: COPYING
 tags:
   - windows
 dependencies:
-  # FIXME: This needs to be set to >=3.0.0,<4.0.0 once ansible.windows is released at that version
-  ansible.windows: ">=2.0.0,<4.0.0"
+  ansible.windows: ">=3.0.0,<4.0.0"
 repository: https://github.com/ansible-collections/community.windows
 documentation: https://docs.ansible.com/ansible/devel/collections/community/windows
 homepage: https://github.com/ansible-collections/community.windows

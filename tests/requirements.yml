@@ -1,6 +1,4 @@
 collections:
-  # - name: ansible.windows
-  - name: https://github.com/jborean93/ansible.windows.git
-    type: git
-    version: dt-fixes
+  - name: ansible.windows
+    version: '>=3.0.0,<4.0.0'
   - name: chocolatey.chocolatey
