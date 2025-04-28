@@ -1,3 +1,0 @@
----
-bugfixes:
-  - win_toast - fix title and message in the notification.

@@ -1,9 +1,0 @@
-removed_features:
-  - win_domain_computer - Removed deprecated module, use ``microsoft.ad.computer`` instead
-  - win_domain_group_membership - Removed deprecated module, use ``microsoft.ad.membership`` instead
-  - win_domain_group - Removed deprecated module, use ``microsoft.ad.group`` instead
-  - win_domain_object_info - Removed deprecated module, use ``microsoft.ad.object_info`` instead
-  - win_domain_ou - Removed deprecated module, use ``microsoft.ad.ou`` instead
-  - win_domain_user - Removed deprecated module, use ``microsoft.ad.user`` instead
-  - win_lineinfile - Removed deprecated return value ``backup``, use ``backup_file`` instead
-  - win_xml - Removed deprecated, and undocumented, return value ``backup``, use ``backup_file`` instead
