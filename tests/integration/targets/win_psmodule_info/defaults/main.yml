@@ -5,7 +5,6 @@ repository_name: Repo
 repo_path: "{{ remote_tmp_dir }}\\repo\\"
 
 modules_to_install:
-  - AnsibleVault
   - PSCSharpInvoker
   - PInvokeHelper
 

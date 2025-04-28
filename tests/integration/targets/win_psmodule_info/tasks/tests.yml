@@ -50,10 +50,10 @@
 
 - name: Get info on modules by repository and name pattern
   vars:
-    wildcard: "*t"
+    wildcard: "*helper"
     repository: "{{ repository_name }}"
     expected_modules:
-      - "AnsibleVault"
+      - "PInvokeHelper"
   block:
     - name: Get multiple modules by wildcard and repository {{ suffix }}
       community.windows.win_psmodule_info:
