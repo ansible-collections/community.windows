@@ -8,11 +8,21 @@
     Get-PSRepository | Unregister-PSRepository
     Register-PSRepository -Default
 
-- name: Set up directory repository
-  ansible.windows.win_copy:
-    src: "{{ role_path }}/files/"
-    dest: "{{ repo_path }}"
-    force: no
+- name: Download required nupkgs
+  ansible.windows.win_get_url:
+    url: '{{ item.url }}'
+    dest: '{{ repo_path }}\{{ item.name }}.nupkg'
+  register: download_res
+  until: download_res is successful
+  retries: 3
+  delay: 5
+  loop:
+  - name: ansiblevault
+    url: https://ansible-ci-files.s3.us-east-1.amazonaws.com/test/integration/targets/win_psmodule_info/ansiblevault.0.3.0.nupkg
+  - name: pinvokehelper
+    url: https://ansible-ci-files.s3.us-east-1.amazonaws.com/test/integration/targets/win_psmodule_info/pinvokehelper.0.1.0.nupkg
+  - name: pscsharpinvoker
+    url: https://ansible-ci-files.s3.us-east-1.amazonaws.com/test/integration/targets/win_psmodule_info/pscsharpinvoker.0.1.0.nupkg
 
 - name: Register repository
   community.windows.win_psrepository:
