@@ -8,6 +8,11 @@
     Get-PSRepository | Unregister-PSRepository
     Register-PSRepository -Default
 
+- name: Create the repository directory
+  ansible.windows.win_file:
+    path: '{{ repo_path }}'
+    state: directory
+
 - name: Download required nupkgs
   ansible.windows.win_get_url:
     url: '{{ item.url }}'
