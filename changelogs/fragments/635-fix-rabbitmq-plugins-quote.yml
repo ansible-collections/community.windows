@@ -1,2 +1,2 @@
 bugfixes:
-  - Fix incorrect quoting in ``win_rabbitmq_plugin`` module that caused failures when specifying ``rabbitmq_bin_path``. The ``rabbitmq-plugins`` command now executes properly without redundant quotes.
+  - win_rabbitmq_plugin - removed redundant quotes that caused failures when specifying ``rabbitmq_bin_path`` (https://github.com/ansible-collections/community.windows/issues/635).
