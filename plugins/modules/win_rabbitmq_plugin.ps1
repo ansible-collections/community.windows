@@ -101,7 +101,7 @@ else {
 }
 
 if ($rabbitmq_bin_path) {
-    $rabbitmq_plugins_cmd = "'$(Join-Path -Path $rabbitmq_bin_path -ChildPath "rabbitmq-plugins")'"
+    $rabbitmq_plugins_cmd = "$(Join-Path -Path $rabbitmq_bin_path -ChildPath "rabbitmq-plugins")"
 }
 else {
     $rabbitmq_plugins_cmd = "rabbitmq-plugins"
