@@ -1,0 +1,3 @@
+bugfixes:
+  - win_rabbitmq_plugin - removed redundant quotes that caused failures when specifying ``rabbitmq_bin_path``
+    (https://github.com/ansible-collections/community.windows/issues/635).
