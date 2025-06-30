@@ -93,6 +93,7 @@
     xpath: '/config/string[@key="foo"]'
     type: attribute
     attribute: spam
+    state: absent
   register: attribute_remove_result
 
 - name: check attribute is removed
@@ -106,6 +107,7 @@
     xpath: '/config/string[@key="foo"]'
     type: attribute
     attribute: spam
+    state: absent
   register: attribute_remove_result_second
 
 - name: check attribute is not removed again
