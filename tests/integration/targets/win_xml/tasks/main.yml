@@ -87,6 +87,12 @@
     that:
     - not element_add_attribute_result_second is changed
 
+- name: register the sha1 of the config.xml before removing an attribute
+  ansible.windows.win_stat:
+    path: "{{ remote_tmp_dir }}\\config.xml"
+    get_checksum: yes
+  register: config_xml_checksum_before
+
 - name: try removing an attribute
   win_xml:
     path: "{{ remote_tmp_dir }}\\config.xml"
@@ -96,10 +102,23 @@
     state: absent
   register: attribute_remove_result
 
+- name: register the sha1 of the config.xml after removing an attribute
+  ansible.windows.win_stat:
+    path: "{{ remote_tmp_dir }}\\config.xml"
+    get_checksum: yes
+  register: config_xml_checksum_after
+
 - name: check attribute is removed
   assert:
     that:
     - attribute_remove_result is changed
+    - config_xml_checksum_before.stat.checksum != config_xml_checksum_after.stat.checksum
+
+- name: register the sha1 of the config.xml before removing an attribute
+  ansible.windows.win_stat:
+    path: "{{ remote_tmp_dir }}\\config.xml"
+    get_checksum: yes
+  register: config_xml_checksum_before
 
 - name: try removing an attribute again
   win_xml:
@@ -110,10 +129,17 @@
     state: absent
   register: attribute_remove_result_second
 
+- name: register the sha1 of the config.xml after removing an attribute
+  ansible.windows.win_stat:
+    path: "{{ remote_tmp_dir }}\\config.xml"
+    get_checksum: yes
+  register: config_xml_checksum_after
+
 - name: check attribute is not removed again
   assert:
     that:
     - not attribute_remove_result_second is changed
+    - config_xml_checksum_before.stat.checksum == config_xml_checksum_after.stat.checksum
 
 - name: try to add a new element in empty element
   win_xml:
