@@ -4,6 +4,20 @@ Community Windows Release Notes
 
 .. contents:: Topics
 
+v3.0.1
+======
+
+Release Summary
+---------------
+
+Release summary for v3.0.1
+
+Bugfixes
+--------
+
+- win_rabbitmq_plugin - removed redundant quotes that caused failures when specifying ``rabbitmq_bin_path`` (https://github.com/ansible-collections/community.windows/issues/635).
+- win_scoop - Fix issue when scoop is installed at a path with spaces like ``C:\Program Files`` - https://github.com/ansible-collections/community.windows/issues/614
+
 v3.0.0
 ======
 

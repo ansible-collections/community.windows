@@ -710,3 +710,16 @@ releases:
     - win_format.yml
     - win_toast.yml
     release_date: '2025-04-29'
+  3.0.1:
+    changes:
+      bugfixes:
+      - win_rabbitmq_plugin - removed redundant quotes that caused failures when specifying
+        ``rabbitmq_bin_path`` (https://github.com/ansible-collections/community.windows/issues/635).
+      - win_scoop - Fix issue when scoop is installed at a path with spaces like ``C:\Program
+        Files`` - https://github.com/ansible-collections/community.windows/issues/614
+      release_summary: Release summary for v3.0.1
+    fragments:
+    - 635-fix-rabbitmq-plugins-quote.yml
+    - release-summary.yml
+    - win_scoop-path.yml
+    release_date: '2025-07-22'
