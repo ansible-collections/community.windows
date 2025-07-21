@@ -1,0 +1,4 @@
+bugfixes:
+  - >-
+    win_scoop - Fix issue when scoop is installed at a path with spaces like ``C:\Program Files`` -
+    https://github.com/ansible-collections/community.windows/issues/614

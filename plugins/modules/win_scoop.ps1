@@ -35,7 +35,6 @@ $state = $module.Params.state
 $module.Result.rc = 0
 
 function Install-Scoop {
-    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidUsingInvokeExpression', '', Justification = 'This is one use case where we want to use iex')]
     [CmdletBinding()]
     param ()
 
@@ -105,7 +104,7 @@ function Get-ScoopPackage {
         [Parameter(Mandatory = $true)] [string]$scoop_path
     )
 
-    $command = Argv-ToString -arguments @("powershell.exe", $scoop_path, "export")
+    $command = Argv-ToString -arguments @("powershell.exe", "-File", $scoop_path, "export")
     $res = Run-Command -Command $command
     if ($res.rc -ne 0) {
         $module.Result.command = $command
@@ -179,7 +178,7 @@ function Install-ScoopPackage {
         [Parameter(Mandatory = $true)] [string]$scoop_path,
         [Parameter(Mandatory = $true)] [String[]]$packages
     )
-    $arguments = [System.Collections.Generic.List[String]]@("powershell.exe", $scoop_path, "install")
+    $arguments = [System.Collections.Generic.List[String]]@("powershell.exe", "-File", $scoop_path, "install")
     $arguments.AddRange($packages)
 
     $common_args = Get-InstallScoopPackageArgument
@@ -223,7 +222,7 @@ function Uninstall-ScoopPackage {
         [Parameter(Mandatory = $true)] [String[]]$packages
     )
 
-    $arguments = [System.Collections.Generic.List[String]]@("powershell.exe", $scoop_path, "uninstall")
+    $arguments = [System.Collections.Generic.List[String]]@("powershell.exe", "-File", $scoop_path, "uninstall")
     $arguments.AddRange($packages)
 
     $common_args = Get-UninstallScoopPackageArgument
@@ -266,10 +265,10 @@ if ($state -in @("absent")) {
 if ($state -in @("present")) {
     $missing_packages = foreach ($package in $name) {
         if (
-      ($installed_packages.Package -notcontains $package) -or
-      (($installed_packages.Package -contains $package) -and (
-          ((($installed_packages | Where-Object { $_.Package -eq $package }).Global -contains $true) -and -not $global) -or
-          ((($installed_packages | Where-Object { $_.Package -eq $package }).Global -notcontains $true) -and $global)
+            ($installed_packages.Package -notcontains $package) -or
+            (($installed_packages.Package -contains $package) -and (
+                ((($installed_packages | Where-Object { $_.Package -eq $package }).Global -contains $true) -and -not $global) -or
+                ((($installed_packages | Where-Object { $_.Package -eq $package }).Global -notcontains $true) -and $global)
             )
       )
         ) {
