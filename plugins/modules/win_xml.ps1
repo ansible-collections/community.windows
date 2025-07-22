@@ -265,7 +265,7 @@ elseif ($type -eq "attribute") {
             }
             else {
                 # element node processing
-                if ($node.Name -eq $attribute ) {
+                if ($node.HasAttribute($attribute)) {
                     # note not caring about the state of 'fragment' at this point
                     $node.RemoveAttribute($attribute)
                     $changed = $true
