@@ -366,6 +366,14 @@ Function Find-LatestPsModule {
         Fail-Json $result $ErrorMessage
     }
 
+    if ( $LatestModuleVersion.GetType().FullName -eq 'System.Object[]' ) {
+        $ErrorMessage = -join @(
+            "The module $Name exists in multiple repositories. Define a repository or the desired "
+            "version of the module."
+        )
+        Fail-Json $result $ErrorMessage
+    }
+
     $LatestModuleVersion
 }
 
