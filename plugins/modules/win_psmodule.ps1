@@ -358,15 +358,19 @@ Function Find-LatestPsModule {
 
         $ht = Add-DefinedParameter -Hashtable $ht -ParametersNames $ParametersNames
 
-        $LatestModule = Find-Module @ht
-        $LatestModuleVersion = $LatestModule.Version
+        $LatestModule = Find-Module @ht | Select-Object Version
     }
     catch [ System.Exception ] {
         $ErrorMessage = "Cant find the module $($Name): $($_.Exception.Message)"
         Fail-Json $result $ErrorMessage
     }
 
-    $LatestModuleVersion
+    if ( $LatestModule.Version.GetType().FullName -eq 'System.Object[]' ) {
+        $ErrorMessage = "The module $Name exists in multiple repositories. Define a repository."
+        Fail-Json $result $ErrorMessage
+    }
+
+    $LatestModule
 }
 
 # Check PowerShell version, fail if < 5.0 and required modules are not installed
@@ -468,15 +472,15 @@ elseif ( $state -eq "latest") {
         Credential = $repo_credential
     }
 
-    $LatestVersion = Find-LatestPsModule @ht
+    $LatestModule = Find-LatestPsModule @ht
 
     $ExistingModule = Get-PsModule $Name
 
-    if ( ($LatestVersion.Version -ne $ExistingModule.Version) -or $force ) {
+    if ( ($LatestModule.Version -ne $ExistingModule.Version) -or $force ) {
 
         $ht = @{
             Name = $Name
-            RequiredVersion = $LatestVersion
+            RequiredVersion = $LatestModule.Version
             Repository = $repo
             AllowClobber = $allow_clobber
             SkipPublisherCheck = $skip_publisher_check
