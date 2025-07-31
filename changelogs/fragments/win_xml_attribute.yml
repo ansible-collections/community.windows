@@ -1,0 +1,3 @@
+---
+bugfixes:
+   - win_xml - handle attribute removal correctly (https://github.com/ansible-collections/community.windows/issues/631).
