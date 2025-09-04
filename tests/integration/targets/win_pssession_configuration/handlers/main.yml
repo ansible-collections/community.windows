@@ -1,0 +1,7 @@
+- name: remove plugin registration
+  ansible.windows.win_powershell:
+    script: |
+      $ErrorActionPreference = 'Stop'
+
+      $pluginRoot = [IO.Path]::Combine($env:SystemRoot, 'System32', 'PowerShell', $PSVersionTable.GitCommitId)
+      Remove-Item -LiteralPath $pluginRoot -Recurse -Force
