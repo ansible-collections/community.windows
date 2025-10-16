@@ -1,2 +1,4 @@
 bugfixes:
-  - win_initialize_disk - disks that are formatted but offline cannot be brought online without erasing them (https://github.com/ansible-collections/community.windows/issues/149).
+  - >
+    win_initialize_disk - disks that are formatted but offline cannot be brought online without erasing them
+    (https://github.com/ansible-collections/community.windows/issues/149).
