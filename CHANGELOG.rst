@@ -4,19 +4,6 @@ Community Windows Release Notes
 
 .. contents:: Topics
 
-v3.0.2
-======
-
-Release Summary
----------------
-
-Release summary for v3.0.2
-
-Bugfixes
---------
-
-- win_initialize_disk - disks that are formatted but offline cannot be brought online without erasing them (https://github.com/ansible-collections/community.windows/issues/149).
-
 v3.0.1
 ======
 
