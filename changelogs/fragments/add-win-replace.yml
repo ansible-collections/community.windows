@@ -1,1 +1,4 @@
-- Added win_replace module to allow multi-occurrence text replacement in files on Windows.
+minor_changes:
+  - Added new `win_replace` module to perform regex-based replacements on Windows files.
+    This module provides similar functionality to `ansible.builtin.replace` but uses
+    native Windows APIs for better performance and compatibility.
