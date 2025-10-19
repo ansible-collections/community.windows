@@ -1,0 +1,1 @@
+- Added win_replace module to allow multi-occurrence text replacement in files on Windows.
