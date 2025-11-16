@@ -1,13 +1,9 @@
----
-- name: check if we can run the tests
-  ansible.windows.win_shell: |
-    $osVersion = [Version](Get-Item -LiteralPath "$env:SystemRoot\System32\kernel32.dll").VersionInfo.ProductVersion
-    $osVersion -ge [Version]"6.2"
-  register: run_test
-  changed_when: False
+- name: get PowerShell version
+  ansible.windows.win_shell: $PSVersionTable.PSVersion.Major
+  register: ps_version
 
-- name: Run on Server 2012 and higher
-  when: run_test.stdout | trim | bool
+- name: skip if running PowerShell 7
+  when: ps_version.stdout|int >= 7
   block:
   - name: ensure IIS features are installed
     ansible.windows.win_feature:

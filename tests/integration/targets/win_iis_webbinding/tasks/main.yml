@@ -1,5 +1,10 @@
----
-- block:
+- name: get PowerShell version
+  ansible.windows.win_shell: $PSVersionTable.PSVersion.Major
+  register: ps_version
+
+- name: skip if running PowerShell 7
+  when: ps_version.stdout|int >= 7
+  block:
   - include_tasks: setup.yml
   - include_tasks: http.yml
   - include_tasks: https-ge6.2.yml
