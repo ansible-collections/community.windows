@@ -43,7 +43,7 @@
         $res.StartName = $sid.Translate([System.Security.Principal.NTAccount]).Value
 
         $res.Exists = $true
-        $res.Dependencies = @(Get-WmiObject -Query "Associators of {Win32_Service.Name=""$service""} Where AssocClass=Win32_DependentService" | select -ExpandProperty Name)
+        $res.Dependencies = @(Get-CimInstance -Query "Associators of {Win32_Service.Name=""$service""} Where AssocClass=Win32_DependentService" | select -ExpandProperty Name)
         $res.Parameters = @{}
         $srvkey = "HKLM:\SYSTEM\CurrentControlSet\Services\$service\Parameters"
         Get-Item "$srvkey" | Select-Object -ExpandProperty property | % { $res.Parameters.$_ = (Get-ItemProperty -Path "$srvkey" -Name $_).$_}
@@ -159,7 +159,7 @@
     that:
     - install_service_complex_check.changed == true
     - (install_service_complex_check_actual.stdout|from_json).Exists == true
-    - (install_service_complex_check_actual.stdout|from_json).DisplayName == '{{ test_service_name }}'
+    - (install_service_complex_check_actual.stdout|from_json).DisplayName == test_service_name
     - (install_service_complex_check_actual.stdout|from_json).Description is none
     - (install_service_complex_check_actual.stdout|from_json).StartMode != 'Manual'
     - (install_service_complex_check_actual.stdout|from_json).StartName != test_win_nssm_normalised_username
