@@ -171,7 +171,7 @@ function Update-NssmServiceParameter {
         Fail-Json -obj $result -message "Error retrieving $parameter for service ""$service"""
     }
 
-    $current_values = @($nssm_result.stdout.split("`n`r") | Where-Object { $_ -ne '' })
+    $current_values = @($nssm_result.stdout.split([char[]]"`n`r") | Where-Object { $_ -ne '' })
 
     if (-not $compare.Invoke($current_values, $arguments)) {
         if ($PSCmdlet.ShouldProcess($service, "Update '$parameter' parameter")) {

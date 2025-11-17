@@ -3,7 +3,7 @@
   set_fact:
     test_service_cmd: |
       $res = @{}
-      $srvobj = Get-WmiObject Win32_Service -Filter "Name=""$service""" | Select Name,DisplayName,Description,PathName,StartMode,StartName,State
+      $srvobj = Get-CimInstance Win32_Service -Filter "Name=""$service""" | Select Name,DisplayName,Description,PathName,StartMode,StartName,State
       if ($srvobj) {
         $srvobj | Get-Member -MemberType *Property | % { $res.($_.name) = $srvobj.($_.name) }
 
