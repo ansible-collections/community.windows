@@ -4,11 +4,12 @@
 # GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 ---
 - name: Unregister all repositories
-  ansible.windows.win_shell: |
-    if (-not (Get-PackageProvider -ListAvailable | Where-Object { ($_.name -eq 'Nuget') -and ($_.version -ge "2.8.5.201") }) ) {
-        Install-PackageProvider -Name NuGet -MinimumVersion 2.8.5.201 -Force | Out-Null
-    }
-    Get-PSRepository | Unregister-PSRepository
+  ansible.windows.win_powershell:
+    script: |
+      if (-not (Get-PackageProvider -ListAvailable | Where-Object { ($_.name -eq 'Nuget') -and ($_.version -ge "2.8.5.201") }) ) {
+          Install-PackageProvider -Name NuGet -MinimumVersion 2.8.5.201 -Force | Out-Null
+      }
+      Get-PSRepository | Unregister-PSRepository
   notify: Add PSGallery
 
 - name: Create repo folders

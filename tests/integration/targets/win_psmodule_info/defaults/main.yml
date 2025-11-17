@@ -23,7 +23,8 @@ expected_fields:
   - author
   - description
   - exported_type_files
-  - exported_workflows
+  # Not present in Pwsh 7+
+  # - exported_workflows
   - nested_modules
   - exported_dsc_resources
   - updated_date

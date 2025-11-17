@@ -19,7 +19,9 @@ $module = [Ansible.Basic.AnsibleModule]::Create($args, $spec)
 # We need to remove this type data so that arrays don't get serialized weirdly.
 # In some cases, an array gets serialized as an object with a Count and Value property where the value is the actual array.
 # See: https://stackoverflow.com/a/48858780/3905079
-Remove-TypeData System.Array
+if (-not $IsCoreCLR) {
+    Remove-TypeData System.Array
+}
 
 function Convert-ObjectToSnakeCase {
     <#
