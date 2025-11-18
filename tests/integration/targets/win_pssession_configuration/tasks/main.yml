@@ -3,6 +3,28 @@
 # Copyright: (c) 2020, Brian Scholer <@briantist>
 # GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 ---
+- name: install PowerShell plugin for PowerShell 7
+  ansible.windows.win_powershell:
+    script: |
+      $ErrorActionPreference = 'Stop'
+
+      $Ansible.Changed = $false
+
+      if (-not $IsCoreCLR) {
+          return
+      }
+
+      $pluginRoot = [IO.Path]::Combine($env:SystemRoot, 'System32', 'PowerShell', $PSVersionTable.GitCommitId)
+      if (Test-Path -LiteralPath $pluginRoot) {
+          return
+      }
+
+      New-Item -Path $pluginRoot -ItemType Directory -Force | Out-Null
+      $Ansible.Changed = $true
+      Copy-Item -LiteralPath "$PSHome\pwrshplugin.dll" -DestinatinonPath "$pluginRoot\pwrshplugin.dll" -Force
+      Set-Content -LiteralPath "$pluginRoot\RemotePowerShellConfig.txt" -Value "PSHOMEDIR=$PSHOME`r`nCORECLRDIR=$PSHome`r`n"
+  notify: remove plugin registration
+
 - block:
     - ansible.windows.setup:
         gather_subset:

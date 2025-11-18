@@ -34,6 +34,20 @@ $state = $module.Params.state
 
 $module.Result.rc = 0
 
+function Get-PowerShellExecutable {
+    [CmdletBinding()]
+    param ()
+
+    $exeName = if ($IsCoreCLR) {
+        'pwsh.exe'
+    }
+    else {
+        'powershell.exe'
+    }
+
+    Join-Path $PSHome $exeName
+}
+
 function Install-Scoop {
     [CmdletBinding()]
     param ()
@@ -73,7 +87,7 @@ function Install-Scoop {
         }
 
         $enc_command = [Convert]::ToBase64String([Text.Encoding]::Unicode.GetBytes($install_script.ToString()))
-        $cmd = "powershell.exe -NoProfile -NoLogo -EncodedCommand $enc_command"
+        $cmd = "`"$(Get-PowerShellExecutable)`" -NoProfile -NoLogo -EncodedCommand $enc_command"
 
         # Scoops installer does weird things and the exit code will most likely be 0. Use the presence of the scoop
         # command as the indicator as to whether it was installed or not.
@@ -104,7 +118,7 @@ function Get-ScoopPackage {
         [Parameter(Mandatory = $true)] [string]$scoop_path
     )
 
-    $command = Argv-ToString -arguments @("powershell.exe", "-File", $scoop_path, "export")
+    $command = Argv-ToString -arguments @((Get-PowerShellExecutable), "-File", $scoop_path, "export")
     $res = Run-Command -Command $command
     if ($res.rc -ne 0) {
         $module.Result.command = $command
@@ -178,7 +192,7 @@ function Install-ScoopPackage {
         [Parameter(Mandatory = $true)] [string]$scoop_path,
         [Parameter(Mandatory = $true)] [String[]]$packages
     )
-    $arguments = [System.Collections.Generic.List[String]]@("powershell.exe", "-File", $scoop_path, "install")
+    $arguments = [System.Collections.Generic.List[String]]@((Get-PowerShellExecutable), "-File", $scoop_path, "install")
     $arguments.AddRange($packages)
 
     $common_args = Get-InstallScoopPackageArgument
@@ -222,7 +236,7 @@ function Uninstall-ScoopPackage {
         [Parameter(Mandatory = $true)] [String[]]$packages
     )
 
-    $arguments = [System.Collections.Generic.List[String]]@("powershell.exe", "-File", $scoop_path, "uninstall")
+    $arguments = [System.Collections.Generic.List[String]]@((Get-PowerShellExecutable), "-File", $scoop_path, "uninstall")
     $arguments.AddRange($packages)
 
     $common_args = Get-UninstallScoopPackageArgument
