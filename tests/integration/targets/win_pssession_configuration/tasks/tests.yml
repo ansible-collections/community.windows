@@ -256,17 +256,7 @@
 
 ######
 
-- name: Check custom type parameters for PowerShell <= 4 (check)
-  win_pssession_configuration:
-    name: "{{ config_name }}"
-    guid: "{{ 'test' | to_uuid }}"
-    powershell_version: '3.0'
-    maximum_received_data_size_per_command_mb: 5.0E+11
-    maximum_received_object_size_mb: 6.6666666666666666666666666
-  register: status
-  when: ansible_powershell_version <= 4
-
-- name: Check custom type parameters for PowerShell >= 5 (check)
+- name: Check custom type parameters for PowerShell 5 (check)
   win_pssession_configuration:
     name: "{{ config_name }}"
     guid: "{{ 'test' | to_uuid }}"
@@ -275,7 +265,8 @@
     maximum_received_data_size_per_command_mb: 5.0E+11
     maximum_received_object_size_mb: 6.6666666666666666666666666
   register: status
-  when: ansible_powershell_version >= 5
+  # PowerShell 7 fails if you specify the PowerShell version
+  when: ansible_powershell_version < 6
 
 ######
 

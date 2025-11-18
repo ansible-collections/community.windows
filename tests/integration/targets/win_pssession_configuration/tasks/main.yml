@@ -21,7 +21,7 @@
 
       New-Item -Path $pluginRoot -ItemType Directory -Force | Out-Null
       $Ansible.Changed = $true
-      Copy-Item -LiteralPath "$PSHome\pwrshplugin.dll" -DestinationPath "$pluginRoot\pwrshplugin.dll" -Force
+      Copy-Item -LiteralPath "$PSHome\pwrshplugin.dll" -Destination "$pluginRoot\pwrshplugin.dll" -Force
       Set-Content -LiteralPath "$pluginRoot\RemotePowerShellConfig.txt" -Value "PSHOMEDIR=$PSHOME`r`nCORECLRDIR=$PSHome`r`n"
   notify: remove plugin registration
 
