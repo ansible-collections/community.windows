@@ -229,7 +229,12 @@ foreach ($user in $profiles) {
         $cur_repos = Import-Clixml -LiteralPath $repo_path
     }
     else {
-        $cur_repos = @{}
+        # It is important we do not use a hashtable literal to ensure the key
+        # ordering is the same as Import-Clixml. The serializer uses this
+        # hashtable which is case sensitive whereas @{} is case insensitive
+        # and can change how the keys are ordered and thus serialized during
+        # the comparison.
+        $cur_repos = [Hashtable]::new()
     }
 
     $updated = $false
