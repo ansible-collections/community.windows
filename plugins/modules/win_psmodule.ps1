@@ -4,6 +4,7 @@
 # Copyright: (c) 2017, Daniele Lazzari <lazzari@mailup.com>
 # GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 
+#AnsibleRequires -PowerShell ..module_utils._Tls
 #Requires -Module Ansible.ModuleUtils.Legacy
 
 # win_psmodule (Windows PowerShell modules Additions/Removals/Updates)
@@ -31,17 +32,7 @@ $result = @{changed = $false
     repository_changed = $false
 }
 
-
-# Enable TLS1.1/TLS1.2 if they're available but disabled (eg. .NET 4.5)
-$security_protocols = [System.Net.ServicePointManager]::SecurityProtocol -bor [System.Net.SecurityProtocolType]::SystemDefault
-if ([System.Net.SecurityProtocolType].GetMember("Tls11").Count -gt 0) {
-    $security_protocols = $security_protocols -bor [System.Net.SecurityProtocolType]::Tls11
-}
-if ([System.Net.SecurityProtocolType].GetMember("Tls12").Count -gt 0) {
-    $security_protocols = $security_protocols -bor [System.Net.SecurityProtocolType]::Tls12
-}
-[System.Net.ServicePointManager]::SecurityProtocol = $security_protocols
-
+Enable-TlsProtocol
 
 Function Install-NugetProvider {
     Param(

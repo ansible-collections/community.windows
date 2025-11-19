@@ -5,6 +5,9 @@
 ---
 - name: Unregister all repositories
   ansible.windows.win_shell: |
+    if (-not (Get-PackageProvider -ListAvailable | Where-Object { ($_.name -eq 'Nuget') -and ($_.version -ge "2.8.5.201") }) ) {
+        Install-PackageProvider -Name NuGet -MinimumVersion 2.8.5.201 -Force | Out-Null
+    }
     Get-PSRepository | Unregister-PSRepository
 
 - block:
@@ -18,6 +21,7 @@
 
     - name: Add the default repository
       ansible.windows.win_shell: |
+        [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
         Register-PSRepository -Default
 
     - name: Single Repository Tests
@@ -30,6 +34,7 @@
 
     - name: Add two more repositories
       ansible.windows.win_shell: |
+        [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
         Register-PSRepository -Name '{{ second_repository_name }}' -SourceLocation '{{ second_repository_source_location }}'
         Register-PSRepository -Name '{{ third_repository_name }}' -SourceLocation '{{ third_repository_source_location }}'
 
@@ -48,4 +53,5 @@
 
     - name: Ensure only the default repository remains
       ansible.windows.win_shell: |
+        [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
         Register-PSRepository -Default
