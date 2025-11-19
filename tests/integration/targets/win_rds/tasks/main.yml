@@ -1,12 +1,12 @@
 ---
-# Cannot use win_feature to install RDS on Server 2008
-- name: check if feature is availble
-  ansible.windows.win_shell: if (Get-Command -Name Add-WindowsFeature -ErrorAction SilentlyContinue) { $true } else { $false }
-  changed_when: False
-  register: module_available
+# Cannot use RDS on PowerShell 7.x
+- name: get PowerShell version
+  ansible.windows.win_powershell:
+    script: $PSVersionTable.PSVersion.ToString()
+  register: ps_version
 
 - name: install Remote Desktop Gateway features
-  when: module_available.stdout | trim | bool
+  when: ps_version.output[0] is version('6.0', '<')
   block:
   - name: ensure Remote Desktop Gateway services are installed
     ansible.windows.win_feature:
