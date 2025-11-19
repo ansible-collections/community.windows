@@ -5,7 +5,9 @@
 
 ---
 - name: unregister the repository
-  ansible.windows.win_shell: Unregister-PSRepository {{ repository_name | quote }} -ErrorAction SilentlyContinue
+  ansible.windows.win_shell: |
+    [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
+    Unregister-PSRepository {{ repository_name | quote }} -ErrorAction SilentlyContinue
 
 - block:
   - name: run all tests
@@ -15,4 +17,6 @@
     include_tasks: update_and_force.yml
   always:
   - name: ensure test repo is unregistered
-    ansible.windows.win_shell: Unregister-PSRepository {{ repository_name | quote }} -ErrorAction SilentlyContinue
+    ansible.windows.win_shell: |
+      [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
+      Unregister-PSRepository {{ repository_name | quote }} -ErrorAction SilentlyContinue
