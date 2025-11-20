@@ -1,2 +1,0 @@
-bugfixes:
-  - win_psmodule - Improve error message, if a module exists in multiple repositories - https://github.com/ansible-collections/community.windows/issues/641

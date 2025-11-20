@@ -1,3 +1,0 @@
-bugfixes:
-  - >-
-    Unify the TLS protocol handling logic for the modules that need it to ensure they use the configured OS policies.
