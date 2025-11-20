@@ -4,6 +4,28 @@ Community Windows Release Notes
 
 .. contents:: Topics
 
+v3.1.0
+======
+
+Release Summary
+---------------
+
+Release summary for v3.1.0
+
+Minor Changes
+-------------
+
+- Add official support for Ansible 2.20
+
+Bugfixes
+--------
+
+- Unify the TLS protocol handling logic for the modules that need it to ensure they use the configured OS policies.
+- win_disk_facts - fixed an issue when a disk may not have a number (https://github.com/ansible-collections/community.windows/pull/652).
+- win_initialize_disk - disks that are formatted but offline cannot be brought online without erasing them (https://github.com/ansible-collections/community.windows/issues/149).
+- win_psmodule - Improve error message, if a module exists in multiple repositories - https://github.com/ansible-collections/community.windows/issues/641
+- win_psrepository_copy - Fix idempotence check to not rely on .NET runtime implementation details. This should avoid any false positive changed indicators
+
 v3.0.1
 ======
 

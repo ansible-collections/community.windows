@@ -1,3 +1,0 @@
-bugfixes:
-  - win_disk_facts - fixed an issue when a disk may not have a number
-    (https://github.com/ansible-collections/community.windows/pull/652).

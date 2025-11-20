@@ -1,4 +1,0 @@
-bugfixes:
-  - >-
-    win_psrepository_copy - Fix idempotence check to not rely on .NET runtime implementation details. This should
-    avoid any false positive changed indicators
