@@ -150,35 +150,57 @@ function Get-ProfileDirectory {
         Select-Wildcard -Property Name -Include $Include -Exclude $Exclude
 }
 
-function Compare-Hashtable {
+function ConvertTo-ComparableObject {
+    [CmdletBinding()]
+    param (
+        [Parameter(Mandatory)]
+        [object]
+        $InputObject
+    )
+
+    if ($InputObject -is [System.Collections.IDictionary]) {
+        # Using a sorted dictionary to ensure consistent key ordering
+        $dict = [System.Collections.Generic.SortedDictionary[string, object]]::new()
+        foreach ($kvp in $InputObject.GetEnumerator()) {
+            $dict[$kvp.Key] = ConvertTo-ComparableObject -InputObject $kvp.Value
+        }
+        $dict
+    }
+    elseif ($InputObject -is [System.Collections.IList]) {
+        # Leading , ensures the output is an array and isn't unrolled.
+        , @(
+            foreach ($item in $InputObject) {
+                ConvertTo-ComparableObject -InputObject $item
+            }
+        )
+    }
+    else {
+        $InputObject
+    }
+}
+
+function Compare-Dictionary {
     <#
-        .SYNOPSIS
-        Attempts to naively compare two hashtables by serializing them and string comparing the serialized versions
+    .SYNOPSIS
+    Attempts to naively compare two dictionaries
     #>
     [CmdletBinding()]
     [OutputType([bool])]
     param(
         [Parameter(Mandatory)]
-        [hashtable]
-        $ReferenceObject ,
+        [System.Collections.IDictionary]
+        $ReferenceObject,
 
         [Parameter(Mandatory)]
-        [hashtable]
-        $DifferenceObject ,
-
-        [Parameter()]
-        [int]
-        $Depth
+        [System.Collections.IDictionary]
+        $DifferenceObject
     )
 
-    if ($PSBoundParameters.ContainsKey('Depth')) {
-        $sRef = [System.Management.Automation.PSSerializer]::Serialize($ReferenceObject, $Depth)
-        $sDif = [System.Management.Automation.PSSerializer]::Serialize($DifferenceObject, $Depth)
-    }
-    else {
-        $sRef = [System.Management.Automation.PSSerializer]::Serialize($ReferenceObject)
-        $sDif = [System.Management.Automation.PSSerializer]::Serialize($DifferenceObject)
-    }
+    $refDict = ConvertTo-ComparableObject -InputObject $ReferenceObject
+    $difDict = ConvertTo-ComparableObject -InputObject $DifferenceObject
+
+    $sRef = ConvertTo-Json -InputObject $refDict -Compress
+    $sDif = ConvertTo-Json -InputObject $difDict -Compress
 
     $sRef -ceq $sDif
 }
@@ -230,7 +252,7 @@ foreach ($user in $profiles) {
     $module.Diff.before[$username] = $cur_repos
     $module.Diff.after[$username] = $new_repos
 
-    if ($updated -and -not (Compare-Hashtable -ReferenceObject $cur_repos -DifferenceObject $new_repos)) {
+    if ($updated -and -not (Compare-Dictionary -ReferenceObject $cur_repos -DifferenceObject $new_repos)) {
         if (-not $module.CheckMode) {
             $null = New-Item -Path $repo_dir -ItemType Directory -Force -ErrorAction SilentlyContinue
             $new_repos | Export-Clixml -LiteralPath $repo_path -Force
