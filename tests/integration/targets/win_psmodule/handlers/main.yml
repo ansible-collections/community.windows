@@ -1,6 +1,7 @@
 ---
 - name: re-add PSGallery repository
-  ansible.windows.win_shell: Register-PSRepository -Default -InstallationPolicy Untrusted
+  ansible.windows.win_powershell:
+    script: Register-PSRepository -Default -InstallationPolicy Untrusted
 
 - name: remove registered repos
   win_psrepository:
@@ -29,6 +30,7 @@
     name: '{{ item }}'
     state: absent
   loop:
+  - ansible-licensed
   - ansible-test1
   - ansible-test2
   - ansible-clobber

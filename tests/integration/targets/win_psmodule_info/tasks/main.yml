@@ -5,6 +5,9 @@
 ---
 - name: Reset repositories
   ansible.windows.win_shell: |
+    if (-not (Get-PackageProvider -ListAvailable | Where-Object { ($_.name -eq 'Nuget') -and ($_.version -ge "2.8.5.201") }) ) {
+        Install-PackageProvider -Name NuGet -MinimumVersion 2.8.5.201 -Force | Out-Null
+    }
     Get-PSRepository | Unregister-PSRepository
     Register-PSRepository -Default
 

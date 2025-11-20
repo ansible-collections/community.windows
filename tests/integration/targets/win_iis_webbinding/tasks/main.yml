@@ -40,7 +40,6 @@
     ansible.windows.win_feature:
       name: Web-Server
       state: absent
-      includ_sub_features: True
       include_management_tools: True
     register: feature_uninstall
 
