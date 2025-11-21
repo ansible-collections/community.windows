@@ -1,4 +1,6 @@
 collections:
-  - name: ansible.windows
-    version: '>=3.0.0,<4.0.0'
+  - name: https://github.com/jborean93/ansible.windows.git
+    type: git
+    version: pwsh-7
+    # version: '>=3.0.0,<4.0.0'
   - name: chocolatey.chocolatey

@@ -171,7 +171,7 @@ function Update-NssmServiceParameter {
         Fail-Json -obj $result -message "Error retrieving $parameter for service ""$service"""
     }
 
-    $current_values = @($nssm_result.stdout.split("`n`r") | Where-Object { $_ -ne '' })
+    $current_values = @($nssm_result.stdout.split([char[]]"`n`r") | Where-Object { $_ -ne '' })
 
     if (-not $compare.Invoke($current_values, $arguments)) {
         if ($PSCmdlet.ShouldProcess($service, "Update '$parameter' parameter")) {
@@ -476,7 +476,8 @@ else {
         # avoid breaking playbooks which use another / custom scheme for configuring app_env
         if ($null -ne $app_env) {
             # note: convert app_env dictionary to list of strings in the form key=value and pass that a long as value
-            $app_env_str = $app_env.GetEnumerator() | ForEach-Object { "$($_.Name)=$($_.Value)" }
+            # we sort it alphabetically to ensure idempotence.
+            $app_env_str = $app_env.GetEnumerator() | Sort-Object Name | ForEach-Object { "$($_.Name)=$($_.Value)" }
 
             # note: this is important here to make an empty envvar set working properly (in the sense that appenv is reset)
             if ($null -eq $app_env_str) {

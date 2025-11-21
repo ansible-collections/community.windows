@@ -19,7 +19,8 @@
   ignore_errors: yes
 
 - name: get result of install package
-  ansible.windows.win_shell: (Get-Module -ListAvailable -Name ansible-licensed | Measure-Object).Count
+  ansible.windows.win_powershell:
+    script: (Get-Module -ListAvailable -Name ansible-licensed | Measure-Object).Count
   register: install_actual_check
 
 - name: assert install package (failure)
@@ -27,7 +28,7 @@
     that:
     - install_licensed is failed
     - '"License Acceptance is required for module" in install_licensed.msg'
-    - install_actual_check.stdout | trim | int == 0
+    - install_actual_check.output[0] == 0
 
 - name: install module requiring license acceptance
   win_psmodule:
@@ -37,14 +38,15 @@
   register: install_licensed
 
 - name: get result of install package
-  ansible.windows.win_shell: Import-Module -Name ansible-licensed; Get-AnsibleLicensed | ConvertTo-Json
+  ansible.windows.win_powershell:
+    script: Import-Module -Name ansible-licensed; Get-AnsibleLicensed
   register: install_actual
 
 - name: assert install package
   assert:
     that:
     - install_licensed is changed
-    - install_actual.stdout | from_json == {"Name":"ansible-licensed","Version":"1.1.1","Repo":"PSRepo 1"}
+    - install_actual.output[0] == {"Name":"ansible-licensed","Version":"1.1.1","Repo":"PSRepo 1"}
 
 - name: install module requiring license acceptance (idempotence)
   win_psmodule:
@@ -54,14 +56,15 @@
   register: install_licensed
 
 - name: get result of install package (idempotence)
-  ansible.windows.win_shell: Import-Module -Name ansible-licensed; Get-AnsibleLicensed | ConvertTo-Json
+  ansible.windows.win_powershell:
+    script: Import-Module -Name ansible-licensed; Get-AnsibleLicensed
   register: install_actual
 
 - name: assert install package (idempotence)
   assert:
     that:
     - install_licensed is not changed
-    - install_actual.stdout | from_json == {"Name":"ansible-licensed","Version":"1.1.1","Repo":"PSRepo 1"}
+    - install_actual.output[0] == {"Name":"ansible-licensed","Version":"1.1.1","Repo":"PSRepo 1"}
 
 ### end licensed module checks
 
@@ -73,14 +76,15 @@
   check_mode: yes
 
 - name: get result of install package (check mode)
-  ansible.windows.win_shell: (Get-Module -ListAvailable -Name ansible-test1 | Measure-Object).Count
+  ansible.windows.win_powershell:
+    script: (Get-Module -ListAvailable -Name ansible-test1 | Measure-Object).Count
   register: install_actual_check
 
 - name: assert install package (check mode)
   assert:
     that:
     - install_check is changed
-    - install_actual_check.stdout | trim | int == 0
+    - install_actual_check.output[0] == 0
 
 - name: install package
   win_psmodule:
@@ -89,14 +93,15 @@
   register: install
 
 - name: get result of install package
-  ansible.windows.win_shell: Import-Module -Name ansible-test1; Get-AnsibleTest1 | ConvertTo-Json
+  ansible.windows.win_powershell:
+    script: Import-Module -Name ansible-test1; Get-AnsibleTest1
   register: install_actual
 
 - name: assert install package
   assert:
     that:
     - install is changed
-    - install_actual.stdout | from_json == {"Name":"ansible-test1","Version":"1.1.0","Repo":"PSRepo 1"}
+    - install_actual.output[0] == {"Name":"ansible-test1","Version":"1.1.0","Repo":"PSRepo 1"}
 
 - name: install package (idempotent)
   win_psmodule:
@@ -117,14 +122,15 @@
   check_mode: yes
 
 - name: get result of remove package (check mode)
-  ansible.windows.win_shell: (Get-Module -ListAvailable -Name ansible-test1 | Measure-Object).Count
+  ansible.windows.win_powershell:
+    script: (Get-Module -ListAvailable -Name ansible-test1 | Measure-Object).Count
   register: remove_actual_check
 
 - name: remove package (check mode)
   assert:
     that:
     - remove_check is changed
-    - remove_actual_check.stdout | trim | int == 1
+    - remove_actual_check.output[0] == 1
 
 - name: remove package
   win_psmodule:
@@ -133,14 +139,15 @@
   register: remove
 
 - name: get result of remove package
-  ansible.windows.win_shell: (Get-Module -ListAvailable -Name ansible-test1 | Measure-Object).Count
+  ansible.windows.win_powershell:
+    script: (Get-Module -ListAvailable -Name ansible-test1 | Measure-Object).Count
   register: remove_actual
 
 - name: assert remove package
   assert:
     that:
     - remove is changed
-    - remove_actual.stdout | trim | int == 0
+    - remove_actual.output[0] == 0
 
 - name: remove package (idempotent)
   win_psmodule:
@@ -168,14 +175,15 @@
   register: install_repo
 
 - name: get result of install module with specific repository
-  ansible.windows.win_shell: Import-Module -Name ansible-test2; Get-AnsibleTest2 | ConvertTo-Json
+  ansible.windows.win_powershell:
+    script: Import-Module -Name ansible-test2; Get-AnsibleTest2
   register: install_repo_actual
 
 - name: assert install module with specific repository
   assert:
     that:
     - install_repo is changed
-    - install_repo_actual.stdout | from_json == {"Name":"ansible-test2","Version":"1.0.0","Repo":"PSRepo 2"}
+    - install_repo_actual.output[0] == {"Name":"ansible-test2","Version":"1.0.0","Repo":"PSRepo 2"}
 
 - name: install module with specific repository (idempotent)
   win_psmodule:
@@ -196,14 +204,15 @@
   register: remove_repo_without_source
 
 - name: get result of remove package that was installed from specific repository
-  ansible.windows.win_shell: (Get-Module -ListAvailable -Name ansible-test2 | Measure-Object).Count
+  ansible.windows.win_powershell:
+    script: (Get-Module -ListAvailable -Name ansible-test2 | Measure-Object).Count
   register: remove_repo_without_source_actual
 
 - name: assert remove package that was installed from specific repository
   assert:
     that:
     - remove_repo_without_source is changed
-    - remove_repo_without_source_actual.stdout | trim | int == 0
+    - remove_repo_without_source_actual.output[0] == 0
 
 - name: fail to install required version that is missing
   win_psmodule:
@@ -221,14 +230,15 @@
   register: install_req_version
 
 - name: get result of install required version
-  ansible.windows.win_shell: Import-Module -Name ansible-test1; Get-AnsibleTest1 | ConvertTo-Json
+  ansible.windows.win_powershell:
+    script: Import-Module -Name ansible-test1; Get-AnsibleTest1
   register: install_req_version_actual
 
 - name: assert install required version
   assert:
     that:
     - install_req_version is changed
-    - install_req_version_actual.stdout | from_json == {"Name":"ansible-test1","Version":"1.0.0","Repo":"PSRepo 1"}
+    - install_req_version_actual.output[0] == {"Name":"ansible-test1","Version":"1.0.0","Repo":"PSRepo 1"}
 
 - name: install required version (idempotent)
   win_psmodule:
@@ -250,14 +260,15 @@
   register: remove_req_version
 
 - name: get result of remove required version
-  ansible.windows.win_shell: (Get-Module -ListAvailable -Name ansible-test1 | Measure-Object).Count
+  ansible.windows.win_powershell:
+    script: (Get-Module -ListAvailable -Name ansible-test1 | Measure-Object).Count
   register: remove_req_version_actual
 
 - name: assert remove required version
   assert:
     that:
     - remove_req_version is changed
-    - remove_req_version_actual.stdout | trim | int == 0
+    - remove_req_version_actual.output[0] == 0
 
 - name: remove required version (idempotent)
   win_psmodule:
@@ -280,14 +291,15 @@
   register: install_min_max
 
 - name: get result of install min max version
-  ansible.windows.win_shell: Import-Module -Name ansible-test1; Get-AnsibleTest1 | ConvertTo-Json
+  ansible.windows.win_powershell:
+    script: Import-Module -Name ansible-test1; Get-AnsibleTest1
   register: install_min_max_actual
 
 - name: assert install min max version
   assert:
     that:
     - install_min_max is changed
-    - install_min_max_actual.stdout | from_json == {"Name":"ansible-test1","Version":"1.0.5","Repo":"PSRepo 1"}
+    - install_min_max_actual.output[0] == {"Name":"ansible-test1","Version":"1.0.5","Repo":"PSRepo 1"}
 
 - name: install min max version (idempotent)
   win_psmodule:
@@ -309,14 +321,15 @@
   register: update_module
 
 - name: get result of update package to latest version
-  ansible.windows.win_shell: Import-Module -Name ansible-test1; Get-AnsibleTest1 | ConvertTo-Json
+  ansible.windows.win_powershell:
+    script: Import-Module -Name ansible-test1; Get-AnsibleTest1
   register: update_module_actual
 
 - name: assert update package to latest version
   assert:
     that:
     - update_module is changed
-    - update_module_actual.stdout | from_json == {"Name":"ansible-test1","Version":"1.1.0","Repo":"PSRepo 1"}
+    - update_module_actual.output[0] == {"Name":"ansible-test1","Version":"1.1.0","Repo":"PSRepo 1"}
 
 - name: update package to latest version (idempotent)
   win_psmodule:
@@ -367,14 +380,15 @@
   register: install_max
 
 - name: get result of install package with max version
-  ansible.windows.win_shell: Import-Module -Name ansible-test2; Get-AnsibleTest2 | ConvertTo-Json
+  ansible.windows.win_powershell:
+    script: Import-Module -Name ansible-test2; Get-AnsibleTest2
   register: install_max_actual
 
 - name: assert install package with max version
   assert:
     that:
     - install_max is changed
-    - install_max_actual.stdout | from_json == {"Name":"ansible-test2","Version":"1.0.0","Repo":"PSRepo 1"}
+    - install_max_actual.output[0] == {"Name":"ansible-test2","Version":"1.0.0","Repo":"PSRepo 1"}
 
 - name: fail to install updated package without skip publisher
   win_psmodule:
@@ -395,14 +409,15 @@
   register: install_skip_pub
 
 - name: get result of install updated package provider with skip publisher
-  ansible.windows.win_shell: Import-Module -Name ansible-test2; Get-AnsibleTest2 | ConvertTo-Json
+  ansible.windows.win_powershell:
+    script: Import-Module -Name ansible-test2; Get-AnsibleTest2
   register: install_skip_pub_actual
 
 - name: assert install updated package provider with skip publisher
   assert:
     that:
     - install_skip_pub is changed
-    - install_skip_pub_actual.stdout | from_json == {"Name":"ansible-test2","Version":"1.0.1","Repo":"PSRepo 1"}
+    - install_skip_pub_actual.output[0] == {"Name":"ansible-test2","Version":"1.0.1","Repo":"PSRepo 1"}
 
 - name: remove test package 2 for clean test
   win_psmodule:
@@ -424,14 +439,15 @@
   register: install_clobber
 
 - name: get result of install clobbered module
-  ansible.windows.win_shell: Import-Module -Name ansible-clobber; Enable-PSTrace | ConvertTo-Json
+  ansible.windows.win_powershell:
+    script: Import-Module -Name ansible-clobber; Enable-PSTrace
   register: install_clobber_actual
 
 - name: assert install clobbered module
   assert:
     that:
     - install_clobber is changed
-    - install_clobber_actual.stdout | from_json == {"Name":"ansible-clobber","Version":"0.1.0","Repo":"PSRepo 1"}
+    - install_clobber_actual.output[0] == {"Name":"ansible-clobber","Version":"0.1.0","Repo":"PSRepo 1"}
 
 - name: remove clobbered module
   win_psmodule:
@@ -440,14 +456,15 @@
   register: remove_clobber
 
 - name: get result of remove clobbered module
-  ansible.windows.win_shell: (Get-Module -ListAvailable -Name ansible-clobber | Measure-Object).Count
+  ansible.windows.win_powershell:
+    script: (Get-Module -ListAvailable -Name ansible-clobber | Measure-Object).Count
   register: remove_clobber_actual
 
 - name: assert remove clobbered module
   assert:
     that:
     - remove_clobber is changed
-    - remove_clobber_actual.stdout | trim | int == 0
+    - remove_clobber_actual.output[0] == 0
 
 - name: fail to install prerelese module
   win_psmodule:
@@ -468,14 +485,15 @@
   register: install_prerelease
 
 - name: get result of install prerelease module
-  ansible.windows.win_shell: Import-Module -Name ansible-test2; Get-AnsibleTest2 | ConvertTo-Json
+  ansible.windows.win_powershell:
+    script: Import-Module -Name ansible-test2; Get-AnsibleTest2
   register: install_prerelease_actual
 
 - name: assert install prerelease module
   assert:
     that:
     - install_prerelease is changed
-    - install_prerelease_actual.stdout | from_json == {"Name":"ansible-test2","Version":"1.1.0","Repo":"PSRepo 1"}
+    - install_prerelease_actual.output[0] == {"Name":"ansible-test2","Version":"1.1.0","Repo":"PSRepo 1"}
 
 - name: remove prerelease module
   win_psmodule:
@@ -484,11 +502,12 @@
   register: remove_prerelease
 
 - name: get result of remove prerelease module
-  ansible.windows.win_shell: (Get-Module -ListAvailable -Name ansible-test2 | Measure-Object).Count
+  ansible.windows.win_powershell:
+    script: (Get-Module -ListAvailable -Name ansible-test2 | Measure-Object).Count
   register: remove_prerelease_actual
 
 - name: assert remove prerelease module
   assert:
     that:
     - remove_prerelease is changed
-    - remove_prerelease_actual.stdout | trim | int == 0
+    - remove_prerelease_actual.output[0] == 0
