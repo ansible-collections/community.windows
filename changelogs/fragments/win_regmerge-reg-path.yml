@@ -1,0 +1,4 @@
+bugfixes:
+  - >-
+    win_regmerge - Ensure ``reg.exe`` uses the absolute location ``C:\Windows\Systme32\reg.exe``. This ensures that
+    misconfigured hosts won't use a different executable.
