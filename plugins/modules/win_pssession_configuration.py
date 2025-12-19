@@ -139,6 +139,7 @@ options:
     description:
       - The minimum required PowerShell version for this session.
       - Must be a valid .Net System.Version string.
+      - This only works if targeting PowerShell 5.1, PowerShell 7.x does not support this option.
     type: raw
   modules_to_import:
     description:
