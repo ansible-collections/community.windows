@@ -203,6 +203,155 @@ function ConvertFrom-AnsibleOption {
     }
 }
 
+function ConvertTo-PsNative {
+    <#
+    .SYNOPSIS
+    Normalize runtime objects to PowerShell-native types.
+
+    .DESCRIPTION
+    Semantics:
+    - Unwraps PSObject to BaseObject
+    - Converts IDictionary -> Hashtable (recursively) with string keys
+    - Converts IEnumerable -> array of parsed elements (recursively), preserving strings
+
+    .NOTES
+    - This is used for Ansible argument spec entries declared as "type='raw'"
+        so that module parameters arriving as CLR or PSObject-wrapped values
+        are made PowerShell-native before being passed to PowerShell cmdlets.
+    #>
+    [CmdletBinding()]
+    param(
+        [Parameter(Mandatory=$true, ValueFromPipeline=$true)]
+        $Value
+    )
+
+    End {
+        if ($null -eq $Value) { return $null }
+
+        # Unwrap PSObject wrapper if present
+        if ($Value -is [System.Management.Automation.PSObject] -and $Value.BaseObject -ne $null) {
+            $Value = $Value.BaseObject
+        }
+
+        # IDictionary -> Hashtable
+        if ($Value -is [System.Collections.IDictionary]) {
+            $ht = @{}
+            foreach ($k in $Value.Keys) {
+                $v = $Value[$k]
+                if ($k -is [string]) { $keyName = $k } else { $keyName = $k.ToString() }
+                $ht[$keyName] = ConvertTo-PsNative -Value $v
+            }
+            return $ht
+        }
+
+        # IEnumerable (but not string) -> array of parsed elements
+        if ($Value -is [System.Collections.IEnumerable] -and -not ($Value -is [string])) {
+            $out = @()
+            foreach ($e in $Value) { $out += (ConvertTo-PsNative -Value $e) }
+            return $out
+        }
+
+        return $Value
+    }
+}
+
+function ConvertTo-PsList {
+    <#
+    .SYNOPSIS
+    Normalize runtime objects into a PowerShell array of native elements.
+
+    .DESCRIPTION
+    Derived from the C# ParseList implementation in Ansible.Basic.cs.
+
+    .NOTES
+    - This is used for Ansible argument spec entries declared as "type='list'"
+        with "elements='raw'" so that module parameters arriving as CLR or
+        PSObject-wrapped values are made PowerShell-native before being passed
+        to PowerShell cmdlets.
+    #>
+    [CmdletBinding()]
+    param(
+        [Parameter(Mandatory=$true, ValueFromPipeline=$true)]
+        $Value
+    )
+
+    End {
+        if ($null -eq $Value) { return $null }
+        # Port of C# ParseList: perform .NET type checks to mirror behavior exactly.
+        $valueType = $Value.GetType()
+
+        # We'll collect parsed elements first, then coerce each element into the
+        # final shape (string or Hashtable) expected by New-PSSessionConfigurationFile.
+        $out = @()
+
+        # Unwrap PSObject if present
+        if ($Value -is [System.Management.Automation.PSObject] -and $Value.BaseObject -ne $null) {
+            $Value = $Value.BaseObject
+            $valueType = $Value.GetType()
+        }
+
+        if ($valueType.IsGenericType -and $valueType.GetGenericTypeDefinition().FullName -eq 'System.Collections.Generic.List`1') {
+            foreach ($e in $Value) { $out += (ConvertTo-PsNative -Value $e) }
+        }
+        elseif ($valueType.FullName -eq 'System.Collections.ArrayList') {
+            foreach ($e in $Value) { $out += (ConvertTo-PsNative -Value $e) }
+        }
+        elseif ($valueType.IsArray) {
+            foreach ($e in $Value) { $out += (ConvertTo-PsNative -Value $e) }
+        }
+        elseif ($valueType.FullName -eq 'System.String') {
+            $parts = $Value -split ',' | ForEach-Object { $_.Trim() }
+            foreach ($p in $parts) { $out += (ConvertTo-PsNative -Value $p) }
+        }
+        elseif ($valueType.FullName -eq 'System.Int32') {
+            $out += (ConvertTo-PsNative -Value $Value)
+        }
+        else {
+            throw "{0} cannot be converted to a list" -f $valueType.FullName
+        }
+
+        # Now coerce each parsed element into either a Hashtable (for dict-like
+        # values) or a string. Also flatten nested enumerables that may have been
+        # produced by ConvertTo-PsNative.
+        $final = @()
+        foreach ($e in $out) {
+            $elem = $e
+            if ($elem -is [System.Management.Automation.PSObject] -and $elem.BaseObject -ne $null) { $elem = $elem.BaseObject }
+
+            if ($elem -is [System.Collections.IDictionary]) {
+                $ht = @{}
+                foreach ($k in $elem.Keys) {
+                    $v = $elem[$k]
+                    $keyName = if ($k -is [string]) { $k } else { $k.ToString() }
+                    $ht[$keyName] = $v
+                }
+                $final += $ht
+                continue
+            }
+
+            if ($elem -is [System.Collections.IEnumerable] -and -not ($elem -is [string])) {
+                foreach ($x in $elem) {
+                    $xx = $x
+                    if ($xx -is [System.Management.Automation.PSObject] -and $xx.BaseObject -ne $null) { $xx = $xx.BaseObject }
+                    if ($xx -is [System.Collections.IDictionary]) {
+                        $ht2 = @{}
+                        foreach ($k2 in $xx.Keys) { $v2 = $xx[$k2]; $keyName2 = if ($k2 -is [string]) { $k2 } else { $k2.ToString() }; $ht2[$keyName2] = $v2 }
+                        $final += $ht2
+                    } else {
+                        $final += [string]$xx
+                    }
+                }
+                continue
+            }
+
+            $final += [string]$elem
+        }
+
+        if ($final.Count -eq 0) { return $null }
+        return $final
+    }
+}
+
 function Write-GeneratedSessionConfiguration {
     [CmdletBinding()]
     [OutputType([System.IO.FileInfo])]
@@ -225,7 +374,29 @@ function Write-GeneratedSessionConfiguration {
         }
 
         $file = $file -replace '(?<!\.pssc)$', '.pssc'
-        New-PSSessionConfigurationFile -Path $file @ParameterSet
+
+        # Since Ansible 12, module parameters arrive in this PowerShell module as wrapped CLR objects/PSObject
+        # instead of plain strings/hashtables/arrays.
+        # New-PSSessionConfigurationFile rejects these wrapped types with errors like:
+        #   "The member 'ModulesToImport' must be an array consisting of either string or hashtable elements."
+        # This error message is also misleading; invalid values for the parameters "VisibleCmdlets" and "VisibleFunctions"
+        # can casue this too, even though "ModulesToImport" is explicitly blamed as cause.
+
+        # New-PSSessionConfigurationFile validates element types strictly and does not accept CLR dictionary
+        # implementations or PSObject-wrapped values. To ensure compatibility, we normalize the affected parameters
+        # with the ConvertTo-PsList function.
+
+        # Prepare a copy of the parameter set so we can substitute normalized lists
+        $p = @{}
+        foreach ($k in $ParameterSet.Keys) {
+            if ($k -in ('ModulesToImport', 'VisibleCmdlets', 'VisibleFunctions')) {
+                $p[$k] = ConvertTo-PsList $ParameterSet[$k]
+            } else {
+                $p[$k] = $ParameterSet[$k]
+            }
+        }
+
+        New-PSSessionConfigurationFile -Path $file @p
         [System.IO.FileInfo]$file
     }
 }
