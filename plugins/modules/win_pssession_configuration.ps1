@@ -223,7 +223,7 @@ function ConvertTo-PsNative {
     #>
     [CmdletBinding()]
     param(
-        [Parameter(Mandatory=$true, ValueFromPipeline=$true)]
+        [Parameter(Mandatory = $true)]
         $Value
     )
 
@@ -231,7 +231,7 @@ function ConvertTo-PsNative {
         if ($null -eq $Value) { return $null }
 
         # Unwrap PSObject wrapper if present
-        if ($Value -is [System.Management.Automation.PSObject] -and $Value.BaseObject -ne $null) {
+        if ($Value -is [System.Management.Automation.PSObject] -and $null -ne $Value.BaseObject) {
             $Value = $Value.BaseObject
         }
 
@@ -301,7 +301,8 @@ function Write-GeneratedSessionConfiguration {
         foreach ($k in $ParameterSet.Keys) {
             if ($k -in ('ModulesToImport', 'VisibleCmdlets', 'VisibleFunctions')) {
                 $p[$k] = ConvertTo-PsNative $ParameterSet[$k]
-            } else {
+            }
+            else {
                 $p[$k] = $ParameterSet[$k]
             }
         }
