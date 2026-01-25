@@ -158,25 +158,30 @@ $result.msg = "not changed"
 if ($content) {
     $queryMatches = [System.Collections.Generic.List[PSCustomObject]]@()
     if ($content -eq "attribute") {
-      foreach ($node in $nodeList) {
-        $attrTable = @{}
-        foreach ($attr in $node.Attributes) {
-            $attrTable[$attr.Name] = $attr.Value
+        foreach ($node in $nodeList) {
+            $attrTable = @{}
+            foreach ($attr in $node.Attributes) {
+                $attrTable[$attr.Name] = $attr.Value
+            }
+            $queryMatches.Add(
+                @{
+                    $node.get_Name() = $attrTable
+                }
+            )
         }
-        $queryMatches.Add(@{
-            $node.get_Name() = $attrTable
-        })
-      }
-    } else {
-      foreach ($node in $nodeList) {
-        $nodeText = $node.get_InnerText()
-        if ($nodeText -eq "") {
-          $nodeText = $null
+    }
+    else {
+        foreach ($node in $nodeList) {
+            $nodeText = $node.get_InnerText()
+            if ($nodeText -eq "") {
+                $nodeText = $null
+            }
+            $queryMatches.Add(
+                @{
+                    $node.get_Name() = $nodeText
+                }
+            )
         }
-        $queryMatches.Add(@{
-            $node.get_Name() = $nodeText
-        })
-      }
     }
     $result.matches = $queryMatches
     Exit-Json $result

@@ -37,7 +37,8 @@ options:
         default: no
     fragment:
         description:
-        - The string representation of the XML fragment expected at xpath.  Since ansible 2.9 not required when I(state=absent), I(content=attribute), I(content=text) or when I(count=yes).
+        - The string representation of the XML fragment expected at xpath.  Since ansible 2.9 not required when I(state=absent) or when I(count=yes).
+        - Not required when I(content)
         type: str
         required: false
         aliases: [ xmlstring ]
