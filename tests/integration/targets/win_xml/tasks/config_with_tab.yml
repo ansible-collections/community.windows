@@ -1,0 +1,52 @@
+- name: copy a test .xml file
+  ansible.windows.win_copy:
+    src: config_with_tab.xml
+    dest: "{{ remote_tmp_dir }}\\config_with_tab.xml"
+
+- name: register the sha1 of the config_with_tab.xml after adding an element
+  ansible.windows.win_stat:
+    path: "{{ remote_tmp_dir }}\\config_with_tab.xml"
+    get_checksum: yes
+  register: config_xml_checksum_before
+
+- name: add an element that only has a text child node
+  win_xml:
+    path: "{{ remote_tmp_dir }}\\config_with_tab.xml"
+    fragment: '<add key="dev" value="development"/>'
+    xpath: '/config/Engine'
+    preserve_whitespace: yes
+  register: element_add_result
+
+- name: register the sha1 of the config_with_tab.xml after adding an element
+  ansible.windows.win_stat:
+    path: "{{ remote_tmp_dir }}\\config_with_tab.xml"
+    get_checksum: yes
+  register: config_xml_checksum_after
+
+- name: check element is added
+  assert:
+    that:
+      - element_add_result is changed
+      - config_xml_checksum_before.stat.checksum != config_xml_checksum_after.stat.checksum
+      - config_xml_checksum_after.stat.checksum == 'a8eeb5f62aa55cfb622d015ff5585e7a322d78eb'
+
+- name: add an element that only has a text child node
+  win_xml:
+    path: "{{ remote_tmp_dir }}\\config_with_tab.xml"
+    fragment: '<add key="prod" value="production"/>'
+    xpath: '/config/Engine'
+    preserve_whitespace: false
+  register: element_add_result_with_no_preserve_whitespace
+
+- name: register the sha1 of the config_with_tab.xml after adding an element
+  ansible.windows.win_stat:
+    path: "{{ remote_tmp_dir }}\\config_with_tab.xml"
+    get_checksum: yes
+  register: config_xml_checksum_after_with_no_preserve_whitespace
+
+- name: check element is added
+  assert:
+    that:
+      - element_add_result_with_no_preserve_whitespace is changed
+      - config_xml_checksum_after.stat.checksum != config_xml_checksum_after_with_no_preserve_whitespace.stat.checksum
+      - config_xml_checksum_after_with_no_preserve_whitespace.stat.checksum == 'cc3d93813766044a367f848490644fcce6be7aff'

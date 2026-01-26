@@ -110,6 +110,7 @@ $type = Get-AnsibleParam $params "type" -type "str" -Default "element" -Validate
 $attribute = Get-AnsibleParam $params "attribute" -type "str" -FailIfEmpty ($type -eq "attribute")
 $state = Get-AnsibleParam $params "state" -type "str" -Default "present"
 $count = Get-AnsibleParam $params "count" -type "bool" -Default $false
+$preserve_whitespace = Get-AnsibleParam $params "preserve_whitespace" -type "bool" -Default $false
 
 $result = @{
     changed = $false
@@ -121,6 +122,8 @@ If (-Not (Test-Path -LiteralPath $dest -PathType Leaf)) {
 
 $xmlorig = New-Object -TypeName System.Xml.XmlDocument
 $xmlorig.XmlResolver = $null
+$xmlorig.PreserveWhitespace = $preserve_whitespace
+
 Try {
     $xmlorig.Load($dest)
 }

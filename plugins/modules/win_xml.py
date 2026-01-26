@@ -59,6 +59,12 @@ options:
         - Xpath to select the node or nodes to operate on.
         type: str
         required: true
+    preserve_whitespace:
+        description:
+        - Whether to preserve whitespace in the XML.
+        type: bool
+        default: false
+        version_added: "3.2.0"
 author:
     - Richard Levenberg (@richardcs)
     - Jon Hawkesworth (@jhawkesworth)
