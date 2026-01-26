@@ -28,7 +28,7 @@
     that:
       - element_add_result is changed
       - config_xml_checksum_before.stat.checksum != config_xml_checksum_after.stat.checksum
-      - config_xml_checksum_after.stat.checksum == '1573c45b460137dcd634db2f965c87c4fa80f064'
+      - config_xml_checksum_after.stat.checksum == 'a8eeb5f62aa55cfb622d015ff5585e7a322d78eb'
 
 - name: add an element that only has a text child node
   win_xml:

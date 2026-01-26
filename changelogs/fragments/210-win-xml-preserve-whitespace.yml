@@ -1,0 +1,3 @@
+---
+bugfixes:
+    - win_xml - allow users to preserve whitespace while updating XML file (https://github.com/ansible-collections/community.windows/issues/210).
