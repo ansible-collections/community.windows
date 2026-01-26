@@ -1,2 +1,2 @@
 bugfixes:
-- 'win_pssession_configuration - Fix type errors for parameters passed in New-PSSessionConfigurationFile'
+  - 'win_pssession_configuration - Fix type errors for parameters passed in New-PSSessionConfigurationFile'
