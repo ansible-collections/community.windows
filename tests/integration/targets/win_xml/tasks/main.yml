@@ -102,6 +102,22 @@
     state: absent
   register: attribute_remove_result
 
+- name: Verify attribute removal
+  ansible.windows.win_powershell:
+    script: |
+      [xml]$xml = Get-Content -Path "{{ remote_tmp_dir }}\config.xml"
+      $node = $xml.SelectSingleNode('/config/string[@key="foo"]')
+
+      # Check if the node exists and then if the 'spam' attribute is null
+      if ($node -eq $null) {
+          return "Node not found"
+      } elseif ($node.HasAttribute("spam")) {
+          return "Attribute still exists"
+      } else {
+          return "Success"
+      }
+  register: verify_result
+
 - name: register the sha1 of the config.xml after removing an attribute
   ansible.windows.win_stat:
     path: "{{ remote_tmp_dir }}\\config.xml"
@@ -113,6 +129,7 @@
     that:
     - attribute_remove_result is changed
     - config_xml_checksum_before.stat.checksum != config_xml_checksum_after.stat.checksum
+    - "verify_result.output[0] == 'Success'"
 
 - name: register the sha1 of the config.xml before removing an attribute
   ansible.windows.win_stat:
