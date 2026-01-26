@@ -124,6 +124,17 @@ EXAMPLES = r'''
     attribute: lang
     fragment: nl
     type: attribute
+
+- name: return attributes of node works node
+  community.windows.win_xml:
+    path: C:\Data\Books.xml
+    xpath: /books/works
+    content: attribute
+  register: works_attributes
+
+- name: show /books/works attribute
+  ansible.builtin.debug:
+    var: works_attributes
 '''
 
 RETURN = r'''
@@ -137,6 +148,11 @@ count:
     returned: if count=yes
     type: int
     sample: 33
+matches:
+    description: Nodes that were read with content
+    returned: if content=attribute or content=text
+    type: list
+    sample: nodes attributes
 msg:
     description: What was done.
     returned: always
