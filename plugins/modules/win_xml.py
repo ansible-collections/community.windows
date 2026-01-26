@@ -64,7 +64,7 @@ options:
         - Whether to preserve whitespace in the XML.
         type: bool
         default: false
-        version_added: "1.7.0"
+        version_added: "3.2.0"
 author:
     - Richard Levenberg (@richardcs)
     - Jon Hawkesworth (@jhawkesworth)
