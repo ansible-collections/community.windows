@@ -25,9 +25,10 @@ options:
         default: false
     content:
         description:
-        - Returns the content of the nodes matched by I(xpath)
+        - Returns the content of the nodes matched by I(xpath).
         type: str
         choices: [ attribute, text ]
+        version_added: '3.2.0'
     backup:
         description:
         - Determine whether a backup should be created.
@@ -38,7 +39,7 @@ options:
     fragment:
         description:
         - The string representation of the XML fragment expected at xpath.  Since ansible 2.9 not required when I(state=absent) or when I(count=yes).
-        - Not required when I(content)
+        - Not required when I(content) is set.
         type: str
         required: false
         aliases: [ xmlstring ]
