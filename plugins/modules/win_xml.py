@@ -23,6 +23,12 @@ options:
         - When set to C(yes), return the number of nodes matched by I(xpath).
         type: bool
         default: false
+    content:
+        description:
+        - Returns the content of the nodes matched by I(xpath).
+        type: str
+        choices: [ attribute, text ]
+        version_added: '3.2.0'
     backup:
         description:
         - Determine whether a backup should be created.
@@ -32,7 +38,8 @@ options:
         default: no
     fragment:
         description:
-        - The string representation of the XML fragment expected at xpath.  Since ansible 2.9 not required when I(state=absent), or when I(count=yes).
+        - The string representation of the XML fragment expected at xpath.  Since ansible 2.9 not required when I(state=absent) or when I(count=yes).
+        - Not required when I(content) is set.
         type: str
         required: false
         aliases: [ xmlstring ]
@@ -118,6 +125,17 @@ EXAMPLES = r'''
     attribute: lang
     fragment: nl
     type: attribute
+
+- name: return attributes of node works node
+  community.windows.win_xml:
+    path: C:\Data\Books.xml
+    xpath: /books/works
+    content: attribute
+  register: works_attributes
+
+- name: show /books/works attribute
+  ansible.builtin.debug:
+    var: works_attributes
 '''
 
 RETURN = r'''
@@ -131,6 +149,11 @@ count:
     returned: if count=yes
     type: int
     sample: 33
+matches:
+    description: Nodes that were read with content
+    returned: if content=attribute or content=text
+    type: list
+    sample: nodes attributes
 msg:
     description: What was done.
     returned: always

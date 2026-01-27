@@ -8,6 +8,52 @@
     src: config.xml
     dest: "{{ remote_tmp_dir }}\\config.xml"
 
+- name: get element text
+  win_xml:
+    path: '{{ remote_tmp_dir }}\config.xml'
+    xpath: /config/string[@key='foo']
+    content: text
+  register: element_get_text_result
+
+- name: verify element text
+  assert:
+    that:
+      - element_get_text_result.changed == false
+      - element_get_text_result.matches | length == 1
+      - element_get_text_result.matches[0]['string'] is defined
+      - element_get_text_result.matches[0]['string'] == 'bar'
+      - element_get_text_result.msg == 'not changed'
+
+- name: get element with no text
+  win_xml:
+    path: '{{ remote_tmp_dir }}\config.xml'
+    xpath: /config/setting
+    content: text
+  register: element_get_notext_result
+
+- name: verify element with no text
+  assert:
+    that:
+      - element_get_notext_result.changed == false
+      - element_get_notext_result.matches | length > 0
+      - element_get_text_result.matches[0]['setting'] is not defined
+      - element_get_notext_result.msg == 'not changed'
+
+- name: get element text (children)
+  win_xml:
+    path: '{{ remote_tmp_dir }}\config.xml'
+    xpath: /config
+    content: text
+  register: element_get_children_result
+
+- name: verify element text (children)
+  assert:
+    that:
+      - element_get_children_result.changed == false
+      - element_get_children_result.matches | length > 0
+      - element_get_children_result.matches[0]['root'] is not defined
+      - element_get_children_result.msg == 'not changed'
+
 - name: add an element that only has a text child node
   win_xml:
     path: "{{ remote_tmp_dir }}\\config.xml"
@@ -36,6 +82,55 @@
   ansible.windows.win_copy:
     src: log4j.xml
     dest: "{{ remote_tmp_dir }}\\log4j.xml"
+
+- name: get element attributes
+  win_xml:
+    path: '{{ remote_tmp_dir }}\log4j.xml'
+    xpath: '/log4j:configuration/root/priority'
+    content: attribute
+  register: element_get_attr_result
+
+- name: verify element attributes
+  assert:
+    that:
+      - element_get_attr_result.changed == false
+      - element_get_attr_result.matches | length == 1
+      - element_get_attr_result.matches[0]['priority'] is defined
+      - element_get_attr_result.matches[0]['priority']['value'] == 'debug'
+      - element_get_attr_result.msg == 'not changed'
+
+- name: get elements attributes
+  win_xml:
+    path: '{{ remote_tmp_dir }}\log4j.xml'
+    xpath: '/log4j:configuration/logger'
+    content: attribute
+  register: elements_get_attr_result
+
+- name: verify elements attributes
+  assert:
+    that:
+      - elements_get_attr_result.changed == false
+      - elements_get_attr_result.matches | length == 5
+      - elements_get_attr_result.matches[0]['logger'] is defined
+      - elements_get_attr_result.matches[0]['logger']['name'] == 'org.springframework.security.web.FilterChainProxy'
+      - elements_get_attr_result.matches[0]['logger']['additivity'] == 'false'
+      - elements_get_attr_result.msg == 'not changed'
+
+- name: get element with no attributes
+  win_xml:
+    path: '{{ remote_tmp_dir }}\log4j.xml'
+    xpath: '/log4j:configuration/root'
+    content: attribute
+  register: element_noattr_result
+
+- name: verify element with no attributes
+  assert:
+    that:
+      - element_noattr_result.changed == false
+      - element_noattr_result.matches | length == 1
+      - element_noattr_result.matches[0]['root'] is defined
+      - element_noattr_result.matches[0]['root'] == {}
+      - element_noattr_result.msg == 'not changed'
 
 - name: change an attribute to fatal logging
   win_xml:
