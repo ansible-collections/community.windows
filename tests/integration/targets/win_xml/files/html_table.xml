@@ -1,0 +1,10 @@
+<table xmlns="http://www.w3.org/TR/html4/">
+  <tr id="0">
+    <td>Apples</td>
+    <td>Bananas</td>
+  </tr>
+  <tr id="1">
+    <td>Phone</td>
+    <td>Computer</td>
+  </tr>
+</table>

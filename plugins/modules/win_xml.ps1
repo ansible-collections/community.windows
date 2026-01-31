@@ -111,6 +111,7 @@ $attribute = Get-AnsibleParam $params "attribute" -type "str" -FailIfEmpty ($typ
 $state = Get-AnsibleParam $params "state" -type "str" -Default "present"
 $count = Get-AnsibleParam $params "count" -type "bool" -Default $false
 $preserve_whitespace = Get-AnsibleParam $params "preserve_whitespace" -type "bool" -Default $false
+$default_namespace_prefix = Get-AnsibleParam $params "prefix" -type "str"
 
 $result = @{
     changed = $false
@@ -134,8 +135,11 @@ Catch {
 $namespaceMgr = New-Object System.Xml.XmlNamespaceManager $xmlorig.NameTable
 $namespace = $xmlorig.DocumentElement.NamespaceURI
 $localname = $xmlorig.DocumentElement.LocalName
-
-$namespaceMgr.AddNamespace($xmlorig.$localname.SchemaInfo.Prefix, $namespace)
+$prefix = $xmlorig.$localname.SchemaInfo.Prefix
+if (-not $prefix -and $namespace) {
+    $prefix = $default_namespace_prefix
+}
+$namespaceMgr.AddNamespace($prefix, $namespace)
 
 $nodeList = $xmlorig.SelectNodes($xpath, $namespaceMgr)
 $nodeListCount = $nodeList.get_Count()
@@ -249,12 +253,10 @@ elseif ($type -eq "attribute") {
             else {
                 # assume NodeType is Element
                 if (!$node.HasAttribute($attribute) -or ($node.$attribute -ne $fragment)) {
-                    if (!$node.HasAttribute($attribute)) {
-                        # add attribute to Element if missing
-                        $node.SetAttributeNode($attribute, $xmlorig.get_DocumentElement().get_NamespaceURI())
-                    }
-                    #set the attribute into the element
-                    $node.SetAttribute($attribute, $fragment)
+                    # Creates/Updates attribute
+                    $newAttr = $xmlorig.CreateAttribute($attribute)
+                    $newAttr.Value = $fragment
+                    $node.Attributes.Append($newAttr)
                     $changed = $true
                 }
             }

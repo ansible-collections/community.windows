@@ -1,0 +1,48 @@
+- name: copy a test .xml file
+  ansible.windows.win_copy:
+    src: html_table.xml
+    dest: "{{ remote_tmp_dir }}\\html_table.xml"
+
+- name: add an attribute using query only
+  win_xml:
+    path: "{{ remote_tmp_dir }}\\html_table.xml"
+    xpath: "//*[local-name() = 'table' and namespace-uri() = 'http://www.w3.org/TR/html4/']//*[local-name() = 'tr' and namespace-uri() = 'http://www.w3.org/TR/html4/'][@id='0']"
+    fragment: fruits
+    type: attribute
+    attribute: category
+  register: attribute_add_result
+
+- name: check attribute add result
+  assert:
+    that:
+    - attribute_add_result is changed
+
+- name: add an attribute using query and defining namespace
+  win_xml:
+    path: "{{ remote_tmp_dir }}\\html_table.xml"
+    xpath: /x:table/x:tr[@id='1']
+    prefix: x
+    fragment: tech
+    type: attribute
+    attribute: category
+  register: attribute_add_prefix_result
+
+- name: check element add result
+  assert:
+    that:
+    - attribute_add_prefix_result is changed
+
+- name: remove an attribute using query and defining namespace
+  win_xml:
+    path: "{{ remote_tmp_dir }}\\html_table.xml"
+    xpath: /x:table/x:tr[@id='1']
+    prefix: x
+    state: absent
+    type: attribute
+    attribute: category
+  register: attribute_rm_prefix_result
+
+- name: check element add result
+  assert:
+    that:
+    - attribute_rm_prefix_result is changed

@@ -419,3 +419,5 @@
       - multi_attr_again.msg == 'not changed'
 
 - include_tasks: config_with_tab.yml
+
+- include_tasks: default_namespace.yml
