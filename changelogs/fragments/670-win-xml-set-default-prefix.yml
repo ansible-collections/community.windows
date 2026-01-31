@@ -1,0 +1,3 @@
+---
+bugfixes:
+  - win_xml - allow users to define the prefix of the default namespace (https://github.com/ansible-collections/community.windows/issues/670).

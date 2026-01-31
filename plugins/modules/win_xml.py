@@ -65,6 +65,11 @@ options:
         type: bool
         default: false
         version_added: "3.2.0"
+    prefix:
+        description:
+        - The prefix you are using in the I(xpath).
+        type: str
+        version_added: "3.2.0"
 author:
     - Richard Levenberg (@richardcs)
     - Jon Hawkesworth (@jhawkesworth)
@@ -118,6 +123,15 @@ EXAMPLES = r'''
     attribute: lang
     fragment: nl
     type: attribute
+
+- name: add an attribute on a file with default namespace
+  win_xml:
+    path: C:\Data\html_table.xml"
+    xpath: /x:table/x:tr
+    prefix: x
+    fragment: fruits
+    type: attribute
+    attribute: category
 '''
 
 RETURN = r'''
