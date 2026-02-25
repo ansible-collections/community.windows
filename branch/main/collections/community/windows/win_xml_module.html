@@ -188,6 +188,19 @@ To check whether it is installed, run <code class="code docutils literal notrans
 </div></td>
 </tr>
 <tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-content"></div><p class="ansible-option-title" id="ansible-collections-community-windows-win-xml-module-parameter-content"><strong>content</strong></p>
+<a class="ansibleOptionLink" href="#parameter-content" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+<p><em class="ansible-option-versionadded">added in community.windows 3.2.0</em></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Returns the content of the nodes matched by <em>xpath</em>.</p>
+<p class="ansible-option-line"><strong class="ansible-option-choices">Choices:</strong></p>
+<ul class="simple">
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">&quot;attribute&quot;</span></code></p></li>
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">&quot;text&quot;</span></code></p></li>
+</ul>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-count"></div><p class="ansible-option-title" id="ansible-collections-community-windows-win-xml-module-parameter-count"><strong>count</strong></p>
 <a class="ansibleOptionLink" href="#parameter-count" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
 </div></td>
@@ -199,16 +212,17 @@ To check whether it is installed, run <code class="code docutils literal notrans
 </ul>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-fragment"></div>
 <div class="ansibleOptionAnchor" id="parameter-xmlstring"></div><p class="ansible-option-title" id="ansible-collections-community-windows-win-xml-module-parameter-xmlstring"><span id="ansible-collections-community-windows-win-xml-module-parameter-fragment"></span><strong>fragment</strong></p>
 <a class="ansibleOptionLink" href="#parameter-fragment" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-aliases">aliases: xmlstring</span></p>
 <p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
-<td><div class="ansible-option-cell"><p>The string representation of the XML fragment expected at xpath. Since ansible 2.9 not required when <em>state=absent</em>, or when <em>count=yes</em>.</p>
+<td><div class="ansible-option-cell"><p>The string representation of the XML fragment expected at xpath. Since ansible 2.9 not required when <em>state=absent</em> or when <em>count=yes</em>.</p>
+<p>Not required when <em>content</em> is set.</p>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-path"></div>
 <div class="ansibleOptionAnchor" id="parameter-dest"></div>
 <div class="ansibleOptionAnchor" id="parameter-file"></div><p class="ansible-option-title" id="ansible-collections-community-windows-win-xml-module-parameter-path"><span id="ansible-collections-community-windows-win-xml-module-parameter-file"></span><span id="ansible-collections-community-windows-win-xml-module-parameter-dest"></span><strong>path</strong></p>
@@ -218,7 +232,7 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <td><div class="ansible-option-cell"><p>Path to the file to operate on.</p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-preserve_whitespace"></div><p class="ansible-option-title" id="ansible-collections-community-windows-win-xml-module-parameter-preserve-whitespace"><strong>preserve_whitespace</strong></p>
 <a class="ansibleOptionLink" href="#parameter-preserve_whitespace" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
 <p><em class="ansible-option-versionadded">added in community.windows 3.2.0</em></p>
@@ -231,7 +245,7 @@ To check whether it is installed, run <code class="code docutils literal notrans
 </ul>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-state"></div><p class="ansible-option-title" id="ansible-collections-community-windows-win-xml-module-parameter-state"><strong>state</strong></p>
 <a class="ansibleOptionLink" href="#parameter-state" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
@@ -243,7 +257,7 @@ To check whether it is installed, run <code class="code docutils literal notrans
 </ul>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-type"></div><p class="ansible-option-title" id="ansible-collections-community-windows-win-xml-module-parameter-type"><strong>type</strong></p>
 <a class="ansibleOptionLink" href="#parameter-type" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
@@ -256,7 +270,7 @@ To check whether it is installed, run <code class="code docutils literal notrans
 </ul>
 </div></td>
 </tr>
-<tr class="row-even"><td><div class="ansible-option-cell">
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-xpath"></div><p class="ansible-option-title" id="ansible-collections-community-windows-win-xml-module-parameter-xpath"><strong>xpath</strong></p>
 <a class="ansibleOptionLink" href="#parameter-xpath" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span> / <span class="ansible-option-required">required</span></p>
 </div></td>
@@ -328,6 +342,17 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <span class="w">    </span><span class="nt">attribute</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">lang</span>
 <span class="w">    </span><span class="nt">fragment</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nl</span>
 <span class="w">    </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">attribute</span>
+
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">return attributes of node works node</span>
+<span class="w">  </span><span class="nt">community.windows.win_xml</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">C:\Data\Books.xml</span>
+<span class="w">    </span><span class="nt">xpath</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/books/works</span>
+<span class="w">    </span><span class="nt">content</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">attribute</span>
+<span class="w">  </span><span class="nt">register</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">works_attributes</span>
+
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">show /books/works attribute</span>
+<span class="w">  </span><span class="nt">ansible.builtin.debug</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">var</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">works_attributes</span>
 </pre></div>
 </div>
 </section>
@@ -369,6 +394,15 @@ To check whether it is installed, run <code class="code docutils literal notrans
 </div></td>
 </tr>
 <tr class="row-odd"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="return-matches"></div><p class="ansible-option-title" id="ansible-collections-community-windows-win-xml-module-return-matches"><strong>matches</strong></p>
+<a class="ansibleOptionLink" href="#return-matches" title="Permalink to this return value"></a><p class="ansible-option-type-line"><span class="ansible-option-type">list</span> / <span class="ansible-option-elements">elements=string</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Nodes that were read with content</p>
+<p class="ansible-option-line"><strong class="ansible-option-returned-bold">Returned:</strong> if content=attribute or content=text</p>
+<p class="ansible-option-line ansible-option-sample"><strong class="ansible-option-sample-bold">Sample:</strong> <code class="ansible-option-sample docutils literal notranslate"><span class="pre">[&quot;nodes</span> <span class="pre">attributes&quot;]</span></code></p>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="return-msg"></div><p class="ansible-option-title" id="ansible-collections-community-windows-win-xml-module-return-msg"><strong>msg</strong></p>
 <a class="ansibleOptionLink" href="#return-msg" title="Permalink to this return value"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
