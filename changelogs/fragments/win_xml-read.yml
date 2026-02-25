@@ -1,0 +1,2 @@
+minor_changes:
+  - win_xml - add new option ``content`` to be able to return the content of nodes (https://github.com/ansible-collections/community.windows/issues/54).
