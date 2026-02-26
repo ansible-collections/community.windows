@@ -326,7 +326,7 @@
     name: '{{test_iis_webapppool_name}}'
     state: present
     attributes:
-      recycling.periodicRestart.schedule: "00:10:00,10:10:00"
+      recycling.periodicRestart.schedule: "01:10:00,11:10:00"
   register: collection_change
 
 - name: get result of set web pool attribute that is a collection
@@ -336,6 +336,26 @@
   register: collection_change_result
 
 - name: assert results of set web pool attribute that is a collection
+  assert:
+    that:
+    - collection_change is changed
+    - collection_change_result.stdout_lines == [ "01:10:00", "11:10:00" ]
+
+- name: set web pool attribute that is a collection (array)
+  web_app_pool:
+    name: '{{test_iis_webapppool_name}}'
+    state: present
+    attributes:
+      recycling.periodicRestart.schedule: ["00:10:00", "10:10:00"]
+  register: collection_change
+
+- name: get result of set web pool attribute that is a collection (array)
+  ansible.windows.win_shell: |
+    Import-Module WebAdministration
+    (Get-ItemProperty -Path "IIS:\AppPools\{{test_iis_webapppool_name}}" -Name recycling.periodicRestart.schedule).Collection | ForEach-Object { $_.value.ToString() }
+  register: collection_change_result
+
+- name: assert results of set web pool attribute that is a collection (string to array)
   assert:
     that:
     - collection_change is changed

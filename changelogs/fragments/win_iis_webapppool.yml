@@ -1,0 +1,3 @@
+---
+bugfixes:
+  - win_iis_webapppool - Fix ``attributes`` to accept entries with values of Array (https://github.com/ansible-collections/community.windows/issues/666).
