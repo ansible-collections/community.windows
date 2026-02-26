@@ -342,7 +342,7 @@
     - collection_change_result.stdout_lines == [ "01:10:00", "11:10:00" ]
 
 - name: set web pool attribute that is a collection (array)
-  web_app_pool:
+  win_iis_webapppool:
     name: '{{test_iis_webapppool_name}}'
     state: present
     attributes:
