@@ -1,0 +1,51 @@
+# This file is part of Ansible
+
+# Copyright: (c) 2020, Brian Scholer <@briantist>
+# Copyright: (c) 2026, Ansible Project
+# GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
+---
+#####################################
+## Begin filter profile (inclusive) tests with no ProfileImagePath
+
+- name: Reset
+  import_tasks: reset.yml
+
+- name: Create a profile with no ProfileImagePath
+  become: yes
+  become_user: SYSTEM
+  become_method: runas
+  ansible.windows.win_shell: |
+    $profileListPath = "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\ProfileList"
+    $dummySid = "S-1-5-21-0000000000-0000000000-0000000000-9999"
+    $fullPath = Join-Path -Path $profileListPath -ChildPath $dummySid
+
+    if (-not (Test-Path -Path $fullPath)) {
+        New-Item -Path $fullPath -Force
+        New-ItemProperty -Path $fullPath -Name "Flags" -Value 0 -PropertyType DWord
+        New-ItemProperty -Path $fullPath -Name "State" -Value 0 -PropertyType DWord
+        New-ItemProperty -Path $fullPath -Name "ProfileLoadTimeLow" -Value 0 -PropertyType DWord
+    }
+
+
+- name: Copy repos with filtered profiles (no ProfileImagePath)
+  community.windows.win_psrepository_copy:
+    profiles: 'S-1-5-21-0000000000-0000000000-0000000000-9999'
+  register: status
+
+- name: Assert that the profile was created
+  assert:
+    that:
+      - status.changed
+
+- name: Remove the profile with no ProfileImagePath
+  become: yes
+  become_user: SYSTEM
+  become_method: runas
+  ansible.windows.win_shell: |
+    $profileListPath = "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\ProfileList"
+    $dummySid = "S-1-5-21-0000000000-0000000000-0000000000-9999"
+    $fullPath = Join-Path -Path $profileListPath -ChildPath $dummySid
+    Remove-Item -Path $fullPath -Force
+
+## End filter profile (inclusive) tests with no ProfileImagePath
+#################################################################
