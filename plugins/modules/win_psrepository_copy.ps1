@@ -142,7 +142,9 @@ function Get-ProfileDirectory {
     # This is what we want, because PSRepositories are stored in AppData/Local and don't roam
     $profiles = (
         @($default) +
-        (Get-ChildItem -LiteralPath $regPL | Get-ItemProperty | Where-Object { $_.PSObject.Properties.Name -contains "ProfileImagePath" } | Select-Object -ExpandProperty ProfileImagePath)
+        (Get-ChildItem -LiteralPath $regPL | Get-ItemProperty
+        | Where-Object { $_.PSObject.Properties.Name -contains "ProfileImagePath" }
+        | Select-Object -ExpandProperty ProfileImagePath)
     ) -as [System.IO.DirectoryInfo[]]
 
     $profiles |

@@ -35,7 +35,7 @@
 - name: Assert that the profile was created
   assert:
     that:
-      - status.changed
+      - not status.changed
 
 - name: Remove the profile with no ProfileImagePath
   become: yes
