@@ -12,7 +12,7 @@
     $default = Get-ItemProperty -LiteralPath $regPL | Select-Object -ExpandProperty Default
     $profiles = (
         @($default) +
-        (Get-ChildItem -LiteralPath $regPL | Get-ItemProperty | Select-Object -ExpandProperty ProfileImagePath)
+        (Get-ChildItem -LiteralPath $regPL | Get-ItemProperty | Where-Object { $_.PSObject.Properties.Name -contains "ProfileImagePath" } | Select-Object -ExpandProperty ProfileImagePath)
     ) -as [System.IO.DirectoryInfo[]]
     $profiles |
         Where-Object -Property Exists -EQ $true |

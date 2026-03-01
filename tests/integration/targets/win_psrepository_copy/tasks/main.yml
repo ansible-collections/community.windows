@@ -78,6 +78,8 @@
 
     - import_tasks: test_force_profiles.yml
 
+    - import_tasks: test_no_profileimagepath.yml
+
   always:
     - name: Reset
       import_tasks: reset.yml
