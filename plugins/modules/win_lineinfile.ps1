@@ -397,7 +397,18 @@ ElseIf (Test-Path -LiteralPath $path) {
     }
 
     # Get the first N bytes from the file, where N is the max preamble length we saw
-    [Byte[]]$bom = Get-Content -Encoding Byte -ReadCount $max_preamble_len -TotalCount $max_preamble_len -LiteralPath $path
+    $getParams = @{
+        LiteralPath = $path
+        ReadCount = $max_preamble_len
+        TotalCount = $max_preamble_len
+    }
+    if ($IsCoreCLR) {
+        $getParams.AsByteStream = $true
+    }
+    else {
+        $getParams.Encoding = "Byte"
+    }
+    [Byte[]]$bom = Get-Content @getParams
 
     # Iterate through the sorted encodings, looking for a full match.
     $found = $false
