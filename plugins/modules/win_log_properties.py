@@ -39,6 +39,17 @@ author:
 """
 
 EXAMPLES = r"""
+- name: Enable PrintService Admin log, set size and archive full logs
+  win_log_properties:
+    name: Microsoft-Windows-PrintService/Admin
+    enabled: true
+    size: 10485760
+    mode: archive
+
+- name: Enable PrintService Operational log
+  win_log_properties:
+    name: Microsoft-Windows-PrintService/Operational
+    enabled: true
 """
 
 RETURN = r"""
