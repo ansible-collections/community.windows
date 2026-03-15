@@ -35,9 +35,6 @@ catch {
     $module.FailJson("Object Name does not exists", $_)
 }
 
-$module.Diff.before = @{ }
-$module.Diff.after = @{ }
-
 $module.Diff.before = @{ enabled = $log.Enabled; retention = $log.Retention; auto_backup = $log.AutoBackup; size = $log.MaxLogSize; }
 
 
