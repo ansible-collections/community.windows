@@ -13,9 +13,9 @@ from ansible.utils.display import Display
 display = Display()
 
 
-def clean_async_result(reference_keys, obj):
-    for key in reference_keys:
-        obj.pop(key)
+def clean_async_result(obj):
+    for key in ['ansible_job_id', 'ansible_async_watchdog_pid', 'finished', 'results_file', 'started']:
+        obj.pop(key, None)
     return obj
 
 
@@ -143,4 +143,4 @@ class ActionModule(ActionBase):
             # let's swallow errors during implicit cleanup to aovid interrupting what was otherwise a successful run
             display.vvvv("Clean up of async status failed on the remote host: %r" % e)
 
-        return clean_async_result(status.keys(), result)
+        return clean_async_result(result)
