@@ -1,9 +1,10 @@
 - name: get PowerShell version
-  ansible.windows.win_shell: $PSVersionTable.PSVersion.Major
+  ansible.windows.win_powershell:
+    script: $PSVersionTable.PSVersion.Major
   register: ps_version
 
 - name: skip if running PowerShell 7
-  when: ps_version.stdout|int >= 7
+  when: ps_version.output[0] < 7
   block:
   - include_tasks: setup.yml
   - include_tasks: http.yml
@@ -19,14 +20,13 @@
     win_iis_website:
       name: "{{ item }}"
       state: absent
-    with_items:
-      - "{{ existing_sites.stdout_lines }}"
+    loop: "{{ existing_sites.stdout_lines | default([]) }}"
 
   - name: cleanup certreq files
     ansible.windows.win_file:
       path: "{{ item }}"
       state: absent
-    with_items:
+    loop:
       - c:\windows\temp\certreq1.txt
       - c:\windows\temp\certreq2.txt
       - c:\windows\temp\certreqwc.txt
@@ -36,10 +36,11 @@
 
   - name: remove certs
     raw: 'remove-item cert:\localmachine\my\{{ item }} -force -ea silentlycontinue'
-    with_items:
-      - "{{ thumbprint1.stdout_lines[0] }}"
-      - "{{ thumbprint2.stdout_lines[0] }}"
-      - "{{ thumbprint_wc.stdout_lines[0] }}"
+    when: item != ""
+    loop:
+      - "{{ thumbprint1.stdout_lines[0] | default('') }}"
+      - "{{ thumbprint2.stdout_lines[0] | default('') }}"
+      - "{{ thumbprint_wc.stdout_lines[0] | default('') }}"
 
   - name: remove IIS features after test
     ansible.windows.win_feature:
@@ -48,6 +49,6 @@
       include_management_tools: True
     register: feature_uninstall
 
-  - name: reboot after feature install
+  - name: reboot after feature uninstall
     ansible.windows.win_reboot:
-    when: feature_uninstall.reboot_required
+    when: feature_uninstall.reboot_required | default(false)

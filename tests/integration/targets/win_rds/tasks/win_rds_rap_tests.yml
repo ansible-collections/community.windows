@@ -93,7 +93,7 @@
     that:
     - edit_rap.changed == true
     - edit_rap_actual.Status == "0"
-    - edit_rap_actual.Description == "Description of {{ test_win_rds_rap_name }}"
+    - edit_rap_actual.Description == "Description of " ~ test_win_rds_rap_name
     - edit_rap_actual.PortNumbers == "3389,3390,3391"
     - edit_rap_actual.UserGroups | length == 2
     - edit_rap_actual.UserGroups[0] == "Users@BUILTIN"
