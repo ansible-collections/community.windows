@@ -1,0 +1,7 @@
+minor_changes:
+  - >-
+    win_unzip - Use ``tar.exe`` from ``%SystemRoot%\System32`` on Windows 10 build 17063 and later
+    and Windows Server 2019 and later to extract tar-based archives (``.tar``, ``.tar.gz``/``.tgz``,
+    ``.tar.bz2``/``.tbz2``, ``.tar.xz``/``.txz``) without requiring PSCX. On older systems where
+    ``tar.exe`` is not available, PSCX remains the fallback. PSCX is still required for passwords,
+    recursive extraction, and non-tar formats other than ``.zip``.

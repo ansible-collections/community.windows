@@ -10,11 +10,18 @@ module: win_unzip
 short_description: Unzips compressed files and archives on the Windows node
 description:
 - Unzips compressed files and archives.
-- Supports .zip files natively.
-- Supports other formats supported by the Powershell Community Extensions (PSCX) module (basically everything 7zip supports).
+- Supports .zip files natively via the .NET BCL.
+- Supports tar-based formats (C(.tar), C(.tar.gz)/C(.tgz), C(.tar.bz2)/C(.tbz2), C(.tar.xz)/C(.txz))
+  via C(tar.exe) present in C(%SystemRoot%\System32) on Windows 10 build 17063 and later
+  and Windows Server 2019 and later, with no additional software required.
+- Supports other formats (C(.gz), C(.bz2), C(.msu) and others) via the PowerShell Community
+  Extensions (PSCX) module. PSCX is also required when using the O(recurse) or O(password) options.
 - For non-Windows targets, use the M(ansible.builtin.unarchive) module instead.
 requirements:
-- PSCX
+- C(tar.exe) at C(%SystemRoot%\System32) for tar-based formats without O(recurse) or O(password)
+  (ships with Windows 10 build 17063+ and Windows Server 2019+).
+- PSCX for formats other than C(.zip) and tar-based, or when using O(recurse) or O(password).
+  Also used as a fallback on older systems where C(tar.exe) is not present.
 options:
   src:
     description:
@@ -48,9 +55,13 @@ options:
       - Passing a value to a password parameter requires the PSCX module to be installed.
 notes:
 - This module is not really idempotent, it will extract the archive every time, and report a change.
-- For extracting any compression types other than .zip, the PowerShellCommunityExtensions (PSCX) Module is required.  This module (in conjunction with PSCX)
-  has the ability to recursively unzip files within the src zip file provided and also functionality for many other compression types. If the destination
-  directory does not exist, it will be created before unzipping the file.  Specifying rm parameter will force removal of the src file after extraction.
+- For tar-based formats (C(.tar), C(.tar.gz), C(.tgz), C(.tar.bz2), C(.tbz2), C(.tar.xz), C(.txz))
+  the module uses C(%SystemRoot%\System32\tar.exe) when available, requiring no extra software.
+  On older systems where C(tar.exe) is not present, the module falls back to PSCX.
+- For all other compression types, or when O(recurse) or O(password) are used, the
+  PowerShellCommunityExtensions (PSCX) module is required. If the destination directory does not
+  exist, it will be created before unzipping the file. Specifying rm parameter will force removal
+  of the src file after extraction.
 seealso:
 - module: ansible.builtin.unarchive
 author:
@@ -72,6 +83,12 @@ EXAMPLES = r'''
     src: C:\Logs\application-error-logs.gz
     dest: C:\ExtractedLogs\application-error-logs
 
+- name: Extract a tar.gz archive (uses tar.exe on Windows 10/Server 2019+, no extra software needed)
+  community.windows.win_unzip:
+    src: C:\Downloads\package.tar.gz
+    dest: C:\Extracted\package
+    delete_archive: true
+
 # Unzip .zip file, recursively decompresses the contained .gz files and removes all unneeded compressed files after completion.
 - name: Recursively decompress GZ files in ApplicationLogs.zip
   community.windows.win_unzip:
@@ -80,6 +97,7 @@ EXAMPLES = r'''
     recurse: true
     delete_archive: true
 
+# PSCX is required for: non-tar formats other than .zip, recurse, and password-protected archives.
 - name: Install PSCX
   community.windows.win_psmodule:
     name: Pscx
