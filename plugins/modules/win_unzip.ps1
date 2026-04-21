@@ -203,7 +203,8 @@ If ($use_pscx) {
     $list = Get-Module -ListAvailable
 
     If (-Not ($list -match "PSCX")) {
-        Fail-Json -obj $result -message "PowerShellCommunityExtensions PowerShell Module (PSCX) is required for this archive type, recursive extraction, or password-protected archives."
+        Fail-Json -obj $result -message ("PowerShellCommunityExtensions PowerShell Module (PSCX) is required " +
+            "for this archive type, recursive extraction, or password-protected archives.")
     }
     Else {
         $result.pscx_status = "present"
