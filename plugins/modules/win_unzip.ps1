@@ -95,25 +95,21 @@ Function Get-SystemTarExePath {
 }
 
 Function Expand-WithTar($src, $dest, $tar_exe) {
-    # Lower $ErrorActionPreference so that stderr from tar.exe does not become a
-    # terminating PowerShell error under the module-level "Stop" preference.
-    $prev_eap = $ErrorActionPreference
+    # Function-scoped: prevents stderr from tar.exe becoming a terminating
+    # PowerShell error under the module-level "Stop" preference.
     $ErrorActionPreference = "Continue"
+    $rc = 0
     $tar_output = $null
-    $failed = $false
     try {
         $tar_output = & $tar_exe -xf $src -C $dest 2>&1
-        $failed = $LASTEXITCODE -ne 0
+        $rc = $LASTEXITCODE
     }
     catch {
-        $failed = $true
+        $rc = -1
         $tar_output = $_.Exception.Message
     }
-    finally {
-        $ErrorActionPreference = $prev_eap
-    }
-    if ($failed) {
-        Fail-Json -obj $result -message "Error extracting '$src' to '$dest' using tar.exe: $tar_output"
+    if ($rc) {
+        Fail-Json -obj $result -message "Error extracting '$src' to '$dest' using tar.exe (rc=$rc): $tar_output"
     }
     $result.changed = $true
 }

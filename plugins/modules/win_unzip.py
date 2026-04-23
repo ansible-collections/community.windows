@@ -12,10 +12,11 @@ description:
 - Unzips compressed files and archives.
 - Supports .zip files natively via the .NET BCL.
 - Supports tar-based formats (C(.tar), C(.tar.gz)/C(.tgz), C(.tar.bz2)/C(.tbz2), C(.tar.xz)/C(.txz))
-  via C(tar.exe) present in C(%SystemRoot%\System32) on Windows 10 build 17063 and later
-  and Windows Server 2019 and later, with no additional software required.
+  via C(tar.exe) as of C(community.windows 3.2.0). C(tar.exe) ships with Windows 10 build 17063 and
+  later and Windows Server 2019 and later, with no additional software required.
 - Supports other formats (C(.gz), C(.bz2), C(.msu) and others) via the PowerShell Community
-  Extensions (PSCX) module. PSCX is also required when using the O(recurse) or O(password) options.
+  Extensions (PSCX) module. PSCX is also required when using the O(recurse) or O(password) options,
+  and for tar-based formats prior to C(community.windows 3.2.0).
 - For non-Windows targets, use the M(ansible.builtin.unarchive) module instead.
 requirements:
 - C(tar.exe) at C(%SystemRoot%\System32) for tar-based formats without O(recurse) or O(password)

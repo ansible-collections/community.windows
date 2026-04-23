@@ -5,3 +5,8 @@ minor_changes:
     ``.tar.bz2``/``.tbz2``, ``.tar.xz``/``.txz``) without requiring PSCX. On older systems where
     ``tar.exe`` is not available, PSCX remains the fallback. PSCX is still required for passwords,
     recursive extraction, and non-tar formats other than ``.zip``.
+bugfixes:
+  - >-
+    win_unzip - Use ``-LiteralPath`` when calling PSCX ``Expand-Archive`` so paths containing
+    PowerShell wildcard characters (e.g. ``[``, ``]``) are not glob-expanded and silently
+    resolved to an empty array.
