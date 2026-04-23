@@ -19,10 +19,9 @@ description:
   and for tar-based formats prior to C(community.windows 3.2.0).
 - For non-Windows targets, use the M(ansible.builtin.unarchive) module instead.
 requirements:
-- C(tar.exe) at C(%SystemRoot%\System32) for tar-based formats without O(recurse) or O(password)
-  (ships with Windows 10 build 17063+ and Windows Server 2019+).
 - PSCX for formats other than C(.zip) and tar-based, or when using O(recurse) or O(password).
-  Also used as a fallback on older systems where C(tar.exe) is not present.
+  Also required for tar-based formats prior to C(community.windows 3.2.0), or on older OS versions
+  which did not ship C(tar.exe).
 options:
   src:
     description:
