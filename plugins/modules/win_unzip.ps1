@@ -84,6 +84,36 @@ Function Expand-ZipLegacy($src, $dest) {
     $result.changed = $true
 }
 
+Function Get-SystemTarExePath {
+    # Only use the tar.exe that ships with Windows 10 / Server 2019+; do not
+    # search PATH to avoid picking up an unknown third-party binary.
+    $system_tar = [System.IO.Path]::Combine($env:SystemRoot, 'System32', 'tar.exe')
+    if (Test-Path -LiteralPath $system_tar) {
+        return $system_tar
+    }
+    return $null
+}
+
+Function Expand-WithTar($src, $dest, $tar_exe) {
+    # Function-scoped: prevents stderr from tar.exe becoming a terminating
+    # PowerShell error under the module-level "Stop" preference.
+    $ErrorActionPreference = "Continue"
+    $rc = 0
+    $tar_output = $null
+    try {
+        $tar_output = & $tar_exe -xf $src -C $dest 2>&1
+        $rc = $LASTEXITCODE
+    }
+    catch {
+        $rc = -1
+        $tar_output = $_.Exception.Message
+    }
+    if ($rc) {
+        Fail-Json -obj $result -message "Error extracting '$src' to '$dest' using tar.exe (rc=$rc): $tar_output"
+    }
+    $result.changed = $true
+}
+
 If ($creates -and (Test-Path -LiteralPath $creates)) {
     $result.skipped = $true
     $result.msg = "The file or directory '$creates' already exists."
@@ -104,6 +134,14 @@ If (-Not (Test-Path -LiteralPath $dest -PathType Container)) {
         Fail-Json -obj $result -message "Error creating '$dest' directory! Msg: $($_.Exception.Message)"
     }
 }
+
+# tar.exe (ships with Windows 10 build 17063+ / Server 2019+) handles tar-based
+# formats natively. It does not support passwords, recursive nested extraction,
+# standalone .gz/.bz2, or .msu - those still require PSCX.
+$filename_lower = [System.IO.Path]::GetFileName($src).ToLower()
+$is_tar_compatible = $filename_lower -match '\.(tar|tar\.gz|tgz|tar\.bz2|tbz2|tar\.xz|txz)$'
+
+$use_pscx = $false
 
 If ($ext -eq ".zip" -And $recurse -eq $false -And -Not $password) {
     # TODO: PS v5 supports zip extraction, use that if available
@@ -135,12 +173,34 @@ If ($ext -eq ".zip" -And $recurse -eq $false -And -Not $password) {
         }
     }
 }
+ElseIf ($is_tar_compatible -And -Not $password -And -Not $recurse) {
+    $tar_exe = Get-SystemTarExePath
+    If ($tar_exe) {
+        If ($check_mode) {
+            # In check mode the dest directory may not exist yet (New-Item ran with -WhatIf)
+            # and there is nothing to execute anyway; just report changed.
+            $result.changed = $true
+        }
+        Else {
+            Expand-WithTar -src $src -dest $dest -tar_exe $tar_exe
+        }
+    }
+    Else {
+        # System tar.exe not available (Windows older than 10 build 17063 / Server 2019); fall back to PSCX
+        $use_pscx = $true
+    }
+}
 Else {
+    $use_pscx = $true
+}
+
+If ($use_pscx) {
     # Check if PSCX is installed
     $list = Get-Module -ListAvailable
 
     If (-Not ($list -match "PSCX")) {
-        Fail-Json -obj $result -message "PowerShellCommunityExtensions PowerShell Module (PSCX) is required for non-'.zip' compressed archive types."
+        Fail-Json -obj $result -message ("PowerShellCommunityExtensions PowerShell Module (PSCX) is required " +
+            "for this archive type, recursive extraction, or password-protected archives.")
     }
     Else {
         $result.pscx_status = "present"
@@ -161,7 +221,9 @@ Else {
         $expand_params.Password = ConvertTo-SecureString -String $password -AsPlainText -Force
     }
     Try {
-        Expand-Archive -Path $src @expand_params
+        # Use -LiteralPath to prevent PowerShell wildcard-expanding brackets and other
+        # special characters that may appear in the path (e.g. [$!@^&test(;)]).
+        Expand-Archive -LiteralPath $src @expand_params
     }
     Catch {
         Fail-Json -obj $result -message "Error expanding '$src' to '$dest'! Msg: $($_.Exception.Message)"
@@ -170,7 +232,7 @@ Else {
     If ($recurse) {
         Get-ChildItem -LiteralPath $dest -recurse | Where-Object { $pcx_extensions -contains $_.extension } | ForEach-Object {
             Try {
-                Expand-Archive -Path $_.FullName -Force @expand_params
+                Expand-Archive -LiteralPath $_.FullName -Force @expand_params
             }
             Catch {
                 Fail-Json -obj $result -message "Error recursively expanding '$src' to '$dest'! Msg: $($_.Exception.Message)"

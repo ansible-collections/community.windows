@@ -169,3 +169,123 @@
       - escape.results | map(attribute='failed') | unique | list == [True]
       - files.matched == 1
       - files.files[0]['filename'] == 'rabbit.txt'
+
+# Regression test: zip with recurse still routes through PSCX, not tar.exe.
+# Also exercises the -LiteralPath fix on the Unicode+special-char path.
+# Skipped when PSCX is not installed (e.g. in bare CI environments).
+- name: check if PSCX is installed
+  ansible.windows.win_shell: |
+    if (Get-Module -ListAvailable -Name Pscx) { 'present' } else { 'absent' }
+  register: pscx_check
+  changed_when: false
+
+- name: unarchive zip with recurse (PSCX path)
+  win_unzip:
+    src: '{{ win_unzip_dir }}\hat1.zip'
+    dest: '{{ win_unzip_dir }}\output_pscx'
+    recurse: true
+  register: unzip_pscx
+  when: pscx_check.stdout | trim == 'present'
+
+- name: get result of unarchive zip with recurse
+  ansible.windows.win_stat:
+    path: '{{ win_unzip_dir }}\output_pscx\rabbit.txt'
+  register: unzip_pscx_actual
+  when: pscx_check.stdout | trim == 'present'
+
+- name: assert zip with recurse used PSCX
+  assert:
+    that:
+    - unzip_pscx is changed
+    - unzip_pscx.pscx_status == 'present'
+    - unzip_pscx_actual.stat.exists
+  when: pscx_check.stdout | trim == 'present'
+
+# Tests for tar.exe extraction path (Windows 10 build 17063+ / Server 2019+)
+# Use remote_tmp_dir (plain ASCII path) so tar.exe can pass the path to the
+# external process without hitting the PSNativeCommandArgumentPassing encoding
+# bug that affects non-ASCII / special-character paths.
+- name: create local tar.gz file
+  script: create_tar.py {{ output_dir + '/win_unzip.tar.gz' | quote }}
+  delegate_to: localhost
+
+- name: copy tar.gz to Windows host
+  ansible.windows.win_copy:
+    src: '{{ output_dir }}/win_unzip.tar.gz'
+    dest: '{{ remote_tmp_dir }}\win_unzip.tar.gz'
+
+- name: unarchive tar.gz (check)
+  win_unzip:
+    src: '{{ remote_tmp_dir }}\win_unzip.tar.gz'
+    dest: '{{ remote_tmp_dir }}\output_tar'
+  register: unzip_tar_check
+  check_mode: yes
+
+- name: get result of unarchive tar.gz (check)
+  ansible.windows.win_stat:
+    path: '{{ remote_tmp_dir }}\output_tar\hello.txt'
+  register: unzip_tar_actual_check
+
+- name: assert result of unarchive tar.gz (check)
+  assert:
+    that:
+    - unzip_tar_check is changed
+    - not unzip_tar_check.removed
+    - not unzip_tar_actual_check.stat.exists
+
+- name: unarchive tar.gz
+  win_unzip:
+    src: '{{ remote_tmp_dir }}\win_unzip.tar.gz'
+    dest: '{{ remote_tmp_dir }}\output_tar'
+  register: unzip_tar
+
+- name: get result of unarchive tar.gz
+  ansible.windows.slurp:
+    path: '{{ remote_tmp_dir }}\output_tar\hello.txt'
+  register: unzip_tar_actual
+
+- name: assert result of unarchive tar.gz
+  assert:
+    that:
+    - unzip_tar is changed
+    - not unzip_tar.removed
+    - unzip_tar_actual.content | b64decode == 'hello from tar'
+
+- name: unarchive tar.gz with delete (check)
+  win_unzip:
+    src: '{{ remote_tmp_dir }}\win_unzip.tar.gz'
+    dest: '{{ remote_tmp_dir }}\output_tar'
+    delete_archive: yes
+  register: unzip_tar_delete_check
+  check_mode: yes
+
+- name: get result of unarchive tar.gz with delete (check)
+  ansible.windows.win_stat:
+    path: '{{ remote_tmp_dir }}\win_unzip.tar.gz'
+  register: unzip_tar_delete_actual_check
+
+- name: assert unarchive tar.gz with delete (check)
+  assert:
+    that:
+    - unzip_tar_delete_check is changed
+    - unzip_tar_delete_check.removed
+    - unzip_tar_delete_actual_check.stat.exists
+
+- name: unarchive tar.gz with delete
+  win_unzip:
+    src: '{{ remote_tmp_dir }}\win_unzip.tar.gz'
+    dest: '{{ remote_tmp_dir }}\output_tar'
+    delete_archive: yes
+  register: unzip_tar_delete
+
+- name: get result of unarchive tar.gz with delete
+  ansible.windows.win_stat:
+    path: '{{ remote_tmp_dir }}\win_unzip.tar.gz'
+  register: unzip_tar_delete_actual
+
+- name: assert unarchive tar.gz with delete
+  assert:
+    that:
+    - unzip_tar_delete is changed
+    - unzip_tar_delete.removed
+    - not unzip_tar_delete_actual.stat.exists
