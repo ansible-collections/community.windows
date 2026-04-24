@@ -156,8 +156,9 @@ see <a class="reference internal" href="#ansible-collections-community-windows-w
 <h2><a class="toc-backref" href="#id1" role="doc-backlink">Synopsis</a><a class="headerlink" href="#synopsis" title="Link to this heading"></a></h2>
 <ul class="simple">
 <li><p>Unzips compressed files and archives.</p></li>
-<li><p>Supports .zip files natively.</p></li>
-<li><p>Supports other formats supported by the Powershell Community Extensions (PSCX) module (basically everything 7zip supports).</p></li>
+<li><p>Supports .zip files natively via the .NET BCL.</p></li>
+<li><p>Supports tar-based formats (<code class="docutils literal notranslate"><span class="pre">.tar</span></code>, <code class="docutils literal notranslate"><span class="pre">.tar.gz</span></code>/<code class="docutils literal notranslate"><span class="pre">.tgz</span></code>, <code class="docutils literal notranslate"><span class="pre">.tar.bz2</span></code>/<code class="docutils literal notranslate"><span class="pre">.tbz2</span></code>, <code class="docutils literal notranslate"><span class="pre">.tar.xz</span></code>/<code class="docutils literal notranslate"><span class="pre">.txz</span></code>) via <code class="docutils literal notranslate"><span class="pre">tar.exe</span></code> as of <code class="docutils literal notranslate"><span class="pre">community.windows</span> <span class="pre">3.2.0</span></code>. <code class="docutils literal notranslate"><span class="pre">tar.exe</span></code> ships with Windows 10 build 17063 and later and Windows Server 2019 and later, with no additional software required.</p></li>
+<li><p>Supports other formats (<code class="docutils literal notranslate"><span class="pre">.gz</span></code>, <code class="docutils literal notranslate"><span class="pre">.bz2</span></code>, <code class="docutils literal notranslate"><span class="pre">.msu</span></code> and others) via the PowerShell Community Extensions (PSCX) module. PSCX is also required when using the <code class="ansible-option docutils literal notranslate"><strong><a class="reference internal" href="#ansible-collections-community-windows-win-unzip-module-parameter-recurse"><span class="std std-ref"><span class="pre">recurse</span></span></a></strong></code> or <code class="ansible-option docutils literal notranslate"><strong><a class="reference internal" href="#ansible-collections-community-windows-win-unzip-module-parameter-password"><span class="std std-ref"><span class="pre">password</span></span></a></strong></code> options, and for tar-based formats prior to <code class="docutils literal notranslate"><span class="pre">community.windows</span> <span class="pre">3.2.0</span></code>.</p></li>
 <li><p>For non-Windows targets, use the <a class="reference external" href="https://docs.ansible.com/projects/ansible/devel/collections/ansible/builtin/unarchive_module.html#ansible-collections-ansible-builtin-unarchive-module" title="(in Ansible devel)"><span class="xref std std-ref">ansible.builtin.unarchive</span></a> module instead.</p></li>
 </ul>
 </section>
@@ -165,7 +166,7 @@ see <a class="reference internal" href="#ansible-collections-community-windows-w
 <span id="ansible-collections-community-windows-win-unzip-module-requirements"></span><h2><a class="toc-backref" href="#id2" role="doc-backlink">Requirements</a><a class="headerlink" href="#requirements" title="Link to this heading"></a></h2>
 <p>The below requirements are needed on the host that executes this module.</p>
 <ul class="simple">
-<li><p>PSCX</p></li>
+<li><p>PSCX for formats other than <code class="docutils literal notranslate"><span class="pre">.zip</span></code> and tar-based, or when using <code class="ansible-option docutils literal notranslate"><strong><a class="reference internal" href="#ansible-collections-community-windows-win-unzip-module-parameter-recurse"><span class="std std-ref"><span class="pre">recurse</span></span></a></strong></code> or <code class="ansible-option docutils literal notranslate"><strong><a class="reference internal" href="#ansible-collections-community-windows-win-unzip-module-parameter-password"><span class="std std-ref"><span class="pre">password</span></span></a></strong></code>. Also required for tar-based formats prior to <code class="docutils literal notranslate"><span class="pre">community.windows</span> <span class="pre">3.2.0</span></code>, or on older OS versions which did not ship <code class="docutils literal notranslate"><span class="pre">tar.exe</span></code>.</p></li>
 </ul>
 </section>
 <section id="parameters">
@@ -242,7 +243,8 @@ see <a class="reference internal" href="#ansible-collections-community-windows-w
 <p class="admonition-title">Note</p>
 <ul class="simple">
 <li><p>This module is not really idempotent, it will extract the archive every time, and report a change.</p></li>
-<li><p>For extracting any compression types other than .zip, the PowerShellCommunityExtensions (PSCX) Module is required. This module (in conjunction with PSCX) has the ability to recursively unzip files within the src zip file provided and also functionality for many other compression types. If the destination directory does not exist, it will be created before unzipping the file. Specifying rm parameter will force removal of the src file after extraction.</p></li>
+<li><p>For tar-based formats (<code class="docutils literal notranslate"><span class="pre">.tar</span></code>, <code class="docutils literal notranslate"><span class="pre">.tar.gz</span></code>, <code class="docutils literal notranslate"><span class="pre">.tgz</span></code>, <code class="docutils literal notranslate"><span class="pre">.tar.bz2</span></code>, <code class="docutils literal notranslate"><span class="pre">.tbz2</span></code>, <code class="docutils literal notranslate"><span class="pre">.tar.xz</span></code>, <code class="docutils literal notranslate"><span class="pre">.txz</span></code>) the module uses <code class="docutils literal notranslate"><span class="pre">%SystemRoot%\System32\tar.exe</span></code> when available, requiring no extra software. On older systems where <code class="docutils literal notranslate"><span class="pre">tar.exe</span></code> is not present, the module falls back to PSCX.</p></li>
+<li><p>For all other compression types, or when <code class="ansible-option docutils literal notranslate"><strong><a class="reference internal" href="#ansible-collections-community-windows-win-unzip-module-parameter-recurse"><span class="std std-ref"><span class="pre">recurse</span></span></a></strong></code> or <code class="ansible-option docutils literal notranslate"><strong><a class="reference internal" href="#ansible-collections-community-windows-win-unzip-module-parameter-password"><span class="std std-ref"><span class="pre">password</span></span></a></strong></code> are used, the PowerShellCommunityExtensions (PSCX) module is required. If the destination directory does not exist, it will be created before unzipping the file. Specifying rm parameter will force removal of the src file after extraction.</p></li>
 </ul>
 </div>
 </section>
@@ -272,6 +274,12 @@ see <a class="reference internal" href="#ansible-collections-community-windows-w
 <span class="w">    </span><span class="nt">src</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">C:\Logs\application-error-logs.gz</span>
 <span class="w">    </span><span class="nt">dest</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">C:\ExtractedLogs\application-error-logs</span>
 
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Extract a tar.gz archive (uses tar.exe on Windows 10/Server 2019+, no extra software needed)</span>
+<span class="w">  </span><span class="nt">community.windows.win_unzip</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">src</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">C:\Downloads\package.tar.gz</span>
+<span class="w">    </span><span class="nt">dest</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">C:\Extracted\package</span>
+<span class="w">    </span><span class="nt">delete_archive</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+
 <span class="c1"># Unzip .zip file, recursively decompresses the contained .gz files and removes all unneeded compressed files after completion.</span>
 <span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Recursively decompress GZ files in ApplicationLogs.zip</span>
 <span class="w">  </span><span class="nt">community.windows.win_unzip</span><span class="p">:</span>
@@ -280,6 +288,7 @@ see <a class="reference internal" href="#ansible-collections-community-windows-w
 <span class="w">    </span><span class="nt">recurse</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
 <span class="w">    </span><span class="nt">delete_archive</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
 
+<span class="c1"># PSCX is required for: non-tar formats other than .zip, recurse, and password-protected archives.</span>
 <span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Install PSCX</span>
 <span class="w">  </span><span class="nt">community.windows.win_psmodule</span><span class="p">:</span>
 <span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Pscx</span>
