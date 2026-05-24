@@ -3,6 +3,8 @@
   chocolatey.chocolatey.win_chocolatey:
     name: NSSM
     state: present
+  vars:
+    ansible_pwsh_interpreter: C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe
 
 - name: restart sshd after env var was updated by chocolatey
   win_service:
@@ -61,4 +63,6 @@
       chocolatey.chocolatey.win_chocolatey:
         name: NSSM
         state: absent
+      vars:
+        ansible_pwsh_interpreter: C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe
       failed_when: false

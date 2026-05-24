@@ -2,6 +2,8 @@
   chocolatey.chocolatey.win_chocolatey:
     name: rabbitmq
     state: present
+  vars:
+    ansible_pwsh_interpreter: C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe
 
 - name: Ensure that rabbitmq_management plugin disabled
   win_rabbitmq_plugin:
