@@ -320,7 +320,7 @@ rc:
 import traceback
 
 from ansible.module_utils.basic import AnsibleModule, missing_required_lib
-from ansible.module_utils._text import to_bytes, to_text
+from ansible.module_utils.common.text.converters import to_bytes, to_text
 
 PYPSEXEC_IMP_ERR = None
 try:
@@ -436,7 +436,7 @@ def main():
     if (connection_username is None or connection_password is None) and \
             not HAS_KERBEROS:
         module.fail_json(msg=missing_required_lib("gssapi"),
-                         execption=KERBEROS_IMP_ERR)
+                         exception=KERBEROS_IMP_ERR)
 
     win_client = client.Client(server=hostname, username=connection_username,
                                password=connection_password, port=port,

@@ -194,7 +194,7 @@ import os
 import traceback
 
 from ansible.errors import AnsibleLookupError
-from ansible.module_utils._text import to_bytes, to_native, to_text
+from ansible.module_utils.common.text.converters import to_bytes, to_native, to_text
 from ansible.module_utils.basic import missing_required_lib
 from ansible.plugins.lookup import LookupBase
 
