@@ -1,3 +1,0 @@
----
-bugfixes:
-    - win_psrepository_copy - handle profiles with no ProfileImagePath (https://github.com/ansible-collections/community.windows/issues/604).

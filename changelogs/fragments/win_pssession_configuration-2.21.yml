@@ -1,3 +1,0 @@
-bugfixes:
-  - >-
-    win_pssession_configuration - Fix compatibility with Ansible 2.21.
