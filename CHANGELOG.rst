@@ -4,6 +4,32 @@ Community Windows Release Notes
 
 .. contents:: Topics
 
+v3.2.0
+======
+
+Release Summary
+---------------
+
+Release summary for v3.2.0
+
+Minor Changes
+-------------
+
+- PowerShell 7 - Add initial support for running modules against PowerShell 7 interpreters. Support for PowerShell 7 varies across each module, see module documentation for more information.
+- win_unzip - Use ``tar.exe`` from ``%SystemRoot%\System32`` on Windows 10 build 17063 and later and Windows Server 2019 and later to extract tar-based archives (``.tar``, ``.tar.gz``/``.tgz``, ``.tar.bz2``/``.tbz2``, ``.tar.xz``/``.txz``) without requiring PSCX. On older systems where ``tar.exe`` is not available, PSCX remains the fallback. PSCX is still required for passwords, recursive extraction, and non-tar formats other than ``.zip``.
+- win_xml - add new option ``content`` to be able to return the content of nodes (https://github.com/ansible-collections/community.windows/issues/54).
+
+Bugfixes
+--------
+
+- win_psrepository_copy - handle profiles with no ProfileImagePath (https://github.com/ansible-collections/community.windows/issues/604).
+- win_pssession_configuration - Fix compatibility with Ansible 2.21.
+- win_pssession_configuration - Fix type errors for parameters passed in New-PSSessionConfigurationFile
+- win_regmerge - Ensure ``reg.exe`` uses the absolute location ``C:\Windows\Systme32\reg.exe``. This ensures that misconfigured hosts won't use a different executable.
+- win_unzip - Use ``-LiteralPath`` when calling PSCX ``Expand-Archive`` so paths containing PowerShell wildcard characters (e.g. ``[``, ``]``) are not glob-expanded and silently resolved to an empty array.
+- win_xml - allow users to preserve whitespace while updating XML file (https://github.com/ansible-collections/community.windows/issues/210).
+- win_xml - handle attribute removal correctly (https://github.com/ansible-collections/community.windows/issues/631).
+
 v3.1.0
 ======
 
