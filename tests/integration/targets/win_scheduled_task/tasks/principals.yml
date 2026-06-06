@@ -43,6 +43,9 @@
     actions:
     - path: cmd.exe
   register: task_with_password
+  become: true
+  become_user: SYSTEM
+  become_method: runas
 
 - name: get result of task with password principal
   win_scheduled_task_stat:
