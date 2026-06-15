@@ -21,22 +21,22 @@ $module = [Ansible.Basic.AnsibleModule]::Create($args, $spec)
 # Define the list of properties that are managed by PowerShellGet repository lookups
 # This is used both by Add-ModuleRepositoryInfo and for optimization checks
 $RepositoryManagedProperties = @(
-    'PublishedDate',
-    'InstalledDate',
-    'UpdatedDate',
-    'Dependencies',
-    'Repository',
-    'PackageManagementProvider',
-    'InstalledLocation',
-    'RepositorySourceLocation',
-    'Tags',
-    'CompatiblePSEditions',
-    'LicenseUri',
-    'ProjectUri',
-    'IconUri',
-    'ReleaseNotes',
-    'ExportedDscResources',
-    'Prefix'
+    'PublishedDate'
+    'InstalledDate'
+    'UpdatedDate'
+    'Dependencies'
+    'Repository'
+    'PackageManagementProvider'
+    'InstalledLocation'
+    'RepositorySourceLocation'
+    'Tags'
+    'CompatiblePSEditions'
+    'LicenseUri'
+    'ProjectUri'
+    'IconUri'
+    'ReleaseNotes'
+    'ExportedDscResources' # ExportedDscResources is not returned here, this is a hack for Windows 2012/R2 to ensure the field is present
+    'Prefix'                # Prefix is not actually returned here, this is a hack for Windows 2012 just to ensure the field is present
 )
 
 # We need to remove this type data so that arrays don't get serialized weirdly.
