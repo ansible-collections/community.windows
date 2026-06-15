@@ -26,6 +26,25 @@ options:
       - Only modules installed from a registered repository will be returned.
       - If the repository was re-registered after module installation with a new C(SourceLocation), this will not match.
     type: str
+  include_properties:
+    description:
+      - List of property names to include in the output.
+      - Property names should be in snake_case format (e.g., C(module_base), C(exported_functions)).
+      - If omitted, all available properties are returned.
+      - When specified, only the requested properties will be included in the output.
+      - To get minimal output similar to the old C(simplified=true), use C([name, version, author, module_base]).
+      - See the RETURN section for a complete list of available properties.
+      - Repository-related properties (repository, repository_source_location, installed_date, published_date, etc.) require PowerShellGet lookups and may be slower.
+    type: list
+    elements: str
+  skip_module_repository_info:
+    description:
+      - When C(true), skips querying PowerShellGet for repository-related metadata.
+      - This significantly improves performance but repository properties will be C(null).
+      - Repository properties include C(repository), C(repository_source_location), C(installed_date), C(published_date), C(updated_date), C(package_management_provider), C(installed_location), C(tags), C(compatible_ps_editions), C(license_uri), C(project_uri), C(icon_uri), C(release_notes), and C(dependencies).
+      - When C(include_properties) is specified without any repository properties, this is automatically set to C(true) for optimization.
+    type: bool
+    default: false
 requirements:
   - C(PowerShellGet) module
 seealso:
@@ -46,6 +65,20 @@ EXAMPLES = r'''
 - name: Get info about networking modules
   community.windows.win_psmodule_info:
     name: Net*
+
+- name: Get minimal info about all modules (name, version, author, module_base only)
+  community.windows.win_psmodule_info:
+    include_properties:
+      - name
+      - version
+      - author
+      - module_base
+  register: simple_modules
+
+- name: Get all module info but skip expensive repository lookups for better performance
+  community.windows.win_psmodule_info:
+    skip_module_repository_info: true
+  register: modules_fast
 
 - name: Get info about all modules installed from the PSGallery repository
   community.windows.win_psmodule_info:
@@ -78,6 +111,8 @@ RETURN = r'''
 modules:
   description:
     - A list of modules (or an empty list is there are none).
+    - When I(include_properties) is specified, only contains the requested properties.
+    - When I(include_properties) is not specified (default), contains all available module properties listed below.
   returned: always
   type: list
   elements: dict
@@ -194,7 +229,7 @@ modules:
         - The module's type. See U(https://docs.microsoft.com/en-us/dotnet/api/system.management.automation.moduletype)
       type: str
       sample: Script
-    procoessor_architecture:
+    processor_architecture:
       description:
         - The module's processor architecture. See U(https://docs.microsoft.com/en-us/dotnet/api/system.reflection.processorarchitecture)
       type: str

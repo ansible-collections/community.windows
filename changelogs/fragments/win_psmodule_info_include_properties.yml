@@ -1,0 +1,8 @@
+---
+minor_changes:
+  - flatiron.windows.win_psmodule_info - Added C(include_properties) parameter to allow fine-grained control over which module properties are returned, improving performance when only specific properties are needed.
+  - flatiron.windows.win_psmodule_info - Added C(skip_module_repository_info) parameter to skips querying PowerShellGet for repository-related metadata.
+  - flatiron.windows.win_psmodule_info - Automatically skips expensive PowerShellGet repository lookups when C(include_properties) is specified without repository-related properties.
+
+bugfixes:
+  - flatiron.windows.win_psmodule_info - Fixed typo in documentation changing C(procoessor_architecture) to C(processor_architecture) (MR-URL).
