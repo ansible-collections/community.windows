@@ -147,7 +147,7 @@ Function Get-PsModule {
         Version = ""
     }
 
-    $ExistingModules = Get-Module -ListAvailable | Where-Object { ($_.name -eq $Name) }
+    $ExistingModules = Get-Module -ListAvailable -Name $Name
     $ExistingModulesCount = $($ExistingModules | Measure-Object).Count
 
     if ( $ExistingModulesCount -gt 0 ) {
@@ -293,7 +293,7 @@ Function Remove-PsModule {
         [Bool]$CheckMode
     )
     # If module is present, uninstalls it.
-    if (Get-Module -ListAvailable | Where-Object { $_.name -eq $Name }) {
+    if (Get-Module -ListAvailable -Name $Name) {
         try {
             $ht = @{
                 Name = $Name
