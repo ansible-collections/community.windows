@@ -36,7 +36,7 @@ $RepositoryManagedProperties = @(
     'IconUri'
     'ReleaseNotes'
     'ExportedDscResources' # ExportedDscResources is not returned here, this is a hack for Windows 2012/R2 to ensure the field is present
-    'Prefix'                # Prefix is not actually returned here, this is a hack for Windows 2012 just to ensure the field is present
+    'Prefix'               # Prefix is not actually returned here, this is a hack for Windows 2012 just to ensure the field is present
 )
 
 # We need to remove this type data so that arrays don't get serialized weirdly.
