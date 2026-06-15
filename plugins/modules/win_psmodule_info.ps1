@@ -237,7 +237,7 @@ function ConvertTo-SerializableModuleInfo {
     }
 }
 
-function Select-ModuleProperties {
+function Select-ModuleProperty {
     <#
         .SYNOPSIS
         Filters a module dictionary to include only specified properties.
@@ -372,7 +372,7 @@ $module.Result.modules = @(
         Convert-ObjectToSnakeCase -NoRecurse |
         ForEach-Object {
             if ($module.Params.include_properties) {
-                Select-ModuleProperties -InputObject $_ -PropertyList $module.Params.include_properties
+                Select-ModuleProperty -InputObject $_ -PropertyList $module.Params.include_properties
             }
             else {
                 # Default: return all properties

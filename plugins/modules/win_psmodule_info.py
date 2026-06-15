@@ -34,14 +34,17 @@ options:
       - When specified, only the requested properties will be included in the output.
       - To get minimal output similar to the old C(simplified=true), use C([name, version, author, module_base]).
       - See the RETURN section for a complete list of available properties.
-      - Repository-related properties (repository, repository_source_location, installed_date, published_date, etc.) require PowerShellGet lookups and may be slower.
+      - Repository-related properties (repository, repository_source_location, installed_date, published_date, etc.)
+        require PowerShellGet lookups and may be slower.
     type: list
     elements: str
   skip_module_repository_info:
     description:
       - When C(true), skips querying PowerShellGet for repository-related metadata.
       - This significantly improves performance but repository properties will be C(null).
-      - Repository properties include C(repository), C(repository_source_location), C(installed_date), C(published_date), C(updated_date), C(package_management_provider), C(installed_location), C(tags), C(compatible_ps_editions), C(license_uri), C(project_uri), C(icon_uri), C(release_notes), and C(dependencies).
+      - Repository properties include C(repository), C(repository_source_location), C(installed_date), C(published_date),
+        C(updated_date), C(package_management_provider), C(installed_location), C(tags), C(compatible_ps_editions),
+        C(license_uri), C(project_uri), C(icon_uri), C(release_notes), and C(dependencies).
       - When C(include_properties) is specified without any repository properties, this is automatically set to C(true) for optimization.
     type: bool
     default: false
