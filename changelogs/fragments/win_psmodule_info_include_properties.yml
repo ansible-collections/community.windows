@@ -1,8 +1,8 @@
 ---
 minor_changes:
-  - flatiron.windows.win_psmodule_info - Added C(include_properties) parameter to allow fine-grained control over which module properties are returned, improving performance when only specific properties are needed.
-  - flatiron.windows.win_psmodule_info - Added C(skip_module_repository_info) parameter to skips querying PowerShellGet for repository-related metadata.
-  - flatiron.windows.win_psmodule_info - Automatically skips expensive PowerShellGet repository lookups when C(include_properties) is specified without repository-related properties.
+  - flatiron.windows.win_psmodule_info - Added ``include_properties`` parameter to allow fine-grained control over which module properties are returned, improving performance when only specific properties are needed (https://github.com/ansible-collections/community.windows/pull/688).
+  - flatiron.windows.win_psmodule_info - Added ``skip_module_repository_info`` parameter to skips querying PowerShellGet for repository-related metadata (https://github.com/ansible-collections/community.windows/pull/688).
+  - flatiron.windows.win_psmodule_info - Automatically skips expensive PowerShellGet repository lookups when ``include_properties`` is specified without repository-related properties (https://github.com/ansible-collections/community.windows/pull/688).
 
 bugfixes:
-  - flatiron.windows.win_psmodule_info - Fixed typo in documentation changing C(procoessor_architecture) to C(processor_architecture) (MR-URL).
+  - flatiron.windows.win_psmodule_info - Fixed typo in documentation changing ``procoessor_architecture`` to ``processor_architecture`` (https://github.com/ansible-collections/community.windows/pull/688).
