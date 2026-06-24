@@ -83,3 +83,38 @@
 
   # block
   check_mode: "{{ run_check_mode }}"
+
+- name: Get specific info on a named module
+  vars:
+    expected_modules:
+      - "{{ builtin_modules[0] }}"
+    expected_fields:
+      - name
+      - version
+  block:
+    - name: Get single module {{ suffix }}
+      community.windows.win_psmodule_info:
+        name: "{{ expected_modules[0] }}"
+        include_properties: "{{ expected_fields }}"
+      register: module_info
+
+    - include_tasks: common.yml
+
+  # block
+  check_mode: "{{ run_check_mode }}"
+
+- name: Get info on a named module without module repository info
+  vars:
+    expected_modules:
+      - "{{ builtin_modules[0] }}"
+  block:
+    - name: Get single module {{ suffix }}
+      community.windows.win_psmodule_info:
+        name: "{{ expected_modules[0] }}"
+        skip_module_repository_info: true
+      register: module_info
+
+    - include_tasks: common.yml
+
+  # block
+  check_mode: "{{ run_check_mode }}"
