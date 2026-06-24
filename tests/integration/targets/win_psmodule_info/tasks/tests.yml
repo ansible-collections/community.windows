@@ -107,6 +107,7 @@
   vars:
     expected_modules:
       - "{{ builtin_modules[0] }}"
+    expected_fields: "{{ base_expected_fields }}"
   block:
     - name: Get single module {{ suffix }}
       community.windows.win_psmodule_info:

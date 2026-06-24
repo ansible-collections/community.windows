@@ -1,21 +1,21 @@
 ---
 minor_changes:
   - >-
-    community.windows.win_psmodule_info - 
-    Added ``include_properties`` parameter to allow fine-grained control over which module properties are returned, 
-    improving performance when only specific properties are needed 
+    community.windows.win_psmodule_info -
+    Added ``include_properties`` parameter to allow fine-grained control over which module properties are returned,
+    improving performance when only specific properties are needed
     (https://github.com/ansible-collections/community.windows/pull/688).
   - >-
-    community.windows.win_psmodule_info - 
-    Added ``skip_module_repository_info`` parameter to skips querying PowerShellGet for repository-related metadata 
+    community.windows.win_psmodule_info -
+    Added ``skip_module_repository_info`` parameter to skips querying PowerShellGet for repository-related metadata
     (https://github.com/ansible-collections/community.windows/pull/688).
   - >-
-    community.windows.win_psmodule_info - 
-    Automatically skips expensive PowerShellGet repository lookups when ``include_properties`` is specified without repository-related properties 
+    community.windows.win_psmodule_info -
+    Automatically skips expensive PowerShellGet repository lookups when ``include_properties`` is specified without repository-related properties
     (https://github.com/ansible-collections/community.windows/pull/688).
 
 bugfixes:
   - >-
-    community.windows.win_psmodule_info - 
-    Fixed typo in documentation changing ``procoessor_architecture`` to ``processor_architecture`` 
+    community.windows.win_psmodule_info -
+    Fixed typo in documentation changing ``procoessor_architecture`` to ``processor_architecture``
     (https://github.com/ansible-collections/community.windows/pull/688).
