@@ -174,6 +174,19 @@ see <a class="reference internal" href="#ansible-collections-community-windows-w
 </thead>
 <tbody>
 <tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-include_properties"></div><p class="ansible-option-title" id="ansible-collections-community-windows-win-psmodule-info-module-parameter-include-properties"><strong>include_properties</strong></p>
+<a class="ansibleOptionLink" href="#parameter-include_properties" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">list</span> / <span class="ansible-option-elements">elements=string</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>List of property names to include in the output.</p>
+<p>Property names should be in snake_case format (e.g., <code class="docutils literal notranslate"><span class="pre">module_base</span></code>, <code class="docutils literal notranslate"><span class="pre">exported_functions</span></code>).</p>
+<p>If omitted, all available properties are returned.</p>
+<p>When specified, only the requested properties will be included in the output.</p>
+<p>To get minimal output similar to the old <code class="docutils literal notranslate"><span class="pre">simplified=true</span></code>, use <code class="docutils literal notranslate"><span class="pre">[name,</span> <span class="pre">version,</span> <span class="pre">author,</span> <span class="pre">module_base]</span></code>.</p>
+<p>See the RETURN section for a complete list of available properties.</p>
+<p>Repository-related properties (repository, repository_source_location, installed_date, published_date, etc.) require PowerShellGet lookups and may be slower.</p>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-name"></div><p class="ansible-option-title" id="ansible-collections-community-windows-win-psmodule-info-module-parameter-name"><strong>name</strong></p>
 <a class="ansibleOptionLink" href="#parameter-name" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
@@ -183,7 +196,7 @@ see <a class="reference internal" href="#ansible-collections-community-windows-w
 <p class="ansible-option-line"><strong class="ansible-option-default-bold">Default:</strong> <code class="ansible-option-default docutils literal notranslate"><span class="pre">&quot;*&quot;</span></code></p>
 </div></td>
 </tr>
-<tr class="row-odd"><td><div class="ansible-option-cell">
+<tr class="row-even"><td><div class="ansible-option-cell">
 <div class="ansibleOptionAnchor" id="parameter-repository"></div><p class="ansible-option-title" id="ansible-collections-community-windows-win-psmodule-info-module-parameter-repository"><strong>repository</strong></p>
 <a class="ansibleOptionLink" href="#parameter-repository" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
@@ -192,6 +205,21 @@ see <a class="reference internal" href="#ansible-collections-community-windows-w
 <p>Modules that were not installed from a repository will not be returned if this option is set.</p>
 <p>Only modules installed from a registered repository will be returned.</p>
 <p>If the repository was re-registered after module installation with a new <code class="docutils literal notranslate"><span class="pre">SourceLocation</span></code>, this will not match.</p>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-skip_module_repository_info"></div><p class="ansible-option-title" id="ansible-collections-community-windows-win-psmodule-info-module-parameter-skip-module-repository-info"><strong>skip_module_repository_info</strong></p>
+<a class="ansibleOptionLink" href="#parameter-skip_module_repository_info" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>When <code class="docutils literal notranslate"><span class="pre">true</span></code>, skips querying PowerShellGet for repository-related metadata.</p>
+<p>This significantly improves performance but repository properties will be <code class="docutils literal notranslate"><span class="pre">null</span></code>.</p>
+<p>Repository properties include <code class="docutils literal notranslate"><span class="pre">repository</span></code>, <code class="docutils literal notranslate"><span class="pre">repository_source_location</span></code>, <code class="docutils literal notranslate"><span class="pre">installed_date</span></code>, <code class="docutils literal notranslate"><span class="pre">published_date</span></code>, <code class="docutils literal notranslate"><span class="pre">updated_date</span></code>, <code class="docutils literal notranslate"><span class="pre">package_management_provider</span></code>, <code class="docutils literal notranslate"><span class="pre">installed_location</span></code>, <code class="docutils literal notranslate"><span class="pre">tags</span></code>, <code class="docutils literal notranslate"><span class="pre">compatible_ps_editions</span></code>, <code class="docutils literal notranslate"><span class="pre">license_uri</span></code>, <code class="docutils literal notranslate"><span class="pre">project_uri</span></code>, <code class="docutils literal notranslate"><span class="pre">icon_uri</span></code>, <code class="docutils literal notranslate"><span class="pre">release_notes</span></code>, and <code class="docutils literal notranslate"><span class="pre">dependencies</span></code>.</p>
+<p>When <code class="docutils literal notranslate"><span class="pre">include_properties</span></code> is specified without any repository properties, this is automatically set to <code class="docutils literal notranslate"><span class="pre">true</span></code> for optimization.</p>
+<p class="ansible-option-line"><strong class="ansible-option-choices">Choices:</strong></p>
+<ul class="simple">
+<li><p><code class="ansible-option-default-bold docutils literal notranslate"><strong><span class="pre">false</span></strong></code> <span class="ansible-option-choices-default-mark">← (default)</span></p></li>
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">true</span></code></p></li>
+</ul>
 </div></td>
 </tr>
 </tbody>
@@ -221,6 +249,20 @@ see <a class="reference internal" href="#ansible-collections-community-windows-w
 <span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Get info about networking modules</span>
 <span class="w">  </span><span class="nt">community.windows.win_psmodule_info</span><span class="p">:</span>
 <span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Net*</span>
+
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Get minimal info about all modules (name, version, author, module_base only)</span>
+<span class="w">  </span><span class="nt">community.windows.win_psmodule_info</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">include_properties</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">name</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">version</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">author</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">module_base</span>
+<span class="w">  </span><span class="nt">register</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">simple_modules</span>
+
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Get all module info but skip expensive repository lookups for better performance</span>
+<span class="w">  </span><span class="nt">community.windows.win_psmodule_info</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">skip_module_repository_info</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">  </span><span class="nt">register</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">modules_fast</span>
 
 <span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Get info about all modules installed from the PSGallery repository</span>
 <span class="w">  </span><span class="nt">community.windows.win_psmodule_info</span><span class="p">:</span>
@@ -265,6 +307,8 @@ see <a class="reference internal" href="#ansible-collections-community-windows-w
 <a class="ansibleOptionLink" href="#return-modules" title="Permalink to this return value"></a><p class="ansible-option-type-line"><span class="ansible-option-type">list</span> / <span class="ansible-option-elements">elements=dictionary</span></p>
 </div></td>
 <td><div class="ansible-option-cell"><p>A list of modules (or an empty list is there are none).</p>
+<p>When <em>include_properties</em> is specified, only contains the requested properties.</p>
+<p>When <em>include_properties</em> is not specified (default), contains all available module properties listed below.</p>
 <p class="ansible-option-line"><strong class="ansible-option-returned-bold">Returned:</strong> always</p>
 </div></td>
 </tr>
@@ -657,8 +701,8 @@ see <a class="reference internal" href="#ansible-collections-community-windows-w
 </div></td>
 </tr>
 <tr class="row-even"><td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
-<div class="ansibleOptionAnchor" id="return-modules/procoessor_architecture"></div><p class="ansible-option-title" id="ansible-collections-community-windows-win-psmodule-info-module-return-modules-procoessor-architecture"><strong>procoessor_architecture</strong></p>
-<a class="ansibleOptionLink" href="#return-modules/procoessor_architecture" title="Permalink to this return value"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+<div class="ansibleOptionAnchor" id="return-modules/processor_architecture"></div><p class="ansible-option-title" id="ansible-collections-community-windows-win-psmodule-info-module-return-modules-processor-architecture"><strong>processor_architecture</strong></p>
+<a class="ansibleOptionLink" href="#return-modules/processor_architecture" title="Permalink to this return value"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
 </div></td>
 <td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell"><p>The module’s processor architecture. See <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.reflection.processorarchitecture">https://docs.microsoft.com/en-us/dotnet/api/system.reflection.processorarchitecture</a></p>
 <p class="ansible-option-line"><strong class="ansible-option-returned-bold">Returned:</strong> success</p>
