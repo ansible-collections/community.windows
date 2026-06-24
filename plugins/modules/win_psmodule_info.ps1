@@ -11,10 +11,33 @@ $spec = @{
     options = @{
         name = @{ type = 'str' ; default = '*' }
         repository = @{ type = 'str' }
+        include_properties = @{ type = 'list' ; elements = 'str' }
+        skip_module_repository_info = @{ type = 'bool' ; default = $false }
     }
     supports_check_mode = $true
 }
 $module = [Ansible.Basic.AnsibleModule]::Create($args, $spec)
+
+# Define the list of properties that are managed by PowerShellGet repository lookups
+# This is used both by Add-ModuleRepositoryInfo and for optimization checks
+$RepositoryManagedProperties = @(
+    'PublishedDate'
+    'InstalledDate'
+    'UpdatedDate'
+    'Dependencies'
+    'Repository'
+    'PackageManagementProvider'
+    'InstalledLocation'
+    'RepositorySourceLocation'
+    'Tags'
+    'CompatiblePSEditions'
+    'LicenseUri'
+    'ProjectUri'
+    'IconUri'
+    'ReleaseNotes'
+    'ExportedDscResources' # ExportedDscResources is not returned here, this is a hack for Windows 2012/R2 to ensure the field is present
+    'Prefix'               # Prefix is not actually returned here, this is a hack for Windows 2012 just to ensure the field is present
+)
 
 # We need to remove this type data so that arrays don't get serialized weirdly.
 # In some cases, an array gets serialized as an object with a Count and Value property where the value is the actual array.
@@ -214,6 +237,39 @@ function ConvertTo-SerializableModuleInfo {
     }
 }
 
+function Select-ModuleProperty {
+    <#
+        .SYNOPSIS
+        Filters a module dictionary to include only specified properties.
+
+        .DESCRIPTION
+        Takes a module information dictionary (already converted to snake_case) and returns
+        only the properties specified in the PropertyList parameter.
+
+        Properties that don't exist in the module dictionary are silently skipped.
+    #>
+    [CmdletBinding()]
+    param(
+        [Parameter(Mandatory = $true, ValueFromPipeline = $true)]
+        [System.Collections.Specialized.OrderedDictionary]
+        $InputObject,
+
+        [Parameter(Mandatory = $true)]
+        [string[]]
+        $PropertyList
+    )
+
+    Process {
+        $result = [Ordered]@{}
+        foreach ($prop in $PropertyList) {
+            if ($InputObject.Contains($prop)) {
+                $result[$prop] = $InputObject[$prop]
+            }
+        }
+        $result
+    }
+}
+
 function Add-ModuleRepositoryInfo {
     <#
         .SYNOPSIS
@@ -236,24 +292,8 @@ function Add-ModuleRepositoryInfo {
     )
 
     Begin {
-        $wantedProperties = @(
-            'PublishedDate',
-            'InstalledDate',
-            'UpdatedDate',
-            'Dependencies',
-            'Repository',
-            'PackageManagementProvider',
-            'InstalledLocation',
-            'RepositorySourceLocation',
-            'Tags',
-            'CompatiblePSEditions',
-            'LicenseUri',
-            'ProjectUri',
-            'IconUri',
-            'ReleaseNotes',
-            'ExportedDscResources', # ExportedDscResources is not returned here, this is a hack for Windows 2012/R2 to ensure the field is present
-            'Prefix'                # Prefix is not actually returned here, this is a hack for Windows 2012 just to ensure the field is present
-        )
+        # Use the variable defined at the script level
+        $wantedProperties = $RepositoryManagedProperties
 
         # Get all the installed modules at once. This prevents us from having to make an expensive individual call for every
         # local module, the vast majority of which didn't come from PowerShellGet.
@@ -297,11 +337,48 @@ function Add-ModuleRepositoryInfo {
     }
 }
 
+$modules = Get-Module -ListAvailable -Name $module.Params.name
+
+# Optimization: Skip expensive PowerShellGet lookups if include_properties is specified
+# and doesn't contain any repository-related properties (converted to snake_case)
+$skipRepositoryLookup = $false
+if ($module.Params.include_properties) {
+    $repositoryPropertiesSnakeCase = $RepositoryManagedProperties | ForEach-Object {
+        Convert-StringToSnakeCase -string $_
+    }
+
+    # Check if any requested property requires repository info
+    $hasRepositoryProperty = $false
+    foreach ($prop in $module.Params.include_properties) {
+        if ($repositoryPropertiesSnakeCase -contains $prop) {
+            $hasRepositoryProperty = $true
+            break
+        }
+    }
+
+    # Only skip if no repository properties were requested
+    if (-not $hasRepositoryProperty) {
+        $skipRepositoryLookup = $true
+    }
+}
+
+if (-not $module.Params.skip_module_repository_info -and -not $skipRepositoryLookup) {
+    $modules = $modules | Add-ModuleRepositoryInfo -RepositoryName $module.Params.repository
+}
+
 $module.Result.modules = @(
-    Get-Module -ListAvailable -Name $module.Params.name |
-        Add-ModuleRepositoryInfo -RepositoryName $module.Params.repository |
+    $modules |
         ConvertTo-SerializableModuleInfo |
-        Convert-ObjectToSnakeCase -NoRecurse
+        Convert-ObjectToSnakeCase -NoRecurse |
+        ForEach-Object {
+            if ($module.Params.include_properties) {
+                Select-ModuleProperty -InputObject $_ -PropertyList $module.Params.include_properties
+            }
+            else {
+                # Default: return all properties
+                $_
+            }
+        }
 )
 
 $module.ExitJson()

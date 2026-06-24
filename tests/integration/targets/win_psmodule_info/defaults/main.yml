@@ -16,8 +16,8 @@ builtin_modules:
 
 sample_modules: "{{ builtin_modules + modules_to_install }}"
 
-expected_fields:
-  - prefix
+# Fields returned by Get-Module 
+base_expected_fields:
   - private_data
   - scripts
   - author
@@ -26,33 +26,21 @@ expected_fields:
   # Not present in Pwsh 7+
   # - exported_workflows
   - nested_modules
-  - exported_dsc_resources
-  - updated_date
   - root_module
   - power_shell_host_name
   - module_base
   - path
   - exported_format_files
-  - dependencies
-  - release_notes
-  - installed_date
   - exported_variables
-  - published_date
   - required_assemblies
   - version
-  - icon_uri
-  - project_uri
   - dot_net_framework_version
   - processor_architecture
-  - license_uri
   - required_modules
   - module_type
-  - compatible_ps_editions
   - company_name
   - copyright
-  - tags
   - access_mode
-  - package_management_provider
   - exported_aliases
   - power_shell_host_version
   - clr_version
@@ -65,7 +53,25 @@ expected_fields:
   - repository_source_location
   - exported_cmdlets
   - exported_commands
-  - repository
-  - installed_location
   - name
   - log_pipeline_execution_details
+
+# Fields populated by Get-InstalledModule 
+repository_expected_fields:
+  - updated_date
+  - dependencies
+  - installed_date
+  - published_date
+  - package_management_provider
+  - repository
+  - installed_location
+  - tags
+  - compatible_ps_editions
+  - license_uri
+  - icon_uri
+  - project_uri
+  - release_notes
+  - exported_dsc_resources
+  - prefix
+
+expected_fields: "{{ base_expected_fields + repository_expected_fields }}"
