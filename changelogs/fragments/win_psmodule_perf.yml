@@ -1,3 +1,7 @@
 ---
-minor_changes:
-  - flatiron.windows.win_psmodule - Now retrieves module installation status of requested module instead of all modules, which was expensive for hosts with many modules installed (https://github.com/ansible-collections/community.windows/pull/688).
+bugfixes:
+  - >-
+    community.windows.win_psmodule - 
+    Now retrieves module installation status of requested module instead of all modules, 
+    which was expensive for hosts with many modules installed 
+    (https://github.com/ansible-collections/community.windows/pull/688).
