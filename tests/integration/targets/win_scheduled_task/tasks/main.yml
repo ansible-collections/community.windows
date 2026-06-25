@@ -3,6 +3,20 @@
   include_tasks: clean.yml
 
 - block:
+  - name: create task under SYSTEM context
+    community.windows.win_scheduled_task:
+      name: MyTest
+      username: SYSTEM
+      logon_type: service_account
+      run_level: highest
+      state: present
+      actions:
+      - path: cmd
+        argument: /c echo hi
+    become: true
+    become_method: runas
+    become_user: SYSTEM
+
   - name: Test failure scenarios
     include_tasks: failures.yml
 
@@ -21,4 +35,9 @@
 
   always:
   - name: remove test tasks after test
-    include_tasks: clean.yml
+    include_tasks: clean.ymli
+
+  - name: remove test SYSTEM created task
+    community.windows.win_scheduled_task:
+      name: MyTest
+      state: absent
