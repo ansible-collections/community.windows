@@ -1,0 +1,4 @@
+bugfixes:
+  - >-
+    win_scheduled_task - Fix issue when creating a new scheduled task when using ``become_user: SYSTEM`` -
+    https://github.com/ansible-collections/community.windows/issues/633
