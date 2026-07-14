@@ -1,5 +1,0 @@
-bugfixes:
-  - >-
-    laps_password - Migrate away from deprecated ``to_text`` methods to the new public API.
-  - >-
-    psexec - Migrate away from deprecated ``to_text`` methods to the new public API.
