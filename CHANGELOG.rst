@@ -4,6 +4,30 @@ Community Windows Release Notes
 
 .. contents:: Topics
 
+v3.3.0
+======
+
+Release Summary
+---------------
+
+Release summary for v3.3.0
+
+Minor Changes
+-------------
+
+- community.windows.win_psmodule_info - Added ``include_properties`` parameter to allow fine-grained control over which module properties are returned, improving performance when only specific properties are needed (https://github.com/ansible-collections/community.windows/pull/688).
+- community.windows.win_psmodule_info - Added ``skip_module_repository_info`` parameter to skips querying PowerShellGet for repository-related metadata (https://github.com/ansible-collections/community.windows/pull/688).
+- community.windows.win_psmodule_info - Automatically skips expensive PowerShellGet repository lookups when ``include_properties`` is specified without repository-related properties (https://github.com/ansible-collections/community.windows/pull/688).
+
+Bugfixes
+--------
+
+- community.windows.win_psmodule - Now retrieves module installation status of requested module instead of all modules, which was expensive for hosts with many modules installed (https://github.com/ansible-collections/community.windows/pull/688).
+- community.windows.win_psmodule_info - Fixed typo in documentation changing ``procoessor_architecture`` to ``processor_architecture`` (https://github.com/ansible-collections/community.windows/pull/688).
+- laps_password - Migrate away from deprecated ``to_text`` methods to the new public API.
+- psexec - Migrate away from deprecated ``to_text`` methods to the new public API.
+- win_scheduled_task - Fix issue when creating a new scheduled task when using ``become_user: SYSTEM`` - https://github.com/ansible-collections/community.windows/issues/633
+
 v3.2.0
 ======
 
