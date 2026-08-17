@@ -397,7 +397,7 @@ see <a class="reference internal" href="#ansible-collections-community-windows-w
 <span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">foo</span>
 <span class="w">    </span><span class="nt">application</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">C:\windows\foo.exe</span>
 
-<span class="c1"># This will yield the following command: C:\windows\foo.exe bar &quot;true&quot;</span>
+<span class="c1"># This will yield the following command: C:\windows\foo.exe bar "true"</span>
 <span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Install the Consul service with a list of parameters</span>
 <span class="w">  </span><span class="nt">community.windows.win_nssm</span><span class="p">:</span>
 <span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Consul</span>
@@ -441,7 +441,7 @@ see <a class="reference internal" href="#ansible-collections-community-windows-w
 <span class="w">    </span><span class="nt">app_environment</span><span class="p">:</span>
 <span class="w">      </span><span class="nt">AUTH_TOKEN</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;token value&gt;</span>
 <span class="w">      </span><span class="nt">SERVER_URL</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://example.com</span>
-<span class="w">      </span><span class="nt">PATH</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;&lt;path-prepends&gt;;</span><span class="cp">{{</span> <span class="nv">ansible_env.PATH</span> <span class="cp">}}</span><span class="s">;&lt;path-appends&gt;&quot;</span>
+<span class="w">      </span><span class="nt">PATH</span><span class="p">:</span><span class="w"> </span><span class="s">"&lt;path-prepends&gt;;</span><span class="cp">{{</span> <span class="nv">ansible_env.PATH</span> <span class="cp">}}</span><span class="s">;&lt;path-appends&gt;"</span>
 
 <span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Remove the foo service</span>
 <span class="w">  </span><span class="nt">community.windows.win_nssm</span><span class="p">:</span>

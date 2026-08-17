@@ -231,7 +231,7 @@ see <a class="reference internal" href="#ansible-collections-community-windows-w
 
 <span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Add Pester module</span>
 <span class="w">  </span><span class="nt">action</span><span class="p">:</span>
-<span class="w">    </span><span class="nt">module_name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{{</span> <span class="s1">&#39;community.windows.win_psmodule&#39;</span> <span class="k">if</span> <span class="nv">ansible_powershell_version</span> <span class="o">&gt;=</span> <span class="m">5</span> <span class="k">else</span> <span class="s1">&#39;chocolatey.chocolatey.win_chocolatey&#39;</span> <span class="cp">}}</span><span class="s">&quot;</span>
+<span class="w">    </span><span class="nt">module_name</span><span class="p">:</span><span class="w"> </span><span class="s">"</span><span class="cp">{{</span> <span class="s1">'community.windows.win_psmodule'</span> <span class="k">if</span> <span class="nv">ansible_powershell_version</span> <span class="o">&gt;=</span> <span class="m">5</span> <span class="k">else</span> <span class="s1">'chocolatey.chocolatey.win_chocolatey'</span> <span class="cp">}}</span><span class="s">"</span>
 <span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Pester</span>
 <span class="w">    </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">present</span>
 

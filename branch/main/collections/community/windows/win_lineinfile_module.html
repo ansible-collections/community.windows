@@ -323,32 +323,32 @@ To check whether it is installed, run <code class="code docutils literal notrans
 
 <span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">community.windows.win_lineinfile</span><span class="p">:</span>
 <span class="w">    </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">C:\Temp\example.conf</span>
-<span class="w">    </span><span class="nt">regex</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;^name=&#39;</span>
-<span class="w">    </span><span class="nt">line</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;name=JohnDoe&#39;</span>
+<span class="w">    </span><span class="nt">regex</span><span class="p">:</span><span class="w"> </span><span class="s">'^name='</span>
+<span class="w">    </span><span class="nt">line</span><span class="p">:</span><span class="w"> </span><span class="s">'name=JohnDoe'</span>
 
 <span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">community.windows.win_lineinfile</span><span class="p">:</span>
 <span class="w">    </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">C:\Temp\example.conf</span>
-<span class="w">    </span><span class="nt">regex</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;^name=&#39;</span>
+<span class="w">    </span><span class="nt">regex</span><span class="p">:</span><span class="w"> </span><span class="s">'^name='</span>
 <span class="w">    </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">absent</span>
 
 <span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">community.windows.win_lineinfile</span><span class="p">:</span>
 <span class="w">    </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">C:\Temp\example.conf</span>
-<span class="w">    </span><span class="nt">regex</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;^127\.0\.0\.1&#39;</span>
-<span class="w">    </span><span class="nt">line</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;127.0.0.1</span><span class="nv"> </span><span class="s">localhost&#39;</span>
+<span class="w">    </span><span class="nt">regex</span><span class="p">:</span><span class="w"> </span><span class="s">'^127\.0\.0\.1'</span>
+<span class="w">    </span><span class="nt">line</span><span class="p">:</span><span class="w"> </span><span class="s">'127.0.0.1</span><span class="nv"> </span><span class="s">localhost'</span>
 
 <span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">community.windows.win_lineinfile</span><span class="p">:</span>
 <span class="w">    </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">C:\Temp\httpd.conf</span>
-<span class="w">    </span><span class="nt">regex</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;^Listen</span><span class="nv"> </span><span class="s">&#39;</span>
-<span class="w">    </span><span class="nt">insertafter</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;^#Listen</span><span class="nv"> </span><span class="s">&#39;</span>
+<span class="w">    </span><span class="nt">regex</span><span class="p">:</span><span class="w"> </span><span class="s">'^Listen</span><span class="nv"> </span><span class="s">'</span>
+<span class="w">    </span><span class="nt">insertafter</span><span class="p">:</span><span class="w"> </span><span class="s">'^#Listen</span><span class="nv"> </span><span class="s">'</span>
 <span class="w">    </span><span class="nt">line</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Listen 8080</span>
 
 <span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">community.windows.win_lineinfile</span><span class="p">:</span>
 <span class="w">    </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">C:\Temp\services</span>
-<span class="w">    </span><span class="nt">regex</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;^#</span><span class="nv"> </span><span class="s">port</span><span class="nv"> </span><span class="s">for</span><span class="nv"> </span><span class="s">http&#39;</span>
-<span class="w">    </span><span class="nt">insertbefore</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;^www.*80/tcp&#39;</span>
-<span class="w">    </span><span class="nt">line</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;#</span><span class="nv"> </span><span class="s">port</span><span class="nv"> </span><span class="s">for</span><span class="nv"> </span><span class="s">http</span><span class="nv"> </span><span class="s">by</span><span class="nv"> </span><span class="s">default&#39;</span>
+<span class="w">    </span><span class="nt">regex</span><span class="p">:</span><span class="w"> </span><span class="s">'^#</span><span class="nv"> </span><span class="s">port</span><span class="nv"> </span><span class="s">for</span><span class="nv"> </span><span class="s">http'</span>
+<span class="w">    </span><span class="nt">insertbefore</span><span class="p">:</span><span class="w"> </span><span class="s">'^www.*80/tcp'</span>
+<span class="w">    </span><span class="nt">line</span><span class="p">:</span><span class="w"> </span><span class="s">'#</span><span class="nv"> </span><span class="s">port</span><span class="nv"> </span><span class="s">for</span><span class="nv"> </span><span class="s">http</span><span class="nv"> </span><span class="s">by</span><span class="nv"> </span><span class="s">default'</span>
 
-<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Create file if it doesn&#39;t exist with a specific encoding</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Create file if it doesn't exist with a specific encoding</span>
 <span class="w">  </span><span class="nt">community.windows.win_lineinfile</span><span class="p">:</span>
 <span class="w">    </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">C:\Temp\utf16.txt</span>
 <span class="w">    </span><span class="nt">create</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
@@ -365,8 +365,8 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <span class="w">  </span><span class="nt">community.windows.win_lineinfile</span><span class="p">:</span>
 <span class="w">    </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">C:\Temp\example.conf</span>
 <span class="w">    </span><span class="nt">backrefs</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
-<span class="w">    </span><span class="nt">regex</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;(^name=)&#39;</span>
-<span class="w">    </span><span class="nt">line</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;$1JohnDoe&#39;</span>
+<span class="w">    </span><span class="nt">regex</span><span class="p">:</span><span class="w"> </span><span class="s">'(^name=)'</span>
+<span class="w">    </span><span class="nt">line</span><span class="p">:</span><span class="w"> </span><span class="s">'$1JohnDoe'</span>
 </pre></div>
 </div>
 </section>

@@ -294,10 +294,10 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Create the same shortcut using environment variables</span>
 <span class="w">  </span><span class="nt">community.windows.win_shortcut</span><span class="p">:</span>
 <span class="w">    </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">The Mozilla Firefox web browser</span>
-<span class="w">    </span><span class="nt">src</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;%ProgramFiles%\Mozilla</span><span class="nv"> </span><span class="s">Firefox\Firefox.exe&#39;</span>
-<span class="w">    </span><span class="nt">dest</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;%Public%\Desktop\Mozilla</span><span class="nv"> </span><span class="s">Firefox.lnk&#39;</span>
-<span class="w">    </span><span class="nt">icon</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;%ProgramFiles\Mozilla</span><span class="nv"> </span><span class="s">Firefox\Firefox.exe,0&#39;</span>
-<span class="w">    </span><span class="nt">directory</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;%ProgramFiles%\Mozilla</span><span class="nv"> </span><span class="s">Firefox&#39;</span>
+<span class="w">    </span><span class="nt">src</span><span class="p">:</span><span class="w"> </span><span class="s">'%ProgramFiles%\Mozilla</span><span class="nv"> </span><span class="s">Firefox\Firefox.exe'</span>
+<span class="w">    </span><span class="nt">dest</span><span class="p">:</span><span class="w"> </span><span class="s">'%Public%\Desktop\Mozilla</span><span class="nv"> </span><span class="s">Firefox.lnk'</span>
+<span class="w">    </span><span class="nt">icon</span><span class="p">:</span><span class="w"> </span><span class="s">'%ProgramFiles\Mozilla</span><span class="nv"> </span><span class="s">Firefox\Firefox.exe,0'</span>
+<span class="w">    </span><span class="nt">directory</span><span class="p">:</span><span class="w"> </span><span class="s">'%ProgramFiles%\Mozilla</span><span class="nv"> </span><span class="s">Firefox'</span>
 <span class="w">    </span><span class="nt">hotkey</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Ctrl+Alt+F</span>
 
 <span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Create an application shortcut for an executable in PATH to your desktop</span>
@@ -307,17 +307,17 @@ To check whether it is installed, run <code class="code docutils literal notrans
 
 <span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Create an application shortcut for the Ansible website</span>
 <span class="w">  </span><span class="nt">community.windows.win_shortcut</span><span class="p">:</span>
-<span class="w">    </span><span class="nt">src</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;%ProgramFiles%\Google\Chrome\Application\chrome.exe&#39;</span>
-<span class="w">    </span><span class="nt">dest</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;%UserProfile%\Desktop\Ansible</span><span class="nv"> </span><span class="s">website.lnk&#39;</span>
+<span class="w">    </span><span class="nt">src</span><span class="p">:</span><span class="w"> </span><span class="s">'%ProgramFiles%\Google\Chrome\Application\chrome.exe'</span>
+<span class="w">    </span><span class="nt">dest</span><span class="p">:</span><span class="w"> </span><span class="s">'%UserProfile%\Desktop\Ansible</span><span class="nv"> </span><span class="s">website.lnk'</span>
 <span class="w">    </span><span class="nt">arguments</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">--new-window https://ansible.com/</span>
-<span class="w">    </span><span class="nt">directory</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;%ProgramFiles%\Google\Chrome\Application&#39;</span>
-<span class="w">    </span><span class="nt">icon</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;%ProgramFiles%\Google\Chrome\Application\chrome.exe,0&#39;</span>
+<span class="w">    </span><span class="nt">directory</span><span class="p">:</span><span class="w"> </span><span class="s">'%ProgramFiles%\Google\Chrome\Application'</span>
+<span class="w">    </span><span class="nt">icon</span><span class="p">:</span><span class="w"> </span><span class="s">'%ProgramFiles%\Google\Chrome\Application\chrome.exe,0'</span>
 <span class="w">    </span><span class="nt">hotkey</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Ctrl+Alt+A</span>
 
 <span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Create a URL shortcut for the Ansible website</span>
 <span class="w">  </span><span class="nt">community.windows.win_shortcut</span><span class="p">:</span>
 <span class="w">    </span><span class="nt">src</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://ansible.com/</span>
-<span class="w">    </span><span class="nt">dest</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;%Public%\Desktop\Ansible</span><span class="nv"> </span><span class="s">website.url&#39;</span>
+<span class="w">    </span><span class="nt">dest</span><span class="p">:</span><span class="w"> </span><span class="s">'%Public%\Desktop\Ansible</span><span class="nv"> </span><span class="s">website.url'</span>
 </pre></div>
 </div>
 <section id="authors">

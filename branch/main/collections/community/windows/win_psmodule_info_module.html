@@ -271,21 +271,21 @@ see <a class="reference internal" href="#ansible-collections-community-windows-w
 
 <span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Update all modules retrieved from above example</span>
 <span class="w">  </span><span class="nt">community.windows.win_psmodule</span><span class="p">:</span>
-<span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">item</span> <span class="cp">}}</span><span class="s">&quot;</span>
+<span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s">"</span><span class="cp">{{</span> <span class="nv">item</span> <span class="cp">}}</span><span class="s">"</span>
 <span class="w">    </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">latest</span>
-<span class="w">  </span><span class="nt">loop</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">gallery_modules.modules</span> <span class="o">|</span> <span class="nf">map</span><span class="o">(</span><span class="nv">attribute</span><span class="o">=</span><span class="nv">name</span><span class="o">)</span> <span class="cp">}}</span><span class="s">&quot;</span>
+<span class="w">  </span><span class="nt">loop</span><span class="p">:</span><span class="w"> </span><span class="s">"</span><span class="cp">{{</span> <span class="nv">gallery_modules.modules</span> <span class="o">|</span> <span class="nf">map</span><span class="o">(</span><span class="nv">attribute</span><span class="o">=</span><span class="nv">name</span><span class="o">)</span> <span class="cp">}}</span><span class="s">"</span>
 
 <span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Get info about all modules on the system</span>
 <span class="w">  </span><span class="nt">community.windows.win_psmodule_info</span><span class="p">:</span>
 <span class="w">  </span><span class="nt">register</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">all_modules</span>
 
-<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Find modules installed from a repository that isn&#39;t registered now</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Find modules installed from a repository that isn't registered now</span>
 <span class="w">  </span><span class="nt">set_fact</span><span class="p">:</span>
-<span class="w">    </span><span class="nt">missing_repository_modules</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;</span><span class="cp">{{</span>
+<span class="w">    </span><span class="nt">missing_repository_modules</span><span class="p">:</span><span class="w"> </span><span class="s">"</span><span class="cp">{{</span>
       <span class="nv">all_modules</span>
-      <span class="o">|</span> <span class="nf">json_query</span><span class="o">(</span><span class="s1">&#39;modules[?repository!=null &amp;&amp; repository==repository_source_location].{name: name, version: version, repository: repository}&#39;</span><span class="o">)</span>
+      <span class="o">|</span> <span class="nf">json_query</span><span class="o">(</span><span class="s1">'modules[?repository!=null &amp;&amp; repository==repository_source_location].{name: name, version: version, repository: repository}'</span><span class="o">)</span>
       <span class="o">|</span> <span class="nf">list</span>
-    <span class="cp">}}</span><span class="s">&quot;</span>
+    <span class="cp">}}</span><span class="s">"</span>
 
 <span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">debug</span><span class="p">:</span>
 <span class="w">    </span><span class="nt">var</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">missing_repository_modules</span>

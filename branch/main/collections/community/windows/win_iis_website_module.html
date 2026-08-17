@@ -293,7 +293,7 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <span class="c1"># Remove Default Web Site and the standard port 80 binding</span>
 <span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Remove Default Web Site</span>
 <span class="w">  </span><span class="nt">community.windows.win_iis_website</span><span class="p">:</span>
-<span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Default</span><span class="nv"> </span><span class="s">Web</span><span class="nv"> </span><span class="s">Site&quot;</span>
+<span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s">"Default</span><span class="nv"> </span><span class="s">Web</span><span class="nv"> </span><span class="s">Site"</span>
 <span class="w">    </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">absent</span>
 
 <span class="c1"># Create a WebSite with custom Logging configuration (Logs Location, Format and Rolling Over).</span>
@@ -303,8 +303,8 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">MyCustom_Web_Shop_Site</span>
 <span class="w">    </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">started</span>
 <span class="w">    </span><span class="nt">port</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">80</span>
-<span class="w">    </span><span class="nt">ip</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;*&#39;</span>
-<span class="w">    </span><span class="nt">hostname</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;*&#39;</span>
+<span class="w">    </span><span class="nt">ip</span><span class="p">:</span><span class="w"> </span><span class="s">'*'</span>
+<span class="w">    </span><span class="nt">hostname</span><span class="p">:</span><span class="w"> </span><span class="s">'*'</span>
 <span class="w">    </span><span class="nt">physical_path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">D:\wwwroot\websites\my-shop-site</span>
 <span class="w">    </span><span class="nt">parameters</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">logfile.directory:D:\IIS-LOGS\websites\my-shop-site|logfile.period:Hourly|logFile.logFormat:W3C</span>
 <span class="w">    </span><span class="nt">application_pool</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">my-shop-site</span>
@@ -312,29 +312,29 @@ To check whether it is installed, run <code class="code docutils literal notrans
 <span class="c1"># Some commandline examples:</span>
 
 <span class="c1"># This return information about an existing host</span>
-<span class="c1"># $ ansible -i vagrant-inventory -m community.windows.win_iis_website -a &quot;name=&#39;Default Web Site&#39;&quot; window</span>
+<span class="c1"># $ ansible -i vagrant-inventory -m community.windows.win_iis_website -a "name='Default Web Site'" window</span>
 <span class="c1"># host | success &gt;&gt; {</span>
-<span class="c1">#     &quot;changed&quot;: false,</span>
-<span class="c1">#     &quot;site&quot;: {</span>
-<span class="c1">#         &quot;ApplicationPool&quot;: &quot;DefaultAppPool&quot;,</span>
-<span class="c1">#         &quot;Bindings&quot;: [</span>
-<span class="c1">#             &quot;*:80:&quot;</span>
+<span class="c1">#     "changed": false,</span>
+<span class="c1">#     "site": {</span>
+<span class="c1">#         "ApplicationPool": "DefaultAppPool",</span>
+<span class="c1">#         "Bindings": [</span>
+<span class="c1">#             "*:80:"</span>
 <span class="c1">#         ],</span>
-<span class="c1">#         &quot;ID&quot;: 1,</span>
-<span class="c1">#         &quot;Name&quot;: &quot;Default Web Site&quot;,</span>
-<span class="c1">#         &quot;PhysicalPath&quot;: &quot;%SystemDrive%\\inetpub\\wwwroot&quot;,</span>
-<span class="c1">#         &quot;State&quot;: &quot;Stopped&quot;</span>
+<span class="c1">#         "ID": 1,</span>
+<span class="c1">#         "Name": "Default Web Site",</span>
+<span class="c1">#         "PhysicalPath": "%SystemDrive%\\inetpub\\wwwroot",</span>
+<span class="c1">#         "State": "Stopped"</span>
 <span class="c1">#     }</span>
 <span class="c1"># }</span>
 
 <span class="c1"># This stops an existing site.</span>
-<span class="c1"># $ ansible -i hosts -m community.windows.win_iis_website -a &quot;name=&#39;Default Web Site&#39; state=stopped&quot; host</span>
+<span class="c1"># $ ansible -i hosts -m community.windows.win_iis_website -a "name='Default Web Site' state=stopped" host</span>
 
 <span class="c1"># This creates a new site.</span>
-<span class="c1"># $ ansible -i hosts -m community.windows.win_iis_website -a &quot;name=acme physical_path=C:\\sites\\acme&quot; host</span>
+<span class="c1"># $ ansible -i hosts -m community.windows.win_iis_website -a "name=acme physical_path=C:\\sites\\acme" host</span>
 
 <span class="c1"># Change logfile.</span>
-<span class="c1"># $ ansible -i hosts -m community.windows.win_iis_website -a &quot;name=acme physical_path=C:\\sites\\acme&quot; host</span>
+<span class="c1"># $ ansible -i hosts -m community.windows.win_iis_website -a "name=acme physical_path=C:\\sites\\acme" host</span>
 </pre></div>
 </div>
 </section>
