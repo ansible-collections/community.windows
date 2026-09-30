@@ -83,7 +83,7 @@ function Install-Scoop {
             if ($current_user.IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)) {
                 $params.RunAsAdmin = $true
             }
-            . $installer -RunAsAdmin
+            & $installer -RunAsAdmin
         }
 
         $enc_command = [Convert]::ToBase64String([Text.Encoding]::Unicode.GetBytes($install_script.ToString()))

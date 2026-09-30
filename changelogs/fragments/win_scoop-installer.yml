@@ -1,0 +1,3 @@
+bugfixes:
+  - >-
+    win_scoop - Fix up Scoop bootstrap installer after a recent change to the `https://get.scoop.sh` script.
