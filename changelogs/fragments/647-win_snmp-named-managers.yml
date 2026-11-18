@@ -1,0 +1,4 @@
+bugfixes:
+  - win_snmp - Do not fail with ``Cannot convert value ... to type System.Int32`` when a permitted manager
+    registry value has a name that is not a number
+    (https://github.com/ansible-collections/community.windows/issues/647).

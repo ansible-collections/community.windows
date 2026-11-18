@@ -65,8 +65,13 @@ ForEach ($idx in (Get-Item -LiteralPath $Managers_reg_key).Property) {
         Remove-ItemProperty -LiteralPath $Managers_reg_key -Name $idx -WhatIf:$check_mode
     }
     Else {
-        # Remember that this index is in use
-        $indexes.Add([int]$idx) | Out-Null
+        # Remember that this index is in use. Entries added by other tools
+        # may use a name that is not a number, such as the address itself;
+        # those cannot clash with the numbered names added below.
+        $idx_num = 0
+        If ([int]::TryParse($idx, [ref]$idx_num)) {
+            $indexes.Add($idx_num) | Out-Null
+        }
         $result.permitted_managers.Add($manager) | Out-Null
     }
 }
