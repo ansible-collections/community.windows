@@ -1,0 +1,68 @@
+---
+  # Other tools sometimes name the PermittedManagers values after the address
+  # instead of 1, 2, 3, ...
+  - name: Add an SNMP manager whose value name is not a number
+    ansible.windows.win_regedit:
+      path: "{{ permitted_managers_key }}"
+      name: 10.0.0.5
+      data: 10.0.0.5
+      type: string
+
+  - name: Add an SNMP manager next to the named entry
+    register: snmp_manager_named
+    win_snmp:
+      action: add
+      permitted_managers:
+        - 10.0.0.6
+
+  - name: Check the new SNMP manager exists in registry
+    register: snmp_manager_named_reg
+    ansible.windows.win_reg_stat:
+      path: "{{ permitted_managers_key }}"
+      name: 1
+
+  - name: Check the named SNMP manager still exists in registry
+    register: snmp_manager_named_orig
+    ansible.windows.win_reg_stat:
+      path: "{{ permitted_managers_key }}"
+      name: 10.0.0.5
+
+  - name: Assert both SNMP managers are present
+    assert:
+      that:
+        - snmp_manager_named is changed
+        - snmp_manager_named.permitted_managers | sort == ['10.0.0.5', '10.0.0.6']
+        - snmp_manager_named_reg.value == '10.0.0.6'
+        - snmp_manager_named_orig.exists
+
+  - name: Add the named SNMP manager again
+    register: snmp_manager_named_again
+    win_snmp:
+      action: add
+      permitted_managers:
+        - 10.0.0.5
+
+  - name: Assert no change when the named SNMP manager is already present
+    assert:
+      that:
+        - snmp_manager_named_again is not changed
+
+  - name: Set SNMP managers without the named entry
+    register: snmp_manager_named_set
+    win_snmp:
+      action: set
+      permitted_managers:
+        - 10.0.0.6
+
+  - name: Check the named SNMP manager was removed from registry
+    register: snmp_manager_named_removed
+    ansible.windows.win_reg_stat:
+      path: "{{ permitted_managers_key }}"
+      name: 10.0.0.5
+
+  - name: Assert the named SNMP manager was removed
+    assert:
+      that:
+        - snmp_manager_named_set is changed
+        - snmp_manager_named_set.permitted_managers == ['10.0.0.6']
+        - not snmp_manager_named_removed.exists
